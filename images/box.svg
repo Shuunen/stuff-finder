@@ -1,0 +1,11 @@
+<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .cls-1{fill:none;stroke:#000;stroke-linejoin:round;stroke-width:2px}
+    </style>
+  </defs>
+  <g data-name="62-Box" id="_62-Box">
+    <path class="cls-1" d="M1 2h30v8H1zM3 10h26v20H3z"/>
+    <path class="cls-1" d="M9 16h14v4H9z"/>
+  </g>
+</svg>
