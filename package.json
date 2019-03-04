@@ -11,7 +11,8 @@
     "build": "parcel build web/index.html",
     "dev": "parcel web/index.html --open",
     "lint": "standard \"src/*\" --fix",
-    "serve": "npm run build && http-server dist -o"
+    "serve": "npm run build && http-server dist -o",
+    "start": "npm run serve"
   },
   "repository": {
     "type": "git",
