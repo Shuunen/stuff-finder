@@ -1,22 +1,24 @@
 <html>
 
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Stuff Finder</title>
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="styles/main.css">
 </head>
 
-<body class="col center middle">
+<body class="stuff-finder col center middle">
     <h1>Stuff Finder</h1>
-    <img class="w20" src="assets/box.svg" alt="logo">
-    <div class="row">
-        <button onclick="appSpeech.start('looking-for')">Je cherche...</button>
-        <button onclick="appSpeech.start('want-to-store')">Je veux ranger...</button>
+    <div class="row mt3">
+        <button onclick="emit('speech-recognition','looking-for')" class="mr2">🔎 Je cherche...</button>
+        <button onclick="emit('speech-recognition','want-to-store')">Je veux ranger... 📦</button>
     </div>
-    <script src="_speech.js"></script>
-    <script src="_prompt.js"></script>
+    <script src="main.js"></script>
+    <include src="components/settings.html"></include>
+    <include src="components/loader.html"></include>
+    <include src="components/toaster.html"></include>
 </body>
 
 </html>
