@@ -1,42 +1,44 @@
 {
-  "name": "stuff-finder",
-  "version": "1.0.0",
-  "description": "Sorting things is pointless if you can't find them afterwards",
-  "main": "index.js",
+  "author": "Romain Racamier-Lafon <romain.racamier@gmail.com>",
+  "bugs": "https://github.com/Shuunen/stuff-finder/issues",
   "dependencies": {
-    "parcel-bundler": "^1.11.0",
-    "typescript": "~3.2.1"
+    "parcel-bundler": "1.12.4"
   },
-  "scripts": {
-    "build": "parcel build web/index.html",
-    "dev": "parcel web/index.html --open",
-    "lint": "standard \"src/*\" --fix",
-    "serve": "npm run build && http-server dist -o",
-    "start": "npm run serve"
+  "description": "Sorting things is pointless if you can't find them afterwards",
+  "devDependencies": {
+    "eslint": "6.6.0",
+    "eslint-config-standard": "14.1.0",
+    "eslint-plugin-html": "6.0.0",
+    "eslint-plugin-import": "2.18.2",
+    "eslint-plugin-node": "10.0.0",
+    "eslint-plugin-promise": "4.2.1",
+    "eslint-plugin-standard": "4.0.1"
   },
+  "files": [
+    "src"
+  ],
+  "homepage": "https://github.com/Shuunen/stuff-finder",
+  "keywords": [
+    "stuff",
+    "finder"
+  ],
+  "license": "GPL-3.0",
+  "name": "@shuunen/stuff-finder",
+  "private": true,
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Shuunen/stuff-finder.git"
+    "url": "https://github.com/Shuunen/stuff-finder.git"
   },
-  "keywords": [],
-  "author": "Romain Racamier-Lafon <romain.racamier@gmail.com>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/Shuunen/stuff-finder/issues"
+  "scripts": {
+    "build": "parcel build src/index.html",
+    "check": "npx repo-check",
+    "ci": "npm run test",
+    "dev": "npm start",
+    "lint": "eslint --fix --ignore-path .gitignore --ext .js,.html .",
+    "postversion": "git push && git push --tags",
+    "start": "parcel src/index.html --open",
+    "test": "npm run lint && npm run check",
+    "update": "npx npm-check-updates -u"
   },
-  "homepage": "https://github.com/Shuunen/stuff-finder#readme",
-  "devDependencies": {
-    "eslint": "^5.14.1",
-    "eslint-plugin-typescript": "^0.14.0",
-    "http-server": "^0.11.1",
-    "sass": "^1.17.0",
-    "standard": "^12.0.1",
-    "typescript-eslint-parser": "^22.0.0"
-  },
-  "standard": {
-    "parser": "typescript-eslint-parser",
-    "plugins": [
-      "typescript"
-    ]
-  }
+  "version": "0.0.1"
 }
