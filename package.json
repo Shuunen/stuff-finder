@@ -2,6 +2,7 @@
   "author": "Romain Racamier-Lafon <romain.racamier@gmail.com>",
   "bugs": "https://github.com/Shuunen/stuff-finder/issues",
   "dependencies": {
+    "@camwiegert/typical": "0.1.1",
     "parcel-bundler": "1.12.4"
   },
   "description": "Sorting things is pointless if you can't find them afterwards",
