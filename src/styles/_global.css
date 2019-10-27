@@ -1,0 +1,12 @@
+html * {
+  box-sizing: border-box;
+}
+
+body {
+  --primary: #604a42;
+  --secondary: #adcfdc;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 16px;
+  color: var(--primary);
+  background-color: var(--secondary);
+}
