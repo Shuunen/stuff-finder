@@ -1,0 +1,54 @@
+
+button,
+input,
+textarea {
+  -webkit-appearance: none;
+  border: .1rem solid var(--color-grey, grey);
+  border-radius: var(--border-radius, .3rem);
+  font-family: inherit;
+  font-size: 1.5rem;
+  margin: 0;
+  margin-left: .2rem;
+  max-width: 100%;
+  padding: .4rem 0 .4rem .4rem;
+  transition: border .3s, background-color .3s;
+}
+
+button,
+input[type="button"],
+input[type="submit"] {
+  background-color: var(--color-grey-light, #e8e8e8);
+  cursor: pointer;
+  margin-bottom: .5rem;
+  padding: .6rem 1.4rem;
+}
+
+button:hover,
+input[type="button"]:hover,
+input[type="submit"]:hover {
+  background-color: var(--color-white, whitesmoke);
+  border: .1rem solid var(--color-primary, steelblue);
+}
+
+button.text,
+input[type="button"].text,
+input[type="submit"].text {
+  background-color: transparent;
+  border: none;
+  text-decoration: underline;
+}
+
+button.text:hover,
+input[type="button"].text:hover,
+input[type="submit"].text:hover {
+  color: var(--color-primary, steelblue);
+}
+
+input:invalid {
+  background-color: var(--color-error-light, #ff000014);
+  border: .1rem solid var(--color-error, red);
+}
+
+input:focus:invalid {
+  box-shadow: none;
+}

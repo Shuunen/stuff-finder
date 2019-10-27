@@ -3,29 +3,17 @@ html * {
 }
 
 body {
-  --primary: #604a42;
-  --secondary: #adcfdc;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  font-size: 16px;
-  color: var(--primary);
-  background-color: var(--secondary);
+  font-size: 24px;
+  color: var(--color-primary);
+  background-color: var(--color-secondary);
 }
 
-button {
-  font-size: inherit;
+h1 {
+  background-color: var(--color-grey-light);
   padding: 0.6rem 1rem;
-  border: 0.4rem solid;
-  color: var(--primary);
-  font-weight: bold;
-  margin-top: 2rem;
-  cursor: pointer;
 }
 
-button:hover {
-  text-decoration: underline;
-  background-color: snow;
-}
-
-button + button {
-  margin-left: 2rem;
+a {
+  color: var(--color-accent, green);
 }

@@ -1,8 +1,7 @@
-const App = require('./app')
+import { type } from '@camwiegert/typical'
+import { BaseModel } from '../model'
 
-const { type } = require('@camwiegert/typical')
-
-class AppPrompt extends App {
+class PluginPrompt extends BaseModel {
   constructor () {
     super('prompt')
     this.log('constructor')
@@ -44,4 +43,4 @@ class AppPrompt extends App {
   }
 }
 
-window.appPrompt = new AppPrompt()
+export const pluginPrompt = new PluginPrompt()

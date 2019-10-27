@@ -1,11 +1,15 @@
-const App = require('./app')
+import { BaseModel } from '../model'
 
-class AppSpeech extends App {
+class PluginSpeech extends BaseModel {
   constructor () {
     super('speech')
     this.log('constructor')
     this.initRecognition()
     this.intent = ''
+  }
+
+  setupListeners () {
+    this.on('speech-recognition', this.startRecognition)
   }
 
   initRecognition () {
@@ -30,11 +34,11 @@ class AppSpeech extends App {
     this.emit('do-prompt-intent', { stuff: sentence, intent: this.intent })
   }
 
-  start (intent = 'unknown') {
+  startRecognition (intent = 'unknown') {
     this.intent = intent
     this.recognition.start()
     console.log('listening...')
   }
 }
 
-window.appSpeech = new AppSpeech()
+export const pluginSpeech = new PluginSpeech()
