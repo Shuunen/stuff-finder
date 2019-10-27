@@ -9,9 +9,14 @@
 </head>
 
 <body class="col center middle">
-    <h1>Stuff Finder is amazing !</h1>
+    <h1>Stuff Finder</h1>
     <img class="w20" src="assets/box.svg" alt="logo">
-    <script src="main.js"></script>
+    <div class="row">
+        <button onclick="appSpeech.start('looking-for')">Je cherche...</button>
+        <button onclick="appSpeech.start('want-to-store')">Je veux ranger...</button>
+    </div>
+    <script src="_speech.js"></script>
+    <script src="_prompt.js"></script>
 </body>
 
 </html>

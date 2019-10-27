@@ -10,3 +10,22 @@ body {
   color: var(--primary);
   background-color: var(--secondary);
 }
+
+button {
+  font-size: inherit;
+  padding: 0.6rem 1rem;
+  border: 0.4rem solid;
+  color: var(--primary);
+  font-weight: bold;
+  margin-top: 2rem;
+  cursor: pointer;
+}
+
+button:hover {
+  text-decoration: underline;
+  background-color: snow;
+}
+
+button + button {
+  margin-left: 2rem;
+}
