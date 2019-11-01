@@ -6,6 +6,11 @@ class PluginSpeech extends BaseModel {
     this.log('constructor')
     this.initRecognition()
     this.intent = ''
+    this.isMobile = typeof window.orientation !== 'undefined'
+  }
+
+  afterLoad () {
+    this.showLog((this.isMobile ? 'mobile' : 'desktop') + ' detected')
   }
 
   setupListeners () {
@@ -22,9 +27,9 @@ class PluginSpeech extends BaseModel {
       const result = event.results[event.results.length - 1][0]
       this.onRecognition(result.transcript, result.confidence)
     }
-    recognition.onspeechend = () => (console.log('speech end') && recognition.stop())
-    recognition.onnomatch = (event) => console.log('onnomatch')
-    recognition.onerror = (event) => console.log('error occurred in recognition: ' + event.error)
+    recognition.onspeechend = () => (this.log('speech end') && recognition.stop())
+    recognition.onnomatch = (event) => this.log('onnomatch')
+    recognition.onerror = (event) => this.log('error occurred in recognition: ' + event.error)
     this.recognition = recognition
   }
 
@@ -37,7 +42,8 @@ class PluginSpeech extends BaseModel {
   startRecognition (intent = 'unknown') {
     this.intent = intent
     this.recognition.start()
-    console.log('listening...')
+    this.emit('do-prompt-intent', { intent: this.intent })
+    this.log('listening...')
   }
 }
 

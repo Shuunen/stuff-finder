@@ -7,10 +7,6 @@ class PluginPrompt extends BaseModel {
     this.log('constructor')
   }
 
-  onLoad () {
-    this.emit('do-prompt', { text: "Stuff Finder c'est génial !" })
-  }
-
   setupElements () {
     this.targetEl = document.querySelector('h1')
     if (!this.targetEl) {
@@ -23,15 +19,15 @@ class PluginPrompt extends BaseModel {
     this.on('do-prompt-intent', this.doPromptIntent)
   }
 
-  doPrompt (data) {
-    type(this.targetEl, data.text)
+  doPrompt (text) {
+    type(this.targetEl, text)
   }
 
   doPromptIntent (data) {
     type(this.targetEl, this.translateIntent(data.intent, data.stuff))
   }
 
-  translateIntent (intent, stuff = 'quelque chose') {
+  translateIntent (intent, stuff = '') {
     switch (intent) {
       case 'looking-for':
         return `Vous cherchez ${stuff} ?`

@@ -39,7 +39,7 @@ export class BaseModel {
     this.setupElements()
     this.setupListeners()
     this.onLoad()
-    setTimeout(this.afterLoad, 200)
+    setTimeout(() => this.afterLoad(), 200)
   }
 
   onLoad () { }

@@ -17,6 +17,10 @@ class App extends BaseModel {
     this.on('storage-found', this.onStorageFound)
   }
 
+  onLoad () {
+    this.emit('do-prompt', "Stuff Finder c'est génial !")
+  }
+
   afterLoad () {
     this.emit('settings-action-required', { required: true })
     this.emit('storage-search', 'api-credentials')
@@ -56,7 +60,7 @@ class App extends BaseModel {
   }
 
   async parseApiResponse (response) {
-    this.showLog('parsing api response...', response)
+    // this.showLog('parsing api response...', response)
     if (!response.records) {
       throw Error('api does not return the expected format')
     }
@@ -69,7 +73,9 @@ class App extends BaseModel {
   }
 
   onStorageFound (data) {
-    this.emit('settings-set', data.value)
+    if (data.key === 'api-credentials') {
+      this.emit('settings-set', data.value)
+    }
   }
 }
 
