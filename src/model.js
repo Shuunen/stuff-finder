@@ -8,12 +8,22 @@ export class BaseModel {
     console.log.apply(console.log, [this.name, ':', ...arguments])
   }
 
+  showLog (message, data) {
+    this.log(message, data || '')
+    this.emit('show-toast', { type: 'info', message })
+  }
+
   warn () {
     console.warn.apply(console.warn, [this.name, ':', ...arguments])
   }
 
   error () {
     console.error.apply(console.error, [this.name, ':', ...arguments])
+  }
+
+  showError (message) {
+    this.error(message)
+    this.emit('show-toast', { type: 'error', message })
   }
 
   emit (eventName, eventData) {
@@ -29,9 +39,12 @@ export class BaseModel {
     this.setupElements()
     this.setupListeners()
     this.onLoad()
+    setTimeout(this.afterLoad, 200)
   }
 
   onLoad () { }
+
+  afterLoad () { }
 
   setupElements () { }
 

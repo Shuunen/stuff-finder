@@ -11,15 +11,27 @@
 <div class="settings backdrop hidden">
     <div class="settings--modal center">
         <h2>Settings</h2>
+        <p class="settings--message error"></p>
         <div class="row wrap center">
             <label class="setting col center">
                 <a href="//airtable.com/api" target="_blank" class="mb1">Airtable api base</a>
                 <input name="airtable-api-base" onkeyup="emit('settings-validate')" placeholder="your api base" pattern="^app\w{14}$" required
-                    autofocus>
+                    maxlength="17" autofocus>
             </label>
             <label class="setting col center mt1">
                 <a href="//airtable.com/account" target="_blank" class="mb1">Airtable api key</a>
-                <input name="airtable-api-key" onkeyup="emit('settings-validate')" placeholder="your api key" pattern="^key\w{14}$" required>
+                <input name="airtable-api-key" onkeyup="emit('settings-validate')" placeholder="your api key" pattern="^key\w{14}$" required
+                    maxlength="17">
+            </label>
+            <label class="setting col center mt1">
+                Airtable table name
+                <input name="airtable-table-name" class="mts" onkeyup="emit('settings-validate')" pattern="^\S+$" placeholder="your table name"
+                    required>
+            </label>
+            <label class="setting col center mt1">
+                Airtable view name
+                <input name="airtable-view-name" class="mts" onkeyup="emit('settings-validate')" pattern="^\S+$" placeholder="your table name"
+                    required value="stuff-finder">
             </label>
         </div>
         <small class="mt2">
@@ -41,24 +53,29 @@
       }
 
       get formIsValid () {
-        return (this.settingApiBase.checkValidity() && this.settingApiKey.checkValidity())
+        return (this.settings.base.checkValidity() && this.settings.key.checkValidity())
       }
 
       constructor () {
         super('settings')
+        this.log('constructor')
+        this.settings = {}
       }
 
       setupElements () {
         this.settingsEl = document.querySelector('.settings')
         this.settingsTriggerEl = document.querySelector('.settings--trigger')
         this.settingsSaveEl = document.querySelector('.settings--save')
-        this.settingApiBase = document.querySelector('.settings--modal input[name="airtable-api-base"]')
-        this.settingApiKey = document.querySelector('.settings--modal input[name="airtable-api-key"]')
+        this.settingsMessageEl = document.querySelector('.settings--message')
+        this.settings.base = document.querySelector('.settings--modal input[name="airtable-api-base"]')
+        this.settings.key = document.querySelector('.settings--modal input[name="airtable-api-key"]')
+        this.settings.table = document.querySelector('.settings--modal input[name="airtable-table-name"]')
+        this.settings.view = document.querySelector('.settings--modal input[name="airtable-view-name"]')
       }
 
       setupListeners () {
-        this.on('api-set', this.setApi)
-        this.on('action-required', this.setAction)
+        this.on('settings-set', this.setSettings)
+        this.on('settings-action-required', this.setActionRequired)
         this.on('settings-validate', this.validate)
         this.on('settings-toggle', this.toggle)
         this.on('settings-save', this.save)
@@ -77,9 +94,21 @@
         }
       }
 
-      setApi (data) {
-        this.settingApiBase.value = data.base
-        this.settingApiKey.value = data.key
+      setSettings (data) {
+        Object.keys(data).forEach(key => {
+          const value = data[key]
+          if (this.settings[key]) {
+            this.settings[key].value = value
+          }
+        })
+      }
+
+      getSettings () {
+        const settings = {}
+        Object.keys(this.settings).forEach(key => {
+          settings[key] = this.settings[key].value
+        })
+        return settings
       }
 
       validate () {
@@ -93,13 +122,22 @@
 
       save () {
         if (this.formIsValid) {
-          this.emit('api-set', { base: this.settingApiBase.value, key: this.settingApiKey.value })
+          this.emit('settings-set', this.getSettings())
           this.toggle()
         }
       }
 
-      setAction (required = false) {
+      setActionRequired (data) {
+        if (typeof data !== 'object') {
+          this.error('settings-action-required is expecting an object')
+        }
+        const required = typeof data.required === 'boolean' ? data.required : false
+        this.log('set action require to', required)
         this.settingsTriggerEl.classList.toggle('action-required', required)
+        if (data.message) {
+          this.log('set message to', data.message)
+          this.settingsMessageEl.textContent = data.message
+        }
       }
     }
     // eslint-disable-next-line no-new
