@@ -7,10 +7,22 @@
   width: 20%;
 }
 
+.mt1 {
+  margin-top: 1rem;
+}
+
+.mt2 {
+  margin-top: 2rem;
+}
+
 .mt3 {
   margin-top: 3rem;
 }
 
 .mr2 {
   margin-right: 2rem;
+}
+
+.mb1 {
+  margin-bottom: 1rem;
 }

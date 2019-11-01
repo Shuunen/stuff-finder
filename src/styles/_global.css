@@ -3,17 +3,29 @@ html * {
 }
 
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  font-size: 24px;
-  color: var(--color-primary);
   background-color: var(--color-secondary);
+  color: var(--color-primary);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 24px;
 }
 
 h1 {
   background-color: var(--color-grey-light);
-  padding: 0.6rem 1rem;
+  padding: .6rem 1rem;
+}
+
+h2 {
+  text-decoration: underline;
 }
 
 a {
   color: var(--color-accent, green);
+}
+
+a[target="_blank"]::after {
+  content: " \25F3";
+}
+
+small {
+  display: inline-block;
 }

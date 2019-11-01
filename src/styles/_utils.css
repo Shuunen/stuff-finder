@@ -20,6 +20,13 @@
   justify-content: center;
 }
 
+.wrap,
+.row.center.wrap {
+  align-items: flex-end;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+
 .backdrop {
   align-items: center;
   background-color: var(--color-shade, rgba(0, 0, 0, .4));

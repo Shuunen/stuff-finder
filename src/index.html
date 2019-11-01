@@ -11,10 +11,35 @@
 
 <body class="stuff-finder col center middle">
     <h1>Stuff Finder</h1>
-    <div class="row mt3">
-        <button onclick="emit('speech-recognition','looking-for')" class="mr2">🔎 Je cherche...</button>
-        <button onclick="emit('speech-recognition','want-to-store')">Je veux ranger... 📦</button>
+    <div class="row mt3 main-buttons">
+        <button class="big" onclick="emit('speech-recognition','looking-for')">🔎 Chercher</button>
+        <button class="big" onclick="emit('speech-recognition','want-to-store')">Ranger <span class="icon">📦</span></button>
     </div>
+    <style>
+        .main-buttons button .icon {
+          margin-left: .2em;
+        }
+
+        @media only screen and (max-width: 600px) {
+          .main-buttons {
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 0;
+          }
+
+          .main-buttons button {
+            display: flex;
+            justify-content: center;
+            margin: 1rem;
+          }
+
+          .main-buttons button .icon {
+            margin-left: 0;
+            margin-right: .4em;
+            order: -1;
+          }
+        }
+    </style>
     <script src="main.js"></script>
     <include src="components/settings.html"></include>
     <include src="components/loader.html"></include>
