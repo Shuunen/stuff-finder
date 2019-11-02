@@ -16,26 +16,10 @@ class PluginPrompt extends BaseModel {
 
   setupListeners () {
     this.on('do-prompt', this.doPrompt)
-    this.on('do-prompt-intent', this.doPromptIntent)
   }
 
-  doPrompt (text) {
-    type(this.targetEl, text)
-  }
-
-  doPromptIntent (data) {
-    type(this.targetEl, this.translateIntent(data.intent, data.stuff))
-  }
-
-  translateIntent (intent, stuff = '') {
-    switch (intent) {
-      case 'looking-for':
-        return `Vous cherchez ${stuff} ?`
-      case 'want-to-store':
-        return `Vous voulez ranger ${stuff} ?`
-      default:
-        return 'Je ne connais pas ce besoin'
-    }
+  doPrompt (args) {
+    type(this.targetEl, ...args)
   }
 }
 

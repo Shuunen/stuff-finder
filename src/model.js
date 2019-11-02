@@ -27,6 +27,10 @@ export class BaseModel {
   }
 
   emit (eventName, eventData) {
+    if (eventName instanceof Array) {
+      // this allows to use emit(['an-event', 'another-one']) but same data will be passed
+      return eventName.forEach(name => this.emit(name, eventData))
+    }
     this.log(`emit event "${eventName}"`, eventData || '')
     window.dispatchEvent(new CustomEvent(eventName, { detail: eventData }))
   }

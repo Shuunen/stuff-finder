@@ -9,10 +9,6 @@ class PluginSpeech extends BaseModel {
     this.isMobile = typeof window.orientation !== 'undefined'
   }
 
-  afterLoad () {
-    this.showLog((this.isMobile ? 'mobile' : 'desktop') + ' detected')
-  }
-
   setupListeners () {
     this.on('speech-recognition', this.startRecognition)
   }
@@ -36,13 +32,12 @@ class PluginSpeech extends BaseModel {
   onRecognition (sentence, confidence) {
     this.log('sentence :', sentence)
     this.log('confidence : ' + confidence)
-    this.emit('do-prompt-intent', { stuff: sentence, intent: this.intent })
+    this.emit('search-intent', { stuff: sentence, intent: this.intent })
   }
 
   startRecognition (intent = 'unknown') {
     this.intent = intent
     this.recognition.start()
-    this.emit('do-prompt-intent', { intent: this.intent })
     this.log('listening...')
   }
 }
