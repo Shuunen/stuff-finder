@@ -24,7 +24,7 @@ class PluginSpeech extends BaseModel {
       this.onRecognition(result.transcript, result.confidence)
     }
     recognition.onspeechend = () => (this.log('speech end') && recognition.stop())
-    recognition.onnomatch = (event) => this.log('onnomatch')
+    recognition.onnomatch = () => this.log('onnomatch')
     recognition.onerror = (event) => this.log('error occurred in recognition: ' + event.error)
     this.recognition = recognition
   }

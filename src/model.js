@@ -1,3 +1,5 @@
+/* global CustomEvent */
+
 export class BaseModel {
   constructor (name = 'unknown') {
     this.name = name
@@ -29,7 +31,8 @@ export class BaseModel {
   emit (eventName, eventData) {
     if (eventName instanceof Array) {
       // this allows to use emit(['an-event', 'another-one']) but same data will be passed
-      return eventName.forEach(name => this.emit(name, eventData))
+      eventName.forEach(name => this.emit(name, eventData))
+      return
     }
     this.log(`emit event "${eventName}"`, eventData || '')
     window.dispatchEvent(new CustomEvent(eventName, { detail: eventData }))
@@ -57,7 +60,8 @@ export class BaseModel {
   async fadeIn (el) {
     this.log('fadeIn')
     if (!el.classList.contains('hide')) {
-      return this.warn('please add "hide" class before mounting dom element and then call fade-in')
+      this.warn('please add "hide" class before mounting dom element and then call fade-in')
+      return
     }
     await this.sleep(10)
     el.style.opacity = 1
