@@ -1,10 +1,10 @@
 <div class="component--search backdrop hidden" onclick="emit('modal-close')">
-    <div class="component--modal center" onclick="event.stopPropagation()">
+    <div class="component--modal col center" onclick="event.stopPropagation()">
         <h2 class="search--title"></h2>
-        <div class="search--results"></div>
+        <div class="search--results col middle grow"></div>
         <div class="row center mt3">
-            <button onclick="emit('modal-close')">🗙 Close</button>
-            <button onclick="emit(['modal-close','search-retry'])">Retry ✔️</button>
+            <button onclick="emit('modal-close')">&times; Close</button>
+            <button onclick="emit(['modal-close','search-retry'])">Retry &check;</button>
         </div>
     </div>
 </div>
@@ -28,14 +28,46 @@
       onSearchComplete (data) {
         this.log(`displaying ${data.results.length} results...`)
         this.title.textContent = data.title
-        let html = '<div class="header"><span>name</span><span>location</span></div>'
-        if (data.results.length === 0) {
-          html = 'Sorry nothing was found ' + this.sorryAscii()
-        } else {
-          html += data.results.map(result => `<div><span>${result.name}</span><span>${result.location}</span></div>`).join('')
-        }
-        this.results.innerHTML = html
+        this.formatResults(data.results)
         this.emit('modal-open', 'component--search')
+      }
+
+      formatResults (results) {
+        if (results.length === 0) {
+          this.results.textContent = 'Sorry nothing was found ' + this.sorryAscii()
+          return
+        }
+        const locations = []
+        const resultsPerLocation = {}
+        results.forEach(result => {
+          if (result.location && !locations.includes(result.location)) {
+            locations.push(result.location)
+          }
+          if (!resultsPerLocation[result.location]) {
+            resultsPerLocation[result.location] = []
+          }
+          resultsPerLocation[result.location].push(result)
+        })
+        this.results.innerHTML = ''
+        let firstLegend = true
+        let firstResult = true
+        locations.forEach(location => {
+          const groupEl = document.createElement('fieldset')
+          groupEl.className = 'mb1'
+          const labelEl = document.createElement('legend')
+          labelEl.className = firstLegend ? 'bold' : ''
+          firstLegend = false
+          labelEl.textContent = location
+          groupEl.appendChild(labelEl)
+          resultsPerLocation[location].forEach(result => {
+            const resultEl = document.createElement('div')
+            resultEl.className = 'search--result col ' + (firstResult ? 'bold' : '')
+            firstResult = false
+            resultEl.innerHTML = `<div>${result.name}</div><small class="mbs">${result.details}</small>`
+            groupEl.appendChild(resultEl)
+          })
+          this.results.appendChild(groupEl)
+        })
       }
 
       sorryAscii () {
@@ -47,18 +79,7 @@
 </script>
 
 <style>
-    .search--results > div {
-      display: flex;
-      justify-content: space-between;
-    }
-
-    .search--results > div.header {
-      color: var(--color-success-light, darkseagreen);
-      font-family: monospace;
-      text-decoration: underline;
-    }
-
-    .search--results > div.header + div {
-      font-weight: bold;
+    .search--result small {
+      opacity: .5;
     }
 </style>
