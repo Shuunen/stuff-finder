@@ -53,24 +53,36 @@ class App extends BaseModel {
 
   async loadItems (credentials) {
     this.emit('set-loading', true)
-    const response = await fetch(`https://api.airtable.com/v0/${credentials.base}/${credentials.table}?api_key=${credentials.key}&view=${credentials.view}`).then(res => res.json())
+    let response = await this.fetchApi(credentials)
     if (!response || response.error) {
       this.emit('set-loading', false)
       this.emit('settings-action-required', { required: true, message: 'These credentials are invalid' })
       return false
     }
-    await this.parseApiResponse(response)
+    let records = response.records
+    let offset = response.offset
+    while (offset) {
+      response = await this.fetchApi(credentials, offset)
+      offset = response.offset
+      records = records.concat(response.records)
+    }
+    await this.parseApiRecords(records)
     this.emit('set-loading', false)
     this.emit('settings-action-required', { required: false, message: '' })
     return true
   }
 
-  async parseApiResponse (response) {
-    // this.showLog('parsing api response...', response)
-    if (!response.records) {
-      throw Error('api does not return the expected format')
+  async fetchApi (credentials, offset) {
+    let url = `https://api.airtable.com/v0/${credentials.base}/${credentials.table}?api_key=${credentials.key}&view=${credentials.view}`
+    if (offset) {
+      url += '&offset=' + offset
     }
-    this.items = response.records.map(item => ({
+    return fetch(url).then(res => res.json())
+  }
+
+  async parseApiRecords (records) {
+    // this.showLog('parsing api records :', records )
+    this.items = records.map(item => ({
       id: item.id,
       ...item.fields,
     }))
@@ -100,7 +112,7 @@ class App extends BaseModel {
 
   getSearchResult (data) {
     const name = `${data.Nom} ${data.Marque}`
-    const details = data.Référence
+    const details = data.Référence + (data.Boite ? ` [${data.Boite}${data.Tiroir}]` : '')
     const location = (data.Pièce && data.Pièce !== 'N/A') ? data.Pièce : ''
     return { name, details, location }
   }

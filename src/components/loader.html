@@ -1,5 +1,5 @@
 <div class="loader backdrop hidden">
-    <div class="lds-dual-ring"></div>
+    <div class="lds-dual-ring">.</div>
 </div>
 
 <script>
@@ -38,33 +38,33 @@
 
 <style>
     .loader {
-        z-index: var(--elevation-t-rex, 200);
+      z-index: var(--elevation-t-rex, 200);
     }
 
     .lds-dual-ring {
-        display: inline-block;
-        height: 6rem;
-        width: 6rem;
+      display: inline-block;
+      height: 6rem;
+      width: 6rem;
     }
 
     .lds-dual-ring:after {
-        animation: lds-dual-ring 1.2s linear infinite;
-        border: .5rem solid var(--color-white, whitesmoke);
-        border-color: var(--color-white, whitesmoke) transparent var(--color-white, whitesmoke) transparent;
-        border-radius: 50%;
-        content: " ";
-        display: block;
-        height: 5rem;
-        width: 5rem;
+      animation: lds-dual-ring 1.2s linear infinite;
+      border: .5rem solid var(--color-white, whitesmoke);
+      border-color: var(--color-white, whitesmoke) transparent var(--color-white, whitesmoke) transparent;
+      border-radius: 50%;
+      content: " ";
+      display: block;
+      height: 5rem;
+      width: 5rem;
     }
 
     @keyframes lds-dual-ring {
-        0% {
-            transform: rotate(0deg);
-        }
+      0% {
+        transform: rotate(0deg);
+      }
 
-        100% {
-            transform: rotate(360deg);
-        }
+      100% {
+        transform: rotate(360deg);
+      }
     }
 </style>
