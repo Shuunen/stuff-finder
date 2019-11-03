@@ -2,6 +2,11 @@ html * {
   box-sizing: border-box;
 }
 
+html, body {
+  margin: 0;
+  overflow: hidden;
+}
+
 body {
   background-color: var(--color-secondary);
   color: var(--color-primary);
@@ -29,4 +34,10 @@ a[target="_blank"]::after {
 
 small {
   display: inline-block;
+}
+
+div:empty,
+small:empty,
+p:empty {
+  display: none;
 }

@@ -6,7 +6,7 @@ textarea {
   border: .1rem solid var(--color-grey, grey);
   border-radius: var(--border-radius, .3rem);
   font-family: inherit;
-  font-size: 1.5rem;
+  font-size: 1rem;
   margin: 0;
   margin-left: .2rem;
   max-width: 100%;
@@ -19,6 +19,7 @@ input[type="button"],
 input[type="submit"] {
   background-color: var(--color-grey-light, #e8e8e8);
   cursor: pointer;
+  font-size: 1.5rem;
   margin-bottom: .5rem;
   padding: .5rem 1.2rem .6rem 1.1rem;
   white-space: nowrap;

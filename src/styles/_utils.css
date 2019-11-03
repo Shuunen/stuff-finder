@@ -1,3 +1,7 @@
+.left {
+  text-align: left;
+}
+
 .center {
   text-align: center;
 }
@@ -59,4 +63,9 @@
 
 .bold {
   font-weight: bold;
+}
+
+.scrollable {
+  overflow-x: hidden;
+  overflow-y: auto;
 }
