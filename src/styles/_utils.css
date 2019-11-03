@@ -27,6 +27,10 @@
   justify-content: space-evenly;
 }
 
+.grow {
+  flex-grow: 1;
+}
+
 .backdrop {
   align-items: center;
   background-color: var(--color-shade, rgba(0, 0, 0, .4));
@@ -51,4 +55,8 @@
 
 .error {
   color: var(--color-error);
+}
+
+.bold {
+  font-weight: bold;
 }

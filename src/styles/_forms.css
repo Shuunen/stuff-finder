@@ -30,7 +30,7 @@ button + button {
 
 button.big {
   font-size: 2.2rem;
-  padding: 1rem 2rem;
+  padding: 1rem 2.5rem 1.2rem 2rem;
 }
 
 button:hover,

@@ -12,6 +12,7 @@ body {
 h1 {
   background-color: var(--color-white);
   padding: .6rem 1rem;
+  white-space: pre;
 }
 
 h2 {
@@ -23,7 +24,7 @@ a {
 }
 
 a[target="_blank"]::after {
-  content: " \25F3";
+  content: " \2197";
 }
 
 small {
