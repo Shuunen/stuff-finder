@@ -3,5 +3,8 @@
     "onnomatch",
     "onresult",
     "onspeechend"
+  ],
+  "cSpell.ignoreWords": [
+    "camwiegert"
   ]
 }
