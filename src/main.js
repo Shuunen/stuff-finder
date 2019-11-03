@@ -26,6 +26,7 @@ class App extends BaseModel {
   afterLoad () {
     this.emit('settings-action-required', { required: true })
     this.emit('storage-search', 'api-credentials')
+    setTimeout(() => this.emit('search-start', 'batterie'), 1000)
   }
 
   coolAscii () {
@@ -111,9 +112,13 @@ class App extends BaseModel {
   }
 
   getSearchResult (data) {
-    const name = `${data.Nom} ${data.Marque}`
-    const details = data.Référence + (data.Boite ? ` [${data.Boite}${data.Tiroir}]` : '')
+    let name = `${data.Nom} ${data.Marque || ''}`.trim()
+    let details = [(data.Référence || ''), (data.Boite ? `[${data.Boite}${data.Tiroir}]` : '')].join(' ').trim()
     const location = (data.Pièce && data.Pièce !== 'N/A') ? data.Pièce : ''
+    if (!location) {
+      name += ' ' + details
+      details = ''
+    }
     return { name, details, location }
   }
 

@@ -42,7 +42,7 @@
         const locations = []
         const resultsPerLocation = {}
         results.forEach(result => {
-          if (result.location && !locations.includes(result.location)) {
+          if (!locations.includes(result.location)) {
             locations.push(result.location)
           }
           if (!resultsPerLocation[result.location]) {
@@ -59,7 +59,7 @@
           const labelEl = document.createElement('legend')
           labelEl.className = firstLegend ? 'bold' : ''
           firstLegend = false
-          labelEl.textContent = location
+          labelEl.textContent = location || 'Somewhere'
           groupEl.appendChild(labelEl)
           resultsPerLocation[location].forEach(result => {
             const resultEl = document.createElement('div')
