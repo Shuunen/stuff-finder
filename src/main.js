@@ -1,6 +1,5 @@
 import './plugins/dom'
 import './plugins/prompt'
-import './plugins/speech'
 import './plugins/storage'
 
 import { BaseModel } from './model'
@@ -16,12 +15,12 @@ class App extends BaseModel {
   setupListeners () {
     this.on('settings-set', this.onSettingsSet)
     this.on('storage-found', this.onStorageFound)
-    this.on('search-intent', this.onSearchIntent)
+    this.on('search-start', this.onSearchStart)
     this.on('search-retry', this.onSearchRetry)
   }
 
   onLoad () {
-    this.emit('do-prompt', ['Stuff Finder', 1000, `Stuff Finder ${this.coolAscii()}`])
+    this.emit('do-prompt', ['Stuff Finder', 1000, `Stuff Finder\n${this.coolAscii()}`])
   }
 
   afterLoad () {
@@ -89,35 +88,21 @@ class App extends BaseModel {
     this.fuse = new Fuse(this.items, options)
   }
 
-  search (stuff, intent) {
+  onSearchStart (stuff) {
     const results = this.fuse.search(stuff).map(r => this.getSearchResult(r))
-    const title = this.getSearchTitle(intent, stuff)
+    const title = `“${stuff}”`
     this.emit('search-complete', { title, results })
   }
 
-  onSearchIntent (data) {
-    this.lastIntent = data.intent
-    this.search(data.stuff, data.intent)
-  }
-
   onSearchRetry () {
-    this.emit('speech-recognition', this.lastIntent)
+    this.emit('speech-recognition')
   }
 
   getSearchResult (data) {
-    const name = data.Nom
-    const location = (data.Pièce && data.Pièce !== 'N/A') ? data.Pièce : 'unknown location'
-    return { name, location }
-  }
-
-  getSearchTitle (intent, stuff = '') {
-    switch (intent) {
-      case 'looking-for':
-      case 'want-to-store':
-        return `Results for "${stuff}"`
-      default:
-        return 'unknown intent'
-    }
+    const name = `${data.Nom} ${data.Marque}`
+    const details = data.Référence
+    const location = (data.Pièce && data.Pièce !== 'N/A') ? data.Pièce : ''
+    return { name, details, location }
   }
 
   onStorageFound (data) {

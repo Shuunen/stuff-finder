@@ -1,0 +1,83 @@
+<div class="component--speech col mt2">
+    <div class="row center">
+        <button class="speech--button big" onclick="emit('speech-recognition')">🔎 Search</button>
+    </div>
+    <small class="speech--hint mt1"></small>
+</div>
+
+<script>
+    class ComponentSpeech extends window.BaseModel {
+      constructor () {
+        super('speech')
+        this.log('constructor')
+        this.initRecognition()
+        this.isMobile = typeof window.orientation !== 'undefined'
+      }
+
+      setupElements () {
+        this.el = document.querySelector('.component--speech')
+        this.buttonEl = document.querySelector('.speech--button')
+        this.hintEl = document.querySelector('.speech--hint')
+      }
+
+      setupListeners () {
+        this.on('speech-recognition', this.onRecognition)
+      }
+
+      onLoad () {
+        this.setStatus('ready')
+      }
+
+      initRecognition () {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
+        const recognition = new SpeechRecognition()
+        recognition.lang = 'fr-FR' // TODO: not generic ^^"
+        recognition.interimResults = false
+        recognition.maxAlternatives = 1
+        recognition.onresult = (event) => {
+          const result = event.results[event.results.length - 1][0]
+          this.onRecognitionEnd(result.transcript, result.confidence)
+        }
+        recognition.onspeechend = () => (this.log('speech end') && recognition.stop())
+        recognition.onnomatch = () => this.setStatus('no-match')
+        recognition.onerror = (event) => this.log('error occurred in recognition: ' + event.error)
+        this.recognition = recognition
+      }
+
+      onRecognitionEnd (sentence, confidence) {
+        this.log('sentence :', sentence)
+        this.log('confidence : ' + confidence)
+        this.emit('search-start', sentence)
+      }
+
+      onRecognition () {
+        this.recognition.start()
+        this.setStatus('listening')
+      }
+
+      setStatus (status) {
+        this.log('status : ' + status)
+        let label = ''
+        let hint = ''
+        switch (status) {
+          case 'listening':
+            label = window.pickOne(['👂 Listening to you', '👂 Give it to me', '👂 Tell me'])
+            hint = 'Say keywords about what you\'re looking for (ex. "tablet", "biking gloves")'
+            break
+          case 'ready':
+            label = window.pickOne(['🔎 Search', '🔎 Find something', '🔎 Find'])
+            hint = 'Search is ready for you sir, just press the button and say something.'
+            break
+          case 'no-match':
+          default:
+            label = 'Sorry I did not understand'
+            hint = 'Search has fail, just press the button to try again.'
+            break
+        }
+        this.buttonEl.textContent = label
+        this.hintEl.textContent = hint
+      }
+    }
+    // eslint-disable-next-line no-new
+    new ComponentSpeech()
+</script>
