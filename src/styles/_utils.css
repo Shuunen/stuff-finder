@@ -69,3 +69,8 @@
   overflow-x: hidden;
   overflow-y: auto;
 }
+
+.ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

@@ -1,5 +1,6 @@
-@import "./_theme";
-@import "./_global";
-@import "./_utils";
-@import "./_sizes";
-@import "./_forms";
+@import "./_theme.css";
+@import "./_global.css";
+@import "./_utils.css";
+@import "./_sizes.css";
+@import "./_highlight.css";
+@import "./_forms.css";

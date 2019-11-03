@@ -1,8 +1,10 @@
 <div class="component--search backdrop hidden" onclick="emit('modal-close')">
     <div class="component--modal col center" onclick="event.stopPropagation()">
         <h2 class="search--title"></h2>
-        <div class="search--results col middle grow"></div>
-        <div class="row center mt3">
+        <div class="grow scrollable">
+            <div class="search--results col middle"></div>
+        </div>
+        <div class="row center mt1 mbs">
             <button onclick="emit('modal-close')">&times; Close</button>
             <button onclick="emit(['modal-close','search-retry'])">Retry &check;</button>
         </div>
@@ -34,7 +36,7 @@
 
       formatResults (results) {
         if (results.length === 0) {
-          this.results.textContent = 'Sorry nothing was found ' + this.sorryAscii()
+          this.results.innerHTML = `<div class="mb1 mt1"><span class="highlight-grey">${this.sorryAscii()}</span></div><span>Sorry nothing was found.</span>`
           return
         }
         const locations = []

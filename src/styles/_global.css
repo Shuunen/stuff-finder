@@ -2,6 +2,16 @@ html * {
   box-sizing: border-box;
 }
 
+html {
+  font-size: 18px;
+}
+
+@media only screen and (max-width: 600px) {
+  html {
+    font-size: 16px;
+  }
+}
+
 html, body {
   margin: 0;
   overflow: hidden;
@@ -11,12 +21,14 @@ body {
   background-color: var(--color-secondary);
   color: var(--color-primary);
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  font-size: 24px;
+}
+
+h1, h2 {
+  margin: 0;
+  padding: .6rem 1rem;
 }
 
 h1 {
-  background-color: var(--color-white);
-  padding: .6rem 1rem;
   white-space: pre;
 }
 
@@ -40,4 +52,8 @@ div:empty,
 small:empty,
 p:empty {
   display: none;
+}
+
+details summary {
+  cursor: pointer;
 }

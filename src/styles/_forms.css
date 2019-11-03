@@ -19,9 +19,9 @@ input[type="button"],
 input[type="submit"] {
   background-color: var(--color-grey-light, #e8e8e8);
   cursor: pointer;
-  font-size: 1.5rem;
   margin-bottom: .5rem;
-  padding: .5rem 1.2rem .6rem 1.1rem;
+  overflow: hidden;
+  padding: .3rem .8rem .4rem .7rem;
   white-space: nowrap;
 }
 
@@ -30,8 +30,8 @@ button + button {
 }
 
 button.big {
-  font-size: 2.2rem;
-  padding: 1rem 2.5rem 1.2rem 2rem;
+  font-size: 1.5rem;
+  padding: .5rem 1.2rem .7rem 1rem;
 }
 
 button:hover,

@@ -15,25 +15,25 @@
         <div class="grow scrollable">
             <p class="settings--message error"></p>
             <form class="settings--form row wrap center" onkeyup="emit('settings-validate')" onchange="emit('settings-validate')">
-                <label class="col">
+                <label class="col center">
                     <a href="//airtable.com/api" target="_blank" class="mb1">Airtable api base</a>
                     <input name="base" placeholder="your api base" pattern="^app\w{14}$" required maxlength="17" autofocus>
                 </label>
-                <label class="col mt1">
+                <label class="col center mt1">
                     <a href="//airtable.com/account" target="_blank" class="mb1">Airtable api key</a>
                     <input name="key" placeholder="your api key" pattern="^key\w{14}$" required maxlength="17">
                 </label>
-                <label class="col mt1">
+                <label class="col center mt1">
                     Airtable table name
                     <input name="table" class="mts" pattern="\S+" placeholder="your table name" required>
                 </label>
-                <label class="col mt1">
+                <label class="col center mt1">
                     Airtable view name
                     <input name="view" class="mts" pattern="\S+" placeholder="your table name" required value="stuff-finder">
                 </label>
             </form>
 
-            <details class="mt2 left">
+            <details class="mt1 mb1 left">
                 <summary>What this app do with my credentials ?</summary>
                 <small>
                     <ul>
@@ -47,7 +47,7 @@
             </details>
         </div>
 
-        <div class="row center mt3">
+        <div class="row center mts">
             <button onclick="emit('modal-close')">&times; Close</button>
             <button class="settings--save" onclick="emit('settings-save')">Save &check;</button>
         </div>
@@ -140,6 +140,11 @@
 </script>
 
 <style>
+    .settings--form > .col {
+      min-width: 12rem;
+      width: 50%;
+    }
+
     .settings--trigger {
       color: var(--color-grey, grey);
       cursor: pointer;
