@@ -1,18 +1,18 @@
 class AppToaster extends HTMLElement {
   get style () {
     return `
-    .app-toaster {
+    .${this._id} {
       bottom: 1rem;
       position: absolute;
       width: 100%;
       z-index: var(--elevation-child, 30);
     }
-    .toast {
+    .${this._id} .toast {
       font-weight: bold;
       margin: .5rem 0;
       padding: .2rem .4rem;
     }
-    .toast.error {
+    .${this._id} .toast.error {
       background-color: var(--color-error, #da0000);
       color: var(--color-white);
     }`
@@ -26,7 +26,7 @@ class AppToaster extends HTMLElement {
   }
 
   emit (eventName, eventData) {
-    console.log(`emit event "${eventName}"`, eventData || '')
+    console.log(`emit event "${eventName}"`, eventData === undefined ? '' : eventData)
     window.dispatchEvent(new CustomEvent(eventName, { detail: eventData }))
   }
 

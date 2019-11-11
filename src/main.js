@@ -15,7 +15,6 @@ class App {
     this.on('fade-out', el => this.fadeOut(el))
     this.on('fade-out-destroy', el => this.fadeOut(el, true))
     setTimeout(() => {
-      this.settingsTriggerEl = document.querySelector('.app-settings--trigger')
       this.settingsActionRequired(true)
       this.emit('storage-search', 'app-settings')
       this.showTitle()
@@ -23,7 +22,7 @@ class App {
   }
 
   emit (eventName, eventData) {
-    console.log(`emit event "${eventName}"`, eventData || '')
+    console.log(`emit event "${eventName}"`, eventData === undefined ? '' : eventData)
     window.dispatchEvent(new CustomEvent(eventName, { detail: eventData }))
   }
 
@@ -51,7 +50,7 @@ class App {
 
   settingsActionRequired (actionRequired, errorMessage = '') {
     console.log('set action required to', actionRequired)
-    this.settingsTriggerEl.classList.toggle('action-required', actionRequired)
+    this.emit('app-settings-trigger--animate', actionRequired)
     this.emit('app-form--settings--error', errorMessage)
     if (!actionRequired) {
       this.emit('app-modal--close')
@@ -103,7 +102,7 @@ class App {
   initFuse () {
     // https://fusejs.io/
     const options = {
-      threshold: 0.45, // 0 is perfect match
+      threshold: 0.35, // 0 is perfect match
       keys: [{
         name: 'Nom',
         weight: 0.5,
@@ -124,7 +123,7 @@ class App {
   onSearchStart (stuff) {
     const results = this.fuse.search(stuff).map(r => this.getSearchResult(r))
     const title = `“${stuff}”`
-    this.emit('search-complete', { title, results })
+    this.emit('app-search--show', { title, results })
   }
 
   onSearchRetry () {
@@ -132,13 +131,9 @@ class App {
   }
 
   getSearchResult (data) {
-    let name = `${data.Nom} ${data.Marque || ''}`.trim()
-    let details = [(data.Référence || ''), (data.Boite ? `[${data.Boite}${data.Tiroir || ''}]` : '')].join(' ').trim()
+    const name = [(data.Nom || ''), (data.Marque || ''), (data.Boite ? `[${data.Boite}${data.Tiroir || ''}]` : '')].join(' ').trim()
+    const details = (data.Référence || '').trim()
     const location = (data.Pièce && data.Pièce !== 'N/A') ? data.Pièce : ''
-    if (!location) {
-      name += ' ' + details
-      details = ''
-    }
     return { ...data, name, details, location }
   }
 

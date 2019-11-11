@@ -1,15 +1,15 @@
 class AppLoader extends HTMLElement {
   get style () {
     return `
-    .loader {
+    .${this._id} {
       z-index: var(--elevation-t-rex, 200);
     }
-    .lds-dual-ring {
+    .${this._id} .lds-dual-ring {
       display: inline-block;
       height: 6rem;
       width: 6rem;
     }
-    .lds-dual-ring:after {
+    .${this._id} .lds-dual-ring:after {
       animation: lds-dual-ring 1.2s linear infinite;
       border: .5rem solid var(--color-white, whitesmoke);
       border-color: var(--color-white, whitesmoke) transparent var(--color-white, whitesmoke) transparent;
@@ -46,7 +46,7 @@ class AppLoader extends HTMLElement {
 
   createWrapper () {
     const wrapper = document.createElement('div')
-    wrapper.className = 'backdrop loader hidden'
+    wrapper.className = `${this._id} backdrop hidden`
     wrapper.innerHTML = '<div class="lds-dual-ring">.</div>'
     const style = document.createElement('style')
     style.innerHTML = this.style
