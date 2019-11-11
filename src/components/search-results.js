@@ -50,22 +50,22 @@ class AppSearchResults extends HTMLElement {
     let firstLegend = true
     let firstResult = true
     locations.forEach(location => {
-      const groupEl = document.createElement('fieldset')
-      groupEl.className = 'mb1 auto'
-      const labelEl = document.createElement('legend')
-      labelEl.className = firstLegend ? 'bold' : ''
+      const group = document.createElement('fieldset')
+      group.className = 'mb1 auto'
+      const label = document.createElement('legend')
+      label.className = `ph1 ${firstLegend ? 'bold' : ''}`
       firstLegend = false
-      labelEl.textContent = location || 'Somewhere'
-      groupEl.appendChild(labelEl)
+      label.textContent = location || 'Somewhere'
+      group.appendChild(label)
       resultsPerLocation[location].forEach(result => {
         const resultEl = document.createElement('div')
-        resultEl.className = 'search--result col ' + (firstResult ? 'bold' : '')
+        resultEl.className = 'search--result col ' + (firstResult ? 'bold mts' : 'mt1')
         firstResult = false
         resultEl.innerHTML = `<div>${result.name}</div><small class="mbs">${result.details}</small>`
         resultEl.addEventListener('click', () => this.emit('edit-result', result))
-        groupEl.appendChild(resultEl)
+        group.appendChild(resultEl)
       })
-      this.els.results.appendChild(groupEl)
+      this.els.results.appendChild(group)
     })
   }
 
@@ -85,7 +85,7 @@ class AppSearchResults extends HTMLElement {
     this.els.wrapper.appendChild(title)
     this.els.title = title
     const results = document.createElement('div')
-    results.className = 'col middle'
+    results.className = 'col middle mts'
     this.els.wrapper.appendChild(results)
     this.els.results = results
   }
