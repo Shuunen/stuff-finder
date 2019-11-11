@@ -7,7 +7,7 @@ class AppStorage {
   }
 
   emit (eventName, eventData) {
-    console.log(`emit event "${eventName}"`, eventData || '')
+    console.log(`emit event "${eventName}"`, eventData === undefined ? '' : eventData)
     window.dispatchEvent(new CustomEvent(eventName, { detail: eventData }))
   }
 

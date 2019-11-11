@@ -1,7 +1,7 @@
 class AppModal extends HTMLElement {
   get style () {
     return `
-    .app-modal {
+    .${this._id} {
       background-color: var(--color-white, whitesmoke);
       border: .3rem solid var(--color-primary, steelblue);
       border-radius: var(--border-radius, .3rem);
@@ -13,7 +13,7 @@ class AppModal extends HTMLElement {
       z-index: var(--elevation-giraffe, 100);
     }
     @media only screen and (max-width: 600px) {
-      .app-modal {
+      .${this._id} {
         max-height: inherit;
         max-width: inherit;
         min-width: var(--settings-width, 80vw);
@@ -36,7 +36,7 @@ class AppModal extends HTMLElement {
   }
 
   emit (eventName, eventData) {
-    console.log(`emit event "${eventName}"`, eventData || '')
+    console.log(`emit event "${eventName}"`, eventData === undefined ? '' : eventData)
     window.dispatchEvent(new CustomEvent(eventName, { detail: eventData }))
   }
 
@@ -70,7 +70,7 @@ class AppModal extends HTMLElement {
 
   createModal () {
     const modal = document.createElement('div')
-    modal.className = 'app-modal col'
+    modal.className = `${this._id} col`
     modal.onclick = event => event.stopPropagation()
     return modal
   }
