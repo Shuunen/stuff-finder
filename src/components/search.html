@@ -3,7 +3,7 @@
     <div class="search--results col middle"></div>
     <div class="row center mt1 mbs">
         <button onclick="emit('app-modal--close')">&times; Close</button>
-        <button onclick="emit(['app-modal--close','search-retry'])">Retry &check;</button>
+        <button onclick="emit('search-retry')">Retry &check;</button>
     </div>
 </app-modal>
 
@@ -15,7 +15,7 @@
       }
 
       onSearchComplete (data) {
-        this.log(`displaying ${data.results.length} results...`)
+        console.log(`displaying ${data.results.length} results...`)
         document.querySelector('.search--title').textContent = data.title
         const wrapper = document.querySelector('.search--results')
         this.formatResults(data.results, wrapper)

@@ -1,15 +1,11 @@
-import './plugins/dom'
-import './plugins/prompt'
-import './plugins/storage'
-
-import { BaseModel } from './model'
 import Fuse from 'fuse.js'
+import { pickOne } from 'shuutils'
+import './services/storage'
 
-class App extends BaseModel {
+class App {
   constructor () {
-    super('app')
-    this.log('constructor')
     this.items = []
+    window.emit = (...args) => this.emit.apply(this, args)
     this.on('app-form--settings--set', this.onSettingsSave)
     this.on('app-form--settings--save', this.onSettingsSave)
     this.on('storage-found', this.onStorageFound)
@@ -21,21 +17,30 @@ class App extends BaseModel {
     setTimeout(() => {
       this.settingsTriggerEl = document.querySelector('.app-settings--trigger')
       this.settingsActionRequired(true)
-      this.emit('storage-search', 'api-credentials')
+      this.emit('storage-search', 'app-settings')
       this.showTitle()
     }, 300)
   }
 
+  emit (eventName, eventData) {
+    console.log(`emit event "${eventName}"`, eventData || '')
+    window.dispatchEvent(new CustomEvent(eventName, { detail: eventData }))
+  }
+
+  on (eventName, callback) {
+    window.addEventListener(eventName, event => callback.bind(this)(event.detail))
+  }
+
   coolAscii () {
-    return window.pickOne(['( ＾◡＾)', '♥‿♥', '八(＾□＾*)', '(◡ ‿ ◡ ✿)', '(=^ェ^=)', 'ʕ •ᴥ•ʔ', '(*°∀°)', '\\(-ㅂ-)/', 'ლ(╹◡╹ლ)', 'ლ(o◡oლ)', '＼(＾O＾)／'])
+    return pickOne(['( ＾◡＾)', '♥‿♥', '八(＾□＾*)', '(◡ ‿ ◡ ✿)', '(=^ェ^=)', 'ʕ •ᴥ•ʔ', '(*°∀°)', '\\(-ㅂ-)/', 'ლ(╹◡╹ლ)', 'ლ(o◡oლ)', '＼(＾O＾)／'])
   }
 
   showTitle () {
-    this.emit('do-prompt', ['Stuff Finder', 1000, `Stuff Finder\n${this.coolAscii()}`])
+    this.emit('app-prompter--type', ['Stuff Finder', 1000, `Stuff Finder\n${this.coolAscii()}`])
   }
 
   async onSettingsSave (settings) {
-    this.log('trying settings', settings)
+    console.log('trying settings', settings)
     const itemsLoaded = await this.loadItems(settings)
     if (!itemsLoaded) {
       return this.settingsActionRequired(true, 'failed to use api settings')
@@ -45,7 +50,7 @@ class App extends BaseModel {
   }
 
   settingsActionRequired (actionRequired, errorMessage = '') {
-    this.log('set action required to', actionRequired)
+    console.log('set action required to', actionRequired)
     this.settingsTriggerEl.classList.toggle('action-required', actionRequired)
     this.emit('app-form--settings--error', errorMessage)
     if (!actionRequired) {
@@ -53,11 +58,15 @@ class App extends BaseModel {
     }
   }
 
+  isLoading (active) {
+    this.emit('app-loader--toggle', active)
+  }
+
   async loadItems (settings) {
-    this.emit('set-loading', true)
+    this.isLoading(true)
     let response = await this.fetchApi(settings)
     if (!response || response.error) {
-      this.emit('set-loading', false)
+      this.isLoading(false)
       return false
     }
     let records = response.records
@@ -68,7 +77,7 @@ class App extends BaseModel {
       records = records.concat(response.records)
     }
     await this.parseApiRecords(records)
-    this.emit('set-loading', false)
+    this.isLoading(false)
     return true
   }
 
@@ -87,7 +96,7 @@ class App extends BaseModel {
       ...item.fields,
     }))
     this.showLog(`${this.items.length} item(s) loaded ` + this.coolAscii())
-    this.log('first item is :', this.items[0])
+    console.log('first item is :', this.items[0])
     this.initFuse()
   }
 
@@ -134,13 +143,13 @@ class App extends BaseModel {
   }
 
   onStorageFound (data) {
-    if (data.key === 'api-credentials') {
+    if (data.key === 'app-settings') {
       this.emit('app-form--settings--set', data.value)
     }
   }
 
   async fadeIn (el) {
-    this.log('fadeIn')
+    console.log('fadeIn')
     if (!el.classList.contains('hide')) {
       this.warn('please add "hide" class before mounting dom element and then call fade-in')
       return
@@ -150,7 +159,7 @@ class App extends BaseModel {
   }
 
   async fadeOut (el, destroy = false) {
-    this.log('fadeOut')
+    console.log('fadeOut')
     el.classList.add('hide')
     await this.sleep(350)
     el.classList.remove('hide')
@@ -164,6 +173,16 @@ class App extends BaseModel {
 
   async sleep (ms) {
     return new Promise(resolve => setTimeout(resolve, (ms || 1000)))
+  }
+
+  showLog (message, data) {
+    console.log(message, data || '')
+    this.emit('show-toast', { type: 'info', message })
+  }
+
+  showError (message) {
+    console.error(message)
+    this.emit('show-toast', { type: 'error', message })
   }
 }
 
