@@ -9,7 +9,6 @@
     class ComponentSpeech extends window.BaseModel {
       constructor () {
         super('speech')
-        this.log('constructor')
         this.initRecognition()
         this.isMobile = typeof window.orientation !== 'undefined'
         this.el = document.querySelector('.component--speech')
@@ -37,8 +36,7 @@
 
       onSuccess (sentence, confidence) {
         this.recognitionSucceed = true
-        this.log('sentence :', sentence)
-        this.log('confidence : ' + confidence)
+        console.log('confidence : ' + confidence)
         this.emit('search-start', sentence)
       }
 
@@ -63,7 +61,6 @@
       }
 
       setStatus (status) {
-        this.log('status : ' + status)
         let label = ''
         let hint = ''
         switch (status) {

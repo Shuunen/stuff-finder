@@ -10,15 +10,20 @@
 </head>
 
 <body class="stuff-finder col center middle">
-    <h1 class="highlight">Stuff Finder</h1>
     <script src="main.js"></script>
     <include src="components/settings.html"></include>
-    <include src="components/loader.html"></include>
+    <!--
     <include src="components/search.html"></include>
     <include src="components/speech.html"></include>
-    <include src="components/toaster.html"></include>
-    <script src="wc/app-modal.js"></script>
-    <script src="wc/app-form.js"></script>
+        -->
+    <script src="wc/modal.js"></script>
+    <script src="wc/form.js"></script>
+    <script src="wc/loader.js"></script>
+    <script src="wc/toaster.js"></script>
+    <script src="wc/prompter.js"></script>
+    <app-toaster></app-toaster>
+    <app-loader></app-loader>
+    <app-prompter></app-prompter>
     <!--<app-modal data-id="settings" data-fields="{ firstName: 'John', last: ''}"></app-modal>-->
 </body>
 

@@ -1,12 +1,18 @@
 import pkg from '../../package.json'
-import { BaseModel } from '../model'
 
-class PluginStorage extends BaseModel {
+class AppStorage {
   constructor () {
-    super('storage')
-    this.log('constructor')
     this.on('storage-set', data => this.set(data.key, data.value))
     this.on('storage-search', this.search)
+  }
+
+  emit (eventName, eventData) {
+    console.log(`emit event "${eventName}"`, eventData || '')
+    window.dispatchEvent(new CustomEvent(eventName, { detail: eventData }))
+  }
+
+  on (eventName, callback) {
+    window.addEventListener(eventName, event => callback.bind(this)(event.detail))
   }
 
   fullKey (key) {
@@ -22,7 +28,7 @@ class PluginStorage extends BaseModel {
   }
 
   async set (key, data) {
-    this.log(`storing ${key}...`, data)
+    console.log(`storing ${key}...`, data)
     localStorage[this.fullKey(key)] = typeof data === 'object' ? JSON.stringify(data) : data
     return data
   }
@@ -34,11 +40,11 @@ class PluginStorage extends BaseModel {
   async search (key) {
     const exists = await this.has(key)
     if (!exists) {
-      return this.log(`key ${key} has not been found in storage`)
+      return console.log(`key ${key} has not been found in storage`)
     }
     const value = await this.get(key)
     this.emit('storage-found', { key, value })
   }
 }
 
-export const pluginStorage = new PluginStorage()
+export const appStorage = new AppStorage()

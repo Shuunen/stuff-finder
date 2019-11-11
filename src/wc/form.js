@@ -1,6 +1,4 @@
-import Model from './model'
-
-class AppForm extends Model {
+class AppForm extends HTMLElement {
   get name () {
     return this.getAttribute('name')
   }
@@ -29,10 +27,19 @@ class AppForm extends Model {
 
   constructor () {
     super()
-    this.id = `app-form--${this.name}`
+    this._id = `app-form--${this.name}`
     this.els = {}
-    this.on(`${this.id}--set`, data => (this.data = data))
-    this.on(`${this.id}--error`, message => (this.error = message))
+    this.on(`${this._id}--set`, data => (this.data = data))
+    this.on(`${this._id}--error`, message => (this.error = message))
+  }
+
+  emit (eventName, eventData) {
+    console.log(`emit event "${eventName}"`, eventData || '')
+    window.dispatchEvent(new CustomEvent(eventName, { detail: eventData }))
+  }
+
+  on (eventName, callback) {
+    window.addEventListener(eventName, event => callback.bind(this)(event.detail))
   }
 
   createForm () {
@@ -63,7 +70,7 @@ class AppForm extends Model {
     row.appendChild(close)
     const save = document.createElement('button')
     save.innerHTML = 'Save &check;'
-    save.onclick = () => this.emit(`${this.id}--save`, this.data)
+    save.onclick = () => this.emit(`${this._id}--save`, this.data)
     save.setAttribute('disabled', true)
     this.els.form.onchange = this.els.form.onkeyup = () => this.validate()
     row.appendChild(save)
@@ -72,7 +79,6 @@ class AppForm extends Model {
   }
 
   validate () {
-    this.log('validating...')
     if (this.els.form.checkValidity()) {
       this.els.save.removeAttribute('disabled')
     } else {

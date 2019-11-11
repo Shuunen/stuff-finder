@@ -1,4 +1,4 @@
-[class^="highlight"] {
+[class*="highlight"] {
   background-color: var(--color-white);
   color: var(--color-primary);
   padding: .2rem .5rem;
