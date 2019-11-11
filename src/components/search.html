@@ -1,42 +1,30 @@
-<div class="component--search backdrop hidden" onclick="emit('modal-close')">
-    <div class="component--modal col center" onclick="event.stopPropagation()">
-        <h2 class="search--title"></h2>
-        <div class="grow scrollable">
-            <div class="search--results col middle"></div>
-        </div>
-        <div class="row center mt1 mbs">
-            <button onclick="emit('modal-close')">&times; Close</button>
-            <button onclick="emit(['modal-close','search-retry'])">Retry &check;</button>
-        </div>
+<app-modal name="search">
+    <h2 class="search--title"></h2>
+    <div class="search--results col middle"></div>
+    <div class="row center mt1 mbs">
+        <button onclick="emit('app-modal--close')">&times; Close</button>
+        <button onclick="emit(['app-modal--close','search-retry'])">Retry &check;</button>
     </div>
-</div>
+</app-modal>
 
 <script>
     class ComponentSearch extends window.BaseModel {
       constructor () {
         super('search')
-      }
-
-      setupElements () {
-        this.el = document.querySelector('.component--search')
-        this.title = document.querySelector('.search--title')
-        this.results = document.querySelector('.search--results')
-      }
-
-      setupListeners () {
         this.on('search-complete', this.onSearchComplete)
       }
 
       onSearchComplete (data) {
         this.log(`displaying ${data.results.length} results...`)
-        this.title.textContent = data.title
-        this.formatResults(data.results)
-        this.emit('modal-open', 'component--search')
+        document.querySelector('.search--title').textContent = data.title
+        const wrapper = document.querySelector('.search--results')
+        this.formatResults(data.results, wrapper)
+        this.emit('app-modal--search--open')
       }
 
-      formatResults (results) {
+      formatResults (results, wrapper) {
         if (results.length === 0) {
-          this.results.innerHTML = `<div class="mb1 mt1"><span class="highlight-grey">${this.sorryAscii()}</span></div><span>Sorry nothing was found.</span>`
+          wrapper.innerHTML = `<div class="mb1 mt1"><span class="highlight-grey">${this.sorryAscii()}</span></div><span>Sorry nothing was found.</span>`
           return
         }
         const locations = []
@@ -50,7 +38,7 @@
           }
           resultsPerLocation[result.location].push(result)
         })
-        this.results.innerHTML = ''
+        wrapper.innerHTML = ''
         let firstLegend = true
         let firstResult = true
         locations.forEach(location => {
@@ -66,9 +54,10 @@
             resultEl.className = 'search--result col ' + (firstResult ? 'bold' : '')
             firstResult = false
             resultEl.innerHTML = `<div>${result.name}</div><small class="mbs">${result.details}</small>`
+            resultEl.addEventListener('click', () => this.emit('edit-result', result))
             groupEl.appendChild(resultEl)
           })
-          this.results.appendChild(groupEl)
+          wrapper.appendChild(groupEl)
         })
       }
 

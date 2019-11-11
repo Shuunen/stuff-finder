@@ -5,16 +5,7 @@ class PluginPrompt extends BaseModel {
   constructor () {
     super('prompt')
     this.log('constructor')
-  }
-
-  setupElements () {
     this.targetEl = document.querySelector('h1')
-    if (!this.targetEl) {
-      console.error('failed to find target')
-    }
-  }
-
-  setupListeners () {
     this.on('do-prompt', this.doPrompt)
   }
 

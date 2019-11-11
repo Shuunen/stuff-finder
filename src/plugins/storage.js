@@ -5,9 +5,6 @@ class PluginStorage extends BaseModel {
   constructor () {
     super('storage')
     this.log('constructor')
-  }
-
-  setupListeners () {
     this.on('storage-set', data => this.set(data.key, data.value))
     this.on('storage-search', this.search)
   }

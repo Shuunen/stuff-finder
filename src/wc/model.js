@@ -1,12 +1,11 @@
-/* global CustomEvent */
-
-export class BaseModel {
-  constructor (name = 'unknown') {
-    this.name = name
+module.exports = class extends HTMLElement {
+  constructor (id = 'unknown') {
+    super()
+    this.id = id
   }
 
   log () {
-    console.log.apply(console.log, [this.name, ':', ...arguments])
+    console.log.apply(console.log, [this.id, ':', ...arguments])
   }
 
   showLog (message, data) {
@@ -15,11 +14,11 @@ export class BaseModel {
   }
 
   warn () {
-    console.warn.apply(console.warn, [this.name, ':', ...arguments])
+    console.warn.apply(console.warn, [this.id, ':', ...arguments])
   }
 
   error () {
-    console.error.apply(console.error, [this.name, ':', ...arguments])
+    console.error.apply(console.error, [this.id, ':', ...arguments])
   }
 
   showError (message) {
