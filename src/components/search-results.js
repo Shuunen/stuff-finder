@@ -1,3 +1,5 @@
+/* global HTMLElement */
+
 import { pickOne } from 'shuutils'
 
 class AppSearchResults extends HTMLElement {

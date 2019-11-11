@@ -1,3 +1,5 @@
+/* global HTMLElement */
+
 class AppForm extends HTMLElement {
   get name () {
     return this.getAttribute('name')

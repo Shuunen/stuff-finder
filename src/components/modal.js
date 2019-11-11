@@ -1,3 +1,5 @@
+/* global HTMLElement */
+
 class AppModal extends HTMLElement {
   get style () {
     return `

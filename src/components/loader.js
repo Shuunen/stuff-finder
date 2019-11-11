@@ -1,3 +1,5 @@
+/* global HTMLElement */
+
 class AppLoader extends HTMLElement {
   get style () {
     return `
