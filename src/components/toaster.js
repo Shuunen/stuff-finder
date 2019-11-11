@@ -1,3 +1,5 @@
+/* global HTMLElement */
+
 class AppToaster extends HTMLElement {
   get style () {
     return `
@@ -36,7 +38,6 @@ class AppToaster extends HTMLElement {
 
   show (data) {
     const { type = 'info', message = 'no message provided', delay = 3000 } = data
-    console.log(`show toast type "${type}" with a delay of ${delay}ms`)
     const toast = document.createElement('p')
     toast.classList.add('toast', type)
     toast.innerHTML = message

@@ -1,3 +1,5 @@
+/* global HTMLElement */
+
 class AppSettingsTrigger extends HTMLElement {
   get style () {
     return `

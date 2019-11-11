@@ -41,7 +41,6 @@ class App {
   }
 
   async onSettingsSave (settings) {
-    console.log('trying settings', settings)
     const itemsLoaded = await this.loadItems(settings)
     if (!itemsLoaded) {
       return this.settingsActionRequired(true, 'failed to use api settings')
@@ -51,7 +50,6 @@ class App {
   }
 
   settingsActionRequired (actionRequired, errorMessage = '') {
-    console.log('set action required to', actionRequired)
     this.emit('app-settings-trigger--animate', actionRequired)
     this.emit('app-form--settings--error', errorMessage)
     if (!actionRequired) {
@@ -97,7 +95,6 @@ class App {
       ...item.fields,
     }))
     this.showLog(`${this.items.length} item(s) loaded ` + this.coolAscii())
-    console.log('first item is :', this.items[0])
     this.initFuse()
   }
 
@@ -146,7 +143,6 @@ class App {
   }
 
   async fadeIn (el) {
-    console.log('fadeIn')
     if (!el.classList.contains('hide')) {
       this.warn('please add "hide" class before mounting dom element and then call fade-in')
       return
@@ -156,7 +152,6 @@ class App {
   }
 
   async fadeOut (el, destroy = false) {
-    console.log('fadeOut')
     el.classList.add('hide')
     await this.sleep(350)
     el.classList.remove('hide')

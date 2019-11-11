@@ -1,3 +1,5 @@
+/* global HTMLElement */
+
 import { type } from '@camwiegert/typical'
 
 class AppPrompter extends HTMLElement {
