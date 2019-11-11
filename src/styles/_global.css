@@ -26,11 +26,12 @@ body {
 }
 
 body::after {
-  animation-duration: 20s;
+  animation-duration: 10s;
   animation-iteration-count: infinite;
   animation-name: letter-lsd;
   animation-timing-function: ease-in-out;
   content: "💿 📷 💎 💡 📻 📱 🔍 🔦 📚";
+  filter: grayscale(1);
   font-size: 2rem;
   letter-spacing: 10vw;
   line-height: 30vh;
@@ -41,13 +42,11 @@ body::after {
 
 @keyframes letter-lsd {
   0%, 100% {
-    filter: grayscale(1);
-    opacity: .5;
-    transform: scale(.95);
+    opacity: .2;
+    transform: scale(.90);
   }
   50% {
-    filter: grayscale(0);
-    opacity: 1;
+    opacity: .7;
     transform: scale(1);
   }
 }

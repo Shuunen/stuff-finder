@@ -1,6 +1,7 @@
 import Fuse from 'fuse.js'
 import { pickOne } from 'shuutils'
 import './services/storage'
+import './services/speech'
 
 class App {
   constructor () {
@@ -8,6 +9,7 @@ class App {
     window.emit = (...args) => this.emit.apply(this, args)
     this.on('app-form--settings--set', this.onSettingsSave)
     this.on('app-form--settings--save', this.onSettingsSave)
+    this.on('app-speech--recognition-success', this.onSearchStart)
     this.on('storage-found', this.onStorageFound)
     this.on('search-start', this.onSearchStart)
     this.on('search-retry', this.onSearchRetry)
@@ -123,7 +125,7 @@ class App {
   onSearchStart (stuff) {
     const results = this.fuse.search(stuff).map(r => this.getSearchResult(r))
     const title = `“${stuff}”`
-    this.emit('app-search--show', { title, results })
+    this.emit('app-search-results--show', { title, results })
   }
 
   onSearchRetry () {

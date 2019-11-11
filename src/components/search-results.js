@@ -1,11 +1,12 @@
 import { pickOne } from 'shuutils'
 
-class AppSearch extends HTMLElement {
+class AppSearchResults extends HTMLElement {
   constructor () {
     super()
-    this._id = 'app-search'
+    this._id = 'app-search-results'
     this.els = {}
     this.on(`${this._id}--show`, this.show)
+    this.on(`${this._id}--retry`, this.retry)
   }
 
   emit (eventName, eventData) {
@@ -21,7 +22,12 @@ class AppSearch extends HTMLElement {
     console.log(`displaying ${data.results.length} results...`)
     this.els.title.textContent = data.title
     this.format(data.results)
-    this.emit('app-modal--search--open')
+    this.emit('app-modal--search-results--open')
+  }
+
+  retry () {
+    this.emit('app-modal--search-results--close')
+    this.emit('app-speech--start')
   }
 
   format (results) {
@@ -69,7 +75,7 @@ class AppSearch extends HTMLElement {
 
   createWrapper () {
     const wrapper = document.createElement('app-modal')
-    wrapper.name = 'search'
+    wrapper.name = 'search-results'
     return wrapper
   }
 
@@ -103,11 +109,11 @@ class AppSearch extends HTMLElement {
     const wrapper = this.createWrapper()
     this.parentNode.replaceChild(wrapper, this)
     setTimeout(() => {
-      this.els.wrapper = document.querySelector('.app-modal--search')
+      this.els.wrapper = document.querySelector('.app-modal--search-results')
       this.addContent()
       this.addFooter()
     }, 500)
   }
 }
 
-window.customElements.define('app-search', AppSearch)
+window.customElements.define('app-search-results', AppSearchResults)

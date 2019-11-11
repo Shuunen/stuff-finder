@@ -14,7 +14,7 @@ class AppModal extends HTMLElement {
     }
     @media only screen and (max-width: 600px) {
       .${this._id} {
-        max-height: inherit;
+        max-height: 100%;
         max-width: inherit;
         min-width: var(--settings-width, 80vw);
         padding: 0 .5rem;
@@ -32,6 +32,7 @@ class AppModal extends HTMLElement {
     this._id = `app-modal--${this.name}`
     this.els = {}
     this.on(`${this._id}--open`, this.open)
+    this.on(`${this._id}--close`, this.close)
     this.on('app-modal--close', this.close)
   }
 
