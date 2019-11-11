@@ -12,19 +12,10 @@
         this.log('constructor')
         this.initRecognition()
         this.isMobile = typeof window.orientation !== 'undefined'
-      }
-
-      setupElements () {
         this.el = document.querySelector('.component--speech')
         this.buttonEl = document.querySelector('.speech--button')
         this.hintEl = document.querySelector('.speech--hint')
-      }
-
-      setupListeners () {
         this.on('speech-recognition', this.onStart)
-      }
-
-      onLoad () {
         this.setStatus('ready')
       }
 

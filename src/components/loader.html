@@ -7,13 +7,7 @@
       constructor () {
         super('loader')
         this.isLoading = false
-      }
-
-      setupElements () {
         this.el = document.querySelector('.loader')
-      }
-
-      setupListeners () {
         this.on('set-loading', this.setLoading)
         this.on('toggle-loading', this.toggleLoading)
       }

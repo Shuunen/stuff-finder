@@ -1,78 +1,16 @@
 
-button,
-input,
-textarea {
-  -webkit-appearance: none;
-  border: .1rem solid var(--color-grey, grey);
-  border-radius: var(--border-radius, .3rem);
-  font-family: inherit;
-  font-size: 1rem;
-  margin: 0;
-  margin-left: .2rem;
-  max-width: 100%;
-  padding: .4rem 0 .4rem .4rem;
-  transition: border .3s, background-color .3s;
+.app-form {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
-button,
-input[type="button"],
-input[type="submit"] {
-  background-color: var(--color-grey-light, #e8e8e8);
-  cursor: pointer;
-  margin-bottom: .5rem;
-  overflow: hidden;
-  padding: .3rem .8rem .4rem .7rem;
-  white-space: nowrap;
+.app-form > label {
+  margin-top: 1rem;
+  min-width: 12rem;
+  width: 50%;
 }
 
-button + button {
-  margin-left: 1em;
-}
-
-button.big {
-  font-size: 1.5rem;
-  padding: .5rem 1.2rem .7rem 1rem;
-}
-
-button:hover,
-input[type="button"]:hover,
-input[type="submit"]:hover {
-  background-color: var(--color-white, whitesmoke);
-  border: .1rem solid var(--color-primary, steelblue);
-}
-
-button.text,
-input[type="button"].text,
-input[type="submit"].text {
-  background-color: transparent;
-  border: none;
-  text-decoration: underline;
-}
-
-button.text:hover,
-input[type="button"].text:hover,
-input[type="submit"].text:hover {
-  color: var(--color-primary, steelblue);
-}
-
-button:disabled {
-  cursor: not-allowed;
-  filter: grayscale(1);
-  opacity: .5;
-}
-
-/* Show red borders when filled, but invalid */
-input:not(:placeholder-shown) {
-  background-color: var(--color-error-light, red);
-  border: .1rem solid var(--color-error, red);
-}
-
-/* Show green borders when valid */
-input:valid {
-  background-color: var(--color-success-light, #c5e2c5);
-  border: .1rem solid var(--color-success, green);
-}
-
-input:focus:invalid {
-  box-shadow: none;
+.app-form > label > [name] {
+  margin-top: .5rem;
 }

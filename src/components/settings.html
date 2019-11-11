@@ -1,4 +1,4 @@
-<div class="settings--trigger" onclick="emit('modal-open', 'component--settings')">
+<div class="app-settings--trigger" onclick="emit('app-modal--settings--open')">
     <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
         stroke-linecap="round" stroke-linejoin="round" class="feather feather-settings">
         <circle cx="12" cy="12" r="3"></circle>
@@ -8,144 +8,42 @@
     </svg>
 </div>
 
-<div class="component--settings backdrop hidden" onclick="emit('modal-close')">
-    <div class="component--modal col" onclick="event.stopPropagation()">
-        <h2>Settings</h2>
+<app-modal name="settings">
+    <app-form name="settings">
+        <label>
+            <a href="//airtable.com/api" target="_blank">Airtable api base</a>
+            <input name="base" placeholder="your api base" pattern="^app\w{14}$" required maxlength="17" autofocus>
+        </label>
+        <label>
+            <a href="//airtable.com/account" target="_blank">Airtable api key</a>
+            <input name="key" placeholder="your api key" pattern="^key\w{14}$" required maxlength="17">
+        </label>
+        <label>
+            Airtable table name
+            <input name="table" pattern="\S+" placeholder="your table name" required>
+        </label>
+        <label>
+            Airtable view name
+            <input name="view" pattern="\S+" placeholder="your table name" required value="stuff-finder">
+        </label>
+    </app-form>
 
-        <div class="grow scrollable">
-            <p class="settings--message error"></p>
-            <form class="settings--form row wrap center" onkeyup="emit('settings-validate')" onchange="emit('settings-validate')">
-                <label class="col center">
-                    <a href="//airtable.com/api" target="_blank" class="mb1">Airtable api base</a>
-                    <input name="base" placeholder="your api base" pattern="^app\w{14}$" required maxlength="17" autofocus>
-                </label>
-                <label class="col center mt1">
-                    <a href="//airtable.com/account" target="_blank" class="mb1">Airtable api key</a>
-                    <input name="key" placeholder="your api key" pattern="^key\w{14}$" required maxlength="17">
-                </label>
-                <label class="col center mt1">
-                    Airtable table name
-                    <input name="table" class="mts" pattern="\S+" placeholder="your table name" required>
-                </label>
-                <label class="col center mt1">
-                    Airtable view name
-                    <input name="view" class="mts" pattern="\S+" placeholder="your table name" required value="stuff-finder">
-                </label>
-            </form>
-
-            <details class="mt1 mb1 left">
-                <summary>What this app do with my credentials ?</summary>
-                <small>
-                    <ul>
-                        <li>fetch your Airtable data</li>
-                        <li>store credentials locally in your browser</li>
-                        <li>nothing else</li>
-                    </ul>
-                    Feel free to check this app source code on the <a href="https://github.com/Shuunen/stuff-finder" target="_blank">Github project
-                        page</a>.
-                </small>
-            </details>
-        </div>
-
-        <div class="row center mts">
-            <button onclick="emit('modal-close')">&times; Close</button>
-            <button class="settings--save" onclick="emit('settings-save')">Save &check;</button>
-        </div>
-    </div>
-</div>
-
-<script>
-    class Settings extends window.BaseModel {
-      get formIsValid () {
-        return this.formEl.checkValidity()
-      }
-
-      constructor () {
-        super('settings')
-        this.log('constructor')
-        this.settings = {}
-      }
-
-      setupElements () {
-        this.el = document.querySelector('.component--settings')
-        this.triggerEl = document.querySelector('.settings--trigger')
-        this.saveEl = document.querySelector('.settings--save')
-        this.messageEl = document.querySelector('.settings--message')
-        this.formEl = document.querySelector('.settings--form')
-      }
-
-      setupListeners () {
-        this.on('settings-set', this.setSettings)
-        this.on('settings-action-required', this.setActionRequired)
-        this.on('settings-validate', this.validate)
-        this.on('settings-save', this.save)
-        this.on('modal-open', this.onModalOpen)
-      }
-
-      onLoad () {
-        this.validate()
-      }
-
-      onModalOpen (id) {
-        if (id !== 'component--settings') {
-          return
-        }
-        this.validate()
-      }
-
-      setSettings (data) {
-        Object.entries(data).forEach(entry => {
-          const [key, value] = entry
-          Array.from(this.formEl.elements).find(el => el.name === key).value = value
-        })
-      }
-
-      getSettings () {
-        const settings = {}
-        Array.from(this.formEl.elements).forEach(el => (settings[el.name] = el.value))
-        return settings
-      }
-
-      validate () {
-        this.log('in validate and formIsValid is', this.formIsValid)
-        if (this.formIsValid) {
-          this.saveEl.removeAttribute('disabled')
-        } else {
-          this.saveEl.setAttribute('disabled', true)
-        }
-      }
-
-      save () {
-        if (this.formIsValid) {
-          this.emit('settings-set', this.getSettings())
-          this.emit('modal-close')
-        }
-      }
-
-      setActionRequired (data) {
-        if (typeof data !== 'object') {
-          this.error('settings-action-required is expecting an object')
-        }
-        const required = typeof data.required === 'boolean' ? data.required : false
-        this.log('set action require to', required)
-        this.triggerEl.classList.toggle('action-required', required)
-        if (data.message) {
-          this.log('set message to', data.message)
-          this.messageEl.textContent = data.message
-        }
-      }
-    }
-    // eslint-disable-next-line no-new
-    new Settings()
-</script>
+    <details class="mt1 mb1 left">
+        <summary>What this app do with my credentials ?</summary>
+        <small>
+            <ul>
+                <li>fetch your Airtable data</li>
+                <li>store credentials locally in your browser</li>
+                <li>nothing else</li>
+            </ul>
+            Feel free to check this app source code on the <a href="https://github.com/Shuunen/stuff-finder" target="_blank">Github project
+                page</a>.
+        </small>
+    </details>
+</app-modal>
 
 <style>
-    .settings--form > .col {
-      min-width: 12rem;
-      width: 50%;
-    }
-
-    .settings--trigger {
+    .app-settings--trigger {
       color: var(--color-grey, grey);
       cursor: pointer;
       height: 2.5rem;
@@ -157,7 +55,7 @@
       z-index: var(--elevation-child, 30);
     }
 
-    .settings--trigger.action-required {
+    .app-settings--trigger.action-required {
       animation-duration: 2s;
       animation-fill-mode: both;
       animation-iteration-count: infinite;
