@@ -32,7 +32,7 @@ class AppSearchResults extends HTMLElement {
 
   format (results) {
     if (results.length === 0) {
-      this.els.results.innerHTML = `<div class="mb1 mt1"><span class="highlight-grey">${this.sorryAscii()}</span></div><span>Sorry nothing was found.</span>`
+      this.els.results.innerHTML = `<div class="mb1 mt1"><span class="highlight-grey">${this.sorryAscii()}</span></div><span class="mb1">Sorry nothing was found.</span>`
       return
     }
     const locations = []
@@ -51,7 +51,7 @@ class AppSearchResults extends HTMLElement {
     let firstResult = true
     locations.forEach(location => {
       const groupEl = document.createElement('fieldset')
-      groupEl.className = 'mb1'
+      groupEl.className = 'mb1 auto'
       const labelEl = document.createElement('legend')
       labelEl.className = firstLegend ? 'bold' : ''
       firstLegend = false
