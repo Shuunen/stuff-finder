@@ -1,12 +1,36 @@
 /* global HTMLElement */
 
 class AppForm extends HTMLElement {
+  get style () {
+    return `
+    .${this._id} {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .${this._id} label {
+      margin-top: 1rem;
+      width: 50%;
+    }
+    .${this._id} label > [name] {
+      margin-top: .5rem;
+    }`
+  }
+
   get name () {
     return this.getAttribute('name')
   }
 
   get title () {
     return this.getAttribute('title')
+  }
+
+  get onCloseEventName () {
+    return this.getAttribute('on-close') || 'app-modal--close'
+  }
+
+  get onSaveEventName () {
+    return this.getAttribute('on-save') || `${this._id}--save`
   }
 
   get data () {
@@ -27,14 +51,6 @@ class AppForm extends HTMLElement {
     this.els.error.textContent = message
   }
 
-  constructor () {
-    super()
-    this._id = `app-form--${this.name}`
-    this.els = {}
-    this.on(`${this._id}--set`, data => (this.data = data))
-    this.on(`${this._id}--error`, message => (this.error = message))
-  }
-
   emit (eventName, eventData) {
     console.log(`emit event "${eventName}"`, eventData === undefined ? '' : eventData)
     window.dispatchEvent(new CustomEvent(eventName, { detail: eventData }))
@@ -47,15 +63,22 @@ class AppForm extends HTMLElement {
   createForm () {
     const form = document.createElement('form')
     form.innerHTML = this.innerHTML
-    form.className = 'app-form'
+    form.className = this._id
+    const style = document.createElement('style')
+    style.innerHTML = this.style
+    form.appendChild(style)
     return form
   }
 
   createHeader () {
     const row = document.createElement('div')
-    const title = document.createElement('h2')
-    title.textContent = this.title || this.name
-    row.appendChild(title)
+    if (this.title === 'false') {
+      this.removeAttribute('title')
+    } else {
+      const title = document.createElement('h2')
+      title.textContent = this.title || this.name
+      row.appendChild(title)
+    }
     const error = document.createElement('p')
     error.className = 'error'
     row.appendChild(error)
@@ -68,16 +91,23 @@ class AppForm extends HTMLElement {
     row.className = 'row center mts'
     const close = document.createElement('button')
     close.innerHTML = '&times; Close'
-    close.onclick = () => this.emit('app-modal--close')
+    close.onclick = () => this.emit(this.onCloseEventName)
     row.appendChild(close)
     const save = document.createElement('button')
     save.innerHTML = 'Save &check;'
-    save.onclick = () => this.emit(`${this._id}--save`, this.data)
+    save.onclick = () => this.emit(this.onSaveEventName, this.data)
     save.setAttribute('disabled', true)
     this.els.form.onchange = this.els.form.onkeyup = () => this.validate()
     row.appendChild(save)
     this.els.save = save
     return row
+  }
+
+  destroy () {
+    this.els.form.remove()
+    this.els.header.remove()
+    this.els.footer.remove()
+    this.remove()
   }
 
   validate () {
@@ -89,6 +119,10 @@ class AppForm extends HTMLElement {
   }
 
   connectedCallback () {
+    this._id = `app-form--${this.name}`
+    this.els = {}
+    this.on(`${this._id}--set`, data => (this.data = data))
+    this.on(`${this._id}--error`, message => (this.error = message))
     this.els.form = this.createForm()
     this.els.header = this.createHeader()
     this.els.footer = this.createFooter()

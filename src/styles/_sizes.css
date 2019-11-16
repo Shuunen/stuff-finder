@@ -1,10 +1,18 @@
 
+.w80 {
+  width: 80%;
+}
+
 .w30 {
   width: 30%;
 }
 
 .w20 {
   width: 20%;
+}
+
+.w4 {
+  width: 4rem;
 }
 
 .mts {
@@ -57,4 +65,8 @@
 
 .ps {
   padding: .5rem;
+}
+
+.pbs {
+  padding-bottom: .5rem;
 }

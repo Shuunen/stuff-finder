@@ -4,6 +4,10 @@
   padding: .2rem .5rem;
 }
 
+.highlight-accent-light {
+  background-color: var(--color-accent-light, powderblue );
+}
+
 .highlight-grey {
   background-color: var(--color-grey-light);
 }
