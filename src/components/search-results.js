@@ -65,7 +65,6 @@ class AppSearchResults extends HTMLElement {
       resultsPerLocation[result.location].push(result)
     })
     this.els.results.innerHTML = ''
-    let firstResult = true
     locations.forEach(location => {
       const group = document.createElement('fieldset')
       group.className = 'mb1 auto'
@@ -74,11 +73,8 @@ class AppSearchResults extends HTMLElement {
       label.textContent = location || 'Somewhere'
       group.appendChild(label)
       resultsPerLocation[location].forEach(result => {
-        const resultEl = document.createElement('div')
-        resultEl.className = 'search--result col ps ' + (firstResult ? 'bold' : '')
-        firstResult = false
-        resultEl.innerHTML = `<div>${result.name}</div><small class="mbs">${result.details}</small>`
-        resultEl.addEventListener('click', () => this.emit('edit-result', result))
+        const resultEl = document.createElement('app-search-result')
+        resultEl.setAttribute('data', JSON.stringify(result))
         group.appendChild(resultEl)
       })
       this.els.results.appendChild(group)
