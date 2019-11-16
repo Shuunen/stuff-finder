@@ -43,6 +43,18 @@
   margin-bottom: .5rem;
 }
 
+.mls {
+  margin-left: .5rem;
+}
+
 .ph1 {
   padding: 0 1rem;
+}
+
+.pvs {
+  padding: .5rem 0;
+}
+
+.ps {
+  padding: .5rem;
 }

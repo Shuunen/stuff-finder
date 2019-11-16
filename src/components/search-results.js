@@ -3,6 +3,22 @@
 import { pickOne } from 'shuutils'
 
 class AppSearchResults extends HTMLElement {
+  get style () {
+    return `
+    .box.highlight-grey {
+      font-family: Arial, monospace;
+      letter-spacing: 0.1rem;
+      padding: 0.1rem 0.4rem;
+      border-width: 0.1rem;
+      border-style: outset;
+      border-radius: 0.3rem;
+    }
+    .bold .box {
+      font-size: 1.2rem;
+    }
+   `
+  }
+
   constructor () {
     super()
     this._id = 'app-search-results'
@@ -49,19 +65,17 @@ class AppSearchResults extends HTMLElement {
       resultsPerLocation[result.location].push(result)
     })
     this.els.results.innerHTML = ''
-    let firstLegend = true
     let firstResult = true
     locations.forEach(location => {
       const group = document.createElement('fieldset')
       group.className = 'mb1 auto'
       const label = document.createElement('legend')
-      label.className = `ph1 ${firstLegend ? 'bold' : ''}`
-      firstLegend = false
+      label.className = 'ph1'
       label.textContent = location || 'Somewhere'
       group.appendChild(label)
       resultsPerLocation[location].forEach(result => {
         const resultEl = document.createElement('div')
-        resultEl.className = 'search--result col ' + (firstResult ? 'bold mts' : 'mt1')
+        resultEl.className = 'search--result col ps ' + (firstResult ? 'bold' : '')
         firstResult = false
         resultEl.innerHTML = `<div>${result.name}</div><small class="mbs">${result.details}</small>`
         resultEl.addEventListener('click', () => this.emit('edit-result', result))
@@ -78,6 +92,9 @@ class AppSearchResults extends HTMLElement {
   createWrapper () {
     const wrapper = document.createElement('app-modal')
     wrapper.name = 'search-results'
+    const style = document.createElement('style')
+    style.innerHTML = this.style
+    wrapper.appendChild(style)
     return wrapper
   }
 

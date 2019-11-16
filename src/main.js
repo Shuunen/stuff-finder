@@ -21,6 +21,7 @@ class App {
       this.emit('storage-search', 'app-settings')
       this.showTitle()
     }, 300)
+    // setTimeout(() => this.onSearchStart('batter'), 1000)
   }
 
   emit (eventName, eventData) {
@@ -130,7 +131,7 @@ class App {
   }
 
   getSearchResult (data) {
-    const name = [(data.Nom || ''), (data.Marque || ''), (data.Boite ? `[${data.Boite}${data.Tiroir || ''}]` : '')].join(' ').trim()
+    const name = [(data.Nom || ''), (data.Marque || ''), (data.Boite ? `<span class="box mls highlight-grey">${data.Boite}${data.Tiroir || ''}</span>` : '')].join('').trim()
     const details = (data.Référence || '').trim()
     const location = (data.Pièce && data.Pièce !== 'N/A') ? data.Pièce : ''
     return { ...data, name, details, location }
