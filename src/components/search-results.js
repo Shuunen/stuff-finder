@@ -3,22 +3,6 @@
 import { pickOne } from 'shuutils'
 
 class AppSearchResults extends HTMLElement {
-  get style () {
-    return `
-    .box.highlight-grey {
-      font-family: Arial, monospace;
-      letter-spacing: 0.1rem;
-      padding: 0.1rem 0.4rem;
-      border-width: 0.1rem;
-      border-style: outset;
-      border-radius: 0.3rem;
-    }
-    .bold .box {
-      font-size: 1.2rem;
-    }
-   `
-  }
-
   constructor () {
     super()
     this._id = 'app-search-results'
@@ -48,22 +32,28 @@ class AppSearchResults extends HTMLElement {
     this.emit('app-speech--start')
   }
 
+  scanLocations (results) {
+    const locations = []
+    const resultsPerLocation = {}
+    results.forEach(result => {
+      const location = (result.Pièce && result.Pièce !== 'N/A') ? result.Pièce : ''
+      if (!locations.includes(location)) {
+        locations.push(location)
+      }
+      if (!resultsPerLocation[location]) {
+        resultsPerLocation[location] = []
+      }
+      resultsPerLocation[location].push(result)
+    })
+    return { locations, resultsPerLocation }
+  }
+
   format (results) {
     if (results.length === 0) {
       this.els.results.innerHTML = `<div class="mb1 mt1"><span class="highlight-grey">${this.sorryAscii()}</span></div><span class="mb1">Sorry nothing was found.</span>`
       return
     }
-    const locations = []
-    const resultsPerLocation = {}
-    results.forEach(result => {
-      if (!locations.includes(result.location)) {
-        locations.push(result.location)
-      }
-      if (!resultsPerLocation[result.location]) {
-        resultsPerLocation[result.location] = []
-      }
-      resultsPerLocation[result.location].push(result)
-    })
+    const { locations, resultsPerLocation } = this.scanLocations(results)
     this.els.results.innerHTML = ''
     locations.forEach(location => {
       const group = document.createElement('fieldset')
@@ -88,9 +78,6 @@ class AppSearchResults extends HTMLElement {
   createWrapper () {
     const wrapper = document.createElement('app-modal')
     wrapper.name = 'search-results'
-    const style = document.createElement('style')
-    style.innerHTML = this.style
-    wrapper.appendChild(style)
     return wrapper
   }
 
