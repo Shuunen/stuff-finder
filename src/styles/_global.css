@@ -70,6 +70,8 @@ a, .clickable {
   border-bottom: 2px solid currentColor;
   color: var(--color-accent, green);
   cursor: pointer;
+  display: inline;
+  line-height: 1.5;
   text-decoration: none;
 }
 

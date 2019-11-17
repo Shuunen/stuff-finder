@@ -41,10 +41,10 @@ class AppSearchResult extends HTMLElement {
 
   get readContent () {
     return `<div class="col center">
-      <div class=row>
+      <div>
         <div class=clickable>${(this.name + ' ' + this.brand).trim()}<span class="box">${this.box.toUpperCase() + this.drawer}</span></div>
       </div>
-      <small class="mbs">${this.details}</small>
+      <small>${this.details}</small>
     </div>`
   }
 
@@ -62,7 +62,7 @@ class AppSearchResult extends HTMLElement {
   }
 
   scrollToForm () {
-    document.querySelector('.app-search-result button.close').scrollIntoViewIfNeeded()
+    document.querySelector('.app-search-result.activated').scrollIntoView()
   }
 
   edit () {
@@ -75,8 +75,8 @@ class AppSearchResult extends HTMLElement {
     form.setAttribute('on-save', this.formSaveEvent)
     form.innerHTML = this.formContent
     this.els.wrapper.appendChild(form)
-    this.scrollToForm()
     this.toggleEdit(true)
+    this.scrollToForm()
   }
 
   save (data) {
@@ -95,6 +95,7 @@ class AppSearchResult extends HTMLElement {
   }
 
   toggleEdit (active = false) {
+    this.els.wrapper.classList.toggle('activated', active)
     this.els.wrapper.classList.toggle('highlight-accent-light', active)
     this.els.read.classList.toggle('hidden', active)
     if (!active) {
