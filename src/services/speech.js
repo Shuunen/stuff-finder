@@ -1,3 +1,4 @@
+/* global AudioContext, CustomEvent */
 
 class AppSpeech {
   constructor () {

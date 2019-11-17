@@ -1,4 +1,4 @@
-/* global HTMLElement */
+/* global HTMLElement, CustomEvent */
 
 class AppToaster extends HTMLElement {
   get style () {

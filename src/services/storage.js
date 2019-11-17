@@ -1,3 +1,5 @@
+/* global localStorage, CustomEvent */
+
 import pkg from '../../package.json'
 
 class AppStorage {
