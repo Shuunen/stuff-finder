@@ -50,7 +50,7 @@ class App {
       return this.settingsActionRequired(true, 'failed to use api settings')
     }
     this.settingsActionRequired(false)
-    this.emit('storage-set', { key: 'api-settings', value: settings })
+    this.emit('storage-set', { key: 'app-settings', value: settings })
   }
 
   settingsActionRequired (actionRequired, errorMessage = '') {
