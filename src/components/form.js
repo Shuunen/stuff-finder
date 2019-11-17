@@ -11,6 +11,11 @@ class AppForm extends HTMLElement {
     .${this._id} label {
       color: var(--color-primary, steelblue);
       margin-top: 1rem;
+    }
+    .${this._id} label + label {
+      padding-left: 0.5rem;
+    }
+    .${this._id} label:not([style]){
       width: 50%;
     }
     .${this._id} label > [name] {
@@ -18,7 +23,7 @@ class AppForm extends HTMLElement {
     }
     @media only screen and (max-width: 600px) {
       .${this._id} label {
-        width: 100%;
+        width: 100% !important;
       }
     }`
   }

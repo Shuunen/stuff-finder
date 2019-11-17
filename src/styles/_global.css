@@ -91,6 +91,7 @@ small {
 
 div:empty,
 small:empty,
+span:empty,
 p:empty {
   display: none;
 }

@@ -1,16 +1,50 @@
 /* global HTMLElement, CustomEvent */
 
 class AppSearchResult extends HTMLElement {
+  get box () {
+    return this.data.Boite || ''
+  }
+
+  get drawer () {
+    return this.data.Tiroir || ''
+  }
+
+  get name () {
+    return (this.data.Nom || '').trim()
+  }
+
+  get brand () {
+    return (this.data.Marque || '').trim()
+  }
+
+  get details () {
+    return (this.data.Référence || '').trim()
+  }
+
+  get location () {
+    return this.data.Pièce || ''
+  }
+
   get formContent () {
-    const name = this.data.Nom
-    const box = this.data.Boite || ''
-    const drawer = this.data.Tiroir
-    const boxes = Array.from(' abcdefghijklmnopqrstuvwxyz').map(l => `<option value=${l} ${l === box.toLowerCase() ? 'selected' : ''}>${l.toUpperCase()}</option>`)
+    const locations = this.data.locations.map(l => `<option value=${l} ${l.toLowerCase() === this.location.toLowerCase() ? 'selected' : ''}>${l}</option>`)
+    const boxes = Array.from(' abcdefghijklmnopqrstuvwxyz').map(l => `<option value=${l} ${l === this.box.toLowerCase() ? 'selected' : ''}>${l.toUpperCase()}</option>`)
+    const drawers = ['', 1, 2, 3, 4, 5, 6, 7].map(d => `<option value=${d} ${d.toString().toLowerCase() === this.drawer.toLowerCase() ? 'selected' : ''}>${d}</option>`)
     return `<div class="row grow wrap" style="justify-content: space-evenly">
-      <em class="clickable disabled mts">${this.data.name}</em>
-      <label class="col">Name<input required name=name type=text value="${name}" /></label>
-      <label class="col" style="width: 4rem">Box <select name=box>${boxes}</select></label>
-      <label class="col" style="width: 4rem">Drawer <input name=drawer type=number value="${drawer}" min=0 max=100 /></label>
+      <div class="full-width mts"><em class="clickable disabled">${this.name}</em></div>
+      <label class="col">Name<input required name=name type=text value="${this.name}" /></label>
+      <label class="col">Brand<input name=brand type=text value="${this.brand}" /></label>
+      <label class="col" style="width: 50%">Location <select name=location>${locations}</select></label>
+      <label class="col" style="width: 25%">Box <select class=center name=box>${boxes}</select></label>
+      <label class="col" style="width: 25%">Drawer <select class=center name=drawer>${drawers}</select></label>
+    </div>`
+  }
+
+  get readContent () {
+    return `<div class="col center">
+      <div class=row>
+        <div class=clickable>${(this.name + ' ' + this.brand).trim()}<span class="box">${this.box.toUpperCase() + this.drawer}</span></div>
+      </div>
+      <small class="mbs">${this.details}</small>
     </div>`
   }
 
@@ -46,18 +80,24 @@ class AppSearchResult extends HTMLElement {
   }
 
   save (data) {
-    this.toggleEdit(false)
+    const locationChanged = (this.data.Pièce !== data.location)
+    if (locationChanged) {
+      setTimeout(() => this.emit('fade-out', this.els.wrapper), 1000)
+    }
+    this.data.Nom = data.name
+    this.data.Marque = data.brand
     this.data.Boite = data.box
     this.data.Tiroir = data.drawer
+    this.data.Pièce = data.location
     console.info('TODO : save form data', data, '...')
-    console.info('TODO : update view with new data, dont let main.js stylize name & box/drawer, all need to be done here to be updated properly')
+    this.toggleEdit(false)
   }
 
   toggleEdit (active = false) {
-    console.log(active ? 'editing' : 'reading', 'result', this.data)
     this.els.wrapper.classList.toggle('highlight-accent-light', active)
     this.els.read.classList.toggle('hidden', active)
     if (!active) {
+      this.els.read.innerHTML = this.readContent
       this.els.form.destroy()
     }
   }
@@ -76,7 +116,7 @@ class AppSearchResult extends HTMLElement {
     wrapper.className = `${this._id} ps`
     const read = this.els.read = document.createElement('div')
     read.className = 'col'
-    read.innerHTML = `<div class="row center"><div class=clickable>${this.data.name}</div></div><small class="mbs">${this.data.details}</small>`
+    read.innerHTML = this.readContent
     read.addEventListener('click', this.edit.bind(this))
     wrapper.appendChild(read)
     return wrapper

@@ -93,9 +93,18 @@ class App {
 
   async parseApiRecords (records) {
     // this.showLog('parsing api records :', records )
-    this.items = records.map(item => ({
-      id: item.id,
-      ...item.fields,
+    let locations = []
+    records.forEach(record => {
+      const location = (record.fields.Pièce && record.fields.Pièce !== 'N/A') ? record.fields.Pièce : ''
+      if (location.length && !locations.includes(location)) {
+        locations.push(location)
+      }
+    })
+    locations = ['', 'N/A'].concat(locations.sort())
+    this.items = records.map(record => ({
+      id: record.id,
+      locations,
+      ...record.fields,
     }))
     this.showLog(`${this.items.length} item(s) loaded ` + this.coolAscii())
     this.initFuse()
@@ -123,20 +132,13 @@ class App {
   }
 
   onSearchStart (stuff) {
-    const results = this.fuse.search(stuff).map(r => this.getSearchResult(r))
+    const results = this.fuse.search(stuff)
     const title = `“${stuff}”`
     this.emit('app-search-results--show', { title, results })
   }
 
   onSearchRetry () {
     this.emit('speech-recognition')
-  }
-
-  getSearchResult (data) {
-    const name = [(data.Nom || ''), (data.Marque || ''), (data.Boite ? `<span class="box mls highlight-grey">${data.Boite}${data.Tiroir || ''}</span>` : '')].join('').trim()
-    const details = (data.Référence || '').trim()
-    const location = (data.Pièce && data.Pièce !== 'N/A') ? data.Pièce : ''
-    return { ...data, name, details, location }
   }
 
   onStorageFound (data) {
