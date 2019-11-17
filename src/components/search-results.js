@@ -1,4 +1,4 @@
-/* global HTMLElement */
+/* global HTMLElement, CustomEvent */
 
 import { pickOne } from 'shuutils'
 
@@ -107,7 +107,7 @@ class AppSearchResults extends HTMLElement {
 
   addFooter () {
     const row = document.createElement('div')
-    row.className = 'row center mts'
+    row.className = 'row center mvs'
     const close = document.createElement('button')
     close.innerHTML = '&times; Close'
     close.onclick = () => this.emit('app-modal--close')

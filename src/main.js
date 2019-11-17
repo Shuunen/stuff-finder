@@ -1,3 +1,5 @@
+/* global CustomEvent, fetch */
+
 import Fuse from 'fuse.js'
 import { pickOne } from 'shuutils'
 import './services/storage'
@@ -21,7 +23,7 @@ class App {
       this.emit('storage-search', 'app-settings')
       this.showTitle()
     }, 300)
-    // setTimeout(() => this.onSearchStart('batter'), 1000)
+    setTimeout(() => this.onSearchStart('batter'), 2000)
   }
 
   emit (eventName, eventData) {

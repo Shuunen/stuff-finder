@@ -6,8 +6,8 @@ select {
   border-radius: var(--border-radius, .3rem);
   font-family: inherit;
   font-size: 1rem;
-  margin: 0;
-  margin-left: .2rem;
+  height: 2.2rem;
+  margin: 0 0 0 .2rem;
   max-width: 100%;
   min-width: 1rem;
   padding: .4rem 0 .4rem .4rem;
@@ -18,12 +18,17 @@ select,
 button,
 input[type="button"],
 input[type="submit"] {
-  background-color: var(--color-grey-light, #e8e8e8);
   cursor: pointer;
-  margin-bottom: .5rem;
-  overflow: hidden;
   padding: .3rem .8rem .4rem .7rem;
   white-space: nowrap;
+}
+
+button,
+input[type="button"],
+input[type="submit"] {
+  background-color: var(--color-grey-light, #e8e8e8);
+  cursor: pointer;
+  overflow: hidden;
 }
 
 button + button {
@@ -32,6 +37,7 @@ button + button {
 
 button.big {
   font-size: 1.5rem;
+  height: 3.3rem;
   padding: .5rem 1.2rem .7rem 1rem;
 }
 
@@ -64,18 +70,18 @@ button:disabled {
 }
 
 input[type="number"] {
+  padding: .4rem;
   text-align: center;
 }
 
-/* Show red borders when filled, but invalid */
-input:not(:placeholder-shown) {
+select:invalid[required],
+input:invalid[required] {
   background-color: var(--color-error-light, red);
   border: .1rem solid var(--color-error, red);
 }
 
-/* Show green borders when valid */
-select:valid,
-input:valid {
+select:valid[required],
+input:valid[required] {
   background-color: var(--color-success-light, #c5e2c5);
   border: .1rem solid var(--color-success, green);
 }
@@ -87,9 +93,8 @@ input:focus:invalid {
 select {
   -webkit-appearance: none;
   appearance: none;
-  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007CB2%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23bbb%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
   background-position: right .7em top 50%, 0 0;
   background-repeat: no-repeat, repeat;
   background-size: .65em auto, 100%;
-  padding-right: 1.5rem;
 }

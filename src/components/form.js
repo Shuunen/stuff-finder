@@ -1,4 +1,4 @@
-/* global HTMLElement */
+/* global HTMLElement, CustomEvent */
 
 class AppForm extends HTMLElement {
   get style () {
@@ -9,11 +9,17 @@ class AppForm extends HTMLElement {
       justify-content: center;
     }
     .${this._id} label {
+      color: var(--color-primary, steelblue);
       margin-top: 1rem;
       width: 50%;
     }
     .${this._id} label > [name] {
       margin-top: .5rem;
+    }
+    @media only screen and (max-width: 600px) {
+      .${this._id} label {
+        width: 100%;
+      }
     }`
   }
 
@@ -88,12 +94,14 @@ class AppForm extends HTMLElement {
 
   createFooter () {
     const row = document.createElement('div')
-    row.className = 'row center mts'
+    row.className = 'row center mts mb1'
     const close = document.createElement('button')
+    close.className = 'close'
     close.innerHTML = '&times; Close'
     close.onclick = () => this.emit(this.onCloseEventName)
     row.appendChild(close)
     const save = document.createElement('button')
+    save.className = 'save'
     save.innerHTML = 'Save &check;'
     save.onclick = () => this.emit(this.onSaveEventName, this.data)
     save.setAttribute('disabled', true)
