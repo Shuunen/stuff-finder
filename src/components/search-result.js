@@ -1,6 +1,19 @@
-/* global HTMLElement */
+/* global HTMLElement, CustomEvent */
 
 class AppSearchResult extends HTMLElement {
+  get formContent () {
+    const name = this.data.Nom
+    const box = this.data.Boite || ''
+    const drawer = this.data.Tiroir
+    const boxes = Array.from(' abcdefghijklmnopqrstuvwxyz').map(l => `<option value=${l} ${l === box.toLowerCase() ? 'selected' : ''}>${l.toUpperCase()}</option>`)
+    return `<div class="row grow wrap" style="justify-content: space-evenly">
+      <em class="clickable disabled mts">${this.data.name}</em>
+      <label class="col">Name<input required name=name type=text value="${name}" /></label>
+      <label class="col" style="width: 4rem">Box <select name=box>${boxes}</select></label>
+      <label class="col" style="width: 4rem">Drawer <input name=drawer type=number value="${drawer}" min=0 max=100 /></label>
+    </div>`
+  }
+
   emit (eventName, eventData) {
     console.log(`emit event "${eventName}"`, eventData === undefined ? '' : eventData)
     window.dispatchEvent(new CustomEvent(eventName, { detail: eventData }))
@@ -10,30 +23,26 @@ class AppSearchResult extends HTMLElement {
     window.addEventListener(eventName, event => callback.bind(this)(event.detail))
   }
 
+  closeOtherForms () {
+    document.querySelectorAll('.app-search-result button.close').forEach(el => el.click())
+  }
+
+  scrollToForm () {
+    document.querySelector('.app-search-result button.close').scrollIntoViewIfNeeded()
+  }
+
   edit () {
-    this.toggleEdit(true)
+    this.closeOtherForms()
     const formName = `result-${this.data.id}`
     const form = this.els.form = document.createElement('app-form')
     form.setAttribute('name', formName)
     form.setAttribute('title', false)
-
-    const formCloseEvent = `${formName}--close`
-    const formSaveEvent = `${formName}--save`
-    form.setAttribute('on-close', formCloseEvent)
-    form.setAttribute('on-save', formSaveEvent)
-    this.on(formCloseEvent, this.toggleEdit)
-    this.on(formSaveEvent, this.save)
-
-    const name = this.data.Nom
-    const box = this.data.Boite || ''
-    const drawer = this.data.Tiroir
-    const boxes = Array.from(' abcdefghijklmnopqrstuvwxyz').map(l => `<option value=${l} ${l === box.toLowerCase() ? 'selected' : ''}>${l.toUpperCase()}</option>`)
-    form.innerHTML = `<div class="row grow" style="justify-content: space-evenly">
-      <label class="col">Name<input required name=name type=text value="${name}" /></label>
-      <label class="col" style="width: 4rem">Box <select name=box>${boxes}</select></label>
-      <label class="col" style="width: 4rem">Drawer <input name=drawer type=number value="${drawer}" min=0 max=100 /></label>
-    </div>`
+    form.setAttribute('on-close', this.formCloseEvent)
+    form.setAttribute('on-save', this.formSaveEvent)
+    form.innerHTML = this.formContent
     this.els.wrapper.appendChild(form)
+    this.scrollToForm()
+    this.toggleEdit(true)
   }
 
   save (data) {
@@ -53,13 +62,21 @@ class AppSearchResult extends HTMLElement {
     }
   }
 
+  setListeners () {
+    this.formCloseEvent = `${this.data.id}--close`
+    this.formSaveEvent = `${this.data.id}--save`
+    this.on(this.formCloseEvent, this.toggleEdit)
+    this.on(this.formSaveEvent, this.save)
+  }
+
   createWrapper () {
-    const data = this.data = JSON.parse(this.getAttribute('data'))
+    this.data = JSON.parse(this.getAttribute('data'))
+    this.setListeners()
     const wrapper = this.els.wrapper = document.createElement('div')
     wrapper.className = `${this._id} ps`
     const read = this.els.read = document.createElement('div')
     read.className = 'col'
-    read.innerHTML = `<div>${data.name}</div><small class="mbs">${data.details}</small>`
+    read.innerHTML = `<div class="row center"><div class=clickable>${this.data.name}</div></div><small class="mbs">${this.data.details}</small>`
     read.addEventListener('click', this.edit.bind(this))
     wrapper.appendChild(read)
     return wrapper
