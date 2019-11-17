@@ -12,6 +12,7 @@ class App {
     this.on('app-form--settings--set', this.onSettingsSave)
     this.on('app-form--settings--save', this.onSettingsSave)
     this.on('app-speech--recognition-success', this.onSearchStart)
+    this.on('app-update--item', this.onUpdateItem)
     this.on('storage-found', this.onStorageFound)
     this.on('search-start', this.onSearchStart)
     this.on('search-retry', this.onSearchRetry)
@@ -84,7 +85,7 @@ class App {
   }
 
   async fetchApi (settings, offset) {
-    let url = `https://api.airtable.com/v0/${settings.base}/${settings.table}?api_key=${settings.key}&view=${settings.view}`
+    let url = this.apiUrl = `https://api.airtable.com/v0/${settings.base}/${settings.table}?api_key=${settings.key}&view=${settings.view}`
     if (offset) {
       url += '&offset=' + offset
     }
@@ -174,12 +175,41 @@ class App {
 
   showLog (message, data) {
     console.log(message, data || '')
-    this.emit('show-toast', { type: 'info', message })
+    this.emit('app-toaster--show', { type: 'info', message })
   }
 
   showError (message) {
     console.error(message)
-    this.emit('show-toast', { type: 'error', message })
+    this.emit('app-toaster--show', { type: 'error', message })
+  }
+
+  async onUpdateItem (item) {
+    const fieldsToUpdate = ['Nom', 'Marque', 'Boite', 'Tiroir', 'Pièce']
+    this.isLoading(true)
+    const data = { fields: {} }
+    fieldsToUpdate.forEach(field => (data.fields[field] = item[field] || null))
+    const url = this.apiUrl.replace('?', `/${item.id}?`)
+    await this.patch(url, data)
+    this.isLoading(false)
+  }
+
+  async patch (url, data) {
+    return fetch(url, {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      method: 'patch',
+      body: JSON.stringify(data),
+    })
+      .then(response => response.json())
+      .then(response => {
+        if (response.error) {
+          throw new Error(response.error.message)
+        }
+        return 'ok'
+      })
+      .catch(err => this.showError(err.message))
   }
 }
 
