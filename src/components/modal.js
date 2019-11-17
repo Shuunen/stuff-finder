@@ -1,4 +1,4 @@
-/* global HTMLElement */
+/* global HTMLElement, CustomEvent */
 
 class AppModal extends HTMLElement {
   get style () {
