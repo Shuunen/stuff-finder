@@ -7,16 +7,18 @@ class AppToaster extends HTMLElement {
       bottom: 1rem;
       position: absolute;
       width: 100%;
-      z-index: var(--elevation-child, 30);
+      z-index: var(--elevation-t-rex, 200);
     }
     .${this._id} .toast {
       font-weight: bold;
       margin: .5rem 0;
       padding: .2rem .4rem;
+      color: var(--color-white, whitesmoke);
+      background-color: var(--color-primary, chocolate);
     }
     .${this._id} .toast.error {
-      background-color: var(--color-error, #da0000);
-      color: var(--color-white);
+      background-color: var(--color-error, red);
+      color: var(--color-white, whitesmoke);
     }`
   }
 

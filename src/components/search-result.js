@@ -27,7 +27,7 @@ class AppSearchResult extends HTMLElement {
 
   get formContent () {
     const locations = this.data.locations.map(l => `<option value=${l} ${l.toLowerCase() === this.location.toLowerCase() ? 'selected' : ''}>${l}</option>`)
-    const boxes = Array.from(' abcdefghijklmnopqrstuvwxyz').map(l => `<option value=${l} ${l === this.box.toLowerCase() ? 'selected' : ''}>${l.toUpperCase()}</option>`)
+    const boxes = Array.from(' abcdefghijklmnopqrstuvwxyz').map(l => `<option value=${l.toUpperCase()} ${l === this.box.toLowerCase() ? 'selected' : ''}>${l.toUpperCase()}</option>`)
     const drawers = ['', 1, 2, 3, 4, 5, 6, 7].map(d => `<option value=${d} ${d.toString().toLowerCase() === this.drawer.toLowerCase() ? 'selected' : ''}>${d}</option>`)
     return `<div class="row grow wrap" style="justify-content: space-evenly">
       <div class="full-width mts"><em class="clickable disabled">${this.name}</em></div>
@@ -89,7 +89,8 @@ class AppSearchResult extends HTMLElement {
     this.data.Boite = data.box
     this.data.Tiroir = data.drawer
     this.data.Pièce = data.location
-    console.info('TODO : save form data', data, '...')
+    this.emit('app-update--item', this.data)
+    // TODO: emit also a success event so toggleEdit below will be done only if update succeed
     this.toggleEdit(false)
   }
 
