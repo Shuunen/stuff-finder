@@ -24,7 +24,7 @@ class App {
       this.emit('storage-search', 'app-settings')
       this.showTitle()
     }, 300)
-    setTimeout(() => this.onSearchStart('batter'), 2000)
+    // setTimeout(() => this.onSearchStart('batter'), 2000)
   }
 
   emit (eventName, eventData) {
