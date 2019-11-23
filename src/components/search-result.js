@@ -100,7 +100,10 @@ class AppSearchResult extends HTMLElement {
     this.els.read.classList.toggle('hidden', active)
     if (!active) {
       this.els.read.innerHTML = this.readContent
-      this.els.form.destroy()
+      if (this.els.form) {
+        console.warn('wtf is this case ?')
+        this.els.form.destroy()
+      }
     }
   }
 
