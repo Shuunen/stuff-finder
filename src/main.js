@@ -94,7 +94,7 @@ class App {
 
   async parseApiRecords (records) {
     // this.showLog('parsing api records :', records )
-    const boxes = []
+    let boxes = []
     let locations = []
     records.forEach(record => {
       const location = (record.fields.Pièce && record.fields.Pièce !== 'N/A') ? record.fields.Pièce : ''
@@ -107,6 +107,7 @@ class App {
       }
     })
     locations = ['', 'N/A'].concat(locations.sort())
+    boxes = [''].concat(boxes.sort())
     this.items = records.map(record => ({
       id: record.id,
       locations,
