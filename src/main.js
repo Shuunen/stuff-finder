@@ -94,17 +94,23 @@ class App {
 
   async parseApiRecords (records) {
     // this.showLog('parsing api records :', records )
+    const boxes = []
     let locations = []
     records.forEach(record => {
       const location = (record.fields.Pièce && record.fields.Pièce !== 'N/A') ? record.fields.Pièce : ''
+      const box = record.fields.Boite || ''
       if (location.length && !locations.includes(location)) {
         locations.push(location)
+      }
+      if (box.length && !boxes.includes(box)) {
+        boxes.push(box)
       }
     })
     locations = ['', 'N/A'].concat(locations.sort())
     this.items = records.map(record => ({
       id: record.id,
       locations,
+      boxes,
       ...record.fields,
     }))
     this.showLog(`${this.items.length} item(s) loaded ` + this.coolAscii())

@@ -27,14 +27,14 @@ class AppSearchResult extends HTMLElement {
 
   get formContent () {
     const locations = this.data.locations.map(l => `<option value=${l} ${l.toLowerCase() === this.location.toLowerCase() ? 'selected' : ''}>${l}</option>`)
-    const boxes = Array.from(' abcdefghijklmnopqrstuvwxyz').map(l => `<option value=${l.toUpperCase()} ${l === this.box.toLowerCase() ? 'selected' : ''}>${l.toUpperCase()}</option>`)
+    const boxes = this.data.boxes.map(l => `<option value=${l} ${l.toLowerCase() === this.box.toLowerCase() ? 'selected' : ''}>${l}</option>`)
     const drawers = ['', 1, 2, 3, 4, 5, 6, 7].map(d => `<option value=${d} ${d.toString().toLowerCase() === this.drawer.toLowerCase() ? 'selected' : ''}>${d}</option>`)
     return `<div class="row grow wrap" style="justify-content: space-evenly">
       <div class="full-width mts"><em class="clickable disabled">${this.name}</em></div>
       <label class="col">Name<input required name=name type=text value="${this.name}" /></label>
       <label class="col">Brand<input name=brand type=text value="${this.brand}" /></label>
       <label class="col" style="width: 50%">Location <select name=location>${locations}</select></label>
-      <label class="col" style="width: 25%">Box <select class=center name=box>${boxes}</select></label>
+      <label class="col" style="width: 25%">Box <select name=box>${boxes}</select></label>
       <label class="col" style="width: 25%">Drawer <select class=center name=drawer>${drawers}</select></label>
     </div>`
   }
