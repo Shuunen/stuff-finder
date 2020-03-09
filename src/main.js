@@ -124,16 +124,16 @@ class App {
       threshold: 0.35, // 0 is perfect match
       keys: [{
         name: 'Nom',
-        weight: 0.5,
-      }, {
-        name: 'Marque',
         weight: 0.3,
       }, {
+        name: 'Marque',
+        weight: 0.1,
+      }, {
         name: 'Référence',
-        weight: 0.8,
+        weight: 0.5,
       }, {
         name: 'Catégorie',
-        weight: 0.2,
+        weight: 0.1,
       }], // TODO: this is not generic ^^"
     }
     this.fuse = new Fuse(this.items, options)
