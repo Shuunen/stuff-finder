@@ -1,5 +1,8 @@
 {
   "author": "Romain Racamier-Lafon <romain.racamier@gmail.com>",
+  "browserslist": [
+    "last 2 Chrome versions"
+  ],
   "bugs": "https://github.com/Shuunen/stuff-finder/issues",
   "dependencies": {
     "@camwiegert/typical": "0.1.1",
@@ -8,9 +11,6 @@
     "posthtml-include": "1.4.0",
     "shuutils": "3.4.0"
   },
-  "browserslist": [
-    "last 2 Chrome versions"
-  ],
   "description": "Sorting things is pointless if you can't find them afterwards",
   "devDependencies": {
     "eslint": "6.8.0",
