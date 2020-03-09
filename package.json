@@ -3,7 +3,7 @@
   "bugs": "https://github.com/Shuunen/stuff-finder/issues",
   "dependencies": {
     "@camwiegert/typical": "0.1.1",
-    "fuse.js": "3.5.0",
+    "fuse.js": "3.6.1",
     "parcel-bundler": "1.12.4",
     "posthtml-include": "1.4.0",
     "shuutils": "3.4.0"
