@@ -140,7 +140,7 @@ class App {
   }
 
   onSearchStart (stuff) {
-    const results = this.fuse.search(stuff)
+    const results = this.fuse.search(stuff).map(i => i.item)
     const title = `“${stuff}”`
     this.emit('app-search-results--show', { title, results })
   }

@@ -5,10 +5,9 @@ import { pickOne } from 'shuutils'
 class AppSearchResults extends HTMLElement {
   constructor () {
     super()
-    this._id = 'app-search-results'
     this.els = {}
-    this.on(`${this._id}--show`, this.show)
-    this.on(`${this._id}--retry`, this.retry)
+    this.on('app-search-results--show', this.show)
+    this.on('app-search-results--retry', this.retry)
   }
 
   emit (eventName, eventData) {
@@ -101,7 +100,7 @@ class AppSearchResults extends HTMLElement {
     row.appendChild(close)
     const retry = document.createElement('button')
     retry.innerHTML = 'Retry &check;'
-    retry.onclick = () => this.emit(`${this._id}--retry`, this.data)
+    retry.onclick = () => this.emit('app-search-results--retry', this.data)
     row.appendChild(retry)
     this.els.retry = retry
     this.els.wrapper.appendChild(row)
