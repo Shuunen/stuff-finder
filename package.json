@@ -9,7 +9,7 @@
     "fuse.js": "5.1.0",
     "parcel-bundler": "1.12.4",
     "posthtml-include": "1.4.1",
-    "shuutils": "3.4.0"
+    "shuutils": "4.0.0"
   },
   "description": "Sorting things is pointless if you can't find them afterwards",
   "devDependencies": {
