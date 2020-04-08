@@ -4,22 +4,21 @@
     "last 2 Chrome versions"
   ],
   "bugs": "https://github.com/Shuunen/stuff-finder/issues",
-  "dependencies": {
-    "@camwiegert/typical": "0.1.1",
-    "fuse.js": "5.1.0",
-    "parcel-bundler": "1.12.4",
-    "posthtml-include": "1.4.1",
-    "shuutils": "4.0.0"
-  },
   "description": "Sorting things is pointless if you can't find them afterwards",
   "devDependencies": {
+    "@camwiegert/typical": "0.1.1",
     "eslint": "6.8.0",
     "eslint-config-standard": "14.1.1",
     "eslint-plugin-html": "6.0.1",
     "eslint-plugin-import": "2.20.2",
     "eslint-plugin-node": "11.1.0",
     "eslint-plugin-promise": "4.2.1",
-    "eslint-plugin-standard": "4.0.1"
+    "eslint-plugin-standard": "4.0.1",
+    "fuse.js": "5.1.0",
+    "parcel-bundler": "1.12.4",
+    "posthtml-include": "1.4.1",
+    "repo-check": "1.5.0",
+    "shuutils": "4.0.0"
   },
   "files": [
     "src"
@@ -38,11 +37,12 @@
   },
   "scripts": {
     "build": "parcel build src/index.html",
-    "check": "npx repo-check",
+    "check": "repo-check",
     "ci": "npm run test",
     "dev": "npm start",
     "lint": "eslint --fix --ignore-path .gitignore --ext .js,.html .",
     "postversion": "git push && git push --tags",
+    "preversion": "npm run ci",
     "start": "parcel src/index.html --open",
     "test": "npm run lint && npm run check",
     "update": "npx npm-check-updates -u"
