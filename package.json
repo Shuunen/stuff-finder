@@ -16,7 +16,7 @@
     "eslint-plugin-standard": "4.0.1",
     "fuse.js": "5.1.0",
     "parcel-bundler": "1.12.4",
-    "posthtml-include": "1.4.2",
+    "posthtml-include": "1.4.3",
     "repo-check": "1.5.1",
     "shuutils": "4.0.0"
   },
