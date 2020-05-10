@@ -36,7 +36,7 @@
     "url": "https://github.com/Shuunen/stuff-finder.git"
   },
   "scripts": {
-    "build": "parcel build src/index.html",
+    "build": "parcel build src/index.html --detailed-report",
     "check": "repo-check",
     "ci": "npm run test",
     "dev": "npm start",
