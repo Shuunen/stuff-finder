@@ -17,7 +17,7 @@
     "fuse.js": "5.2.3",
     "parcel-bundler": "1.12.4",
     "posthtml-include": "1.4.3",
-    "repo-check": "1.7.0",
+    "repo-check": "1.10.0",
     "shuutils": "4.1.0"
   },
   "files": [
