@@ -75,8 +75,11 @@
 }
 
 .ellipsis {
+  max-width: 80vw;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
 }
 
 .box {
