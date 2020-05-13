@@ -87,4 +87,4 @@ class AppModal extends HTMLElement {
   }
 }
 
-window.customElements.define('app-modal', AppModal)
+setTimeout(() => window.customElements.define('app-modal', AppModal), 10)
