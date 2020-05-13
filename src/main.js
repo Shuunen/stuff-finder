@@ -13,6 +13,7 @@ class App {
     this.on('app-speech--recognition-success', this.onSearchStart)
     this.on('app-update--item', this.onUpdateItem)
     this.on('storage-found', this.onStorageFound)
+    this.on('get-barcodes-to-print', this.getBarcodesToPrint)
     this.on('search-start', this.onSearchStart)
     this.on('search-retry', this.onSearchRetry)
     this.on('fade-in', this.fadeIn)
@@ -81,6 +82,11 @@ class App {
     await this.parseApiRecords(records)
     this.isLoading(false)
     return true
+  }
+
+  async getBarcodesToPrint () {
+    const barcodes = this.items.filter(i => (i.reference.length > 3 && i['ref-printed'] === false))
+    this.emit('barcodes-to-print', barcodes)
   }
 
   async fetchApi (settings, offset) {

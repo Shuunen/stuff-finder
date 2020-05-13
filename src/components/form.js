@@ -19,7 +19,7 @@ class AppForm extends HTMLElement {
       width: 50%;
     }
     .${this._id} label > [name] {
-      margin-top: .5rem;
+      margin-top: .3rem;
     }
     @media only screen and (max-width: 600px) {
       .${this._id} label {

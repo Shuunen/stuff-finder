@@ -1,6 +1,7 @@
 import './form'
 import './loader'
 import './modal'
+import './print-barcodes'
 import './prompter'
 import './search-button'
 import './search-result'
