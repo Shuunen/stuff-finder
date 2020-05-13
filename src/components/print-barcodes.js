@@ -1,4 +1,5 @@
 /* global HTMLElement, CustomEvent */
+import 'webcomponent-qr-code'
 
 class AppPrintBarcodes extends HTMLElement {
   get template () {
@@ -18,7 +19,13 @@ class AppPrintBarcodes extends HTMLElement {
     </p>
     <div class="print-zone preview">
       <div class="a4-65">
-        ${this.barcodes.map(b => `<div class=barcode>${b.name}<br>${b.reference}</div>`).join('\n')}
+        ${this.barcodes.map(b => `<div class=barcode>
+          <qr-code data="${b.reference}" margin=0 modulesize=3></qr-code>
+          <div class=col>
+            <span class=name>${b.name}</span>
+            <span class=location>${b.box ? (b.box[0] + b.drawer) : b.location}</span>
+          </div>
+        </div>`).join('\n')}
       </div>
     </div>`
   }
@@ -58,13 +65,29 @@ class AppPrintBarcodes extends HTMLElement {
     }
     .barcode {
       display: flex;
-      justify-content: center;
+      justify-content: space-evenly;
       align-items: center;
       border: 2px solid;
       border-radius: 8px;
+      padding: 10px;
     }
     .barcode:nth-child(even){
       border-style: dashed;
+    }
+    .barcode .name {
+      overflow: hidden;
+      line-height: 1.2rem;
+      padding-left: 10px;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+    .barcode .location {
+      padding-top: 0.3rem;
+      font-weight: bold;
+      font-family: monospace;
+      font-size: 1.2rem;
     }
     .print-zone {
       background: none;
@@ -87,6 +110,9 @@ class AppPrintBarcodes extends HTMLElement {
         top: 0;
         width: 100%;
         z-index: 100;
+      }
+      .barcode {
+        border-color: white;
       }
     }
     `
