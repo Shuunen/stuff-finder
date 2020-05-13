@@ -55,6 +55,7 @@ class AppSettingsTrigger extends HTMLElement {
 
   createWrapper () {
     const wrapper = document.createElement('div')
+    wrapper.title = 'Open settings'
     wrapper.className = this._id
     wrapper.innerHTML = this.icon
     wrapper.onclick = () => this.emit('app-modal--settings--open')

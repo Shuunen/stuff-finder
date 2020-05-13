@@ -71,7 +71,7 @@ class AppSearchButton extends HTMLElement {
     row.appendChild(this.createTypeInput())
     row.appendChild(this.createSeparator())
     row.appendChild(this.createVoiceInput())
-    this.els.search.style = this.els.button.style = 'width: 6rem'
+    this.els.search.style = 'width: 6rem'
     return row
   }
 
