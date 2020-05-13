@@ -96,8 +96,8 @@ class App {
     let boxes = []
     let locations = []
     records.forEach(record => {
-      const location = (record.fields.Pièce && record.fields.Pièce !== 'N/A') ? record.fields.Pièce : ''
-      const box = record.fields.Boite || ''
+      const location = (record.fields.location && record.fields.location !== 'N/A') ? record.fields.location : ''
+      const box = record.fields.box || ''
       if (location.length && !locations.includes(location)) {
         locations.push(location)
       }
@@ -109,8 +109,16 @@ class App {
     boxes = [''].concat(boxes.sort())
     this.items = records.map(record => ({
       id: record.id,
+      name: '',
+      brand: '',
+      details: '',
       locations,
       boxes,
+      box: '',
+      drawer: '',
+      location: '',
+      reference: '',
+      'ref-printed': false,
       ...record.fields,
     }))
     this.showLog(`${this.items.length} item(s) loaded ` + this.coolAscii())
@@ -122,16 +130,19 @@ class App {
     const options = {
       threshold: 0.35, // 0 is perfect match
       keys: [{
-        name: 'Nom',
+        name: 'name',
         weight: 0.3,
       }, {
-        name: 'Marque',
+        name: 'brand',
         weight: 0.1,
       }, {
-        name: 'Référence',
-        weight: 0.5,
+        name: 'details',
+        weight: 0.2,
       }, {
-        name: 'Catégorie',
+        name: 'reference',
+        weight: 0.3,
+      }, {
+        name: 'category',
         weight: 0.1,
       }], // TODO: this is not generic ^^"
     }
@@ -190,7 +201,7 @@ class App {
   }
 
   async onUpdateItem (item) {
-    const fieldsToUpdate = ['Nom', 'Marque', 'Boite', 'Tiroir', 'Pièce']
+    const fieldsToUpdate = ['name', 'brand', 'details', 'box', 'drawer', 'location', 'reference', 'ref-printed']
     this.isLoading(true)
     const data = { fields: {} }
     fieldsToUpdate.forEach(field => (data.fields[field] = item[field] || null))

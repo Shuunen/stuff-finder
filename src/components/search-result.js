@@ -1,38 +1,16 @@
 /* global HTMLElement, CustomEvent */
 
 class AppSearchResult extends HTMLElement {
-  get box () {
-    return this.data.Boite || ''
-  }
-
-  get drawer () {
-    return this.data.Tiroir || ''
-  }
-
-  get name () {
-    return (this.data.Nom || '').trim()
-  }
-
-  get brand () {
-    return (this.data.Marque || '').trim()
-  }
-
-  get details () {
-    return (this.data.Référence || '').trim()
-  }
-
-  get location () {
-    return this.data.Pièce || ''
-  }
-
   get formContent () {
-    const locations = this.data.locations.map(l => `<option value=${l} ${l.toLowerCase() === this.location.toLowerCase() ? 'selected' : ''}>${l}</option>`)
-    const boxes = this.data.boxes.map(l => `<option value=${l} ${l.toLowerCase() === this.box.toLowerCase() ? 'selected' : ''}>${l}</option>`)
-    const drawers = ['', 1, 2, 3, 4, 5, 6, 7].map(d => `<option value=${d} ${d.toString().toLowerCase() === this.drawer.toLowerCase() ? 'selected' : ''}>${d}</option>`)
+    const locations = this.data.locations.map(l => `<option value=${l} ${l.toLowerCase() === this.data.location.toLowerCase() ? 'selected' : ''}>${l}</option>`)
+    const boxes = this.data.boxes.map(l => `<option value="${l}" ${l.toLowerCase() === this.data.box.toLowerCase() ? 'selected' : ''}>${l}</option>`)
+    const drawers = ['', 1, 2, 3, 4, 5, 6, 7].map(d => `<option value="${d}" ${d.toString().toLowerCase() === this.data.drawer.toLowerCase() ? 'selected' : ''}>${d}</option>`)
     return `<div class="row grow wrap" style="justify-content: space-evenly">
-      <div class="full-width mts"><em class="clickable disabled">${this.name}</em></div>
-      <label class="col">Name<input required name=name type=text value="${this.name}" /></label>
-      <label class="col">Brand<input name=brand type=text value="${this.brand}" /></label>
+      <div class="full-width mts"><em class="clickable disabled">${this.data.name}</em></div>
+      <label class="col" style="width: 50%; margin-top: 0;">Name<input required name=name type=text value="${this.data.name}" /></label>
+      <label class="col" style="width: 50%; margin-top: 0;">Brand<input name=brand type=text value="${this.data.brand}" /></label>
+      <label class="col" style="width: 50%">Details<input name=details type=text value="${this.data.details}" /></label>
+      <label class="col" style="width: 50%">Reference<input name=reference type=text value="${this.data.reference}" /></label>
       <label class="col" style="width: 50%">Location <select name=location>${locations}</select></label>
       <label class="col" style="width: 25%">Box <select name=box>${boxes}</select></label>
       <label class="col" style="width: 25%">Drawer <select class=center name=drawer>${drawers}</select></label>
@@ -42,9 +20,9 @@ class AppSearchResult extends HTMLElement {
   get readContent () {
     return `<div class="col center">
       <div>
-        <div class=clickable>${(this.name + ' ' + this.brand).trim()}<span class="box">${this.box.toUpperCase() + this.drawer}</span></div>
+        <div class=clickable>${(this.data.name + ' ' + this.data.brand).trim()}<span class="box">${this.data.box.toUpperCase() + this.data.drawer}</span></div>
       </div>
-      <small>${this.details}</small>
+      <small class=ellipsis>${this.data.details}</small>
     </div>`
   }
 
@@ -80,30 +58,24 @@ class AppSearchResult extends HTMLElement {
   }
 
   save (data) {
-    const locationChanged = (this.data.Pièce !== data.location)
-    if (locationChanged) {
-      setTimeout(() => this.emit('fade-out', this.els.wrapper), 1000)
-    }
-    this.data.Nom = data.name
-    this.data.Marque = data.brand
-    this.data.Boite = data.box
-    this.data.Tiroir = data.drawer
-    this.data.Pièce = data.location
+    const locationChanged = (this.data.location !== data.location)
+    if (locationChanged) setTimeout(() => this.emit('fade-out', this.els.wrapper), 1000)
+    Object.assign(this.data, data)
     this.emit('app-update--item', this.data)
     // TODO: emit also a success event so toggleEdit below will be done only if update succeed
     this.toggleEdit(false)
+    this.els.read.innerHTML = this.readContent
   }
 
   toggleEdit (active = false) {
     this.els.wrapper.classList.toggle('activated', active)
     this.els.wrapper.classList.toggle('highlight-accent-light', active)
     this.els.read.classList.toggle('hidden', active)
-    if (!active) {
-      this.els.read.innerHTML = this.readContent
-      if (this.els.form) {
-        console.warn('wtf is this case ?')
-        this.els.form.destroy()
-      }
+    if (active) return
+    this.els.read.innerHTML = this.readContent
+    if (this.els.form) {
+      console.warn('wtf is this case ?')
+      this.els.form.destroy()
     }
   }
 
@@ -115,7 +87,7 @@ class AppSearchResult extends HTMLElement {
   }
 
   createWrapper () {
-    this.data = JSON.parse(this.getAttribute('data'))
+    Object.assign(this.data, JSON.parse(this.getAttribute('data')))
     this.setListeners()
     const wrapper = this.els.wrapper = document.createElement('div')
     wrapper.className = `${this._id} ps`
