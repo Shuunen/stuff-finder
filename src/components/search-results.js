@@ -35,7 +35,7 @@ class AppSearchResults extends HTMLElement {
     const locations = []
     const resultsPerLocation = {}
     results.forEach(result => {
-      const location = (result.Pièce && result.Pièce !== 'N/A') ? result.Pièce : ''
+      const location = (result.location && result.location !== 'N/A') ? result.location : ''
       if (!locations.includes(location)) {
         locations.push(location)
       }
