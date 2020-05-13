@@ -11,7 +11,6 @@ class AppModal extends HTMLElement {
       max-width: 50rem;
       overflow: auto;
       padding: .7rem 2rem 1rem;
-      width: var(--settings-width, 80vw);
       z-index: var(--elevation-giraffe, 100);
     }
     @media only screen and (max-width: 600px) {
