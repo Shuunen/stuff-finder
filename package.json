@@ -42,7 +42,7 @@
     "lint": "eslint --fix --ignore-path .gitignore --ext .js,.html .",
     "postversion": "git push && git push --tags",
     "preversion": "npm run ci",
-    "start": "parcel src/index.html --open",
+    "start": "parcel src/index.html",
     "test": "npm run lint && npm run check",
     "update": "npx npm-check-updates -u"
   },
