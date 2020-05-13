@@ -146,4 +146,4 @@ class AppForm extends HTMLElement {
   }
 }
 
-window.customElements.define('app-form', AppForm)
+setTimeout(() => window.customElements.define('app-form', AppForm), 200)

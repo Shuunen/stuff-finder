@@ -1,9 +1,8 @@
 /* global CustomEvent, fetch */
-
 import Fuse from 'fuse.js'
 import { pickOne } from 'shuutils'
-import './services/storage'
-import './services/speech'
+import './components'
+import './services'
 
 class App {
   constructor () {
