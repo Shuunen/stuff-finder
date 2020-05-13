@@ -15,6 +15,7 @@
     "eslint-plugin-promise": "4.2.1",
     "eslint-plugin-standard": "4.0.1",
     "fuse.js": "6.0.0",
+    "npm-run-all": "4.1.5",
     "parcel-bundler": "1.12.4",
     "repo-check": "1.10.0",
     "shuutils": "4.1.0"
@@ -37,13 +38,13 @@
   "scripts": {
     "build": "parcel build src/index.html --detailed-report",
     "check": "repo-check",
-    "ci": "npm run test",
+    "ci": "run-s lint build test check",
     "dev": "npm start",
     "lint": "eslint --fix --ignore-path .gitignore --ext .js,.html .",
     "postversion": "git push && git push --tags",
     "preversion": "npm run ci",
     "start": "parcel src/index.html",
-    "test": "npm run lint && npm run check",
+    "test": "echo no tests yet",
     "update": "npx npm-check-updates -u"
   },
   "version": "0.0.1"

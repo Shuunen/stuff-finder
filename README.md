@@ -11,6 +11,10 @@
 
 ## Thanks
 
+- [Box icon](https://www.iconfinder.com/icons/2123914/app_box_essential_ui_icon) by Just Icon
+- [Github](https://github.com) : this great, free and evolving platform
+- [Netlify](https://netlify.com) : awesome company that offers hosting for OSS
+- [Npm-run-all](https://github.com/mysticatea/npm-run-all) : to keep my npm scripts clean & readable
+- [Parcel Js](https://parceljs.org) : fast & easy to use bundler
 - [Shields.io](https://shields.io) : for the nice badges on top of this readme
 - [Travis-ci.org](https://travis-ci.org) : for providing free continuous deployments
-- [Box icon](https://www.iconfinder.com/icons/2123914/app_box_essential_ui_icon) by Just Icon
