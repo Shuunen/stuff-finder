@@ -10,7 +10,34 @@ class AppPrintBarcodes extends HTMLElement {
       <app-modal name="print-barcodes" />`
   }
 
-  get modalContent () {
+  get modalContentPrepare () {
+    return `
+    <h1>Prepare Barcodes</h1>
+    <p class=mbs>
+      Below is the list of non-printed items. <br>
+      You can select up to <strong>65</strong> valid items to print.
+    </p>
+    <div class="row even mb1">
+      <a href="#" data-action="select-all">select all</a>
+      <a href="#" data-action="select-valid">select all valid</a>
+      <a href="#" data-action="select-none">select none</a>
+    </div>
+    <div class=list>
+      ${this.barcodes.map(b => `<div class=row>
+        <input type=checkbox id="${b.id}" data-action="select-one">
+        <app-form name="${b.id}" inline=true title=false>
+          <input name=name placeholder=Name required minlength=3 maxlength=50 autofocus value="${b.name}">
+          <input name=reference placeholder=reference pattern=\\w{10,} required maxlength=20 autofocus value="${b.reference}">
+        </app-form>
+      </div>`).join('\n')}
+    </div>
+    <div class=mt1>
+      <button disabled class=preview>Preview</button>
+    </div>
+    <div class="error preview mts"></div>`
+  }
+
+  get modalContentPrint () {
     return `
     <h1>Print Barcodes</h1>
     <p>
@@ -47,6 +74,10 @@ class AppPrintBarcodes extends HTMLElement {
     .${this._id} .icon svg {
       height: 100%;
       width: 100%;
+    }
+    .list {
+      height: 30vh;
+      overflow: auto;
     }
     .a4-65 {
       display: grid;
@@ -126,7 +157,7 @@ class AppPrintBarcodes extends HTMLElement {
     this._id = 'app-print-barcodes'
     this.barcodes = []
     this.els = {}
-    this.on('barcodes-to-print', this.showBarcodes)
+    this.on('barcodes-to-print', this.prepareBarcodes)
   }
 
   on (eventName, callback) {
@@ -144,14 +175,53 @@ class AppPrintBarcodes extends HTMLElement {
     this.emit('get-barcodes-to-print')
   }
 
-  showBarcodes (barcodes = []) {
-    this.barcodes = barcodes.slice(0, 65)
-    this.els.wrapper.querySelector('.app-modal--print-barcodes').innerHTML = this.modalContent
-    // this.els.wrapper.querySelector('a.print').onclick = () => this.startPrint()
+  previewBarcodes () {
+    this.barcodes = this.barcodes.filter(b => this.selection.includes(b.id))
+    this.els.modal.innerHTML = this.modalContentPrint
   }
 
-  startPrint () {
+  prepareBarcodes (barcodes) {
+    this.barcodes = barcodes.sort(a => a.reference ? -1 : 1)
+    this.els.modal = this.els.wrapper.querySelector('.app-modal--print-barcodes')
+    this.els.modal.innerHTML = this.modalContentPrepare
+    this.els.modal.addEventListener('click', event => this.onModalPrepareClick(event))
+    this.els.previewBtn = this.els.modal.querySelector('button.preview')
+    this.els.previewBtn.onclick = () => this.previewBarcodes()
+    this.els.previewError = this.els.modal.querySelector('.error.preview')
+    this.selectValidItems()
+  }
 
+  onModalPrepareClick (event) {
+    const action = event.target.getAttribute('data-action')
+    if (!action) return
+    if (action === 'select-all') this.setAllItems(true)
+    if (action === 'select-none') this.setAllItems(false)
+    if (action === 'select-valid') this.selectValidItems()
+    console.log('action clicked :', action)
+    this.updatePreviewButton()
+  }
+
+  setAllItems (selected = true) {
+    document.querySelectorAll('input[data-action="select-one"]').forEach(el => (el.checked = selected))
+  }
+
+  selectValidItems () {
+    const forms = Array.from(this.els.wrapper.querySelectorAll('.list app-form'))
+    forms.forEach(form => {
+      // check valid form related checkbox
+      if (form.getAttribute('valid') === 'true') document.getElementById(form.name).checked = true
+    })
+    this.updatePreviewButton()
+  }
+
+  updatePreviewButton () {
+    this.selection = Array.from(document.querySelectorAll('input[data-action="select-one"]:checked')).map(e => e.id)
+    this.els.previewBtn.disabled = this.selection.length <= 0 || this.selection.length > 65
+    this.els.previewBtn.textContent = `Preview ${this.selection.length} barcodes`
+    this.els.previewError.textContent = ''
+    if (!this.els.previewBtn.disabled) return
+    if (this.selection.length <= 0) this.els.previewError.textContent = 'You need to select at least one item'
+    if (this.selection.length > 65) this.els.previewError.textContent = 'You cannot select more than 65 items'
   }
 
   createWrapper () {
