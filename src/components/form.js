@@ -28,21 +28,11 @@ class AppForm extends HTMLElement {
     }`
   }
 
-  get name () {
-    return this.getAttribute('name')
-  }
-
-  get title () {
-    return this.getAttribute('title')
-  }
-
-  get onCloseEventName () {
-    return this.getAttribute('on-close') || 'app-modal--close'
-  }
-
-  get onSaveEventName () {
-    return this.getAttribute('on-save') || `${this._id}--save`
-  }
+  get name () { return this.getAttribute('name') }
+  get title () { return this.getAttribute('title') }
+  get inline () { return this.getAttribute('inline') === 'true' }
+  get onCloseEventName () { return this.getAttribute('on-close') || 'app-modal--close' }
+  get onSaveEventName () { return this.getAttribute('on-save') || `${this._id}--save` }
 
   get data () {
     const data = {}
@@ -56,6 +46,10 @@ class AppForm extends HTMLElement {
       Array.from(this.els.form.elements).find(el => el.name === key).value = value
     })
     this.validate()
+  }
+
+  get dataChanged () {
+    return JSON.stringify(this.initialData) !== JSON.stringify(this.data)
   }
 
   set error (message) {
@@ -82,29 +76,23 @@ class AppForm extends HTMLElement {
   }
 
   createHeader () {
-    const row = document.createElement('div')
-    if (this.title === 'false') {
-      this.removeAttribute('title')
-    } else {
-      const title = document.createElement('h2')
-      title.textContent = this.title || this.name
-      row.appendChild(title)
-    }
-    const error = document.createElement('p')
-    error.className = 'error'
-    row.appendChild(error)
-    this.els.error = error
-    return row
+    const title = document.createElement('h2')
+    title.textContent = this.title || this.name
+    return title
   }
 
   createFooter () {
     const row = document.createElement('div')
     row.className = 'row center mts mb1'
-    const close = document.createElement('button')
-    close.className = 'close'
-    close.innerHTML = '&times; Close'
-    close.onclick = () => this.emit(this.onCloseEventName)
-    row.appendChild(close)
+    if (this.inline) {
+      row.classList.add('hidden')
+    } else {
+      const close = document.createElement('button')
+      close.className = 'close'
+      close.innerHTML = '&times; Close'
+      close.onclick = () => this.emit(this.onCloseEventName)
+      row.appendChild(close)
+    }
     const save = document.createElement('button')
     save.className = 'save'
     save.innerHTML = 'Save &check;'
@@ -124,11 +112,14 @@ class AppForm extends HTMLElement {
   }
 
   validate () {
-    if (this.els.form.checkValidity()) {
+    const isValid = this.els.form.checkValidity()
+    if (isValid) {
       this.els.save.removeAttribute('disabled')
     } else {
       this.els.save.setAttribute('disabled', true)
     }
+    if (this.inline) this.els.footer.classList.toggle('hidden', !(this.dataChanged && isValid))
+    this.setAttribute('valid', isValid)
   }
 
   connectedCallback () {
@@ -137,12 +128,19 @@ class AppForm extends HTMLElement {
     this.on(`${this._id}--set`, data => (this.data = data))
     this.on(`${this._id}--error`, message => (this.error = message))
     this.els.form = this.createForm()
-    this.els.header = this.createHeader()
-    this.els.footer = this.createFooter()
     this.innerHTML = ''
     this.appendChild(this.els.form)
-    this.parentElement.prepend(this.els.header)
-    this.parentElement.append(this.els.footer)
+    this.els.error = document.createElement('p')
+    this.els.error.className = 'error'
+    this.els.form.parentElement.append(this.els.error)
+    if (!this.inline) {
+      this.els.header = this.createHeader()
+      this.parentElement.prepend(this.els.header)
+    }
+    this.els.footer = this.createFooter()
+    this.els.form.parentElement.append(this.els.footer)
+    this.initialData = this.data
+    this.validate()
   }
 }
 
