@@ -85,7 +85,7 @@ class App {
   }
 
   async getBarcodesToPrint () {
-    const barcodes = this.items.filter(i => (i.reference.length > 3 && i['ref-printed'] === false))
+    const barcodes = this.items.filter(i => i['ref-printed'] === false)
     this.emit('barcodes-to-print', barcodes)
   }
 
