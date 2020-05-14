@@ -22,8 +22,8 @@ class AppPrintBarcodes extends HTMLElement {
         ${this.barcodes.map(b => `<div class=barcode>
           <qr-code data="${b.reference}" margin=0 modulesize=3></qr-code>
           <div class=col>
-            <span class=name>${b.name}</span>
-            <span class=location>${b.box ? (b.box[0] + b.drawer) : b.location}</span>
+            <span class=name>${[b.name, b.brand, b.details].join(' ').trim()}</span>
+            <span class=location>${b.box && b.box !== 'N/A' ? (b.box[0] + b.drawer) : b.location}</span>
           </div>
         </div>`).join('\n')}
       </div>
@@ -69,7 +69,7 @@ class AppPrintBarcodes extends HTMLElement {
       align-items: center;
       border: 2px solid;
       border-radius: 8px;
-      padding: 10px;
+      padding: 6px;
     }
     .barcode:nth-child(even){
       border-style: dashed;
@@ -78,6 +78,9 @@ class AppPrintBarcodes extends HTMLElement {
       overflow: hidden;
       line-height: 1.2rem;
       padding-left: 10px;
+      font-size: 0.8rem;
+      font-family: sans-serif;
+      letter-spacing: -0.5px;
       text-overflow: ellipsis;
       display: -webkit-box;
       -webkit-line-clamp: 2;
