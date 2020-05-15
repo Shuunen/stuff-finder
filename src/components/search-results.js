@@ -21,9 +21,15 @@ class AppSearchResults extends HTMLElement {
 
   show (data) {
     console.log(`displaying ${data.results.length} results...`)
-    this.els.title.textContent = data.title
+    if (data.byReference && !data.results[0]['ref-printed']) this.markReferenceAsPrinted(data.results[0])
+    this.els.title.textContent = data.byReference ? '' : data.title
     this.format(data.results)
     this.emit('app-modal--search-results--open')
+  }
+
+  markReferenceAsPrinted (item) {
+    console.log('marking this item as ref-printed', item)
+    this.emit('app-update--item', { id: item.id, 'ref-printed': true })
   }
 
   retry () {
@@ -64,6 +70,7 @@ class AppSearchResults extends HTMLElement {
       resultsPerLocation[location].forEach(result => {
         const resultEl = document.createElement('app-search-result')
         resultEl.setAttribute('data', JSON.stringify(result))
+        if (results.length === 1) resultEl.setAttribute('solo', true)
         group.appendChild(resultEl)
       })
       this.els.results.appendChild(group)
