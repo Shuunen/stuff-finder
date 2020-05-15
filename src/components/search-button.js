@@ -47,7 +47,9 @@ class AppSearchButton extends HTMLElement {
   }
 
   onKeyDown (event) {
-    if (event.target.tagName.toLowerCase() !== 'body') return
+    const filter = /^[\w\d\s-]{1}$/i // this filter let user use special keys like CTRL without interfering
+    if (event.target.tagName.toLowerCase() !== 'body' || !filter.test(event.key)) return
+    console.log('redirecting user input char :', event.key, 'to search input')
     this.els.search.focus()
   }
 
