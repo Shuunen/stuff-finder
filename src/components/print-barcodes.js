@@ -13,10 +13,7 @@ class AppPrintBarcodes extends HTMLElement {
   get modalContentPrepare () {
     return `
     <h1>Prepare Barcodes</h1>
-    <p class=mbs>
-      Below is the list of non-printed items. <br>
-      You can select up to <strong>65</strong> valid items to print.
-    </p>
+    <p class=mbs>Below is the list of non-printed items where valid ones have been pre-selected.</p>
     <div class="row even mb1">
       <a href="#" data-action="select-all">select all</a>
       <a href="#" data-action="select-valid">select all valid</a>
@@ -25,9 +22,13 @@ class AppPrintBarcodes extends HTMLElement {
     <div class=list>
       ${this.barcodes.map(b => `<div class=row>
         <input type=checkbox id="${b.id}" data-action="select-one">
-        <app-form name="${b.id}" inline=true title=false>
-          <input name=name placeholder=Name required minlength=3 maxlength=50 autofocus value="${b.name}">
-          <input name=reference placeholder=reference pattern=\\w{10,} required maxlength=20 autofocus value="${b.reference}">
+        <app-form name="${b.id}" inline=true title=false on-save="app-update--item">
+          <input type=hidden name=id value="${b.id}" />
+          <input style="width: 12rem" name=name placeholder=Name required minlength=3 maxlength=50 autofocus value="${b.name}">
+          <input style="width: 9rem" name=brand placeholder=Brand value="${b.brand}">
+          <input style="width: 9rem" name=reference placeholder=Reference required minlength=7 maxlength=20 value="${b.reference}">
+          <select style="width: 4rem" required name=box>${b.boxes.map(l => `<option value="${l}" ${l.toLowerCase() === b.box.toLowerCase() ? 'selected' : ''}>${l}</option>`).join('')}</select>
+          <select style="width: 4rem" name=drawer>${['', 1, 2, 3, 4, 5, 6, 7].map(d => `<option value="${d}" ${d.toString().toLowerCase() === b.drawer.toLowerCase() ? 'selected' : ''}>${d}</option>`).join('')}</select>
         </app-form>
       </div>`).join('\n')}
     </div>
