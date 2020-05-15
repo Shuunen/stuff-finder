@@ -207,10 +207,12 @@ class App {
   }
 
   async onUpdateItem (item) {
+    if (!item.id) return this.showError('cannot update an item without his id')
     const fieldsToUpdate = ['name', 'brand', 'details', 'box', 'drawer', 'location', 'reference', 'ref-printed']
-    this.isLoading(true)
     const data = { fields: {} }
-    fieldsToUpdate.forEach(field => (data.fields[field] = item[field] || null))
+    fieldsToUpdate.forEach(field => item[field] ? (data.fields[field] = item[field]) : null)
+    if (Object.keys(data.fields).length === 0) return this.showError('cannot update an item without data')
+    this.isLoading(true)
     const url = this.apiUrl.replace('?', `/${item.id}?`)
     await this.patch(url, data)
     this.isLoading(false)
