@@ -42,6 +42,15 @@ class AppSearchButton extends HTMLElement {
     window.addEventListener(eventName, event => callback.bind(this)(event.detail))
   }
 
+  handleFocusLessTyping () {
+    document.body.addEventListener('keydown', event => this.onKeyDown(event))
+  }
+
+  onKeyDown (event) {
+    if (event.target.tagName.toLowerCase() !== 'body') return
+    this.els.search.focus()
+  }
+
   createTypeInput () {
     const search = this.els.search = document.createElement('input')
     search.placeholder = ' Type it 🔎'
@@ -89,6 +98,7 @@ class AppSearchButton extends HTMLElement {
     this.els.wrapper = this.createWrapper()
     this.status = 'ready'
     this.parentNode.replaceChild(this.els.wrapper, this)
+    this.handleFocusLessTyping()
   }
 }
 
