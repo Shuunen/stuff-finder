@@ -96,12 +96,17 @@ class AppForm extends HTMLElement {
     const save = document.createElement('button')
     save.className = 'save'
     save.innerHTML = 'Save &check;'
-    save.onclick = () => this.emit(this.onSaveEventName, this.data)
+    save.onclick = () => this.onSave()
     save.setAttribute('disabled', true)
     this.els.form.onchange = this.els.form.onkeyup = () => this.validate()
     row.appendChild(save)
     this.els.save = save
     return row
+  }
+
+  onSave () {
+    this.emit(this.onSaveEventName, this.data)
+    this.els.footer.classList.add('hidden')
   }
 
   destroy () {
