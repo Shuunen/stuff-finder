@@ -215,6 +215,10 @@ class App {
     this.isLoading(true)
     const url = this.apiUrl.replace('?', `/${item.id}?`)
     await this.patch(url, data)
+    // once item has been patch remotely, lets patch it locally in memory
+    const index = this.items.findIndex(i => i.id === item.id)
+    if (index < 0) this.showError('failed to find local item')
+    else Object.assign(this.items[index], data.fields)
     this.isLoading(false)
   }
 
