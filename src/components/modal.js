@@ -47,9 +47,6 @@ class AppModal extends HTMLElement {
   }
 
   open () {
-    if (!this.els.wrapper.classList.contains('hidden')) {
-      return this.warn('cannot open an already visible modal')
-    }
     this.els.wrapper.classList.remove('hidden')
   }
 
