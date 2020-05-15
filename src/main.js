@@ -156,9 +156,12 @@ class App {
   }
 
   onSearchStart (stuff) {
-    const results = this.fuse.search(stuff).map(i => i.item)
-    const title = `“${stuff}”`
-    this.emit('app-search-results--show', { title, results })
+    const str = stuff.trim()
+    const looksLikeReference = /^[\w\d-]{7,}$/i.test(str)
+    const result = looksLikeReference ? this.items.find(i => i.reference === str) : null
+    const results = result ? [result] : this.fuse.search(str).map(i => i.item)
+    const title = `“${str}”`
+    this.emit('app-search-results--show', { title, results, byReference: !!result })
   }
 
   onSearchRetry () {
