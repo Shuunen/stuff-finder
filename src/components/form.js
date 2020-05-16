@@ -52,9 +52,8 @@ class AppForm extends HTMLElement {
     return JSON.stringify(this.initialData) !== JSON.stringify(this.data)
   }
 
-  set error (message) {
-    this.els.error.textContent = message
-  }
+  get error () { return this.els.error.textContent }
+  set error (message) { this.els.error.textContent = message }
 
   emit (eventName, eventData) {
     console.log(`emit event "${eventName}"`, eventData === undefined ? '' : eventData)

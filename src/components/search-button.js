@@ -3,9 +3,11 @@
 import { pickOne } from 'shuutils'
 
 class AppSearchButton extends HTMLElement {
+  get status () { return this._status }
   set status (status) {
     let label = ''
     let hint = ''
+    this._status = status
     switch (status) {
       case 'listening':
         label = pickOne(['👂 Listening to you', '👂 Give it to me', '👂 Tell me'])
@@ -29,6 +31,7 @@ class AppSearchButton extends HTMLElement {
   constructor () {
     super()
     this._id = 'app-search-button'
+    this._status = ''
     this.els = {}
     this.on('app-speech--status', status => (this.status = status))
   }

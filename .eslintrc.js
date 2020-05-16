@@ -2,14 +2,14 @@ const rules = require('./.eslintrc.rules.js')
 
 module.exports = {
   extends: [
-    'standard'
+    'standard',
   ],
   parserOptions: {
     ecmaVersion: 2018,
-    sourceType: 'module'
+    sourceType: 'module',
   },
   plugins: [
-    'html'
+    'html',
   ],
-  rules
+  rules,
 }
