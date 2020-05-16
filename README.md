@@ -12,7 +12,6 @@
 ## Todo
 
 - [ ] nicer colorful identity ([something like this ?](https://www.iconfinder.com/icons/44859/cube_icon))
-- [ ] update ref-printed products in batch
 
 ## Thanks
 

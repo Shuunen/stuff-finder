@@ -19,11 +19,16 @@ class AppSearchResult extends HTMLElement {
 
   get readContent () {
     return `<div class="col center">
+      ${this.isSolo && this.data.photo && this.data.photo.length ? `<img class=mb1 style="max-height: 20rem; max-width: 20rem" src="${this.data.photo[0].url}" />` : ''}
       <div>
         <div class=clickable>${(this.data.name + ' ' + this.data.brand).trim()}<span class="box">${this.data.box.toUpperCase() + this.data.drawer}</span></div>
       </div>
       <small class=ellipsis>${this.data.details}</small>
     </div>`
+  }
+
+  get isSolo () {
+    return this.getAttribute('solo') === 'true'
   }
 
   emit (eventName, eventData) {
@@ -88,6 +93,7 @@ class AppSearchResult extends HTMLElement {
 
   createWrapper () {
     Object.assign(this.data, JSON.parse(this.getAttribute('data')))
+    if (this.isSolo) console.log(this.data)
     this.setListeners()
     const wrapper = this.els.wrapper = document.createElement('div')
     wrapper.className = `${this._id} ps`
