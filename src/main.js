@@ -125,6 +125,7 @@ class App {
       location: '',
       reference: '',
       'ref-printed': false,
+      status: 'acheté',
       ...record.fields,
     }))
     this.showLog(`${this.items.length} item(s) loaded ` + this.coolAscii())
