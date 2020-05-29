@@ -48,7 +48,7 @@ class AppPrintBarcodes extends HTMLElement {
     <div class="print-zone preview">
       <div class="a4-65">
         ${this.barcodes.map(b => `<div class=barcode>
-          <qr-code data="${b.reference}" margin=0 modulesize=3></qr-code>
+          <qr-code data="${b.reference.trim()}" margin=0 modulesize=3></qr-code>
           <div class=col>
             <span class=name>${[b.name, b.brand, b.details].join(' ').trim()}</span>
             <span class=location>${b.box && b.box !== 'N/A' ? (b.box[0] + b.drawer) : b.location}</span>
