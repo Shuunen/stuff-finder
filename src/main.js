@@ -213,18 +213,26 @@ class App {
 
   async onUpdateItem (item) {
     if (!item.id) return this.showError('cannot update an item without his id')
+    this.isLoading(true)
+    await this.updateItemRemotely(item)
+    await this.updateItemLocally(item)
+    this.isLoading(false)
+  }
+
+  async updateItemRemotely (item) {
     const fieldsToUpdate = ['name', 'brand', 'details', 'box', 'drawer', 'location', 'reference', 'ref-printed']
     const data = { fields: {} }
-    fieldsToUpdate.forEach(field => item[field] ? (data.fields[field] = item[field]) : null)
+    fieldsToUpdate.forEach(field => (item[field] || typeof item[field] === 'boolean') ? (data.fields[field] = item[field]) : null)
     if (Object.keys(data.fields).length === 0) return this.showError('cannot update an item without data')
-    this.isLoading(true)
     const url = this.apiUrl.replace('?', `/${item.id}?`)
-    await this.patch(url, data)
-    // once item has been patch remotely, lets patch it locally in memory
+    return this.patch(url, data)
+  }
+
+  async updateItemLocally (item) {
     const index = this.items.findIndex(i => i.id === item.id)
-    if (index < 0) this.showError('failed to find local item')
-    else Object.assign(this.items[index], data.fields)
-    this.isLoading(false)
+    if (index < 0) return this.showError('failed to find local item')
+    Object.assign(this.items[index], item)
+    this.initFuse()
   }
 
   async patch (url, data) {
