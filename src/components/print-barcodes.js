@@ -25,8 +25,9 @@ class AppPrintBarcodes extends HTMLElement {
         <app-form name="${b.id}" inline=true title=false on-save="app-update--item">
           <input type=hidden name=id value="${b.id}" />
           <input style="width: 12rem" name=name placeholder=Name required minlength=3 maxlength=50 autofocus value="${b.name}">
-          <input style="width: 9rem" name=brand placeholder=Brand value="${b.brand}">
-          <input style="width: 9rem" name=reference placeholder=Reference required minlength=7 maxlength=20 value="${b.reference}">
+          <input style="width: 10rem" name=details placeholder=Details value="${b.details}">
+          <input style="width: 6rem" name=brand placeholder=Brand value="${b.brand}">
+          <input style="width: 6rem" name=reference placeholder=Reference required minlength=7 maxlength=20 value="${b.reference}">
           <select style="width: 4rem" required name=box>${b.boxes.map(l => `<option value="${l}" ${l.toLowerCase() === b.box.toLowerCase() ? 'selected' : ''}>${l}</option>`).join('')}</select>
           <select style="width: 4rem" name=drawer>${['', 1, 2, 3, 4, 5, 6, 7].map(d => `<option value="${d}" ${d.toString().toLowerCase() === b.drawer.toLowerCase() ? 'selected' : ''}>${d}</option>`).join('')}</select>
         </app-form>
