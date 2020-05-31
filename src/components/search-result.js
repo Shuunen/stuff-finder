@@ -7,7 +7,7 @@ class AppSearchResult extends HTMLElement {
     const statuses = this.data.statuses.map(s => `<option value="${s}" ${s.toLowerCase() === this.data.status.toLowerCase() ? 'selected' : ''}>${s}</option>`)
     const drawers = ['', 1, 2, 3, 4, 5, 6, 7].map(d => `<option value="${d}" ${d.toString().toLowerCase() === this.data.drawer.toLowerCase() ? 'selected' : ''}>${d}</option>`)
     return `<div class="row grow wrap" style="justify-content: space-evenly">
-      ${this.isSolo && this.data.photo && this.data.photo.length ? `<img style="width: 100%; max-width: 300px" src="${this.data.photo[0].url}" />` : ''}
+      ${this.data.photo && this.data.photo.length ? `<img style="width: 100%; max-width: 300px" src="${this.data.photo[0].url}" />` : ''}
       <label class="col" style="width: 50%">Name<input required name=name type=text value="${this.data.name}" /></label>
       <label class="col" style="width: 50%">Brand<input name=brand type=text value="${this.data.brand}" /></label>
       <label class="col" style="width: 50%">Details<input name=details type=text value="${this.data.details}" /></label>
@@ -78,14 +78,10 @@ class AppSearchResult extends HTMLElement {
   toggleEdit (active = false) {
     this.emit('app-search-results--edit')
     this.els.wrapper.classList.toggle('activated', active)
-    this.els.wrapper.classList.toggle('highlight-accent-light', active && !this.isSolo)
     this.els.read.classList.toggle('hidden', active)
     if (active) return
     this.els.read.innerHTML = this.readContent
-    if (this.els.form) {
-      console.warn('wtf is this case ?')
-      this.els.form.destroy()
-    }
+    if (this.els.form) this.els.form.destroy()
   }
 
   setListeners () {

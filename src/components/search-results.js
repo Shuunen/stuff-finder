@@ -23,7 +23,7 @@ class AppSearchResults extends HTMLElement {
   show (data) {
     console.log(`displaying ${data.results.length} results...`)
     if (data.byReference && !data.results[0]['ref-printed']) this.markReferenceAsPrinted(data.results[0])
-    this.els.title.textContent = data.results.length > 1 ? data.title : ''
+    this.els.title.textContent = data.results.length !== 1 ? data.title : ''
     this.format(data.results)
     this.emit('app-modal--search-results--open')
   }
