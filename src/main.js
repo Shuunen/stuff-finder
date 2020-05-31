@@ -101,31 +101,32 @@ class App {
     // this.showLog('parsing api records :', records )
     let boxes = []
     let locations = []
+    let statuses = []
     records.forEach(record => {
       const location = (record.fields.location && record.fields.location !== 'N/A') ? record.fields.location : ''
       const box = record.fields.box || ''
-      if (location.length && !locations.includes(location)) {
-        locations.push(location)
-      }
-      if (box.length && !boxes.includes(box)) {
-        boxes.push(box)
-      }
+      const status = record.fields.status || 'acheté'
+      if (location.length && !locations.includes(location)) locations.push(location)
+      if (box.length && !boxes.includes(box)) boxes.push(box)
+      if (!statuses.includes(status)) statuses.push(status)
     })
     locations = ['', 'N/A'].concat(locations.sort())
     boxes = [''].concat(boxes.sort())
+    statuses = [''].concat(statuses.sort())
     this.items = records.map(record => ({
       id: record.id,
       name: '',
       brand: '',
       details: '',
-      locations,
-      boxes,
       box: '',
+      boxes,
       drawer: '',
       location: '',
+      locations,
       reference: '',
       'ref-printed': false,
       status: 'acheté',
+      statuses,
       ...record.fields,
     }))
     this.showLog(`${this.items.length} item(s) loaded ` + this.coolAscii())

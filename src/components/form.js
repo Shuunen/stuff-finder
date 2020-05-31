@@ -12,12 +12,6 @@ class AppForm extends HTMLElement {
       color: var(--color-primary, steelblue);
       margin-top: 1rem;
     }
-    .${this._id} label + label {
-      padding-left: 0.5rem;
-    }
-    .${this._id} label:not([style]){
-      width: 50%;
-    }
     .${this._id} label > [name] {
       margin-top: .3rem;
     }
@@ -29,14 +23,18 @@ class AppForm extends HTMLElement {
   }
 
   get name () { return this.getAttribute('name') }
-  get title () { return this.getAttribute('title') }
+  get title () { return this.getAttribute('title') !== 'false' ? this.getAttribute('title') : '' }
   get inline () { return this.getAttribute('inline') === 'true' }
   get onCloseEventName () { return this.getAttribute('on-close') || 'app-modal--close' }
   get onSaveEventName () { return this.getAttribute('on-save') || `${this._id}--save` }
 
   get data () {
     const data = {}
-    Array.from(this.els.form.elements).forEach(el => (data[el.name] = el.value))
+    Array.from(this.els.form.elements).forEach(el => {
+      let value = el.value
+      if (el.type === 'checkbox') value = el.checked
+      data[el.name] = value
+    })
     return data
   }
 
@@ -76,7 +74,7 @@ class AppForm extends HTMLElement {
 
   createHeader () {
     const title = document.createElement('h2')
-    title.textContent = this.title || this.name
+    title.textContent = this.title
     return title
   }
 
@@ -88,7 +86,7 @@ class AppForm extends HTMLElement {
     } else {
       const close = document.createElement('button')
       close.className = 'close'
-      close.innerHTML = '&times; Close'
+      close.innerHTML = '&times; Cancel'
       close.onclick = () => this.emit(this.onCloseEventName)
       row.appendChild(close)
     }

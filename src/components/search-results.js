@@ -8,6 +8,7 @@ class AppSearchResults extends HTMLElement {
     this.els = {}
     this.on('app-search-results--show', this.show)
     this.on('app-search-results--retry', this.retry)
+    this.on('app-search-results--edit', this.toggleFooter)
   }
 
   emit (eventName, eventData) {
@@ -22,7 +23,7 @@ class AppSearchResults extends HTMLElement {
   show (data) {
     console.log(`displaying ${data.results.length} results...`)
     if (data.byReference && !data.results[0]['ref-printed']) this.markReferenceAsPrinted(data.results[0])
-    this.els.title.textContent = data.byReference ? '' : data.title
+    this.els.title.textContent = data.results.length > 1 ? data.title : ''
     this.format(data.results)
     this.emit('app-modal--search-results--open')
   }
@@ -110,7 +111,12 @@ class AppSearchResults extends HTMLElement {
     retry.onclick = () => this.emit('app-search-results--retry', this.data)
     row.appendChild(retry)
     this.els.retry = retry
-    this.els.wrapper.appendChild(row)
+    this.els.footer = row
+    this.els.wrapper.appendChild(this.els.footer)
+  }
+
+  toggleFooter () {
+    this.els.footer.classList.toggle('hidden')
   }
 
   connectedCallback () {

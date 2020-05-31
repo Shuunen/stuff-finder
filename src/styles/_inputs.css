@@ -74,6 +74,10 @@ input[type="number"] {
   text-align: center;
 }
 
+input[type="checkbox"] {
+  cursor: pointer;
+}
+
 select:invalid[required],
 input:invalid[required] {
   background-color: var(--color-error-light, red);

@@ -3,15 +3,18 @@
 class AppSearchResult extends HTMLElement {
   get formContent () {
     const locations = this.data.locations.map(l => `<option value=${l} ${l.toLowerCase() === this.data.location.toLowerCase() ? 'selected' : ''}>${l}</option>`)
-    const boxes = this.data.boxes.map(l => `<option value="${l}" ${l.toLowerCase() === this.data.box.toLowerCase() ? 'selected' : ''}>${l}</option>`)
+    const boxes = this.data.boxes.map(b => `<option value="${b}" ${b.toLowerCase() === this.data.box.toLowerCase() ? 'selected' : ''}>${b}</option>`)
+    const statuses = this.data.statuses.map(s => `<option value="${s}" ${s.toLowerCase() === this.data.status.toLowerCase() ? 'selected' : ''}>${s}</option>`)
     const drawers = ['', 1, 2, 3, 4, 5, 6, 7].map(d => `<option value="${d}" ${d.toString().toLowerCase() === this.data.drawer.toLowerCase() ? 'selected' : ''}>${d}</option>`)
     return `<div class="row grow wrap" style="justify-content: space-evenly">
-      <div class="full-width mts"><em class="clickable disabled">${this.data.name}</em></div>
-      <label class="col" style="width: 50%; margin-top: 0;">Name<input required name=name type=text value="${this.data.name}" /></label>
-      <label class="col" style="width: 50%; margin-top: 0;">Brand<input name=brand type=text value="${this.data.brand}" /></label>
+      ${this.isSolo && this.data.photo && this.data.photo.length ? `<img style="width: 100%; max-width: 300px" src="${this.data.photo[0].url}" />` : ''}
+      <label class="col" style="width: 50%">Name<input required name=name type=text value="${this.data.name}" /></label>
+      <label class="col" style="width: 50%">Brand<input name=brand type=text value="${this.data.brand}" /></label>
       <label class="col" style="width: 50%">Details<input name=details type=text value="${this.data.details}" /></label>
-      <label class="col" style="width: 50%">Reference<input name=reference type=text value="${this.data.reference}" /></label>
-      <label class="col" style="width: 50%">Location <select name=location>${locations}</select></label>
+      <label class="col" style="width: 25%">Reference<input name=reference type=text value="${this.data.reference}" /></label>
+      <label class="col" style="width: 25%">Ref printed ?<input class=auto type=checkbox name="ref-printed" ${this.data['ref-printed'] ? 'checked' : ''}></label>
+      <label class="col" style="width: 25%">Status<select name=status>${statuses}</select></label>
+      <label class="col" style="width: 25%">Location <select name=location>${locations}</select></label>
       <label class="col" style="width: 25%">Box <select name=box>${boxes}</select></label>
       <label class="col" style="width: 25%">Drawer <select class=center name=drawer>${drawers}</select></label>
     </div>`
@@ -19,9 +22,9 @@ class AppSearchResult extends HTMLElement {
 
   get readContent () {
     return `<div class="col center">
-      ${this.isSolo && this.data.photo && this.data.photo.length ? `<img class=mb1 style="max-height: 20rem; max-width: 20rem" src="${this.data.photo[0].url}" />` : ''}
+      ${this.isSolo && this.data.photo && this.data.photo.length ? `<img class="clickable mb1" style="max-height: 20rem; max-width: 20rem" src="${this.data.photo[0].url}" />` : ''}
       <div>
-        <div class=clickable>${(this.data.name + ' ' + this.data.brand).trim()}<span class="box">${this.data.box.toUpperCase() + this.data.drawer}</span></div>
+        <a class=clickable>${(this.data.name + ' ' + this.data.brand).trim()}<span class="box">${this.data.box.toUpperCase() !== 'N/A' ? (this.data.box.toUpperCase() + this.data.drawer) : ''}</span></a>
       </div>
       <small class=ellipsis>${this.data.details}</small>
     </div>`
@@ -73,8 +76,9 @@ class AppSearchResult extends HTMLElement {
   }
 
   toggleEdit (active = false) {
+    this.emit('app-search-results--edit')
     this.els.wrapper.classList.toggle('activated', active)
-    this.els.wrapper.classList.toggle('highlight-accent-light', active)
+    this.els.wrapper.classList.toggle('highlight-accent-light', active && !this.isSolo)
     this.els.read.classList.toggle('hidden', active)
     if (active) return
     this.els.read.innerHTML = this.readContent

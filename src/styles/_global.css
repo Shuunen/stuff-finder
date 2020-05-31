@@ -69,9 +69,12 @@ h2 {
 }
 
 a, .clickable {
+  cursor: pointer;
+}
+
+a.clickable {
   border-bottom: 2px solid currentColor;
   color: var(--color-accent, green);
-  cursor: pointer;
   display: inline;
   line-height: 1.5;
   text-decoration: none;
@@ -93,6 +96,9 @@ small {
   display: inline-block;
 }
 
+h1:empty,
+h2:empty,
+h3:empty,
 div:empty,
 small:empty,
 span:empty,
@@ -102,4 +108,8 @@ p:empty {
 
 details summary {
   cursor: pointer;
+}
+
+fieldset {
+  background: white;
 }
