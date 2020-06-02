@@ -66,6 +66,15 @@ class AppSearchButton extends HTMLElement {
     return search
   }
 
+  createScanInput () {
+    const button = this.els.scan = document.createElement('button')
+    button.textContent = '[ Scan it ]'
+    button.style.background = 'linear-gradient(red -30%, white 20%, white 80%, red 130%)'
+    button.onclick = () => this.emit('app-scan-code--start')
+    button.classList.add('ml1')
+    return button
+  }
+
   createSeparator () {
     const separator = document.createElement('em')
     separator.className = 'ph1'
@@ -83,7 +92,7 @@ class AppSearchButton extends HTMLElement {
     const row = document.createElement('div')
     row.className = 'row center middle'
     row.appendChild(this.createTypeInput())
-    row.appendChild(this.createSeparator())
+    row.appendChild(this.createScanInput())
     row.appendChild(this.createVoiceInput())
     this.els.search.style = 'width: 6rem'
     return row
