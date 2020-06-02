@@ -47,11 +47,19 @@ class AppScanCode extends HTMLElement {
     window.requestAnimationFrame(this.tick.bind(this))
   }
 
+  onModalClose () {
+    this.modalClosed = true
+    const streams = this.els.video.srcObject.getTracks()
+    console.log(streams.length || 'no', 'stream(s) to stop')
+    if (!streams.length) return
+    streams.forEach(s => s.stop())
+  }
+
   start () {
     console.log('user wants to scan something')
     this.emit('app-modal--scan-code--open')
     this.modalClosed = false
-    this.on('app-modal--scan-code--closed', () => (this.modalClosed = true))
+    this.on('app-modal--scan-code--closed', () => this.onModalClose())
     navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } }).then(stream => this.onCameraReady(stream))
   }
 
