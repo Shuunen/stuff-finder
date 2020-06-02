@@ -54,6 +54,7 @@ class AppModal extends HTMLElement {
     if (this.els.wrapper.classList.contains('hidden')) {
       return // this.warn('cannot close an already hidden modal')
     }
+    this.emit(`${this._id}--closed`)
     this.emit('fade-out', this.els.wrapper)
   }
 
