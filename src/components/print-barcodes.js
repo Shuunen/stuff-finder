@@ -4,7 +4,7 @@ import 'webcomponent-qr-code'
 class AppPrintBarcodes extends HTMLElement {
   get template () {
     return `
-      <div class="icon" title="Print barcodes">
+      <div class="icon hidden" title="Print barcodes">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><defs/><path fill="currentColor" fill-rule="evenodd" d="M8 4h8v2H8V4zm10 2h4v12h-4v4H6v-4H2V6h4V2h12v4zm2 10h-2v-2H6v2H4V8h16v8zM8 16h8v4H8v-4zm0-6H6v2h2v-2z" clip-rule="evenodd"/></svg>
       </div>
       <app-modal name="print-barcodes" />`
@@ -160,6 +160,7 @@ class AppPrintBarcodes extends HTMLElement {
     this.barcodes = []
     this.els = {}
     this.on('barcodes-to-print', this.prepareBarcodes)
+    this.on('items-ready', () => (this.els.icon.classList.remove('hidden')))
   }
 
   on (eventName, callback) {

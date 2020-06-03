@@ -45,19 +45,16 @@ class App {
 
   async onSettingsSave (settings) {
     const itemsLoaded = await this.loadItems(settings)
-    if (!itemsLoaded) {
-      return this.settingsActionRequired(true, 'failed to use api settings')
-    }
+    if (!itemsLoaded) return this.settingsActionRequired(true, 'failed to use api settings')
     this.settingsActionRequired(false)
+    if (this.items.length) this.emit('items-ready')
     this.emit('storage-set', { key: 'app-settings', value: settings })
   }
 
   settingsActionRequired (actionRequired, errorMessage = '') {
     this.emit('app-settings-trigger--animate', actionRequired)
     this.emit('app-form--settings--error', errorMessage)
-    if (!actionRequired) {
-      this.emit('app-modal--close')
-    }
+    if (!actionRequired) this.emit('app-modal--close')
   }
 
   isLoading (active) {
