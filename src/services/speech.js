@@ -1,4 +1,4 @@
-/* global AudioContext, CustomEvent */
+/* global CustomEvent */
 
 import { SEARCH_ORIGIN } from '../constants'
 
@@ -6,7 +6,6 @@ class AppSpeech {
   constructor () {
     this.initRecognition()
     this.isMobile = typeof window.orientation !== 'undefined'
-    this.audioContext = new AudioContext()
     this.on('app-speech--start', this.onStart)
   }
 
@@ -67,21 +66,10 @@ class AppSpeech {
   setStatus (status) {
     this.emit('app-speech--status', status)
     if (status === 'listening' && !this.isMobile) {
-      this.notify(400, 0.7)
+      this.emit('app-sound--info')
     } else if (status === 'failed') {
-      this.notify(200, 1.4)
+      this.emit('app-sound--error')
     }
-  }
-
-  notify (frequency = 400, seconds = 1) {
-    const o = this.audioContext.createOscillator()
-    const g = this.audioContext.createGain()
-    o.connect(g)
-    o.type = 'sine'
-    o.frequency.value = frequency
-    g.connect(this.audioContext.destination)
-    o.start(0)
-    g.gain.exponentialRampToValueAtTime(0.000006, this.audioContext.currentTime + seconds)
   }
 }
 
