@@ -24,6 +24,10 @@ button, input[type="button"], input[type="submit"], .input-accent {
   overflow: hidden;
 }
 
+.input-primary {
+  border-color: var(--color-primary);
+}
+
 button + button {
   margin-left: 1em;
 }
