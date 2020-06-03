@@ -19,11 +19,18 @@ class AppScanCode extends HTMLElement {
   }
 
   showCanvas () {
+    this.els.message.textContent = 'Point your camera to a QR code and search will starts.'
     this.els.loading.hidden = true
     this.els.canvasElement.hidden = false
     this.els.canvasElement.height = this.els.video.videoHeight
     this.els.canvasElement.width = this.els.video.videoWidth
     this.els.canvasElement.style.maxWidth = 300
+  }
+
+  hideCanvas () {
+    this.els.message.textContent = 'Please wait few seconds'
+    this.els.loading.hidden = false
+    this.els.canvasElement.hidden = true
   }
 
   tick () {
@@ -51,6 +58,7 @@ class AppScanCode extends HTMLElement {
 
   onModalClose () {
     this.modalClosed = true
+    this.hideCanvas()
     const streams = this.els.video.srcObject.getTracks()
     console.log(streams.length || 'no', 'stream(s) to stop')
     if (!streams.length) return
@@ -84,8 +92,8 @@ class AppScanCode extends HTMLElement {
     this.els.canvas = canvasElement.getContext('2d')
     this.els.video = document.createElement('video')
     this.els.wrapper.appendChild(canvasElement)
-    const message = document.createElement('p')
-    message.textContent = 'Just point your camera to a QR Code and search will start.'
+    const message = this.els.message = document.createElement('p')
+    message.textContent = 'You might not have video source or have declined access to it.'
     this.els.wrapper.appendChild(message)
   }
 
