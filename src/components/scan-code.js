@@ -37,10 +37,12 @@ class AppScanCode extends HTMLElement {
     if (!code) return window.requestAnimationFrame(this.tick.bind(this))
     console.log('found qr code value :', code.data)
     this.emit('app-modal--scan-code--close')
+    this.emit('app-sound--success')
     this.emit('search-start', { str: code.data, origin: SEARCH_ORIGIN.scan })
   }
 
   onCameraReady (stream) {
+    this.emit('app-sound--info')
     this.els.video.srcObject = stream
     this.els.video.play()
     this.els.loading.innerText = '⌛ Loading video...'
