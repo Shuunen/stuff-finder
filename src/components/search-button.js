@@ -16,13 +16,13 @@ class AppSearchButton extends HTMLElement {
         break
       case 'ready':
         label = pickOne(['🎙️ Say it'])
-        hint = 'Search is ready for you sir, just type your search or say something.'
+        hint = 'Search is ready for you sir, just type your search, scan or say something.'
         break
       case 'no-match':
       case 'failed':
       default:
         label = pickOne(['🎙️ Retry', '🎙️ Try again'])
-        hint = 'Search has fail, just press the button to try again.'
+        hint = 'Speech recognition has fail, just press the button to try again or use another method.'
         break
     }
     this.els.button.textContent = label
@@ -34,6 +34,7 @@ class AppSearchButton extends HTMLElement {
     this._status = ''
     this.els = {}
     this.on('app-speech--status', status => (this.status = status))
+    this.on('items-ready', () => (this.els.wrapper.classList.remove('hidden')))
   }
 
   emit (eventName, eventData) {
@@ -101,7 +102,7 @@ class AppSearchButton extends HTMLElement {
 
   createWrapper () {
     const wrapper = document.createElement('div')
-    wrapper.className = 'app-search-button col mt2'
+    wrapper.className = 'app-search-button col mt2 hidden'
     wrapper.appendChild(this.createInputs())
     const hint = this.els.hint = document.createElement('small')
     hint.className = 'm1'
