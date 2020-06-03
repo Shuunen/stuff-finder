@@ -1,13 +1,15 @@
 .stuff-finder {
   --color-primary: #604a42;
-  --color-accent: royalblue;
+  --color-accent-darker: #1959d2;
+  --color-accent: cornflowerblue;
   --color-accent-light: #e0e8ef;
+  --color-accent-lighter: #f6f8fe;
   --color-white: whitesmoke;
   --color-grey: #666;
-  --color-grey-light: #ebebeb;
+  --color-grey-light: #b3b3b3;
   --color-shade: rgba(0, 0, 0, .4);
-  --color-success: green;
-  --color-success-light: #daecda;
+  --color-success: #8aab8a;
+  --color-success-light: #f3fbf3;
   --color-error: red;
   --color-error-light: rgba(250,0,0,.1);
   --elevation-t-rex: 200;

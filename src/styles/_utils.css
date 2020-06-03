@@ -18,18 +18,15 @@
   justify-content: space-evenly;
 }
 
-.row.middle,
-.col.center {
+.row.middle, .col.center {
   align-items: center;
 }
 
-.row.center,
-.col.middle {
+.row.center, .col.middle {
   justify-content: center;
 }
 
-.wrap,
-.row.center.wrap {
+.wrap, .row.center.wrap {
   align-items: flex-end;
   flex-wrap: wrap;
   justify-content: space-evenly;
@@ -87,9 +84,9 @@
 }
 
 .box {
-  background-color: var(--color-grey-light, lightgrey);
+  background-color: var(--color-accent, blue);
   bottom: 0;
-  color: var(--color-primary, chocolate);
+  color: var(--color-white, white);
   font-family: Arial, monospace;
   font-size: .9rem;
   font-weight: 600;

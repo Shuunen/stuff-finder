@@ -1,27 +1,6 @@
 /* global HTMLElement, CustomEvent */
 
 class AppForm extends HTMLElement {
-  get style () {
-    return `
-    .${this._id} {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-    .${this._id} label {
-      color: var(--color-primary, steelblue);
-      margin-top: 1rem;
-    }
-    .${this._id} label > [name] {
-      margin-top: .3rem;
-    }
-    @media only screen and (max-width: 600px) {
-      .${this._id} label {
-        width: 100% !important;
-      }
-    }`
-  }
-
   get name () { return this.getAttribute('name') }
   get title () { return this.getAttribute('title') !== 'false' ? this.getAttribute('title') : '' }
   get inline () { return this.getAttribute('inline') === 'true' }
@@ -66,9 +45,6 @@ class AppForm extends HTMLElement {
     const form = document.createElement('form')
     form.innerHTML = this.innerHTML
     form.className = this._id
-    const style = document.createElement('style')
-    style.innerHTML = this.style
-    form.appendChild(style)
     return form
   }
 

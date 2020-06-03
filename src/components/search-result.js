@@ -8,15 +8,15 @@ class AppSearchResult extends HTMLElement {
     const drawers = ['', 1, 2, 3, 4, 5, 6, 7].map(d => `<option value="${d}" ${d.toString().toLowerCase() === this.data.drawer.toLowerCase() ? 'selected' : ''}>${d}</option>`)
     return `<div class="row grow wrap" style="justify-content: space-evenly">
       <div style="width: 100%">${this.data.photo && this.data.photo.length ? `<img style="max-width: 300px" src="${this.data.photo[0].url}" />` : ''}</div>
-      <label class="col" style="width: 50%">Name<input required name=name type=text value="${this.data.name}" /></label>
-      <label class="col" style="width: 50%">Brand<input name=brand type=text value="${this.data.brand}" /></label>
-      <label class="col" style="width: 50%">Details<input name=details type=text value="${this.data.details}" /></label>
-      <label class="col" style="width: 25%">Reference<input name=reference type=text value="${this.data.reference}" /></label>
-      <label class="col" style="width: 25%">Ref printed ?<input class=auto type=checkbox name="ref-printed" ${this.data['ref-printed'] ? 'checked' : ''}></label>
-      <label class="col" style="width: 25%">Status<select name=status>${statuses}</select></label>
-      <label class="col" style="width: 25%">Location <select name=location>${locations}</select></label>
-      <label class="col" style="width: 25%">Box <select name=box>${boxes}</select></label>
-      <label class="col" style="width: 25%">Drawer <select class=center name=drawer>${drawers}</select></label>
+      <label class="col" style="min-width: 50%">Name<input required name=name type=text value="${this.data.name}" /></label>
+      <label class="col" style="min-width: 50%">Brand<input name=brand type=text value="${this.data.brand}" /></label>
+      <label class="col" style="min-width: 50%">Details<input name=details type=text value="${this.data.details}" /></label>
+      <label class="col" style="min-width: 25%">Reference<input required name=reference type=text value="${this.data.reference}" /></label>
+      <label class="col" style="min-width: 25%">Ref printed ?<input class=auto type=checkbox name="ref-printed" ${this.data['ref-printed'] ? 'checked' : ''}></label>
+      <label class="col" style="min-width: 25%">Status<select name=status>${statuses}</select></label>
+      <label class="col" style="min-width: 25%">Location <select required name=location>${locations}</select></label>
+      <label class="col" style="min-width: 25%">Box <select required name=box>${boxes}</select></label>
+      <label class="col" style="min-width: 25%">Drawer <select class=center name=drawer>${drawers}</select></label>
     </div>`
   }
 
@@ -96,7 +96,7 @@ class AppSearchResult extends HTMLElement {
     if (this.isSolo) console.log(this.data)
     this.setListeners()
     const wrapper = this.els.wrapper = document.createElement('div')
-    wrapper.className = `${this._id} ps`
+    wrapper.className = 'app-search-result'
     const read = this.els.read = document.createElement('div')
     read.className = 'col'
     read.innerHTML = this.readContent
@@ -106,7 +106,6 @@ class AppSearchResult extends HTMLElement {
   }
 
   connectedCallback () {
-    this._id = 'app-search-result'
     this.els = {}
     this.data = {}
     this.parentNode.replaceChild(this.createWrapper(), this)
