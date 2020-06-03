@@ -60,7 +60,7 @@ class AppSearchButton extends HTMLElement {
   createTypeInput () {
     const search = this.els.search = document.createElement('input')
     search.id = 'input-type'
-    search.className = 'input-accent'
+    search.className = 'input-primary'
     search.placeholder = ' Type it 🔎'
     search.onchange = () => {
       this.emit('search-start', { str: search.value, origin: SEARCH_ORIGIN.type })
@@ -72,9 +72,9 @@ class AppSearchButton extends HTMLElement {
   createScanInput () {
     const button = this.els.scan = document.createElement('button')
     button.textContent = '[ Scan it ]'
+    button.className = 'input-primary ml1'
     button.style.background = 'linear-gradient(red -30%, white 20%, white 80%, red 130%)'
     button.onclick = () => this.emit('app-scan-code--start')
-    button.classList.add('ml1')
     return button
   }
 
@@ -87,6 +87,7 @@ class AppSearchButton extends HTMLElement {
 
   createVoiceInput () {
     const button = this.els.button = document.createElement('button')
+    button.className = 'input-primary'
     button.onclick = () => this.emit('app-speech--start')
     return button
   }
@@ -105,7 +106,7 @@ class AppSearchButton extends HTMLElement {
     const wrapper = document.createElement('div')
     wrapper.className = 'app-search-button col mt2 hidden'
     wrapper.appendChild(this.createInputs())
-    const hint = this.els.hint = document.createElement('small')
+    const hint = this.els.hint = document.createElement('p')
     hint.className = 'm1'
     wrapper.appendChild(hint)
     return wrapper

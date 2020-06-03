@@ -18,6 +18,8 @@
     "jsqr": "1.3.1",
     "npm-run-all": "4.1.5",
     "parcel-bundler": "1.12.4",
+    "parcel-plugin-nuke-dist": "1.0.1",
+    "parcel-plugin-static-files-copy": "2.3.1",
     "repo-check": "1.10.0",
     "shuutils": "4.1.0",
     "webcomponent-qr-code": "1.0.5"
@@ -38,10 +40,10 @@
     "url": "https://github.com/Shuunen/stuff-finder.git"
   },
   "scripts": {
-    "build": "parcel build src/index.html --detailed-report",
+    "build": "parcel build src/index.html --public-url . --no-source-maps --detailed-report",
     "check": "repo-check",
     "ci": "run-s lint build test check",
-    "dev": "npm start",
+    "dev": "parcel src/index.html",
     "lint": "eslint --fix --ignore-path .gitignore --ext .js,.html .",
     "postversion": "git push && git push --tags",
     "preversion": "npm run ci",
