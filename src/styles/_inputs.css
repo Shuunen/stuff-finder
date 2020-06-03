@@ -1,7 +1,4 @@
-button,
-input,
-textarea,
-select {
+button, input, textarea, select {
   border: .1rem solid var(--color-grey, grey);
   border-radius: var(--border-radius, .3rem);
   font-family: inherit;
@@ -14,19 +11,15 @@ select {
   transition: border .3s, background-color .3s;
 }
 
-select,
-button,
-input[type="button"],
-input[type="submit"] {
+select, button, input[type="button"], input[type="submit"] {
   cursor: pointer;
   padding: .3rem .8rem .4rem .7rem;
   white-space: nowrap;
 }
 
-button,
-input[type="button"],
-input[type="submit"] {
-  background-color: var(--color-grey-light, #e8e8e8);
+button, input[type="button"], input[type="submit"], .input-accent {
+  background-color: var(--color-accent-lighter);
+  border-color: var(--color-accent);
   cursor: pointer;
   overflow: hidden;
 }
@@ -41,25 +34,18 @@ button.big {
   padding: .5rem 1.2rem .7rem 1rem;
 }
 
-select:hover,
-button:hover,
-input[type="button"]:hover,
-input[type="submit"]:hover {
+select:hover, button:hover, input[type="button"]:hover, input[type="submit"]:hover {
   background-color: var(--color-white, whitesmoke);
   border: .1rem solid var(--color-primary, steelblue);
 }
 
-button.text,
-input[type="button"].text,
-input[type="submit"].text {
+button.text, input[type="button"].text, input[type="submit"].text {
   background-color: transparent;
   border: none;
   text-decoration: underline;
 }
 
-button.text:hover,
-input[type="button"].text:hover,
-input[type="submit"].text:hover {
+button.text:hover, input[type="button"].text:hover, input[type="submit"].text:hover {
   color: var(--color-primary, steelblue);
 }
 
@@ -78,14 +64,16 @@ input[type="checkbox"] {
   cursor: pointer;
 }
 
-select:invalid[required],
-input:invalid[required] {
+input[type="text"], select {
+  border-color: var(--color-grey-light, lightgrey);
+}
+
+select:invalid[required], input:invalid[required] {
   background-color: var(--color-error-light, red);
   border: .1rem solid var(--color-error, red);
 }
 
-select:valid[required],
-input:valid[required] {
+select:valid[required], input:valid[required] {
   background-color: var(--color-success-light, #c5e2c5);
   border: .1rem solid var(--color-success, green);
 }
@@ -101,8 +89,35 @@ select {
   background-position: right .7em top 50%, 0 0;
   background-repeat: no-repeat, repeat;
   background-size: .65em auto, 100%;
+  min-width: 100px;
 }
 
 select.center {
   text-indent: calc(50% - .5rem);
+}
+
+fieldset {
+  background: white;
+}
+
+fieldset + fieldset, fieldset + fieldset.auto {
+  margin-top: .5rem;
+}
+
+label {
+  flex-grow: 1;
+  line-height: 2;
+  overflow: hidden;
+  padding: .1rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.app-search-result + .app-search-result {
+  margin-top: .5rem;
+}
+
+.app-search-result + .app-search-result.activated {
+  background-color: var(--color-accent-lighter);
+  padding: .4rem .2rem;
 }

@@ -60,6 +60,7 @@ class AppSearchButton extends HTMLElement {
   createTypeInput () {
     const search = this.els.search = document.createElement('input')
     search.id = 'input-type'
+    search.className = 'input-accent'
     search.placeholder = ' Type it 🔎'
     search.onchange = () => {
       this.emit('search-start', { str: search.value, origin: SEARCH_ORIGIN.type })

@@ -63,7 +63,7 @@ class AppSearchResults extends HTMLElement {
     this.els.results.innerHTML = ''
     locations.forEach(location => {
       const group = document.createElement('fieldset')
-      group.className = 'mb1 auto'
+      group.className = 'auto'
       const label = document.createElement('legend')
       label.className = 'ph1'
       label.textContent = location || 'Somewhere'
@@ -101,7 +101,7 @@ class AppSearchResults extends HTMLElement {
 
   addFooter () {
     const row = document.createElement('div')
-    row.className = 'row center mvs'
+    row.className = 'row center mt1 mbs'
     const close = document.createElement('button')
     close.innerHTML = '&times; Close'
     close.onclick = () => this.emit('app-modal--close')

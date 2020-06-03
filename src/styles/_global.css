@@ -25,32 +25,6 @@ body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
-body::after {
-  animation-duration: 10s;
-  animation-iteration-count: infinite;
-  animation-name: letter-lsd;
-  animation-timing-function: ease-in-out;
-  content: "💿 📷 💎 💡 📻 📱 🔍 🔦 📚";
-  filter: grayscale(1);
-  font-size: 2rem;
-  letter-spacing: 10vw;
-  line-height: 30vh;
-  margin-left: 5vw;
-  position: fixed;
-  z-index: -1;
-}
-
-@keyframes letter-lsd {
-  0%, 100% {
-    opacity: .2;
-    transform: scale(.90);
-  }
-  50% {
-    opacity: .7;
-    transform: scale(1);
-  }
-}
-
 h1, h2 {
   margin: 0;
   padding: .6rem 1rem;
@@ -74,7 +48,7 @@ a, .clickable {
 
 a.clickable {
   border-bottom: 2px solid currentColor;
-  color: var(--color-accent, green);
+  color: var(--color-accent-darker, blue);
   display: inline;
   line-height: 1.5;
   text-decoration: none;
@@ -96,20 +70,10 @@ small {
   display: inline-block;
 }
 
-h1:empty,
-h2:empty,
-h3:empty,
-div:empty,
-small:empty,
-span:empty,
-p:empty {
+h1:empty, h2:empty, h3:empty, div:empty, small:empty, span:empty, p:empty {
   display: none;
 }
 
 details summary {
   cursor: pointer;
-}
-
-fieldset {
-  background: white;
 }
