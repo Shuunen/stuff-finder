@@ -1,12 +1,13 @@
 /* global AudioContext, CustomEvent */
 
+import { SEARCH_ORIGIN } from '../constants'
+
 class AppSpeech {
   constructor () {
-    this._id = 'app-speech'
     this.initRecognition()
     this.isMobile = typeof window.orientation !== 'undefined'
     this.audioContext = new AudioContext()
-    this.on(`${this._id}--start`, this.onStart)
+    this.on('app-speech--start', this.onStart)
   }
 
   emit (eventName, eventData) {
@@ -43,7 +44,7 @@ class AppSpeech {
   onSuccess (sentence, confidence) {
     this.recognitionSucceed = true
     console.log('confidence : ' + confidence)
-    this.emit(`${this._id}--recognition-success`, sentence)
+    this.emit('search-start', { str: sentence, origin: SEARCH_ORIGIN.speech })
   }
 
   onEnd () {
@@ -64,7 +65,7 @@ class AppSpeech {
   }
 
   setStatus (status) {
-    this.emit(`${this._id}--status`, status)
+    this.emit('app-speech--status', status)
     if (status === 'listening' && !this.isMobile) {
       this.notify(400, 0.7)
     } else if (status === 'failed') {

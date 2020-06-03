@@ -1,10 +1,10 @@
 /* global HTMLElement, CustomEvent */
 import jsQR from 'jsqr'
+import { SEARCH_ORIGIN } from '../constants'
 
 class AppScanCode extends HTMLElement {
   constructor () {
     super()
-    this._id = 'app-scan-code'
     this.els = {}
     this.on('app-scan-code--start', this.start)
   }
@@ -37,7 +37,7 @@ class AppScanCode extends HTMLElement {
     if (!code) return window.requestAnimationFrame(this.tick.bind(this))
     console.log('found qr code value :', code.data)
     this.emit('app-modal--scan-code--close')
-    this.emit('search-start', code.data)
+    this.emit('search-start', { str: code.data, origin: SEARCH_ORIGIN.scan })
   }
 
   onCameraReady (stream) {
