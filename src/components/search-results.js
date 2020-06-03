@@ -35,7 +35,7 @@ class AppSearchResults extends HTMLElement {
 
   retry () {
     this.emit('app-modal--search-results--close')
-    this.emit('app-speech--start')
+    this.emit('search-retry')
   }
 
   scanLocations (results) {

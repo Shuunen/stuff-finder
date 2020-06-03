@@ -1,6 +1,7 @@
 /* global HTMLElement, CustomEvent */
 
 import { pickOne } from 'shuutils'
+import { SEARCH_ORIGIN } from '../constants'
 
 class AppSearchButton extends HTMLElement {
   get status () { return this._status }
@@ -30,7 +31,6 @@ class AppSearchButton extends HTMLElement {
 
   constructor () {
     super()
-    this._id = 'app-search-button'
     this._status = ''
     this.els = {}
     this.on('app-speech--status', status => (this.status = status))
@@ -58,9 +58,10 @@ class AppSearchButton extends HTMLElement {
 
   createTypeInput () {
     const search = this.els.search = document.createElement('input')
+    search.id = 'input-type'
     search.placeholder = ' Type it 🔎'
     search.onchange = () => {
-      this.emit('search-start', search.value)
+      this.emit('search-start', { str: search.value, origin: SEARCH_ORIGIN.type })
       search.value = ''
     }
     return search
@@ -100,7 +101,7 @@ class AppSearchButton extends HTMLElement {
 
   createWrapper () {
     const wrapper = document.createElement('div')
-    wrapper.className = `${this._id} col mt2`
+    wrapper.className = 'app-search-button col mt2'
     wrapper.appendChild(this.createInputs())
     const hint = this.els.hint = document.createElement('small')
     hint.className = 'm1'

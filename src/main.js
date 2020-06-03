@@ -2,6 +2,7 @@
 import Fuse from 'fuse.js'
 import { pickOne } from 'shuutils'
 import './components'
+import { JSON_HEADERS, SEARCH_ORIGIN } from './constants'
 import './services'
 
 class App {
@@ -10,7 +11,6 @@ class App {
     window.emit = (...args) => this.emit.apply(this, args)
     this.on('app-form--settings--set', this.onSettingsSave)
     this.on('app-form--settings--save', this.onSettingsSave)
-    this.on('app-speech--recognition-success', this.onSearchStart)
     this.on('app-update--item', this.onUpdateItem)
     this.on('storage-found', this.onStorageFound)
     this.on('get-barcodes-to-print', this.getBarcodesToPrint)
@@ -24,7 +24,6 @@ class App {
       this.emit('storage-search', 'app-settings')
       this.showTitle()
     }, 300)
-    // setTimeout(() => this.onSearchStart('batter'), 2000)
   }
 
   emit (eventName, eventData) {
@@ -157,8 +156,9 @@ class App {
     this.fuse = new Fuse(this.items, options)
   }
 
-  onSearchStart (stuff) {
-    const str = stuff.trim()
+  onSearchStart ({ str, origin }) {
+    str = str.trim()
+    this.lastSearchOrigin = origin
     const looksLikeReference = /^[\w\d-]{7,}$/i.test(str)
     const result = looksLikeReference ? this.items.find(i => i.reference === str) : null
     const results = result ? [result] : this.fuse.search(str).map(i => i.item)
@@ -167,7 +167,11 @@ class App {
   }
 
   onSearchRetry () {
-    this.emit('speech-recognition')
+    console.log('retry and this.lastSearchOrigin', this.lastSearchOrigin)
+    if (this.lastSearchOrigin === SEARCH_ORIGIN.type) return document.getElementById('input-type').focus()
+    if (this.lastSearchOrigin === SEARCH_ORIGIN.scan) return this.emit('app-scan-code--start')
+    if (this.lastSearchOrigin === SEARCH_ORIGIN.speech) return this.emit('app-speech--start')
+    this.showError('un-handled search retry case')
   }
 
   onStorageFound (data) {
@@ -177,10 +181,7 @@ class App {
   }
 
   async fadeIn (el) {
-    if (!el.classList.contains('hide')) {
-      this.warn('please add "hide" class before mounting dom element and then call fade-in')
-      return
-    }
+    if (!el.classList.contains('hide')) return console.warn('please add "hide" class before mounting dom element and then call fade-in')
     await this.sleep(10)
     el.style.opacity = 1
   }
@@ -190,9 +191,7 @@ class App {
     await this.sleep(350)
     el.classList.remove('hide')
     el.classList.add('hidden')
-    if (!destroy) {
-      return
-    }
+    if (!destroy) return
     await this.sleep(350)
     el.remove()
   }
@@ -236,22 +235,8 @@ class App {
   }
 
   async patch (url, data) {
-    return fetch(url, {
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      method: 'patch',
-      body: JSON.stringify(data),
-    })
-      .then(response => response.json())
-      .then(response => {
-        if (response.error) {
-          throw new Error(response.error.message)
-        }
-        return 'ok'
-      })
-      .catch(err => this.showError(err.message))
+    const options = { headers: JSON_HEADERS, method: 'patch', body: JSON.stringify(data) }
+    return fetch(url, options).then(response => response.json()).catch(err => this.showError(err.message))
   }
 }
 
