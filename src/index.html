@@ -25,37 +25,39 @@
   <app-settings-trigger></app-settings-trigger>
 
   <app-modal name="settings">
-    <app-form name="settings" title="Settings">
-      <label>
-        <a href="//airtable.com/api" target="_blank" rel="noreferrer">Airtable api base</a>
-        <input name="base" placeholder="your api base" pattern="^app\w{14}$" required maxlength="17" autofocus>
-      </label>
-      <label>
-        <a href="//airtable.com/account" target="_blank" rel="noreferrer">Airtable api key</a>
-        <input name="key" placeholder="your api key" pattern="^key\w{14}$" required maxlength="17">
-      </label>
-      <label>
-        Airtable table name
-        <input name="table" pattern="\S+" placeholder="your table name" required>
-      </label>
-      <label>
-        Airtable view name
-        <input name="view" pattern="\S+" placeholder="your table name" required value="stuff-finder">
-      </label>
-    </app-form>
+    <div class="col ph1">
+      <app-form name="settings" title="Settings">
+        <label>
+          <a href="//airtable.com/api" target="_blank" rel="noreferrer">Airtable api base</a>
+          <input name="base" placeholder="your api base" pattern="^app\w{14}$" required maxlength="17" autofocus>
+        </label>
+        <label>
+          <a href="//airtable.com/account" target="_blank" rel="noreferrer">Airtable api key</a>
+          <input name="key" placeholder="your api key" pattern="^key\w{14}$" required maxlength="17">
+        </label>
+        <label>
+          Airtable table name
+          <input name="table" pattern="\S+" placeholder="your table name" required>
+        </label>
+        <label>
+          Airtable view name
+          <input name="view" pattern="\S+" placeholder="your table name" required value="stuff-finder">
+        </label>
+      </app-form>
 
-    <details class="mb1 left">
-      <summary>What this app do with my credentials ?</summary>
-      <small>
-        <ul>
-          <li>fetch your Airtable data</li>
-          <li>store credentials locally in your browser</li>
-          <li>nothing else</li>
-        </ul>
-        Feel free to check this app source code on the <a href="//github.com/Shuunen/stuff-finder" target="_blank" rel="noreferrer">Github project
-          page</a>.
-      </small>
-    </details>
+      <details class="mb1 left">
+        <summary>What this app do with my credentials ?</summary>
+        <small>
+          <ul>
+            <li>fetch your Airtable data</li>
+            <li>store credentials locally in your browser</li>
+            <li>nothing else</li>
+          </ul>
+          Feel free to check this app source code on the <a href="//github.com/Shuunen/stuff-finder" target="_blank" rel="noreferrer">Github project
+            page</a>.
+        </small>
+      </details>
+    </div>
   </app-modal>
 
   <script nonce="wei7762n1" src="main.js"></script>

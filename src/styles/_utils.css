@@ -40,6 +40,10 @@
   margin: auto;
 }
 
+.push-left {
+  margin-right: auto;
+}
+
 .backdrop {
   align-items: center;
   background-color: var(--color-shade, rgba(0, 0, 0, .4));
@@ -76,7 +80,7 @@
 }
 
 .ellipsis {
-  max-width: 80vw;
+  max-width: 20rem;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

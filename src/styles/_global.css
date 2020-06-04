@@ -39,7 +39,6 @@ h1 {
 h2 {
   font-size: 1.2rem;
   text-decoration: underline;
-  text-transform: uppercase;
 }
 
 a, .clickable {
@@ -76,4 +75,9 @@ h1:empty, h2:empty, h3:empty, div:empty, small:empty, span:empty, p:empty {
 
 details summary {
   cursor: pointer;
+}
+
+img {
+  max-height: inherit;
+  max-width: 100%;
 }

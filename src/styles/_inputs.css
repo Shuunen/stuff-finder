@@ -93,7 +93,7 @@ select {
   background-position: right .7em top 50%, 0 0;
   background-repeat: no-repeat, repeat;
   background-size: .65em auto, 100%;
-  min-width: 100px;
+  min-width: 7rem;
 }
 
 select.center {
@@ -102,26 +102,29 @@ select.center {
 
 fieldset {
   background: white;
+  margin: 1rem;
 }
 
 fieldset + fieldset, fieldset + fieldset.auto {
   margin-top: .5rem;
 }
 
+fieldset.single {
+  border: none;
+}
+
+legend {
+  font-size: 1.2rem;
+}
+
 label {
-  flex-grow: 1;
+  display: grid;
+  grid-gap: 1rem;
+  grid-template-columns: 1fr 2fr;
   line-height: 2;
   overflow: hidden;
   padding: .1rem;
+  text-align: left;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-.app-search-result + .app-search-result {
-  margin-top: .5rem;
-}
-
-.app-search-result + .app-search-result.activated {
-  background-color: var(--color-accent-lighter);
-  padding: .4rem .2rem;
 }

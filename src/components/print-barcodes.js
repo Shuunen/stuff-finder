@@ -19,21 +19,21 @@ class AppPrintBarcodes extends HTMLElement {
       <a href="#" data-action="select-valid">select all valid</a>
       <a href="#" data-action="select-none">select none</a>
     </div>
-    <div class=list>
+    <div class="list ph1">
       ${this.barcodes.map(b => `<div class=row>
         <input type=checkbox id="${b.id}" data-action="select-one">
-        <app-form name="${b.id}" inline=true title=false on-save="app-update--item">
+        <app-form name="${b.id}" inline=true title=false on-save="app-update--item" columns="4fr 3fr 2fr 2fr 1fr 1fr">
           <input type=hidden name=id value="${b.id}" />
-          <input style="width: 12rem" name=name placeholder=Name required minlength=3 maxlength=50 autofocus value="${b.name}">
-          <input style="width: 10rem" name=details placeholder=Details value="${b.details}">
-          <input style="width: 6rem" name=brand placeholder=Brand value="${b.brand}">
-          <input style="width: 6rem" name=reference placeholder=Reference required minlength=7 maxlength=20 value="${b.reference}">
-          <select style="width: 4rem" required name=box>${b.boxes.map(l => `<option value="${l}" ${l.toLowerCase() === b.box.toLowerCase() ? 'selected' : ''}>${l}</option>`).join('')}</select>
-          <select style="width: 4rem" name=drawer>${['', 1, 2, 3, 4, 5, 6, 7].map(d => `<option value="${d}" ${d.toString().toLowerCase() === b.drawer.toLowerCase() ? 'selected' : ''}>${d}</option>`).join('')}</select>
+          <input name=name placeholder=Name required minlength=3 maxlength=50 autofocus value="${b.name}">
+          <input name=details placeholder=Details value="${b.details}">
+          <input name=brand placeholder=Brand value="${b.brand}">
+          <input name=reference placeholder=Reference required minlength=7 maxlength=20 value="${b.reference}">
+          <select required name=box>${b.boxes.map(l => `<option value="${l}" ${l.toLowerCase() === b.box.toLowerCase() ? 'selected' : ''}>${l}</option>`).join('')}</select>
+          <select name=drawer>${['', 1, 2, 3, 4, 5, 6, 7].map(d => `<option value="${d}" ${d.toString().toLowerCase() === b.drawer.toLowerCase() ? 'selected' : ''}>${d}</option>`).join('')}</select>
         </app-form>
       </div>`).join('\n')}
     </div>
-    <div class=mt1>
+    <div class=mv>
       <button disabled class=preview>Preview</button>
     </div>
     <div class="error preview mts"></div>`

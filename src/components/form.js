@@ -2,10 +2,18 @@
 
 class AppForm extends HTMLElement {
   get name () { return this.getAttribute('name') }
+  get columns () { return this.getAttribute('columns') || '1fr' }
   get title () { return this.getAttribute('title') !== 'false' ? this.getAttribute('title') : '' }
   get inline () { return this.getAttribute('inline') === 'true' }
   get onCloseEventName () { return this.getAttribute('on-close') || 'app-modal--close' }
   get onSaveEventName () { return this.getAttribute('on-save') || `${this._id}--save` }
+
+  get style () {
+    return `app-form form { display: grid; grid-gap: 1rem; }
+    @media only screen and (max-width: 600px) {
+      app-form form { grid-template-columns: 1fr !important; }
+    }`
+  }
 
   get data () {
     const data = {}
@@ -45,6 +53,10 @@ class AppForm extends HTMLElement {
     const form = document.createElement('form')
     form.innerHTML = this.innerHTML
     form.className = this._id
+    form.style = 'grid-template-columns: ' + this.columns
+    const style = document.createElement('style')
+    style.innerHTML = this.style
+    form.appendChild(style)
     return form
   }
 

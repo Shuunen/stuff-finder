@@ -4,6 +4,11 @@
   padding: .2rem .5rem;
 }
 
+.highlight-accent {
+  background-color: var(--color-accent, blue );
+  color: var(--color-white, white );
+}
+
 .highlight-accent-light {
   background-color: var(--color-accent-light, powderblue );
 }

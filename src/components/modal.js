@@ -2,25 +2,14 @@
 
 class AppModal extends HTMLElement {
   get style () {
-    return `
-    .${this._id} {
+    return `.${this._id} {
       background-color: var(--color-white, whitesmoke);
       border: .3rem solid var(--color-primary, steelblue);
       border-radius: var(--border-radius, .3rem);
       max-height: 90%;
-      max-width: 50rem;
+      max-width: 70rem;
       overflow: auto;
-      padding: .7rem 2rem 1rem;
       z-index: var(--elevation-giraffe, 100);
-    }
-    @media only screen and (max-width: 600px) {
-      .${this._id} {
-        max-height: 100%;
-        max-width: inherit;
-        min-width: var(--settings-width, 80vw);
-        padding: 0 .5rem;
-        width: auto;
-      }
     }`
   }
 

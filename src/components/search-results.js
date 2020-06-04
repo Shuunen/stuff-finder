@@ -3,6 +3,15 @@
 import { pickOne } from 'shuutils'
 
 class AppSearchResults extends HTMLElement {
+  get style () {
+    return `
+    .app-search-result { margin-top: .5rem; max-width: 40rem; }
+    .app-search-result + .app-search-result { margin-bottom: .5rem; margin-top: 1rem; }
+    .app-search-result + .app-search-result.activated { background-color: var(--color-accent-lighter); padding: .4rem .2rem; }
+    .app-search-result--image { height: 10rem; background-size: cover; background-repeat: no-repeat; background-position: center top; }
+    `
+  }
+
   constructor () {
     super()
     this.els = {}
@@ -63,9 +72,9 @@ class AppSearchResults extends HTMLElement {
     this.els.results.innerHTML = ''
     locations.forEach(location => {
       const group = document.createElement('fieldset')
-      group.className = 'auto'
+      if (results.length === 1) group.className = 'single'
       const label = document.createElement('legend')
-      label.className = 'ph1'
+      label.className = 'highlight-accent'
       label.textContent = location || 'Somewhere'
       group.appendChild(label)
       resultsPerLocation[location].forEach(result => {
@@ -85,6 +94,9 @@ class AppSearchResults extends HTMLElement {
   createWrapper () {
     const wrapper = document.createElement('app-modal')
     wrapper.name = 'search-results'
+    const style = document.createElement('style')
+    style.innerHTML = this.style
+    wrapper.appendChild(style)
     return wrapper
   }
 
@@ -101,7 +113,7 @@ class AppSearchResults extends HTMLElement {
 
   addFooter () {
     const row = document.createElement('div')
-    row.className = 'row center mt1 mbs'
+    row.className = 'row center mb1'
     const close = document.createElement('button')
     close.innerHTML = '&times; Close'
     close.onclick = () => this.emit('app-modal--close')
@@ -115,8 +127,8 @@ class AppSearchResults extends HTMLElement {
     this.els.wrapper.appendChild(this.els.footer)
   }
 
-  toggleFooter () {
-    this.els.footer.classList.toggle('hidden')
+  toggleFooter (active) {
+    this.els.footer.classList.toggle('hidden', active)
   }
 
   connectedCallback () {
