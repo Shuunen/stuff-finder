@@ -132,22 +132,20 @@ class App {
   initFuse () {
     // https://fusejs.io/
     const options = {
+      distance: 200, // see the tip at https://fusejs.io/concepts/scoring-theory.html#scoring-theory
       threshold: 0.35, // 0 is perfect match
       keys: [{
         name: 'name',
-        weight: 0.3,
+        weight: 4,
       }, {
         name: 'brand',
-        weight: 0.1,
+        weight: 2,
       }, {
         name: 'details',
-        weight: 0.2,
-      }, {
-        name: 'reference',
-        weight: 0.3,
+        weight: 4,
       }, {
         name: 'category',
-        weight: 0.1,
+        weight: 1,
       }], // TODO: this is not generic ^^"
     }
     this.fuse = new Fuse(this.items, options)
@@ -159,7 +157,7 @@ class App {
     const looksLikeReference = /^[\w\d-]{7,}$/i.test(str)
     const result = looksLikeReference ? this.items.find(i => i.reference === str) : null
     const results = result ? [result] : this.fuse.search(str).map(i => i.item)
-    const title = `“${str}”`
+    const title = `Results for “${str}”`
     this.emit('app-search-results--show', { title, results, byReference: !!result })
   }
 
