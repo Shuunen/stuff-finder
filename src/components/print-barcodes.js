@@ -98,7 +98,6 @@ class AppPrintBarcodes extends HTMLElement {
     }
     .barcode {
       display: flex;
-      justify-content: space-evenly;
       align-items: center;
       border: 2px solid;
       border-radius: 8px;
@@ -106,6 +105,9 @@ class AppPrintBarcodes extends HTMLElement {
     }
     .barcode:nth-child(even){
       border-style: dashed;
+    }
+    .barcode .col {
+      overflow: hidden;
     }
     .barcode .name {
       overflow: hidden;
@@ -178,12 +180,29 @@ class AppPrintBarcodes extends HTMLElement {
     this.emit('get-barcodes-to-print')
   }
 
-  previewBarcodes () {
+  async previewBarcodes () {
+    this.emit('app-loader--toggle', true)
     this.barcodes = this.barcodes.filter(b => this.selection.includes(b.id))
     this.els.modal.innerHTML = this.modalContentPrint
+    await this.adjustQrCodes()
+    await this.sleep(500)
+    this.emit('app-loader--toggle', false)
   }
 
-  prepareBarcodes (barcodes) {
+  async adjustQrCodes () {
+    // sometimes some qr code are too big
+    document.querySelectorAll('qr-code').forEach(wc => {
+      // reducing their module size do the trick & reduce their display size
+      if (wc.shadowRoot.firstElementChild.height > 63) wc.modulesize = 2
+    })
+  }
+
+  async sleep (ms) {
+    return new Promise(resolve => setTimeout(resolve, (ms || 1000)))
+  }
+
+  async prepareBarcodes (barcodes) {
+    this.emit('app-loader--toggle', true)
     this.barcodes = barcodes.sort(a => a.reference ? -1 : 1)
     this.els.modal = this.els.wrapper.querySelector('.app-modal--print-barcodes')
     this.els.modal.innerHTML = this.modalContentPrepare
@@ -192,6 +211,8 @@ class AppPrintBarcodes extends HTMLElement {
     this.els.previewBtn.onclick = () => this.previewBarcodes()
     this.els.previewError = this.els.modal.querySelector('.error.preview')
     this.selectValidItems()
+    await this.sleep(500)
+    this.emit('app-loader--toggle', false)
   }
 
   onModalPrepareClick (event) {
