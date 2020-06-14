@@ -44,7 +44,7 @@ class AppPrintBarcodes extends HTMLElement {
     <h1>Print Barcodes</h1>
     <p>
       Below is a preview of the page that will be printed. <br>
-      Make sure to remove any print margin after <a href="#" onclick="print()">clicking me</a>.
+      Make sure to remove any print margin after <a href="#print">clicking me</a>.
     </p>
     <div class="print-zone preview">
       <div class="a4-65">
@@ -86,21 +86,18 @@ class AppPrintBarcodes extends HTMLElement {
       grid-template-columns: repeat(5, 1fr);
       grid-template-rows: repeat(13, 1fr);
       grid-column-gap: 10px;
-      width: 1190px;
-      height: 1625px;
+      width: 1140px;
+      height: 1540px;
       margin: auto;
       background: white;
-      padding: 62px 28px 0 31px;
-    }
-    .a4-65 > .barcode {
-      height: 120px;
-      overflow: hidden;
+      padding: 62px 30px 0 30px;
     }
     .barcode {
       display: flex;
       align-items: center;
       border: 2px solid;
       border-radius: 8px;
+      overflow: hidden;
       padding: 6px;
     }
     .barcode:nth-child(even){
@@ -108,11 +105,11 @@ class AppPrintBarcodes extends HTMLElement {
     }
     .barcode .col {
       overflow: hidden;
+      padding-left: 10px;
     }
     .barcode .name {
       overflow: hidden;
       line-height: 1.2rem;
-      padding-left: 10px;
       font-size: 0.8rem;
       font-family: sans-serif;
       letter-spacing: -0.5px;
@@ -151,6 +148,9 @@ class AppPrintBarcodes extends HTMLElement {
       }
       .barcode {
         border-color: white;
+      }
+      body > div:not(.app-print-barcodes) {
+        display: none;
       }
     }
     `
