@@ -184,6 +184,7 @@ class AppPrintBarcodes extends HTMLElement {
     this.emit('app-loader--toggle', true)
     this.barcodes = this.barcodes.filter(b => this.selection.includes(b.id))
     this.els.modal.innerHTML = this.modalContentPrint
+    this.els.modal.querySelector('a[href="#print"]').onclick = () => window.print()
     await this.adjustQrCodes()
     await this.sleep(500)
     this.emit('app-loader--toggle', false)
