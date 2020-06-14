@@ -112,6 +112,24 @@ class AppForm extends HTMLElement {
     this.setAttribute('valid', isValid)
   }
 
+  // when copy pasting from a spreadsheet entry, values are like : "appABC keyXYZ tableName viewName"
+  handleMultiPaste () {
+    const input = this.els.form.querySelector('label > input[multi-paste]')
+    if (!input) return
+    const inputs = this.els.form.querySelectorAll('label > input')
+    console.log('handle multi paste from', input, 'and others', inputs)
+    input.removeAttribute('multi-paste')
+    const multiRegex = /"(\w+) (\w+) ([\w-]+) ([\w-]+)"/
+    input.onchange = () => { if (multiRegex.test(input.value)) this.onMultiPaste(input.value.match(multiRegex).splice(1, 4), inputs) }
+  }
+
+  onMultiPaste (values, inputs) {
+    console.log('multi paste detected, applying values', values, 'to', inputs)
+    inputs.forEach((input, i) => {
+      if (values[i]) input.value = values[i]
+    })
+  }
+
   connectedCallback () {
     this._id = `app-form--${this.name}`
     this.els = {}
@@ -120,6 +138,7 @@ class AppForm extends HTMLElement {
     this.els.form = this.createForm()
     this.innerHTML = ''
     this.appendChild(this.els.form)
+    this.handleMultiPaste()
     this.els.error = document.createElement('p')
     this.els.error.className = 'error'
     this.els.form.parentElement.append(this.els.error)
