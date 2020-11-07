@@ -46,7 +46,7 @@ class AppToaster extends HTMLElement {
     if (type === 'success') {
       toast.innerHTML += '✔️'
     }
-    this.els.wrapper.appendChild(toast)
+    this.els.wrapper.append(toast)
     toast.addEventListener('click', () => this.emit('fade-out-destroy', toast))
     if (type === 'error') {
       return
@@ -59,7 +59,7 @@ class AppToaster extends HTMLElement {
     wrapper.className = `${this._id} col center`
     const style = document.createElement('style')
     style.innerHTML = this.style
-    wrapper.appendChild(style)
+    wrapper.append(style)
     return wrapper
   }
 

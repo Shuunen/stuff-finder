@@ -51,7 +51,7 @@ class AppSearchButton extends HTMLElement {
   }
 
   onKeyDown (event) {
-    const filter = /^[\w\d\s-]{1}$/i // this filter let user use special keys like CTRL without interfering
+    const filter = /^[\s\w-]$/i // this filter let user use special keys like CTRL without interfering
     if (event.target.tagName.toLowerCase() !== 'body' || !filter.test(event.key)) return
     console.log('redirecting user input char :', event.key, 'to search input')
     this.els.search.focus()
@@ -62,10 +62,10 @@ class AppSearchButton extends HTMLElement {
     search.id = 'input-type'
     search.className = 'input-primary'
     search.placeholder = ' Type it 🔎'
-    search.onchange = () => {
+    search.addEventListener('change', () => {
       this.emit('search-start', { str: search.value, origin: SEARCH_ORIGIN.type })
       search.value = ''
-    }
+    })
     return search
   }
 
@@ -74,7 +74,7 @@ class AppSearchButton extends HTMLElement {
     button.textContent = '[ Scan it ]'
     button.className = 'input-primary ml1'
     button.style.background = 'linear-gradient(red -30%, white 20%, white 80%, red 130%)'
-    button.onclick = () => this.emit('app-scan-code--start')
+    button.addEventListener('click', () => this.emit('app-scan-code--start'))
     return button
   }
 
@@ -88,16 +88,16 @@ class AppSearchButton extends HTMLElement {
   createVoiceInput () {
     const button = this.els.button = document.createElement('button')
     button.className = 'input-primary'
-    button.onclick = () => this.emit('app-speech--start')
+    button.addEventListener('click', () => this.emit('app-speech--start'))
     return button
   }
 
   createInputs () {
     const row = document.createElement('div')
     row.className = 'row center middle'
-    row.appendChild(this.createTypeInput())
-    row.appendChild(this.createScanInput())
-    row.appendChild(this.createVoiceInput())
+    row.append(this.createTypeInput())
+    row.append(this.createScanInput())
+    row.append(this.createVoiceInput())
     this.els.search.style = 'width: 6rem'
     return row
   }
@@ -105,10 +105,10 @@ class AppSearchButton extends HTMLElement {
   createWrapper () {
     const wrapper = document.createElement('div')
     wrapper.className = 'app-search-button col mt2 hidden'
-    wrapper.appendChild(this.createInputs())
+    wrapper.append(this.createInputs())
     const hint = this.els.hint = document.createElement('p')
     hint.className = 'm1'
-    wrapper.appendChild(hint)
+    wrapper.append(hint)
     return wrapper
   }
 

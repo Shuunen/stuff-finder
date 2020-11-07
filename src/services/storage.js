@@ -1,6 +1,6 @@
 /* global localStorage, CustomEvent */
 
-import pkg from '../../package.json'
+import packageJson from '../../package.json'
 
 class AppStorage {
   constructor () {
@@ -18,7 +18,7 @@ class AppStorage {
   }
 
   fullKey (key) {
-    return `${pkg.name}_${key}`
+    return `${packageJson.name}_${key}`
   }
 
   async get (key) {

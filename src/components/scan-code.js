@@ -52,7 +52,7 @@ class AppScanCode extends HTMLElement {
     this.emit('app-sound--info')
     this.els.video.srcObject = stream
     this.els.video.play()
-    this.els.loading.innerText = '⌛ Loading video...'
+    this.els.loading.textContent = '⌛ Loading video...'
     window.requestAnimationFrame(this.tick.bind(this))
   }
 
@@ -61,7 +61,7 @@ class AppScanCode extends HTMLElement {
     this.hideCanvas()
     const streams = this.els.video.srcObject.getTracks()
     console.log(streams.length || 'no', 'stream(s) to stop')
-    if (!streams.length) return
+    if (streams.length === 0) return
     streams.forEach(s => s.stop())
   }
 
@@ -83,18 +83,18 @@ class AppScanCode extends HTMLElement {
     const title = this.els.title = document.createElement('h2')
     title.textContent = 'QR code scanner'
     title.classList.add('mb1')
-    this.els.wrapper.appendChild(title)
+    this.els.wrapper.append(title)
     const loading = this.els.loading = document.createElement('div')
     loading.textContent = 'Unable to access video stream'
-    this.els.wrapper.appendChild(loading)
+    this.els.wrapper.append(loading)
     const canvasElement = this.els.canvasElement = document.createElement('canvas')
     canvasElement.setAttribute('hidden', true)
     this.els.canvas = canvasElement.getContext('2d')
     this.els.video = document.createElement('video')
-    this.els.wrapper.appendChild(canvasElement)
+    this.els.wrapper.append(canvasElement)
     const message = this.els.message = document.createElement('p')
     message.textContent = 'You might not have video source or have declined access to it.'
-    this.els.wrapper.appendChild(message)
+    this.els.wrapper.append(message)
   }
 
   connectedCallback () {

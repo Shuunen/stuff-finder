@@ -52,11 +52,11 @@ class AppSearchResult extends HTMLElement {
   }
 
   closeOtherForms () {
-    document.querySelectorAll('.app-search-result button.close').forEach(el => el.click())
+    document.querySelectorAll('.app-search-result button.close').forEach(element => element.click())
   }
 
-  isElementInViewport (el) {
-    var rect = el.getBoundingClientRect()
+  isElementInViewport (element) {
+    const rect = element.getBoundingClientRect()
     return (
       rect.top >= 0 && rect.left >= 0 &&
       rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
@@ -65,9 +65,9 @@ class AppSearchResult extends HTMLElement {
   }
 
   scrollToForm () {
-    const el = document.querySelector('.app-search-result.activated')
-    if (this.isElementInViewport(el)) return
-    el.scrollIntoView({ behavior: 'smooth' })
+    const element = document.querySelector('.app-search-result.activated')
+    if (this.isElementInViewport(element)) return
+    element.scrollIntoView({ behavior: 'smooth' })
   }
 
   edit () {
@@ -80,7 +80,7 @@ class AppSearchResult extends HTMLElement {
     form.setAttribute('on-close', this.formCloseEvent)
     form.setAttribute('on-save', this.formSaveEvent)
     form.innerHTML = this.formContent
-    this.els.wrapper.appendChild(form)
+    this.els.wrapper.append(form)
     this.toggleEdit(true)
     this.scrollToForm()
   }
@@ -123,7 +123,7 @@ class AppSearchResult extends HTMLElement {
     read.className = 'col'
     read.innerHTML = this.readContent
     read.addEventListener('click', this.edit.bind(this))
-    wrapper.appendChild(read)
+    wrapper.append(read)
     return wrapper
   }
 

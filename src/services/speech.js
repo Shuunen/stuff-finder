@@ -30,7 +30,7 @@ class AppSpeech {
     }
     recognition.onspeechend = () => this.onEnd()
     recognition.onnomatch = () => this.onFail()
-    recognition.onerror = (event) => this.onError(event.error)
+    recognition.addEventListener('error', (event) => this.onError(event.error))
     this.recognition = recognition
   }
 

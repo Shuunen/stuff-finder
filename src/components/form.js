@@ -17,10 +17,10 @@ class AppForm extends HTMLElement {
 
   get data () {
     const data = {}
-    Array.from(this.els.form.elements).forEach(el => {
-      let value = el.value
-      if (el.type === 'checkbox') value = el.checked
-      data[el.name] = value
+    ;[...this.els.form.elements].forEach(element => {
+      let value = element.value
+      if (element.type === 'checkbox') value = element.checked
+      data[element.name] = value
     })
     return data
   }
@@ -28,7 +28,7 @@ class AppForm extends HTMLElement {
   set data (data) {
     Object.entries(data).forEach(entry => {
       const [key, value] = entry
-      Array.from(this.els.form.elements).find(el => el.name === key).value = value
+      ;[...this.els.form.elements].find(element => element.name === key).value = value
     })
     this.validate()
   }
@@ -56,7 +56,7 @@ class AppForm extends HTMLElement {
     form.style = 'grid-template-columns: ' + this.columns
     const style = document.createElement('style')
     style.innerHTML = this.style
-    form.appendChild(style)
+    form.append(style)
     return form
   }
 
@@ -75,16 +75,16 @@ class AppForm extends HTMLElement {
       const close = document.createElement('button')
       close.className = 'close'
       close.innerHTML = '&times; Cancel'
-      close.onclick = () => this.emit(this.onCloseEventName)
-      row.appendChild(close)
+      close.addEventListener('click', () => this.emit(this.onCloseEventName))
+      row.append(close)
     }
     const save = document.createElement('button')
     save.className = 'save'
     save.innerHTML = 'Save &check;'
-    save.onclick = () => this.onSave()
+    save.addEventListener('click', () => this.onSave())
     save.setAttribute('disabled', true)
-    this.els.form.onchange = this.els.form.onkeyup = () => this.validate()
-    row.appendChild(save)
+    this.els.form.addEventListener('change', this.els.form.addEventListener('keyup', () => this.validate()))
+    row.append(save)
     this.els.save = save
     return row
   }
@@ -120,13 +120,13 @@ class AppForm extends HTMLElement {
     console.log('handle multi paste from', input, 'and others', inputs)
     input.removeAttribute('multi-paste')
     const multiRegex = /"(\w+) (\w+) ([\w-]+) ([\w-]+)"/
-    input.onchange = () => { if (multiRegex.test(input.value)) this.onMultiPaste(input.value.match(multiRegex).splice(1, 4), inputs) }
+    input.addEventListener('change', () => { if (multiRegex.test(input.value)) this.onMultiPaste(input.value.match(multiRegex).splice(1, 4), inputs) })
   }
 
   onMultiPaste (values, inputs) {
     console.log('multi paste detected, applying values', values, 'to', inputs)
-    inputs.forEach((input, i) => {
-      if (values[i]) input.value = values[i]
+    inputs.forEach((input, index) => {
+      if (values[index]) input.value = values[index]
     })
   }
 
@@ -137,7 +137,7 @@ class AppForm extends HTMLElement {
     this.on(`${this._id}--error`, message => (this.error = message))
     this.els.form = this.createForm()
     this.innerHTML = ''
-    this.appendChild(this.els.form)
+    this.append(this.els.form)
     this.handleMultiPaste()
     this.els.error = document.createElement('p')
     this.els.error.className = 'error'

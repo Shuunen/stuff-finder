@@ -50,17 +50,17 @@ class AppModal extends HTMLElement {
   createWrapper () {
     const wrapper = document.createElement('div')
     wrapper.className = 'backdrop hidden'
-    wrapper.onclick = () => this.emit('app-modal--close')
+    wrapper.addEventListener('click', () => this.emit('app-modal--close'))
     const style = document.createElement('style')
     style.innerHTML = this.style
-    wrapper.appendChild(style)
+    wrapper.append(style)
     return wrapper
   }
 
   createModal () {
     const modal = document.createElement('div')
     modal.className = `${this._id} col`
-    modal.onclick = event => event.stopPropagation()
+    modal.addEventListener('click', event => event.stopPropagation())
     return modal
   }
 
@@ -68,7 +68,7 @@ class AppModal extends HTMLElement {
     this.els.wrapper = this.createWrapper()
     this.els.modal = this.createModal()
     this.els.modal.innerHTML = this.innerHTML
-    this.els.wrapper.appendChild(this.els.modal)
+    this.els.wrapper.append(this.els.modal)
     this.parentNode.replaceChild(this.els.wrapper, this)
   }
 }

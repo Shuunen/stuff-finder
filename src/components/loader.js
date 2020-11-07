@@ -52,7 +52,7 @@ class AppLoader extends HTMLElement {
     wrapper.innerHTML = '<div class="lds-dual-ring">.</div>'
     const style = document.createElement('style')
     style.innerHTML = this.style
-    wrapper.appendChild(style)
+    wrapper.append(style)
     return wrapper
   }
 

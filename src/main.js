@@ -8,7 +8,7 @@ import './services'
 class App {
   constructor () {
     this.items = []
-    window.emit = (...args) => this.emit.apply(this, args)
+    window.emit = (...stuff) => this.emit.apply(this, stuff)
     this.on('app-form--settings--set', this.onSettingsSave)
     this.on('app-form--settings--save', this.onSettingsSave)
     this.on('app-update--item', this.onUpdateItem)
@@ -17,8 +17,8 @@ class App {
     this.on('search-start', this.onSearchStart)
     this.on('search-retry', this.onSearchRetry)
     this.on('fade-in', this.fadeIn)
-    this.on('fade-out', el => this.fadeOut(el))
-    this.on('fade-out-destroy', el => this.fadeOut(el, true))
+    this.on('fade-out', element => this.fadeOut(element))
+    this.on('fade-out-destroy', element => this.fadeOut(element, true))
     setTimeout(() => {
       this.settingsActionRequired(true)
       this.emit('storage-search', 'app-settings')
@@ -47,7 +47,7 @@ class App {
     const itemsLoaded = await this.loadItems(settings)
     if (!itemsLoaded) return this.settingsActionRequired(true, 'failed to use api settings')
     this.settingsActionRequired(false)
-    if (this.items.length) this.emit('items-ready')
+    if (this.items.length > 0) this.emit('items-ready')
     this.emit('storage-set', { key: 'app-settings', value: settings })
   }
 
@@ -81,7 +81,7 @@ class App {
   }
 
   async getBarcodesToPrint () {
-    const barcodes = this.items.filter(i => i['ref-printed'] === false && i.status === 'acheté')
+    const barcodes = this.items.filter(index => index['ref-printed'] === false && index.status === 'acheté')
     this.emit('barcodes-to-print', barcodes)
   }
 
@@ -90,7 +90,7 @@ class App {
     if (offset) {
       url += '&offset=' + offset
     }
-    return fetch(url).then(res => res.json())
+    return fetch(url).then(response => response.json())
   }
 
   async parseApiRecords (records) {
@@ -102,8 +102,8 @@ class App {
       const location = (record.fields.location && record.fields.location !== 'N/A') ? record.fields.location : ''
       const box = record.fields.box || ''
       const status = record.fields.status || 'acheté'
-      if (location.length && !locations.includes(location)) locations.push(location)
-      if (box.length && !boxes.includes(box)) boxes.push(box)
+      if (location.length > 0 && !locations.includes(location)) locations.push(location)
+      if (box.length > 0 && !boxes.includes(box)) boxes.push(box)
       if (!statuses.includes(status)) statuses.push(status)
     })
     locations = ['', 'N/A'].concat(locations.sort())
@@ -154,16 +154,16 @@ class App {
   onSearchStart ({ str, origin }) {
     str = str.trim()
     this.lastSearchOrigin = origin
-    const looksLikeReference = /^[\w\d-]{7,}$/i.test(str)
-    const result = looksLikeReference ? this.items.find(i => i.reference === str) : null
-    const results = result ? [result] : this.fuse.search(str).map(i => i.item)
+    const looksLikeReference = /^[\w-]{7,}$/i.test(str)
+    const result = looksLikeReference ? this.items.find(index => index.reference === str) : undefined
+    const results = result ? [result] : this.fuse.search(str).map(index => index.item)
     const title = `Results for “${str}”`
     this.emit('app-search-results--show', { title, results, byReference: !!result })
   }
 
   onSearchRetry () {
     console.log('retry and this.lastSearchOrigin', this.lastSearchOrigin)
-    if (this.lastSearchOrigin === SEARCH_ORIGIN.type) return document.getElementById('input-type').focus()
+    if (this.lastSearchOrigin === SEARCH_ORIGIN.type) return document.querySelector('#input-type').focus()
     if (this.lastSearchOrigin === SEARCH_ORIGIN.scan) return this.emit('app-scan-code--start')
     if (this.lastSearchOrigin === SEARCH_ORIGIN.speech) return this.emit('app-speech--start')
     this.showError('un-handled search retry case')
@@ -175,20 +175,20 @@ class App {
     }
   }
 
-  async fadeIn (el) {
-    if (!el.classList.contains('hide')) return console.warn('please add "hide" class before mounting dom element and then call fade-in')
+  async fadeIn (element) {
+    if (!element.classList.contains('hide')) return console.warn('please add "hide" class before mounting dom element and then call fade-in')
     await this.sleep(10)
-    el.style.opacity = 1
+    element.style.opacity = 1
   }
 
-  async fadeOut (el, destroy = false) {
-    el.classList.add('hide')
+  async fadeOut (element, destroy = false) {
+    element.classList.add('hide')
     await this.sleep(350)
-    el.classList.remove('hide')
-    el.classList.add('hidden')
+    element.classList.remove('hide')
+    element.classList.add('hidden')
     if (!destroy) return
     await this.sleep(350)
-    el.remove()
+    element.remove()
   }
 
   async sleep (ms) {
@@ -216,22 +216,22 @@ class App {
   async updateItemRemotely (item) {
     const fieldsToUpdate = ['name', 'brand', 'details', 'box', 'drawer', 'location', 'reference', 'ref-printed']
     const data = { fields: {} }
-    fieldsToUpdate.forEach(field => (item[field] || typeof item[field] === 'boolean') ? (data.fields[field] = item[field]) : null)
+    fieldsToUpdate.forEach(field => (item[field] || typeof item[field] === 'boolean') ? (data.fields[field] = item[field]) : undefined)
     if (Object.keys(data.fields).length === 0) return this.showError('cannot update an item without data')
     const url = this.apiUrl.replace('?', `/${item.id}?`)
     return this.patch(url, data)
   }
 
-  async updateItemLocally (item) {
-    const index = this.items.findIndex(i => i.id === item.id)
+  async updateItemLocally (itemToUpdate) {
+    const index = this.items.findIndex(item => item.id === itemToUpdate.id)
     if (index < 0) return this.showError('failed to find local item')
-    Object.assign(this.items[index], item)
+    Object.assign(this.items[index], itemToUpdate)
     this.initFuse()
   }
 
   async patch (url, data) {
     const options = { headers: JSON_HEADERS, method: 'patch', body: JSON.stringify(data) }
-    return fetch(url, options).then(response => response.json()).catch(err => this.showError(err.message))
+    return fetch(url, options).then(response => response.json()).catch(error => this.showError(error.message))
   }
 }
 

@@ -184,7 +184,7 @@ class AppPrintBarcodes extends HTMLElement {
     this.emit('app-loader--toggle', true)
     this.barcodes = this.barcodes.filter(b => this.selection.includes(b.id))
     this.els.modal.innerHTML = this.modalContentPrint
-    this.els.modal.querySelector('a[href="#print"]').onclick = () => window.print()
+    this.els.modal.querySelector('a[href="#print"]').addEventListener('click', () => window.print())
     await this.adjustQrCodes()
     await this.sleep(500)
     this.emit('app-loader--toggle', false)
@@ -209,7 +209,7 @@ class AppPrintBarcodes extends HTMLElement {
     this.els.modal.innerHTML = this.modalContentPrepare
     this.els.modal.addEventListener('click', event => this.onModalPrepareClick(event))
     this.els.previewBtn = this.els.modal.querySelector('button.preview')
-    this.els.previewBtn.onclick = () => this.previewBarcodes()
+    this.els.previewBtn.addEventListener('click', () => this.previewBarcodes())
     this.els.previewError = this.els.modal.querySelector('.error.preview')
     this.selectValidItems()
     await this.sleep(500)
@@ -227,20 +227,20 @@ class AppPrintBarcodes extends HTMLElement {
   }
 
   setAllItems (selected = true) {
-    document.querySelectorAll('input[data-action="select-one"]').forEach(el => (el.checked = selected))
+    document.querySelectorAll('input[data-action="select-one"]').forEach(element => (element.checked = selected))
   }
 
   selectValidItems () {
-    const forms = Array.from(this.els.wrapper.querySelectorAll('.list app-form'))
+    const forms = [...this.els.wrapper.querySelectorAll('.list app-form')]
     forms.forEach(form => {
       // check valid form related checkbox
-      if (form.getAttribute('valid') === 'true') document.getElementById(form.name).checked = true
+      if (form.getAttribute('valid') === 'true') document.querySelector('#' + form.name).checked = true
     })
     this.updatePreviewButton()
   }
 
   updatePreviewButton () {
-    this.selection = Array.from(document.querySelectorAll('input[data-action="select-one"]:checked')).map(e => e.id)
+    this.selection = [...document.querySelectorAll('input[data-action="select-one"]:checked')].map(element => element.id)
     this.els.previewBtn.disabled = this.selection.length <= 0 || this.selection.length > 65
     this.els.previewBtn.textContent = `Preview ${this.selection.length} barcodes`
     this.els.previewError.textContent = ''
@@ -254,10 +254,10 @@ class AppPrintBarcodes extends HTMLElement {
     wrapper.className = `${this._id}`
     wrapper.innerHTML = this.template
     this.els.icon = wrapper.querySelector('.icon')
-    this.els.icon.onclick = () => this.showModal(true)
+    this.els.icon.addEventListener('click', () => this.showModal(true))
     const style = document.createElement('style')
     style.innerHTML = this.style
-    wrapper.appendChild(style)
+    wrapper.append(style)
     return wrapper
   }
 

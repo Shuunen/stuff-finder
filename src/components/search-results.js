@@ -76,14 +76,14 @@ class AppSearchResults extends HTMLElement {
       const label = document.createElement('legend')
       label.className = 'highlight-accent'
       label.textContent = location || 'Somewhere'
-      group.appendChild(label)
+      group.append(label)
       resultsPerLocation[location].forEach(result => {
-        const resultEl = document.createElement('app-search-result')
-        resultEl.setAttribute('data', JSON.stringify(result))
-        if (results.length === 1) resultEl.setAttribute('solo', true)
-        group.appendChild(resultEl)
+        const resultElement = document.createElement('app-search-result')
+        resultElement.setAttribute('data', JSON.stringify(result))
+        if (results.length === 1) resultElement.setAttribute('solo', true)
+        group.append(resultElement)
       })
-      this.els.results.appendChild(group)
+      this.els.results.append(group)
     })
   }
 
@@ -96,18 +96,18 @@ class AppSearchResults extends HTMLElement {
     wrapper.name = 'search-results'
     const style = document.createElement('style')
     style.innerHTML = this.style
-    wrapper.appendChild(style)
+    wrapper.append(style)
     return wrapper
   }
 
   addContent () {
     const title = document.createElement('h2')
     title.textContent = 'def'
-    this.els.wrapper.appendChild(title)
+    this.els.wrapper.append(title)
     this.els.title = title
     const results = document.createElement('div')
     results.className = 'col middle mts'
-    this.els.wrapper.appendChild(results)
+    this.els.wrapper.append(results)
     this.els.results = results
   }
 
@@ -116,15 +116,15 @@ class AppSearchResults extends HTMLElement {
     row.className = 'row center mb1'
     const close = document.createElement('button')
     close.innerHTML = '&times; Close'
-    close.onclick = () => this.emit('app-modal--close')
-    row.appendChild(close)
+    close.addEventListener('click', () => this.emit('app-modal--close'))
+    row.append(close)
     const retry = document.createElement('button')
     retry.innerHTML = 'Retry &check;'
-    retry.onclick = () => this.emit('app-search-results--retry', this.data)
-    row.appendChild(retry)
+    retry.addEventListener('click', () => this.emit('app-search-results--retry', this.data))
+    row.append(retry)
     this.els.retry = retry
     this.els.footer = row
-    this.els.wrapper.appendChild(this.els.footer)
+    this.els.wrapper.append(this.els.footer)
   }
 
   toggleFooter (active) {

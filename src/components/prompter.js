@@ -7,7 +7,7 @@ class AppPrompter extends HTMLElement {
     super()
     this._id = 'app-prompter'
     this.els = {}
-    this.on(`${this._id}--type`, args => type(this.els.wrapper, ...args))
+    this.on(`${this._id}--type`, options => type(this.els.wrapper, ...options))
   }
 
   on (eventName, callback) {
