@@ -17,11 +17,13 @@
 ## Thanks
 
 - [Box icon](https://www.iconfinder.com/icons/2123914/app_box_essential_ui_icon) by Just Icon
+- [Eslint](https://eslint.org) : super tool to find & fix problems
 - [Favicon.io](https://favicon.io/favicon-generator/?t=SF&ff=Istok+Web&fs=110&fc=#FFF&b=rounded&bc=#08F) : handy favicon generator
 - [Github](https://github.com) : this great, free and evolving platform
 - [Netlify](https://netlify.com) : awesome company that offers hosting for OSS
 - [Npm-run-all](https://github.com/mysticatea/npm-run-all) : to keep my npm scripts clean & readable
 - [Parcel Js](https://parceljs.org) : fast & easy to use bundler
+- [Repo-checker](https://github.com/Shuunen/repo-checker) : eslint cover /src code and this tool the rest ^^
 - [RIOT Optimizer](https://riot-optimizer.com) : Radical Image Optimization Tool, the best software I found to compress images
 - [Shields.io](https://shields.io) : for the nice badges on top of this readme
 - [Travis-ci.org](https://travis-ci.org) : for providing free continuous deployments
