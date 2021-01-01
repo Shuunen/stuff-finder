@@ -22,7 +22,7 @@
     "parcel-plugin-nuke-dist": "1.0.1",
     "parcel-plugin-static-files-copy": "2.5.0",
     "repo-check": "1.14.2",
-    "shuutils": "4.1.0",
+    "shuutils": "4.2.0",
     "webcomponent-qr-code": "1.0.5"
   },
   "files": [
