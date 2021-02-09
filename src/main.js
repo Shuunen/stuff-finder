@@ -120,6 +120,7 @@ class App {
       location: '',
       locations,
       reference: '',
+      barcode: '',
       'ref-printed': false,
       status: 'acheté',
       statuses,
@@ -154,9 +155,8 @@ class App {
   onSearchStart ({ str, origin }) {
     str = str.trim()
     this.lastSearchOrigin = origin
-    const looksLikeReference = /^[\w-]{7,}$/i.test(str)
-    const result = looksLikeReference ? this.items.find(index => index.reference === str) : undefined
-    const results = result ? [result] : this.fuse.search(str).map(index => index.item)
+    const result = this.items.find(item => (item.reference === str || item.barcode === str))
+    const results = result ? [result] : this.fuse.search(str).map(item => item.item)
     const title = `Results for “${str}”`
     this.emit('app-search-results--show', { title, results, byReference: !!result })
   }
@@ -214,7 +214,7 @@ class App {
   }
 
   async updateItemRemotely (item) {
-    const fieldsToUpdate = ['name', 'brand', 'details', 'box', 'drawer', 'location', 'reference', 'ref-printed']
+    const fieldsToUpdate = ['name', 'brand', 'details', 'box', 'drawer', 'location', 'reference', 'barcode', 'ref-printed']
     const data = { fields: {} }
     fieldsToUpdate.forEach(field => (item[field] || typeof item[field] === 'boolean') ? (data.fields[field] = item[field]) : undefined)
     if (Object.keys(data.fields).length === 0) return this.showError('cannot update an item without data')

@@ -13,13 +13,14 @@ class AppSearchResult extends HTMLElement {
         <label>Brand<input name=brand type=text value="${this.data.brand}" /></label>
         <label>Details<input name=details type=text value="${this.data.details}" /></label>
         <label>Reference<input required name=reference type=text value="${this.data.reference}" /></label>
-        <label>Ref printed ?<input class="push-left" type=checkbox name="ref-printed" ${this.data['ref-printed'] ? 'checked' : ''}></label>
+        <label>Barcode<input required name=barcode type=text value="${this.data.barcode}" /></label>
       </div>
       <div class=col>
         <label>Status<select name=status>${statuses}</select></label>
         <label>Location <select required name=location>${locations}</select></label>
         <label>Box <select required name=box>${boxes}</select></label>
         <label>Drawer <select name=drawer>${drawers}</select></label>
+        <label>Ref printed ?<input class="push-left" type=checkbox name="ref-printed" ${this.data['ref-printed'] ? 'checked' : ''}></label>
       </div>
     `
   }
