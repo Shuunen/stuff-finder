@@ -1,9 +1,10 @@
-/* global HTMLElement, CustomEvent */
+/* global window, document, HTMLElement */
 
-import { pickOne } from 'shuutils'
+import { emit, on, pickOne } from 'shuutils'
+import { button, div, dom } from '../utils.js'
 
 class AppSearchResults extends HTMLElement {
-  get style () {
+  get style() {
     return `
     .app-search-result { margin-top: .5rem; max-width: 40rem; }
     .app-search-result + .app-search-result { margin-bottom: .5rem; margin-top: 1rem; }
@@ -12,62 +13,38 @@ class AppSearchResults extends HTMLElement {
     `
   }
 
-  constructor () {
+  constructor() {
     super()
     this.els = {}
-    this.on('app-search-results--show', this.show)
-    this.on('app-search-results--retry', this.retry)
-    this.on('app-search-results--edit', this.toggleFooter)
+    on('app-search-results--show', data => this.show(data))
+    on('app-search-results--retry', () => this.retry())
+    on('app-search-results--edit', active => this.toggleFooter(active))
   }
 
-  emit (eventName, eventData) {
-    console.log(`emit event "${eventName}"`, eventData === undefined ? '' : eventData)
-    window.dispatchEvent(new CustomEvent(eventName, { detail: eventData }))
-  }
-
-  on (eventName, callback) {
-    window.addEventListener(eventName, event => callback.bind(this)(event.detail))
-  }
-
-  show (data) {
+  show(data) {
     console.log(`displaying ${data.results.length} results...`)
     if (data.byReference && !data.results[0]['ref-printed']) this.markReferenceAsPrinted(data.results[0])
-    this.els.title.textContent = data.results.length !== 1 ? data.title : ''
+    this.els.title.textContent = data.results.length === 1 ? '' : data.title
     this.format(data.results)
-    this.emit('app-modal--search-results--open')
+    emit('app-modal--search-results--open')
   }
 
-  markReferenceAsPrinted (item) {
+  markReferenceAsPrinted(item) {
     console.log('marking this item as ref-printed', item)
-    this.emit('app-update--item', { id: item.id, 'ref-printed': true })
+    emit('app-update--item', { id: item.id, 'ref-printed': true })
   }
 
-  retry () {
-    this.emit('app-modal--search-results--close')
-    this.emit('search-retry')
+  retry() {
+    emit('app-modal--search-results--close')
+    emit('search-retry')
   }
 
-  scanLocations (results) {
-    const locations = []
-    const resultsPerLocation = {}
-    results.forEach(result => {
-      const location = (result.location && result.location !== 'N/A') ? result.location : ''
-      if (!locations.includes(location)) {
-        locations.push(location)
-      }
-      if (!resultsPerLocation[location]) {
-        resultsPerLocation[location] = []
-      }
-      resultsPerLocation[location].push(result)
-    })
-    return { locations, resultsPerLocation }
-  }
-
-  format (results) {
+  format(results) {
     if (results.length === 0) {
       this.els.results.innerHTML = `<div class="mb1 mt1"><span class="highlight-grey">${this.sorryAscii()}</span></div><span class="mb1">Sorry nothing was found.</span>`
       return
     }
+    /*
     const { locations, resultsPerLocation } = this.scanLocations(results)
     this.els.results.innerHTML = ''
     locations.forEach(location => {
@@ -85,53 +62,48 @@ class AppSearchResults extends HTMLElement {
       })
       this.els.results.append(group)
     })
+    */
+    results.forEach(result => {
+      const resultElement = dom('app-search-result')
+      resultElement.setAttribute('data', JSON.stringify(result))
+      this.els.results.append(resultElement)
+    })
   }
 
-  sorryAscii () {
+  sorryAscii() {
     return pickOne(['[#´Д`]', '¯\\_(ツ)_/¯', 'ಠ_ಠ', '(⊙＿⊙\')', '(#+_+)', '(._.)', '(╯▅╰)', '╮ (. ❛ ᴗ ❛.) ╭'])
   }
 
-  createWrapper () {
-    const wrapper = document.createElement('app-modal')
+  createWrapper() {
+    const wrapper = dom('app-modal')
     wrapper.name = 'search-results'
-    const style = document.createElement('style')
-    style.innerHTML = this.style
-    wrapper.append(style)
+    wrapper.append(dom('style', this.style))
     return wrapper
   }
 
-  addContent () {
-    const title = document.createElement('h2')
-    title.textContent = 'def'
-    this.els.wrapper.append(title)
-    this.els.title = title
-    const results = document.createElement('div')
-    results.className = 'col middle mts'
-    this.els.wrapper.append(results)
-    this.els.results = results
+  addContent() {
+    this.els.title = dom('h2', 'def')
+    this.els.wrapper.append(this.els.title)
+    this.els.results = div('list')
+    this.els.wrapper.append(this.els.results)
   }
 
-  addFooter () {
-    const row = document.createElement('div')
-    row.className = 'row center mb1'
-    const close = document.createElement('button')
-    close.innerHTML = '&times; Close'
-    close.addEventListener('click', () => this.emit('app-modal--close'))
-    row.append(close)
-    const retry = document.createElement('button')
-    retry.innerHTML = 'Retry &check;'
-    retry.addEventListener('click', () => this.emit('app-search-results--retry', this.data))
-    row.append(retry)
-    this.els.retry = retry
-    this.els.footer = row
+  addFooter() {
+    this.els.footer = div('row center mb1')
+    const close = button('&times; Close')
+    close.addEventListener('click', () => emit('app-modal--close'))
+    this.els.footer.append(close)
+    this.els.retry = button('Retry &check;')
+    this.els.retry.addEventListener('click', () => emit('app-search-results--retry', this.data))
+    this.els.footer.append(this.els.retry)
     this.els.wrapper.append(this.els.footer)
   }
 
-  toggleFooter (active) {
+  toggleFooter(active) {
     this.els.footer.classList.toggle('hidden', active)
   }
 
-  connectedCallback () {
+  connectedCallback() {
     const wrapper = this.createWrapper()
     this.parentNode.replaceChild(wrapper, this)
     setTimeout(() => {

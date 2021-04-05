@@ -1,52 +1,43 @@
-/* global CustomEvent */
-
-import { SEARCH_ORIGIN } from '../constants'
+/* global window, navigator */
+import { emit, on } from 'shuutils'
+import { SEARCH_ORIGIN } from '../constants.js'
 
 class AppSpeech {
-  constructor () {
+  constructor() {
     this.initRecognition()
     this.isMobile = typeof window.orientation !== 'undefined'
-    this.on('app-speech--start', this.onStart)
+    on('app-speech--start', this.onStart)
   }
 
-  emit (eventName, eventData) {
-    console.log(`emit event "${eventName}"`, eventData === undefined ? '' : eventData)
-    window.dispatchEvent(new CustomEvent(eventName, { detail: eventData }))
-  }
-
-  on (eventName, callback) {
-    window.addEventListener(eventName, event => callback.bind(this)(event.detail))
-  }
-
-  initRecognition () {
+  initRecognition() {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
     const recognition = new SpeechRecognition()
-    recognition.lang = 'fr-FR' // TODO: not generic ^^"
+    recognition.lang = navigator.language || navigator.userLanguage
     recognition.interimResults = false
     recognition.maxAlternatives = 1
-    recognition.onresult = (event) => {
+    recognition.onresult = event => {
       const result = event.results[event.results.length - 1][0]
       this.onSuccess(result.transcript, result.confidence)
     }
     recognition.onspeechend = () => this.onEnd()
     recognition.onnomatch = () => this.onFail()
-    recognition.addEventListener('error', (event) => this.onError(event.error))
+    recognition.addEventListener('error', event => this.onError(event.error))
     this.recognition = recognition
   }
 
-  onStart () {
+  onStart() {
     this.recognition.start()
     this.recognitionSucceed = false
     this.setStatus('listening')
   }
 
-  onSuccess (sentence, confidence) {
+  onSuccess(sentence, confidence) {
     this.recognitionSucceed = true
     console.log('confidence : ' + confidence)
-    this.emit('search-start', { str: sentence, origin: SEARCH_ORIGIN.speech })
+    emit('search-start', { str: sentence, origin: SEARCH_ORIGIN.speech })
   }
 
-  onEnd () {
+  onEnd() {
     this.recognition.stop()
     // this delay the test on recognitionSucceed because onEnd is triggered just before onSuccess
     // this lead recognitionSucceed to be still false by default at this moment and this next line conclude that recognition has failed
@@ -54,22 +45,19 @@ class AppSpeech {
     setTimeout(() => this.setStatus(this.recognitionSucceed ? 'ready' : 'failed'), 200)
   }
 
-  onError (reason) {
+  onError(reason) {
     this.error('error occurred in recognition : ' + reason)
     this.onFail()
   }
 
-  onFail () {
+  onFail() {
     this.setStatus('failed')
   }
 
-  setStatus (status) {
-    this.emit('app-speech--status', status)
-    if (status === 'listening' && !this.isMobile) {
-      this.emit('app-sound--info')
-    } else if (status === 'failed') {
-      this.emit('app-sound--error')
-    }
+  setStatus(status) {
+    emit('app-speech--status', status)
+    if (status === 'listening' && !this.isMobile) emit('app-sound--info')
+    else if (status === 'failed') emit('app-sound--error')
   }
 }
 

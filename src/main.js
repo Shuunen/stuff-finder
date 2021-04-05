@@ -1,67 +1,57 @@
-/* global CustomEvent, fetch */
+/* global document, fetch */
 import Fuse from 'fuse.js'
-import { pickOne } from 'shuutils'
-import './components'
-import { JSON_HEADERS, SEARCH_ORIGIN } from './constants'
-import './services'
+import { emit, on, pickOne, sleep } from 'shuutils'
+import './components/index.js'
+import { JSON_HEADERS, SEARCH_ORIGIN } from './constants.js'
+import './services/index.js'
 
 class App {
-  constructor () {
+  constructor() {
     this.items = []
-    window.emit = (...stuff) => this.emit.apply(this, stuff)
-    this.on('app-form--settings--set', this.onSettingsSave)
-    this.on('app-form--settings--save', this.onSettingsSave)
-    this.on('app-update--item', this.onUpdateItem)
-    this.on('storage-found', this.onStorageFound)
-    this.on('get-barcodes-to-print', this.getBarcodesToPrint)
-    this.on('search-start', this.onSearchStart)
-    this.on('search-retry', this.onSearchRetry)
-    this.on('fade-in', this.fadeIn)
-    this.on('fade-out', element => this.fadeOut(element))
-    this.on('fade-out-destroy', element => this.fadeOut(element, true))
+    on('app-form--settings--set', settings => this.onSettingsSave(settings))
+    on('app-form--settings--save', settings => this.onSettingsSave(settings))
+    on('app-update--item', item => this.onUpdateItem(item))
+    on('storage-found', data => this.onStorageFound(data))
+    on('get-barcodes-to-print', () => this.getBarcodesToPrint())
+    on('search-start', data => this.onSearchStart(data))
+    on('search-retry', () => this.onSearchRetry())
+    on('fade-in', element => this.fadeIn(element))
+    on('fade-out', element => this.fadeOut(element))
+    on('fade-out-destroy', element => this.fadeOut(element, true))
     setTimeout(() => {
       this.settingsActionRequired(true)
-      this.emit('storage-search', 'app-settings')
+      emit('storage-search', 'app-settings')
       this.showTitle()
     }, 300)
   }
 
-  emit (eventName, eventData) {
-    console.log(`emit event "${eventName}"`, eventData === undefined ? '' : eventData)
-    window.dispatchEvent(new CustomEvent(eventName, { detail: eventData }))
-  }
-
-  on (eventName, callback) {
-    window.addEventListener(eventName, event => callback.bind(this)(event.detail))
-  }
-
-  coolAscii () {
+  coolAscii() {
     return pickOne(['( ＾◡＾)', '♥‿♥', '八(＾□＾*)', '(◡ ‿ ◡ ✿)', '(=^ェ^=)', 'ʕ •ᴥ•ʔ', '(*°∀°)', '\\(-ㅂ-)/', 'ლ(╹◡╹ლ)', 'ლ(o◡oლ)', '＼(＾O＾)／'])
   }
 
-  showTitle () {
-    this.emit('app-prompter--type', ['Stuff Finder', 1000, `Stuff Finder\n${this.coolAscii()}`])
+  showTitle() {
+    emit('app-prompter--type', ['Stuff Finder', 1000, `Stuff Finder\n${this.coolAscii()}`])
   }
 
-  async onSettingsSave (settings) {
+  async onSettingsSave(settings) {
     const itemsLoaded = await this.loadItems(settings)
     if (!itemsLoaded) return this.settingsActionRequired(true, 'failed to use api settings')
     this.settingsActionRequired(false)
-    if (this.items.length > 0) this.emit('items-ready')
-    this.emit('storage-set', { key: 'app-settings', value: settings })
+    if (this.items.length > 0) emit('items-ready')
+    emit('storage-set', { key: 'app-settings', value: settings })
   }
 
-  settingsActionRequired (actionRequired, errorMessage = '') {
-    this.emit('app-settings-trigger--animate', actionRequired)
-    this.emit('app-form--settings--error', errorMessage)
-    if (!actionRequired) this.emit('app-modal--close')
+  settingsActionRequired(actionRequired, errorMessage = '') {
+    emit('app-settings-trigger--animate', actionRequired)
+    emit('app-form--settings--error', errorMessage)
+    if (!actionRequired) emit('app-modal--close')
   }
 
-  isLoading (active) {
-    this.emit('app-loader--toggle', active)
+  isLoading(active) {
+    emit('app-loader--toggle', active)
   }
 
-  async loadItems (settings) {
+  async loadItems(settings) {
     this.isLoading(true)
     let response = await this.fetchApi(settings)
     if (!response || response.error) {
@@ -71,7 +61,7 @@ class App {
     let records = response.records
     let offset = response.offset
     while (offset) {
-      response = await this.fetchApi(settings, offset)
+      response = await this.fetchApi(settings, offset) // eslint-disable-line no-await-in-loop
       offset = response.offset
       records = records.concat(response.records)
     }
@@ -80,20 +70,18 @@ class App {
     return true
   }
 
-  async getBarcodesToPrint () {
+  async getBarcodesToPrint() {
     const barcodes = this.items.filter(index => index['ref-printed'] === false && index.status === 'acheté')
-    this.emit('barcodes-to-print', barcodes)
+    emit('barcodes-to-print', barcodes)
   }
 
-  async fetchApi (settings, offset) {
-    let url = this.apiUrl = `https://api.airtable.com/v0/${settings.base}/${settings.table}?api_key=${settings.key}&view=${settings.view}`
-    if (offset) {
-      url += '&offset=' + offset
-    }
-    return fetch(url).then(response => response.json())
+  async fetchApi(settings, offset) {
+    this.apiUrl = `https://api.airtable.com/v0/${settings.base}/${settings.table}?api_key=${settings.key}&view=${settings.view}`
+    if (offset) this.apiUrl += '&offset=' + offset
+    return fetch(this.apiUrl).then(response => response.json())
   }
 
-  async parseApiRecords (records) {
+  async parseApiRecords(records) {
     // this.showLog('parsing api records :', records )
     let boxes = []
     let locations = []
@@ -130,7 +118,7 @@ class App {
     this.initFuse()
   }
 
-  initFuse () {
+  initFuse() {
     // https://fusejs.io/
     const options = {
       distance: 200, // see the tip at https://fusejs.io/concepts/scoring-theory.html#scoring-theory
@@ -147,65 +135,59 @@ class App {
       }, {
         name: 'category',
         weight: 1,
-      }], // TODO: this is not generic ^^"
+      }], // this is not generic ^^"
     }
     this.fuse = new Fuse(this.items, options)
   }
 
-  onSearchStart ({ str, origin }) {
+  onSearchStart({ str, origin }) {
     str = str.trim()
     this.lastSearchOrigin = origin
     const result = this.items.find(item => (item.reference === str || item.barcode === str))
     const results = result ? [result] : this.fuse.search(str).map(item => item.item)
     const title = `Results for “${str}”`
-    this.emit('app-search-results--show', { title, results, byReference: !!result })
+    emit('app-search-results--show', { title, results, byReference: Boolean(result) })
   }
 
-  onSearchRetry () {
+  onSearchRetry() {
     console.log('retry and this.lastSearchOrigin', this.lastSearchOrigin)
     if (this.lastSearchOrigin === SEARCH_ORIGIN.type) return document.querySelector('#input-type').focus()
-    if (this.lastSearchOrigin === SEARCH_ORIGIN.scan) return this.emit('app-scan-code--start')
-    if (this.lastSearchOrigin === SEARCH_ORIGIN.speech) return this.emit('app-speech--start')
+    if (this.lastSearchOrigin === SEARCH_ORIGIN.scan) return emit('app-scan-code--start')
+    if (this.lastSearchOrigin === SEARCH_ORIGIN.speech) return emit('app-speech--start')
     this.showError('un-handled search retry case')
   }
 
-  onStorageFound (data) {
-    if (data.key === 'app-settings') {
-      this.emit('app-form--settings--set', data.value)
-    }
+  onStorageFound(data) {
+    if (data.key === 'app-settings') emit('app-form--settings--set', data.value)
   }
 
-  async fadeIn (element) {
+  async fadeIn(element) {
     if (!element.classList.contains('hide')) return console.warn('please add "hide" class before mounting dom element and then call fade-in')
-    await this.sleep(10)
+    await sleep(10)
     element.style.opacity = 1
   }
 
-  async fadeOut (element, destroy = false) {
+  async fadeOut(element, destroy = false) {
     element.classList.add('hide')
-    await this.sleep(350)
+    await sleep(350)
     element.classList.remove('hide')
     element.classList.add('hidden')
     if (!destroy) return
-    await this.sleep(350)
+    await sleep(350)
     element.remove()
   }
 
-  async sleep (ms) {
-    return new Promise(resolve => setTimeout(resolve, (ms || 1000)))
-  }
-
-  showLog (message, data) {
+  showLog(message, data) {
     console.log(message, data || '')
-    this.emit('app-toaster--show', { type: 'info', message })
+    emit('app-toaster--show', { type: 'info', message })
   }
 
-  showError (message) {
+  showError(message) {
     console.error(message)
-    this.emit('app-toaster--show', { type: 'error', message })
+    emit('app-toaster--show', { type: 'error', message })
   }
 
-  async onUpdateItem (item) {
+  async onUpdateItem(item) {
     if (!item.id) return this.showError('cannot update an item without his id')
     this.isLoading(true)
     await this.updateItemRemotely(item)
@@ -213,23 +195,25 @@ class App {
     this.isLoading(false)
   }
 
-  async updateItemRemotely (item) {
+  async updateItemRemotely(item) {
     const fieldsToUpdate = ['name', 'brand', 'details', 'box', 'drawer', 'location', 'reference', 'barcode', 'ref-printed']
     const data = { fields: {} }
-    fieldsToUpdate.forEach(field => (item[field] || typeof item[field] === 'boolean') ? (data.fields[field] = item[field]) : undefined)
+    fieldsToUpdate.forEach(field => {
+      if (item[field] || typeof item[field] === 'boolean') data.fields[field] = item[field]
+    })
     if (Object.keys(data.fields).length === 0) return this.showError('cannot update an item without data')
     const url = this.apiUrl.replace('?', `/${item.id}?`)
     return this.patch(url, data)
   }
 
-  async updateItemLocally (itemToUpdate) {
+  async updateItemLocally(itemToUpdate) {
     const index = this.items.findIndex(item => item.id === itemToUpdate.id)
     if (index < 0) return this.showError('failed to find local item')
     Object.assign(this.items[index], itemToUpdate)
     this.initFuse()
   }
 
-  async patch (url, data) {
+  async patch(url, data) {
     const options = { headers: JSON_HEADERS, method: 'patch', body: JSON.stringify(data) }
     return fetch(url, options).then(response => response.json()).catch(error => this.showError(error.message))
   }
