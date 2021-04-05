@@ -1,69 +1,40 @@
-/* global HTMLElement, CustomEvent */
+/* global window, HTMLElement */
+
+import { emit, on } from 'shuutils'
+import { div, dom, p } from '../utils.js'
 
 class AppToaster extends HTMLElement {
-  get style () {
+  get style() {
     return `
-    .${this._id} {
-      bottom: 1rem;
-      position: absolute;
-      width: 100%;
-      z-index: var(--elevation-t-rex, 200);
-    }
-    .${this._id} .toast {
-      font-weight: bold;
-      margin: .5rem 0;
-      padding: .2rem .4rem;
-      color: var(--color-white, whitesmoke);
-      background-color: var(--color-primary, chocolate);
-    }
-    .${this._id} .toast.error {
-      background-color: var(--color-error, red);
-      color: var(--color-white, whitesmoke);
-    }`
+    .app-toaster { bottom: 1rem; position: absolute; width: 100%; z-index: var(--elevation-t-rex, 200); }
+    .app-toaster .toast { font-weight: bold; margin: .5rem 0; padding: .2rem .4rem; color: var(--color-white, whitesmoke); background-color: var(--color-primary, chocolate); }
+    .app-toaster .toast.error { background-color: var(--color-error, red); color: var(--color-white, whitesmoke); }`
   }
 
-  constructor () {
+  constructor() {
     super()
     this._id = 'app-toaster'
     this.els = {}
-    this.on(`${this._id}--show`, this.show)
+    on(`${this._id}--show`, data => this.show(data))
   }
 
-  emit (eventName, eventData) {
-    console.log(`emit event "${eventName}"`, eventData === undefined ? '' : eventData)
-    window.dispatchEvent(new CustomEvent(eventName, { detail: eventData }))
-  }
-
-  on (eventName, callback) {
-    window.addEventListener(eventName, event => callback.bind(this)(event.detail))
-  }
-
-  show (data) {
+  show(data) {
     const { type = 'info', message = 'no message provided', delay = 3000 } = data
-    const toast = document.createElement('p')
-    toast.classList.add('toast', type)
-    toast.innerHTML = message
-    if (type === 'success') {
-      toast.innerHTML += '✔️'
-    }
+    const toast = p(message, `toast ${type}`)
+    if (type === 'success') toast.innerHTML += '✔️'
     this.els.wrapper.append(toast)
-    toast.addEventListener('click', () => this.emit('fade-out-destroy', toast))
-    if (type === 'error') {
-      return
-    }
-    setTimeout(() => this.emit('fade-out', toast), delay)
+    toast.addEventListener('click', () => emit('fade-out-destroy', toast))
+    if (type === 'error') return
+    setTimeout(() => emit('fade-out', toast), delay)
   }
 
-  createWrapper () {
-    const wrapper = document.createElement('div')
-    wrapper.className = `${this._id} col center`
-    const style = document.createElement('style')
-    style.innerHTML = this.style
-    wrapper.append(style)
+  createWrapper() {
+    const wrapper = div(`${this._id} col center`)
+    wrapper.append(dom('style', this.style))
     return wrapper
   }
 
-  connectedCallback () {
+  connectedCallback() {
     this.els.wrapper = this.createWrapper()
     this.parentNode.replaceChild(this.els.wrapper, this)
   }

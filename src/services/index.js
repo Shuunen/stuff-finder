@@ -1,4 +1,4 @@
-import './sound'
-import './speech'
-import './storage'
+import './sound.js'
+import './speech.js'
+import './storage.js'
 // lint .-.
