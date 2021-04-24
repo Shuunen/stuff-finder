@@ -5,12 +5,12 @@
 }
 
 .highlight-accent {
-  background-color: var(--color-accent, blue );
-  color: var(--color-white, white );
+  background-color: var(--color-accent, blue);
+  color: var(--color-white, white);
 }
 
 .highlight-accent-light {
-  background-color: var(--color-accent-light, powderblue );
+  background-color: var(--color-accent-light, powderblue);
 }
 
 .highlight-grey {

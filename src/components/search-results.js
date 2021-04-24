@@ -89,11 +89,11 @@ class AppSearchResults extends HTMLElement {
   }
 
   addFooter() {
-    this.els.footer = div('row center mb1')
+    this.els.footer = div('row center mb1 mt1')
     const close = button('&times; Close')
     close.addEventListener('click', () => emit('app-modal--close'))
     this.els.footer.append(close)
-    this.els.retry = button('Retry &check;')
+    this.els.retry = button('Retry &check;', 'ml1')
     this.els.retry.addEventListener('click', () => emit('app-search-results--retry', this.data))
     this.els.footer.append(this.els.retry)
     this.els.wrapper.append(this.els.footer)
