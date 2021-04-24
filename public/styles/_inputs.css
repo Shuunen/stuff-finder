@@ -1,10 +1,12 @@
+/* stylelint-disable selector-combinator-space-before, selector-combinator-space-after */
+
 button, input, textarea, select {
   border: .1rem solid var(--color-grey, grey);
   border-radius: var(--border-radius, .3rem);
   font-family: inherit;
   font-size: 1rem;
   height: 2.2rem;
-  margin: 0 0 0 .2rem;
+  margin: 0;
   max-width: 100%;
   min-width: 1rem;
   padding: .4rem 0 .4rem .4rem;
@@ -28,14 +30,24 @@ button, input[type="button"], input[type="submit"], .input-accent {
   border-color: var(--color-primary);
 }
 
-button + button {
-  margin-left: 1em;
-}
-
 button.big {
   font-size: 1.5rem;
   height: 3.3rem;
   padding: .5rem 1.2rem .7rem 1rem;
+}
+
+select {
+  -webkit-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23bbb%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+  background-position: right .7em top 50%, 0 0;
+  background-repeat: no-repeat, repeat;
+  background-size: .65em auto, 100%;
+  min-width: 7rem;
+}
+
+input[type="text"], select {
+  border-color: var(--color-grey-light, lightgrey);
 }
 
 select:hover, button:hover, input[type="button"]:hover, input[type="submit"]:hover {
@@ -68,10 +80,6 @@ input[type="checkbox"] {
   cursor: pointer;
 }
 
-input[type="text"], select {
-  border-color: var(--color-grey-light, lightgrey);
-}
-
 select:invalid[required], input:invalid[required] {
   background-color: var(--color-error-light, red);
   border: .1rem solid var(--color-error, red);
@@ -86,16 +94,6 @@ input:focus:invalid {
   box-shadow: none;
 }
 
-select {
-  -webkit-appearance: none;
-  appearance: none;
-  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23bbb%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
-  background-position: right .7em top 50%, 0 0;
-  background-repeat: no-repeat, repeat;
-  background-size: .65em auto, 100%;
-  min-width: 7rem;
-}
-
 select.center {
   text-indent: calc(50% - .5rem);
 }
@@ -105,7 +103,7 @@ fieldset {
   margin: 1rem;
 }
 
-fieldset + fieldset, fieldset + fieldset.auto {
+fieldset+fieldset, fieldset+fieldset.auto {
   margin-top: .5rem;
 }
 
@@ -127,4 +125,8 @@ label {
   text-align: left;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+input::placeholder {
+  text-align: center;
 }

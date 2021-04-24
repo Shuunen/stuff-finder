@@ -70,7 +70,7 @@ class AppSearchButton extends HTMLElement {
   }
 
   createScanInput() {
-    this.els.scan = button('[ Scan it ]', 'input-primary ml1')
+    this.els.scan = button('[ Scan it ]', 'input-primary')
     this.els.scan.style.background = 'linear-gradient(red -30%, white 20%, white 80%, red 130%)'
     this.els.scan.addEventListener('click', () => emit('app-scan-code--start'))
     return this.els.scan
@@ -83,16 +83,15 @@ class AppSearchButton extends HTMLElement {
   }
 
   createInputs() {
-    const row = div('row center middle')
+    const row = div('grid col-3 center middle')
     row.append(this.createTypeInput())
     row.append(this.createScanInput())
     row.append(this.createVoiceInput())
-    this.els.search.style = 'width: 6rem'
     return row
   }
 
   createWrapper() {
-    const wrapper = div('app-search-button col mt2 hidden')
+    const wrapper = div('app-search-button col mt2 ph1 hidden')
     wrapper.append(this.createInputs())
     this.els.hint = p('', 'm1')
     wrapper.append(this.els.hint)

@@ -80,7 +80,7 @@ class AppForm extends HTMLElement {
       close.addEventListener('click', () => emit(this.onCloseEventName))
       row.append(close)
     }
-    const save = button('Save &check;', 'save')
+    const save = button('Save &check;', 'save ml1')
     save.addEventListener('click', () => this.onSave())
     save.setAttribute('disabled', true)
     this.els.form.addEventListener('change', this.els.form.addEventListener('keyup', () => this.validate()))
