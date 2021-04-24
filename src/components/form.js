@@ -29,7 +29,7 @@ class AppForm extends HTMLElement {
   }
 
   get style() {
-    return `app-form form { display: grid; grid-gap: 1rem; }
+    return `app-form form { display: grid; grid-gap: .5rem; margin: 0.5rem 0 1.5rem; }
     @media only screen and (max-width: 600px) {
       app-form form { grid-template-columns: 1fr !important; }
     }`
