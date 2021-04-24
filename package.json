@@ -6,8 +6,8 @@
     "@camwiegert/typical": "0.1.1",
     "fuse.js": "6.4.6",
     "jsqr": "1.4.0",
-    "shuunen-stack": "latest",
-    "shuutils": "latest",
+    "shuunen-stack": "0.6.2",
+    "shuutils": "4.4.0",
     "webcomponent-qr-code": "1.0.5"
   },
   "files": [
@@ -31,9 +31,7 @@
     "lint": "stack lint",
     "postversion": "git push && git push --tags",
     "preversion": "npm run lint && npm run build",
-    "start": "npm run dev",
-    "test": "echo no tests yet",
-    "update": "npx npm-check-updates -u"
+    "update": "stack update"
   },
   "version": "0.0.1"
 }
