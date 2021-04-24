@@ -7,7 +7,7 @@
     "fuse.js": "6.4.6",
     "jsqr": "1.4.0",
     "shuunen-stack": "latest",
-    "shuutils": "4.4.0",
+    "shuutils": "latest",
     "webcomponent-qr-code": "1.0.5"
   },
   "files": [
