@@ -6,7 +6,7 @@ class AppSpeech {
   constructor() {
     this.initRecognition()
     this.isMobile = typeof window.orientation !== 'undefined'
-    on('app-speech--start', this.onStart)
+    on('app-speech--start', () => this.onStart())
   }
 
   initRecognition() {
