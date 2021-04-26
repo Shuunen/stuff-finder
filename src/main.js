@@ -1,28 +1,33 @@
 /* global document, fetch */
 import Fuse from 'fuse.js'
-import { emit, on, pickOne, sleep } from 'shuutils'
+import { emit, on, pickOne, sleep, storage } from 'shuutils'
 import './components/index.js'
 import { JSON_HEADERS, SEARCH_ORIGIN } from './constants.js'
 import './services/index.js'
 
+const key = '@shuunen/stuff-finder_'
+
 class App {
   constructor() {
+    console.log('app start')
     this.items = []
-    on('app-form--settings--set', settings => this.onSettingsSave(settings))
     on('app-form--settings--save', settings => this.onSettingsSave(settings))
     on('app-update--item', item => this.onUpdateItem(item))
-    on('storage-found', data => this.onStorageFound(data))
     on('get-barcodes-to-print', () => this.getBarcodesToPrint())
     on('search-start', data => this.onSearchStart(data))
     on('search-retry', () => this.onSearchRetry())
     on('fade-in', element => this.fadeIn(element))
     on('fade-out', element => this.fadeOut(element))
     on('fade-out-destroy', element => this.fadeOut(element, true))
-    setTimeout(() => {
-      this.settingsActionRequired(true)
-      emit('storage-search', 'app-settings')
-      this.showTitle()
-    }, 300)
+    this.checkExistingSettings()
+    this.showTitle()
+  }
+
+  async checkExistingSettings() {
+    const settings = await storage.get(key + 'app-settings')
+    if (!settings) return this.settingsActionRequired(true)
+    this.onSettingsSave(settings)
+    setTimeout(() => emit('app-form--settings--set', settings), 200)
   }
 
   coolAscii() {
@@ -34,11 +39,12 @@ class App {
   }
 
   async onSettingsSave(settings) {
-    const itemsLoaded = await this.loadItems(settings)
+    this.apiUrl = `https://api.airtable.com/v0/${settings.base}/${settings.table}?api_key=${settings.key}&view=${settings.view}`
+    const itemsLoaded = await this.loadItems()
     if (!itemsLoaded) return this.settingsActionRequired(true, 'failed to use api settings')
     this.settingsActionRequired(false)
     if (this.items.length > 0) emit('items-ready')
-    emit('storage-set', { key: 'app-settings', value: settings })
+    storage.set(key + 'app-settings', settings)
   }
 
   settingsActionRequired(actionRequired, errorMessage = '') {
@@ -51,22 +57,28 @@ class App {
     emit('app-loader--toggle', active)
   }
 
-  async loadItems(settings) {
+  async loadItems() {
     this.isLoading(true)
-    let response = await this.fetchApi(settings)
+    const cachedItems = (await storage.get(key + 'items')) || []
+    let response = await this.fetchApi()
     if (!response || response.error) {
       this.isLoading(false)
       return false
     }
     let records = response.records
+    if (cachedItems.some(item => (item.id === records[0].id && item['updated-on'] === records[0].fields['updated-on']))) {
+      this.items = cachedItems
+      this.showLog(`${this.items.length} item(s) cached ` + this.coolAscii())
+      this.initFuse()
+      return true
+    }
     let offset = response.offset
     while (offset) {
-      response = await this.fetchApi(settings, offset) // eslint-disable-line no-await-in-loop
+      response = await this.fetchApi(offset) // eslint-disable-line no-await-in-loop
       offset = response.offset
       records = records.concat(response.records)
     }
-    await this.parseApiRecords(records)
-    this.isLoading(false)
+    this.parseApiRecords(records)
     return true
   }
 
@@ -75,13 +87,13 @@ class App {
     emit('barcodes-to-print', barcodes)
   }
 
-  async fetchApi(settings, offset) {
-    this.apiUrl = `https://api.airtable.com/v0/${settings.base}/${settings.table}?api_key=${settings.key}&view=${settings.view}`
-    if (offset) this.apiUrl += '&offset=' + offset
-    return fetch(this.apiUrl).then(response => response.json())
+  async fetchApi(offset) {
+    const sortByUpdatedFirst = '&sort%5B0%5D%5Bfield%5D=updated-on&sort%5B0%5D%5Bdirection%5D=desc'
+    const url = this.apiUrl + (offset ? `&offset=${offset}` : '') + sortByUpdatedFirst
+    return fetch(url).then(response => response.json())
   }
 
-  async parseApiRecords(records) {
+  parseApiRecords(records) {
     // this.showLog('parsing api records :', records )
     let boxes = []
     let locations = []
@@ -138,6 +150,8 @@ class App {
       }], // this is not generic ^^"
     }
     this.fuse = new Fuse(this.items, options)
+    storage.set(key + 'items', this.items)
+    this.isLoading(false)
   }
 
   onSearchStart({ str, origin }) {
@@ -155,10 +169,6 @@ class App {
     if (this.lastSearchOrigin === SEARCH_ORIGIN.scan) return emit('app-scan-code--start')
     if (this.lastSearchOrigin === SEARCH_ORIGIN.speech) return emit('app-speech--start')
     this.showError('un-handled search retry case')
-  }
-
-  onStorageFound(data) {
-    if (data.key === 'app-settings') emit('app-form--settings--set', data.value)
   }
 
   async fadeIn(element) {
