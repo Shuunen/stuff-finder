@@ -5,6 +5,7 @@
 *.tgz
 dist
 node_modules
+public/*.css
 public/*.js
 public/*.map
 sample.*

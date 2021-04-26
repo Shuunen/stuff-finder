@@ -4,6 +4,7 @@ import { emit, on, pickOne, sleep, storage } from 'shuutils'
 import './components/index.js'
 import { JSON_HEADERS, SEARCH_ORIGIN } from './constants.js'
 import './services/index.js'
+import './styles/main.css'
 
 const key = '@shuunen/stuff-finder_'
 
