@@ -25,7 +25,7 @@ class AppSound {
   }
 
   playTone(frequency = 400, seconds = 1) {
-    if(!this.audioContext) this.audioContext = new window.AudioContext({ latencyHint: 'interactive' })
+    if (!this.audioContext) this.audioContext = new window.AudioContext({ latencyHint: 'interactive' })
     const o = this.audioContext.createOscillator()
     const g = this.audioContext.createGain()
     o.connect(g)
