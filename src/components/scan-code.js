@@ -9,6 +9,7 @@ class AppScanCode extends HTMLElement {
     super()
     this.els = {}
     on('app-scan-code--start', () => this.start())
+    on('app-modal--scan-code--closed', () => this.onModalClose())
   }
 
   showCanvas() {
@@ -62,7 +63,6 @@ class AppScanCode extends HTMLElement {
     console.log('user wants to scan something')
     emit('app-modal--scan-code--open')
     this.modalClosed = false
-    on('app-modal--scan-code--closed', () => this.onModalClose())
     navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } }).then(stream => this.onCameraReady(stream))
   }
 
