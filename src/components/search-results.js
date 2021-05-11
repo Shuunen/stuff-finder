@@ -40,29 +40,9 @@ class AppSearchResults extends HTMLElement {
   }
 
   format(results) {
-    if (results.length === 0) {
-      this.els.results.innerHTML = `<div class="mb1 mt1"><span class="highlight-grey">${this.sorryAscii()}</span></div><span class="mb1">Sorry nothing was found.</span>`
-      return
-    }
-    this.els.results.innerHTML = ''
-    /*
-    const { locations, resultsPerLocation } = this.scanLocations(results)
-    locations.forEach(location => {
-      const group = document.createElement('fieldset')
-      if (results.length === 1) group.className = 'single'
-      const label = document.createElement('legend')
-      label.className = 'highlight-accent'
-      label.textContent = location || 'Somewhere'
-      group.append(label)
-      resultsPerLocation[location].forEach(result => {
-        const resultElement = document.createElement('app-search-result')
-        resultElement.setAttribute('data', JSON.stringify(result))
-        if (results.length === 1) resultElement.setAttribute('solo', true)
-        group.append(resultElement)
-      })
-      this.els.results.append(group)
-    })
-    */
+    const content = results.length === 0 ? `<div class="mb1 mt1"><span class="highlight-grey">${this.sorryAscii()}</span></div><span class="mb1">Sorry nothing was found.</span>` : ''
+    this.els.results.innerHTML = content
+    if (content.length > 0) return
     results.forEach(result => {
       const resultElement = dom('app-search-result')
       resultElement.setAttribute('data', JSON.stringify(result))
@@ -83,13 +63,11 @@ class AppSearchResults extends HTMLElement {
   }
 
   addContent() {
+    this.els.wrapper = document.querySelector('.app-modal--search-results')
     this.els.title = dom('h2', 'def')
     this.els.wrapper.append(this.els.title)
     this.els.results = div('list')
     this.els.wrapper.append(this.els.results)
-  }
-
-  addFooter() {
     this.els.footer = div('row center mb1 mt1')
     const close = button('&times; Close')
     close.addEventListener('click', () => emit('app-modal--close'))
@@ -98,6 +76,7 @@ class AppSearchResults extends HTMLElement {
     this.els.retry.addEventListener('click', () => emit('app-search-results--retry', this.data))
     this.els.footer.append(this.els.retry)
     this.els.wrapper.append(this.els.footer)
+    emit('app-search-results--ready')
   }
 
   toggleFooter(active) {
@@ -107,11 +86,7 @@ class AppSearchResults extends HTMLElement {
   connectedCallback() {
     const wrapper = this.createWrapper()
     this.parentNode.replaceChild(wrapper, this)
-    setTimeout(() => {
-      this.els.wrapper = document.querySelector('.app-modal--search-results')
-      this.addContent()
-      this.addFooter()
-    }, 500)
+    on('app-modal--search-results--ready', () => this.addContent())
   }
 }
 

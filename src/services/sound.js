@@ -1,6 +1,6 @@
 /* global window */
 
-import { on } from 'shuutils'
+import { on, sleep } from 'shuutils'
 
 class AppSound {
   constructor() {
@@ -14,14 +14,16 @@ class AppSound {
     this.playTone(400, 0.7)
   }
 
-  onError() {
+  async onError() {
     this.playTone(200, 0.4)
-    setTimeout(() => this.playTone(100, 0.7), 100)
+    await sleep(100)
+    this.playTone(100, 0.7)
   }
 
-  onSuccess() {
+  async onSuccess() {
     this.playTone(600, 0.4)
-    setTimeout(() => this.playTone(800, 0.7), 100)
+    await sleep(100)
+    this.playTone(800, 0.7)
   }
 
   playTone(frequency = 400, seconds = 1) {

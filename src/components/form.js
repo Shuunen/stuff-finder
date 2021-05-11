@@ -149,6 +149,7 @@ class AppForm extends HTMLElement {
     this.els.form.parentElement.append(this.els.footer)
     this.initialData = this.data
     this.validate()
+    emit(`${this._id}--ready`)
   }
 }
 

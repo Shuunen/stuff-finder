@@ -1,5 +1,5 @@
 /* global window, navigator */
-import { emit, on } from 'shuutils'
+import { emit, on, sleep } from 'shuutils'
 import { SEARCH_ORIGIN } from '../constants.js'
 
 class AppSpeech {
@@ -37,12 +37,13 @@ class AppSpeech {
     emit('search-start', { str: sentence, origin: SEARCH_ORIGIN.speech })
   }
 
-  onEnd() {
+  async onEnd() {
     this.recognition.stop()
     // this delay the test on recognitionSucceed because onEnd is triggered just before onSuccess
     // this lead recognitionSucceed to be still false by default at this moment and this next line conclude that recognition has failed
     // when delayed this line is executed after a potential onSuccess which make use of recognitionSucceed state
-    setTimeout(() => this.setStatus(this.recognitionSucceed ? 'ready' : 'failed'), 200)
+    await sleep(200)
+    this.setStatus(this.recognitionSucceed ? 'ready' : 'failed')
   }
 
   onError(reason) {

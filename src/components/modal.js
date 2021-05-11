@@ -50,6 +50,7 @@ class AppModal extends HTMLElement {
     this.els.modal.innerHTML = this.innerHTML
     this.els.wrapper.append(this.els.modal)
     this.parentNode.replaceChild(this.els.wrapper, this)
+    emit(`${this._id}--ready`)
   }
 }
 

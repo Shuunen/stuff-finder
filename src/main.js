@@ -28,7 +28,7 @@ class App {
     const settings = await storage.get(key + 'app-settings')
     if (!settings) return this.settingsActionRequired(true)
     this.onSettingsSave(settings)
-    setTimeout(() => emit('app-form--settings--set', settings), 200)
+    on('app-form--settings--ready', () => emit('app-form--settings--set', settings))
   }
 
   coolAscii() {

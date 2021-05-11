@@ -84,8 +84,6 @@ class AppSearchResult extends HTMLElement {
   }
 
   save(data) {
-    const locationChanged = (this.data.location !== data.location)
-    if (locationChanged) setTimeout(() => emit('fade-out', this.els.wrapper), 1000)
     Object.assign(this.data, data)
     emit('app-update--item', this.data)
     // should also emit a success event so toggleEdit below will be done only if update succeed
