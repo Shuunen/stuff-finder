@@ -29,6 +29,7 @@
     "build": "stack build src/main.js --out-dir public --format iife --minify",
     "dev": "npm run build -- --dev",
     "lint": "stack lint",
+    "mark": "node bin/mark.js",
     "postversion": "git push && git push --tags",
     "preversion": "npm run lint && npm run build",
     "update": "stack update"
