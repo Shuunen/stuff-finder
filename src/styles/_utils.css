@@ -18,11 +18,8 @@
   justify-content: space-evenly;
 }
 
-.row.middle, .col.center {
+.row.center, .col.center {
   align-items: center;
-}
-
-.row.center, .col.middle {
   justify-content: center;
 }
 

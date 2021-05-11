@@ -6,10 +6,10 @@ import { button, div, dom } from '../utils.js'
 class AppSearchResults extends HTMLElement {
   get style() {
     return `
-    .app-search-result { margin-top: .5rem; max-width: 40rem; }
+    .app-search-result { margin-top: .5rem; }
+    .app-search-result img { max-width: 18rem; max-height: 18rem; margin: auto; padding: 0 1rem; }
     .app-search-result + .app-search-result { margin-bottom: .5rem; margin-top: 1rem; }
     .app-search-result + .app-search-result.activated { background-color: var(--color-accent-lighter); padding: .4rem .2rem; }
-    .app-search-result--image { height: 10rem; background-size: cover; background-repeat: no-repeat; background-position: center top; }
     `
   }
 
@@ -44,9 +44,9 @@ class AppSearchResults extends HTMLElement {
       this.els.results.innerHTML = `<div class="mb1 mt1"><span class="highlight-grey">${this.sorryAscii()}</span></div><span class="mb1">Sorry nothing was found.</span>`
       return
     }
+    this.els.results.innerHTML = ''
     /*
     const { locations, resultsPerLocation } = this.scanLocations(results)
-    this.els.results.innerHTML = ''
     locations.forEach(location => {
       const group = document.createElement('fieldset')
       if (results.length === 1) group.className = 'single'
@@ -66,6 +66,7 @@ class AppSearchResults extends HTMLElement {
     results.forEach(result => {
       const resultElement = dom('app-search-result')
       resultElement.setAttribute('data', JSON.stringify(result))
+      if (results.length === 1) resultElement.setAttribute('solo', true)
       this.els.results.append(resultElement)
     })
   }

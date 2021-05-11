@@ -7,10 +7,27 @@
   .grid {
     gap: 1rem;
   }
-  label, .col-3 {
+  .col-3 {
     grid-template-columns: 1fr;
+  }
+  label {
+    grid-gap: .5rem;
   }
   button, input, textarea, select {
     height: 2.6rem;
+  }
+  div.app-modal--search-results {
+    max-width: 100%;
+    width: 100%;
+  }
+  div.app-search-result img {
+    padding: 0;
+    max-width: 100%;
+    max-height: 32vh;
+    margin: 0 auto 1rem auto;
+  }
+  .col app-form form {
+    grid-template-columns: 1fr !important;
+    grid-gap: 0;
   }
 }

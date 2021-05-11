@@ -83,7 +83,7 @@ class AppSearchButton extends HTMLElement {
   }
 
   createInputs() {
-    const row = div('grid col-3 center middle')
+    const row = div('grid col-3 center')
     row.append(this.createTypeInput())
     row.append(this.createScanInput())
     row.append(this.createVoiceInput())

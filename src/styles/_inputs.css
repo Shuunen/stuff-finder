@@ -119,6 +119,7 @@ label {
   display: grid;
   grid-gap: 1rem;
   grid-template-columns: 1fr 2fr;
+  align-items: center;
   line-height: 2;
   overflow: hidden;
   padding: .1rem;

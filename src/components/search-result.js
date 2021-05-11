@@ -10,7 +10,7 @@ class AppSearchResult extends HTMLElement {
     const statuses = this.data.statuses.map(s => `<option value="${s}" ${s.toLowerCase() === this.data.status.toLowerCase() ? 'selected' : ''}>${s}</option>`)
     const drawers = ['', 1, 2, 3, 4, 5, 6, 7].map(d => `<option value="${d}" ${d.toString().toLowerCase() === this.data.drawer.toLowerCase() ? 'selected' : ''}>${d}</option>`)
     return `
-      ${this.hasImage ? `<div class="app-search-result--image" style="background-image: url('${this.data.photo[0].url}'); display: block;"></div>` : ''}
+      ${this.hasImage ? `<img src="${this.data.photo[0].url}" />` : ''}
       <div class=col>
         <label>Name<input required name=name type=text value="${this.data.name}" /></label>
         <label>Brand<input name=brand type=text value="${this.data.brand}" /></label>
@@ -23,14 +23,14 @@ class AppSearchResult extends HTMLElement {
         <label>Location <select required name=location>${locations}</select></label>
         <label>Box <select required name=box>${boxes}</select></label>
         <label>Drawer <select name=drawer>${drawers}</select></label>
-        <label>Ref printed ?<input class="push-left" type=checkbox name="ref-printed" ${this.data['ref-printed'] ? 'checked' : ''}></label>
+        <label>Printed ?<input class="push-left" type=checkbox name="ref-printed" ${this.data['ref-printed'] ? 'checked' : ''}></label>
       </div>
     `
   }
 
   get readContent() {
     return `<div class="col center">
-      ${this.isSolo && this.hasImage ? `<img class="clickable mb1" style="max-height: 16rem" src="${this.data.photo[0].url}" />` : ''}
+      ${this.isSolo ? `<img class="clickable mb1" src="${this.hasImage ? this.data.photo[0].url : 'assets/no-view.svg'}" />` : ''}
       <div>
         <a class=clickable>
           <span class=ellipsis>${(this.data.name + ' ' + this.data.brand).trim()}</span>
@@ -114,7 +114,7 @@ class AppSearchResult extends HTMLElement {
     Object.assign(this.data, JSON.parse(this.getAttribute('data')))
     if (this.isSolo) console.log(this.data)
     this.setListeners()
-    this.els.wrapper = div('app-search-result')
+    this.els.wrapper = div('app-search-result p')
     this.els.read = div('col', this.readContent)
     this.els.read.addEventListener('click', this.edit.bind(this))
     this.els.wrapper.append(this.els.read)

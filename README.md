@@ -16,6 +16,7 @@
 ## Thanks
 
 - [Box icon](https://www.iconfinder.com/icons/2123914/app_box_essential_ui_icon) by Just Icon
+- [Eye icon](https://www.iconfinder.com/icons/5925640/eye_no_view_icon) by IconPai
 - [Favicon.io](https://favicon.io/favicon-generator/?t=SF&ff=Istok+Web&fs=110&fc=#FFF&b=rounded&bc=#08F) : handy favicon generator
 - [Github](https://github.com) : this great, free and evolving platform
 - [Netlify](https://netlify.com) : awesome company that offers hosting for OSS
