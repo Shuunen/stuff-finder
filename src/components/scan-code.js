@@ -8,7 +8,9 @@ class AppScanCode extends HTMLElement {
   async initReader() {
     console.log('init reader')
     this.reader = new BrowserMultiFormatReader()
-    this.sources = await this.reader.listVideoInputDevices()
+    const sources = await this.reader.listVideoInputDevices()
+    this.device = (sources.find(s => s.label.includes('back')) || sources[0]).deviceId
+    console.log('sources ?', sources)
   }
 
   onResult(code) {
@@ -22,7 +24,7 @@ class AppScanCode extends HTMLElement {
     console.log('user wants to scan something')
     emit('app-modal--scan-code--open')
     if (this.reader === undefined) await this.initReader()
-    this.reader.decodeFromVideoDevice(this.sources[0].deviceId, this.els.video, (result, error) => {
+    this.reader.decodeFromVideoDevice(this.device, this.els.video, (result, error) => {
       if (error && !(error instanceof NotFoundException)) return console.error(error)
       if (result) return this.onResult(result.text)
     })
