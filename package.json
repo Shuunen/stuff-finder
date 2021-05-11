@@ -4,8 +4,8 @@
   "description": "Sorting things is pointless if you can't find them afterwards",
   "devDependencies": {
     "@camwiegert/typical": "0.1.1",
+    "@zxing/library": "0.18.5",
     "fuse.js": "6.4.6",
-    "jsqr": "1.4.0",
     "shuunen-stack": "0.6.2",
     "shuutils": "4.4.0",
     "webcomponent-qr-code": "1.0.5"

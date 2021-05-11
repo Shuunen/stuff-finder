@@ -3,11 +3,11 @@
     "airtable",
     "barcodes",
     "evenodd",
-    "jsqr",
     "modulesize",
     "onnomatch",
     "onresult",
-    "onspeechend"
+    "onspeechend",
+    "zxing"
   ],
   "cSpell.ignoreWords": [
     "camwiegert"
