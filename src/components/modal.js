@@ -39,7 +39,7 @@ class AppModal extends HTMLElement {
   }
 
   createModal() {
-    const modal = div(`${this._id} col`)
+    const modal = div(`app-modal ${this._id} col`)
     modal.addEventListener('click', event => event.stopPropagation())
     return modal
   }

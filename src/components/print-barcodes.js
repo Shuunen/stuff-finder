@@ -65,7 +65,6 @@ class AppPrintBarcodes extends HTMLElement {
     return `
     .${this._id} .icon { --size: 2.8rem; color: var(--color-grey, grey); cursor: pointer; height: var(--size); overflow: hidden; position: absolute; right: 6rem; top: 2rem; width: var(--size); z-index: var(--elevation-child, 30); }
     .${this._id} .icon svg { height: 100%; width: 100%; }
-    .list { min-height: 30vh; min-width: 60vw; overflow: auto; }
     .a4-65 { display: grid; grid-template-columns: repeat(5, 1fr); grid-template-rows: repeat(13, 1fr); grid-column-gap: 10px; width: 1140px; height: 1540px; margin: auto; background: white; padding: 62px 30px 0 30px; }
     .barcode { display: flex; align-items: center; border: 2px solid; border-radius: 8px; overflow: hidden; padding: 6px; }
     .barcode:nth-child(even){ border-style: dashed; }

@@ -76,3 +76,9 @@ img {
   max-height: inherit;
   max-width: 100%;
 }
+
+.list {
+  min-height: 30vh;
+  min-width: 30vw;
+  overflow: auto;
+}

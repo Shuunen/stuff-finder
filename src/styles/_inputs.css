@@ -120,7 +120,7 @@ label {
   grid-gap: 1rem;
   grid-template-columns: 1fr 2fr;
   align-items: center;
-  line-height: 2;
+  line-height: 2.6;
   overflow: hidden;
   padding: .1rem;
   text-align: left;

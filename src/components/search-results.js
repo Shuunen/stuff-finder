@@ -1,6 +1,6 @@
 /* global window, document, HTMLElement */
 
-import { emit, on, pickOne } from 'shuutils'
+import { emit, on, pickOne, sleep } from 'shuutils'
 import { button, div, dom } from '../utils.js'
 
 class AppSearchResults extends HTMLElement {
@@ -9,7 +9,7 @@ class AppSearchResults extends HTMLElement {
     .app-search-result { margin-top: .5rem; }
     .app-search-result img { max-width: 18rem; max-height: 18rem; margin: auto; padding: 0 1rem; }
     .app-search-result + .app-search-result { margin-bottom: .5rem; margin-top: 1rem; }
-    .app-search-result + .app-search-result.activated { background-color: var(--color-accent-lighter); padding: .4rem .2rem; }
+    .app-search-result + .app-search-result.activated { box-shadow: 0 0 1rem 0 lightgrey; background-color: var(--color-accent-lighter); padding: .5rem; }
     `
   }
 
@@ -39,7 +39,7 @@ class AppSearchResults extends HTMLElement {
     emit('search-retry')
   }
 
-  format(results) {
+  async format(results) {
     const content = results.length === 0 ? `<div class="mb1 mt1"><span class="highlight-grey">${this.sorryAscii()}</span></div><span class="mb1">Sorry nothing was found.</span>` : ''
     this.els.results.innerHTML = content
     if (content.length > 0) return
@@ -49,6 +49,8 @@ class AppSearchResults extends HTMLElement {
       if (results.length === 1) resultElement.setAttribute('solo', true)
       this.els.results.append(resultElement)
     })
+    await sleep(100)
+    this.els.results.scrollTo(0, 0)
   }
 
   sorryAscii() {
