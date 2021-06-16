@@ -7,7 +7,7 @@
     "@zxing/library": "0.18.6",
     "fuse.js": "6.4.6",
     "shuunen-stack": "0.6.2",
-    "shuutils": "4.5.1",
+    "shuutils": "4.6.0",
     "webcomponent-qr-code": "1.0.5"
   },
   "files": [
