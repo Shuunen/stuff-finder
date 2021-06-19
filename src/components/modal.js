@@ -1,18 +1,16 @@
-/* global window, HTMLElement */
-
 import { emit, on } from 'shuutils'
 import { div, dom } from '../utils.js'
 
 class AppModal extends HTMLElement {
-  get style() {
+  get style () {
     return `.${this._id} { background-color: var(--color-white, whitesmoke); border: .3rem solid var(--color-primary, steelblue); border-radius: var(--border-radius, .3rem); max-height: 90%; max-width: 70rem; overflow: auto; z-index: var(--elevation-giraffe, 100); }`
   }
 
-  get name() {
+  get name () {
     return this.getAttribute('name')
   }
 
-  constructor() {
+  constructor () {
     super()
     this._id = `app-modal--${this.name}`
     this.els = {}
@@ -21,30 +19,30 @@ class AppModal extends HTMLElement {
     on('app-modal--close', () => this.close())
   }
 
-  open() {
+  open () {
     this.els.wrapper.classList.remove('hidden')
   }
 
-  close() {
+  close () {
     if (this.els.wrapper.classList.contains('hidden')) return // this.warn('cannot close an already hidden modal')
     emit(`${this._id}--closed`)
     emit('fade-out', this.els.wrapper)
   }
 
-  createWrapper() {
+  createWrapper () {
     const wrapper = div('backdrop hidden')
     wrapper.addEventListener('click', () => emit('app-modal--close'))
     wrapper.append(dom('style', this.style))
     return wrapper
   }
 
-  createModal() {
+  createModal () {
     const modal = div(`app-modal ${this._id} col`)
     modal.addEventListener('click', event => event.stopPropagation())
     return modal
   }
 
-  connectedCallback() {
+  connectedCallback () {
     this.els.wrapper = this.createWrapper()
     this.els.modal = this.createModal()
     this.els.modal.innerHTML = this.innerHTML

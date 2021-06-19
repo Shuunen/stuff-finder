@@ -1,15 +1,14 @@
-/* global window, navigator */
 import { emit, on, sleep } from 'shuutils'
 import { SEARCH_ORIGIN } from '../constants.js'
 
 class AppSpeech {
-  constructor() {
+  constructor () {
     this.initRecognition()
     this.isMobile = typeof window.orientation !== 'undefined'
     on('app-speech--start', () => this.onStart())
   }
 
-  initRecognition() {
+  initRecognition () {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
     const recognition = new SpeechRecognition()
     recognition.lang = navigator.language || navigator.userLanguage
@@ -25,19 +24,19 @@ class AppSpeech {
     this.recognition = recognition
   }
 
-  onStart() {
+  onStart () {
     this.recognition.start()
     this.recognitionSucceed = false
     this.setStatus('listening')
   }
 
-  onSuccess(sentence, confidence) {
+  onSuccess (sentence, confidence) {
     this.recognitionSucceed = true
     console.log('confidence : ' + confidence)
     emit('search-start', { str: sentence, origin: SEARCH_ORIGIN.speech })
   }
 
-  async onEnd() {
+  async onEnd () {
     this.recognition.stop()
     // this delay the test on recognitionSucceed because onEnd is triggered just before onSuccess
     // this lead recognitionSucceed to be still false by default at this moment and this next line conclude that recognition has failed
@@ -46,16 +45,16 @@ class AppSpeech {
     this.setStatus(this.recognitionSucceed ? 'ready' : 'failed')
   }
 
-  onError(reason) {
+  onError (reason) {
     this.error('error occurred in recognition : ' + reason)
     this.onFail()
   }
 
-  onFail() {
+  onFail () {
     this.setStatus('failed')
   }
 
-  setStatus(status) {
+  setStatus (status) {
     emit('app-speech--status', status)
     if (status === 'listening' && !this.isMobile) emit('app-sound--info')
     else if (status === 'failed') emit('app-sound--error')

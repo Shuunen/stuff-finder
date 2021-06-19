@@ -1,10 +1,9 @@
-/* global window, document, HTMLElement */
 import { emit, on, sleep } from 'shuutils'
 import 'webcomponent-qr-code'
 import { div, dom } from '../utils.js'
 
 class AppPrintBarcodes extends HTMLElement {
-  get template() {
+  get template () {
     return `
       <div class="icon hidden" title="Print barcodes">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><defs/><path fill="currentColor" fill-rule="evenodd" d="M8 4h8v2H8V4zm10 2h4v12h-4v4H6v-4H2V6h4V2h12v4zm2 10h-2v-2H6v2H4V8h16v8zM8 16h8v4H8v-4zm0-6H6v2h2v-2z" clip-rule="evenodd"/></svg>
@@ -12,7 +11,7 @@ class AppPrintBarcodes extends HTMLElement {
       <app-modal name="print-barcodes" />`
   }
 
-  get modalContentPrepare() {
+  get modalContentPrepare () {
     return `
     <h1>Prepare Barcodes</h1>
     <p class=mbs>Below is the list of non-printed items where valid ones have been pre-selected.</p>
@@ -41,7 +40,7 @@ class AppPrintBarcodes extends HTMLElement {
     <div class="error preview mts"></div>`
   }
 
-  get modalContentPrint() {
+  get modalContentPrint () {
     return `
     <h1>Print Barcodes</h1>
     <p>
@@ -61,7 +60,7 @@ class AppPrintBarcodes extends HTMLElement {
     </div>`
   }
 
-  get style() {
+  get style () {
     return `
     .${this._id} .icon { --size: 2.8rem; color: var(--color-grey, grey); cursor: pointer; height: var(--size); overflow: hidden; position: absolute; right: 6rem; top: 2rem; width: var(--size); z-index: var(--elevation-child, 30); }
     .${this._id} .icon svg { height: 100%; width: 100%; }
@@ -80,7 +79,7 @@ class AppPrintBarcodes extends HTMLElement {
     `
   }
 
-  constructor() {
+  constructor () {
     super()
     this._id = 'app-print-barcodes'
     this.barcodes = []
@@ -89,13 +88,13 @@ class AppPrintBarcodes extends HTMLElement {
     on('items-ready', () => (this.els.icon.classList.remove('hidden')))
   }
 
-  showModal(active) {
+  showModal (active) {
     console.log('print barcodes toggle', active ? 'show' : 'hide')
     this.els.wrapper.querySelector('.backdrop').classList.toggle('hidden', !active)
     emit('get-barcodes-to-print')
   }
 
-  async previewBarcodes() {
+  async previewBarcodes () {
     emit('app-loader--toggle', true)
     this.barcodes = this.barcodes.filter(b => this.selection.includes(b.id))
     this.els.modal.innerHTML = this.modalContentPrint
@@ -105,7 +104,7 @@ class AppPrintBarcodes extends HTMLElement {
     emit('app-loader--toggle', false)
   }
 
-  async adjustQrCodes() {
+  async adjustQrCodes () {
     // sometimes some qr code are too big
     document.querySelectorAll('qr-code').forEach(wc => {
       // reducing their module size do the trick & reduce their display size
@@ -113,7 +112,7 @@ class AppPrintBarcodes extends HTMLElement {
     })
   }
 
-  async prepareBarcodes(barcodes) {
+  async prepareBarcodes (barcodes) {
     emit('app-loader--toggle', true)
     this.barcodes = barcodes.sort(a => a.reference ? -1 : 1)
     this.els.modal = this.els.wrapper.querySelector('.app-modal--print-barcodes')
@@ -127,7 +126,7 @@ class AppPrintBarcodes extends HTMLElement {
     emit('app-loader--toggle', false)
   }
 
-  onModalPrepareClick(event) {
+  onModalPrepareClick (event) {
     const action = event.target.getAttribute('data-action')
     if (!action) return
     if (action === 'select-all') this.setAllItems(true)
@@ -137,13 +136,13 @@ class AppPrintBarcodes extends HTMLElement {
     this.updatePreviewButton()
   }
 
-  setAllItems(selected = true) {
+  setAllItems (selected = true) {
     document.querySelectorAll('input[data-action="select-one"]').forEach(element => {
       element.checked = selected
     })
   }
 
-  selectValidItems() {
+  selectValidItems () {
     const forms = [...this.els.wrapper.querySelectorAll('.list app-form')]
     forms.forEach(form => {
       // check valid form related checkbox
@@ -152,7 +151,7 @@ class AppPrintBarcodes extends HTMLElement {
     this.updatePreviewButton()
   }
 
-  updatePreviewButton() {
+  updatePreviewButton () {
     this.selection = [...document.querySelectorAll('input[data-action="select-one"]:checked')].map(element => element.id)
     this.els.previewBtn.disabled = this.selection.length <= 0 || this.selection.length > 65
     this.els.previewBtn.textContent = `Preview ${this.selection.length} barcodes`
@@ -162,7 +161,7 @@ class AppPrintBarcodes extends HTMLElement {
     if (this.selection.length > 65) this.els.previewError.textContent = 'You cannot select more than 65 items'
   }
 
-  createWrapper() {
+  createWrapper () {
     const wrapper = div(`${this._id}`, this.template)
     this.els.icon = wrapper.querySelector('.icon')
     this.els.icon.addEventListener('click', () => this.showModal(true))
@@ -170,7 +169,7 @@ class AppPrintBarcodes extends HTMLElement {
     return wrapper
   }
 
-  connectedCallback() {
+  connectedCallback () {
     this.els.wrapper = this.createWrapper()
     this.parentNode.replaceChild(this.els.wrapper, this)
   }

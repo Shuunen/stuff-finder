@@ -1,15 +1,13 @@
-/* global window, document, HTMLElement */
-
 import { emit, on, pickOne } from 'shuutils'
 import { SEARCH_ORIGIN } from '../constants.js'
 import { button, div, dom, p } from '../utils.js'
 
 class AppSearchButton extends HTMLElement {
-  get status() {
+  get status () {
     return this._status
   }
 
-  set status(status) {
+  set status (status) {
     let label = ''
     let hint = ''
     this._status = status
@@ -33,7 +31,7 @@ class AppSearchButton extends HTMLElement {
     this.els.hint.textContent = hint
   }
 
-  constructor() {
+  constructor () {
     super()
     this._status = ''
     this.els = {}
@@ -45,18 +43,18 @@ class AppSearchButton extends HTMLElement {
     })
   }
 
-  handleFocusLessTyping() {
+  handleFocusLessTyping () {
     document.body.addEventListener('keydown', event => this.onKeyDown(event))
   }
 
-  onKeyDown(event) {
+  onKeyDown (event) {
     const filter = /^[\s\w-]$/i // this filter let user use special keys like CTRL without interfering
     if (event.target.tagName.toLowerCase() !== 'body' || !filter.test(event.key)) return
     console.log('redirecting user input char :', event.key, 'to search input')
     this.els.search.focus()
   }
 
-  createTypeInput() {
+  createTypeInput () {
     const search = dom('input')
     search.id = 'input-type'
     search.className = 'input-primary'
@@ -69,20 +67,20 @@ class AppSearchButton extends HTMLElement {
     return search
   }
 
-  createScanInput() {
+  createScanInput () {
     this.els.scan = button('[ Scan it ]', 'input-primary')
     this.els.scan.style.background = 'linear-gradient(red -30%, white 20%, white 80%, red 130%)'
     this.els.scan.addEventListener('click', () => emit('app-scan-code--start'))
     return this.els.scan
   }
 
-  createVoiceInput() {
+  createVoiceInput () {
     this.els.button = button('', 'input-primary')
     this.els.button.addEventListener('click', () => emit('app-speech--start'))
     return this.els.button
   }
 
-  createInputs() {
+  createInputs () {
     const row = div('grid col-3 center')
     row.append(this.createTypeInput())
     row.append(this.createScanInput())
@@ -90,7 +88,7 @@ class AppSearchButton extends HTMLElement {
     return row
   }
 
-  createWrapper() {
+  createWrapper () {
     const wrapper = div('app-search-button col mt2 ph1 hidden')
     wrapper.append(this.createInputs())
     this.els.hint = p('', 'm1')
@@ -98,7 +96,7 @@ class AppSearchButton extends HTMLElement {
     return wrapper
   }
 
-  connectedCallback() {
+  connectedCallback () {
     this.els.wrapper = this.createWrapper()
     this.status = 'ready'
     this.parentNode.replaceChild(this.els.wrapper, this)

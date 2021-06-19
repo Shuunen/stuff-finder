@@ -1,5 +1,3 @@
-/* global document */
-
 export const dom = (type, content = '', classes = '') => {
   const element = document.createElement(type)
   element.className = classes
@@ -9,10 +7,10 @@ export const dom = (type, content = '', classes = '') => {
 
 export const div = (classes, content = '') => dom('div', content, classes)
 
-export const img = (alt, src, classes = '') => {
+export const img = (alt, source, classes = '') => {
   const element = dom('img', '', classes)
   element.alt = alt
-  element.src = src
+  element.src = source
   return element
 }
 

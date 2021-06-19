@@ -1,10 +1,8 @@
-/* global window, document, HTMLElement */
-
 import { emit, on } from 'shuutils'
 import { div, dom } from '../utils.js'
 
 class AppSearchResult extends HTMLElement {
-  get formContent() {
+  get formContent () {
     const locations = this.data.locations.map(l => `<option value=${l} ${l.toLowerCase() === this.data.location.toLowerCase() ? 'selected' : ''}>${l}</option>`)
     const boxes = this.data.boxes.map(b => `<option value="${b}" ${b.toLowerCase() === this.data.box.toLowerCase() ? 'selected' : ''}>${b}</option>`)
     const statuses = this.data.statuses.map(s => `<option value="${s}" ${s.toLowerCase() === this.data.status.toLowerCase() ? 'selected' : ''}>${s}</option>`)
@@ -28,7 +26,7 @@ class AppSearchResult extends HTMLElement {
     `
   }
 
-  get readContent() {
+  get readContent () {
     return `<div class="col center">
       ${this.isSolo ? `<img class="clickable mb1" src="${this.hasImage ? this.data.photo[0].url : 'assets/no-view.svg'}" />` : ''}
       <div>
@@ -41,19 +39,19 @@ class AppSearchResult extends HTMLElement {
     </div>`
   }
 
-  get hasImage() {
+  get hasImage () {
     return this.data.photo && this.data.photo.length > 0
   }
 
-  get isSolo() {
+  get isSolo () {
     return this.getAttribute('solo') === 'true'
   }
 
-  closeOtherForms() {
+  closeOtherForms () {
     document.querySelectorAll('.app-search-result button.close').forEach(element => element.click())
   }
 
-  isElementInViewport(element) {
+  isElementInViewport (element) {
     const rect = element.getBoundingClientRect()
     return (
       rect.top >= 0 && rect.left >= 0 &&
@@ -62,13 +60,13 @@ class AppSearchResult extends HTMLElement {
     )
   }
 
-  scrollToForm() {
+  scrollToForm () {
     const element = document.querySelector('.app-search-result.activated')
     if (this.isElementInViewport(element)) return
     element.scrollIntoView({ behavior: 'smooth' })
   }
 
-  edit() {
+  edit () {
     this.closeOtherForms()
     const formName = `result-${this.data.id}`
     const form = dom('app-form', this.formContent, formName)
@@ -83,7 +81,7 @@ class AppSearchResult extends HTMLElement {
     this.scrollToForm()
   }
 
-  save(data) {
+  save (data) {
     Object.assign(this.data, data)
     emit('app-update--item', this.data)
     // should also emit a success event so toggleEdit below will be done only if update succeed
@@ -91,7 +89,7 @@ class AppSearchResult extends HTMLElement {
     this.els.read.innerHTML = this.readContent
   }
 
-  toggleEdit(active = false) {
+  toggleEdit (active = false) {
     console.log('toggleEdit', active)
     emit('app-search-results--edit', active)
     this.els.wrapper.classList.toggle('activated', active)
@@ -101,25 +99,25 @@ class AppSearchResult extends HTMLElement {
     if (this.els.form) this.els.form.destroy()
   }
 
-  setListeners() {
+  setListeners () {
     this.formCloseEvent = `${this.data.id}--close`
     this.formSaveEvent = `${this.data.id}--save`
     on(this.formCloseEvent, active => this.toggleEdit(active))
     on(this.formSaveEvent, data => this.save(data))
   }
 
-  createWrapper() {
+  createWrapper () {
     Object.assign(this.data, JSON.parse(this.getAttribute('data')))
     if (this.isSolo) console.log(this.data)
     this.setListeners()
     this.els.wrapper = div('app-search-result p')
     this.els.read = div('col', this.readContent)
-    this.els.read.addEventListener('click', this.edit.bind(this))
+    this.els.read.addEventListener('click', () => this.edit())
     this.els.wrapper.append(this.els.read)
     return this.els.wrapper
   }
 
-  connectedCallback() {
+  connectedCallback () {
     this.els = {}
     this.data = {}
     this.parentNode.replaceChild(this.createWrapper(), this)

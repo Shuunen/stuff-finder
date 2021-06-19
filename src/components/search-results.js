@@ -1,10 +1,8 @@
-/* global window, document, HTMLElement */
-
 import { emit, on, pickOne, sleep } from 'shuutils'
 import { button, div, dom } from '../utils.js'
 
 class AppSearchResults extends HTMLElement {
-  get style() {
+  get style () {
     return `
     .app-search-result { margin-top: .5rem; }
     .app-search-result img { max-width: 18rem; max-height: 18rem; margin: auto; padding: 0 1rem; }
@@ -13,7 +11,7 @@ class AppSearchResults extends HTMLElement {
     `
   }
 
-  constructor() {
+  constructor () {
     super()
     this.els = {}
     on('app-search-results--show', data => this.show(data))
@@ -21,7 +19,7 @@ class AppSearchResults extends HTMLElement {
     on('app-search-results--edit', active => this.toggleFooter(active))
   }
 
-  show(data) {
+  show (data) {
     console.log(`displaying ${data.results.length} results...`)
     if (data.byReference && !data.results[0]['ref-printed']) this.markReferenceAsPrinted(data.results[0])
     this.els.title.textContent = data.results.length === 1 ? '' : data.title
@@ -29,17 +27,17 @@ class AppSearchResults extends HTMLElement {
     emit('app-modal--search-results--open')
   }
 
-  markReferenceAsPrinted(item) {
+  markReferenceAsPrinted (item) {
     console.log('marking this item as ref-printed', item)
-    emit('app-update--item', { id: item.id, 'ref-printed': true })
+    emit('app-update--item', { 'id': item.id, 'ref-printed': true })
   }
 
-  retry() {
+  retry () {
     emit('app-modal--search-results--close')
     emit('search-retry')
   }
 
-  async format(results) {
+  async format (results) {
     const content = results.length === 0 ? `<div class="mb1 mt1"><span class="highlight-grey">${this.sorryAscii()}</span></div><span class="mb1">Sorry nothing was found.</span>` : ''
     this.els.results.innerHTML = content
     if (content.length > 0) return
@@ -53,18 +51,18 @@ class AppSearchResults extends HTMLElement {
     this.els.results.scrollTo(0, 0)
   }
 
-  sorryAscii() {
+  sorryAscii () {
     return pickOne(['[#´Д`]', '¯\\_(ツ)_/¯', 'ಠ_ಠ', '(⊙＿⊙\')', '(#+_+)', '(._.)', '(╯▅╰)', '╮ (. ❛ ᴗ ❛.) ╭'])
   }
 
-  createWrapper() {
+  createWrapper () {
     const wrapper = dom('app-modal')
     wrapper.name = 'search-results'
     wrapper.append(dom('style', this.style))
     return wrapper
   }
 
-  addContent() {
+  addContent () {
     this.els.wrapper = document.querySelector('.app-modal--search-results')
     this.els.title = dom('h2', 'def')
     this.els.wrapper.append(this.els.title)
@@ -81,11 +79,11 @@ class AppSearchResults extends HTMLElement {
     emit('app-search-results--ready')
   }
 
-  toggleFooter(active) {
+  toggleFooter (active) {
     this.els.footer.classList.toggle('hidden', active)
   }
 
-  connectedCallback() {
+  connectedCallback () {
     const wrapper = this.createWrapper()
     this.parentNode.replaceChild(wrapper, this)
     on('app-modal--search-results--ready', () => this.addContent())
