@@ -6,6 +6,6 @@ export const SEARCH_ORIGIN = {
 }
 
 export const JSON_HEADERS = {
-  Accept: 'application/json',
+  'Accept': 'application/json',
   'Content-Type': 'application/json',
 }

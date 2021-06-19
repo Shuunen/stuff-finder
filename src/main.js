@@ -1,4 +1,3 @@
-/* global document, fetch */
 import Fuse from 'fuse.js'
 import { emit, on, pickOne, sleep, storage } from 'shuutils'
 import './components/index.js'
@@ -9,7 +8,7 @@ import './styles/main.css'
 const key = '@shuunen/stuff-finder_'
 
 class App {
-  constructor() {
+  constructor () {
     console.log('app start')
     this.items = []
     on('app-form--settings--save', settings => this.onSettingsSave(settings))
@@ -24,22 +23,22 @@ class App {
     this.showTitle()
   }
 
-  async checkExistingSettings() {
+  async checkExistingSettings () {
     const settings = await storage.get(key + 'app-settings')
     if (!settings) return this.settingsActionRequired(true)
     this.onSettingsSave(settings)
     on('app-form--settings--ready', () => emit('app-form--settings--set', settings))
   }
 
-  coolAscii() {
+  coolAscii () {
     return pickOne(['( ＾◡＾)', '♥‿♥', '八(＾□＾*)', '(◡ ‿ ◡ ✿)', '(=^ェ^=)', 'ʕ •ᴥ•ʔ', '(*°∀°)', '\\(-ㅂ-)/', 'ლ(╹◡╹ლ)', 'ლ(o◡oლ)', '＼(＾O＾)／'])
   }
 
-  showTitle() {
+  showTitle () {
     emit('app-prompter--type', ['Stuff Finder', 1000, `Stuff Finder\n${this.coolAscii()}`])
   }
 
-  async onSettingsSave(settings) {
+  async onSettingsSave (settings) {
     this.apiUrl = `https://api.airtable.com/v0/${settings.base}/${settings.table}?api_key=${settings.key}&view=${settings.view}`
     const itemsLoaded = await this.loadItems()
     if (!itemsLoaded) return this.settingsActionRequired(true, 'failed to use api settings')
@@ -48,17 +47,17 @@ class App {
     storage.set(key + 'app-settings', settings)
   }
 
-  settingsActionRequired(actionRequired, errorMessage = '') {
+  settingsActionRequired (actionRequired, errorMessage = '') {
     emit('app-settings-trigger--animate', actionRequired)
     emit('app-form--settings--error', errorMessage)
     if (!actionRequired) emit('app-modal--close')
   }
 
-  isLoading(active) {
+  isLoading (active) {
     emit('app-loader--toggle', active)
   }
 
-  async loadItems() {
+  async loadItems () {
     this.isLoading(true)
     const cachedItems = (await storage.get(key + 'items')) || []
     let response = await this.fetchApi()
@@ -75,26 +74,26 @@ class App {
     }
     let offset = response.offset
     while (offset) {
-      response = await this.fetchApi(offset) // eslint-disable-line no-await-in-loop
+      response = await this.fetchApi(offset)
       offset = response.offset
-      records = records.concat(response.records)
+      records = [...records, ...response.records]
     }
     this.parseApiRecords(records)
     return true
   }
 
-  async getBarcodesToPrint() {
+  async getBarcodesToPrint () {
     const barcodes = this.items.filter(index => index['ref-printed'] === false && index.status === 'acheté')
     emit('barcodes-to-print', barcodes)
   }
 
-  async fetchApi(offset) {
+  async fetchApi (offset) {
     const sortByUpdatedFirst = '&sort%5B0%5D%5Bfield%5D=updated-on&sort%5B0%5D%5Bdirection%5D=desc'
     const url = this.apiUrl + (offset ? `&offset=${offset}` : '') + sortByUpdatedFirst
     return fetch(url).then(response => response.json())
   }
 
-  parseApiRecords(records) {
+  parseApiRecords (records) {
     // this.showLog('parsing api records :', records )
     let boxes = []
     let locations = []
@@ -107,23 +106,23 @@ class App {
       if (box.length > 0 && !boxes.includes(box)) boxes.push(box)
       if (!statuses.includes(status)) statuses.push(status)
     })
-    locations = ['', 'N/A'].concat(locations.sort())
-    boxes = [''].concat(boxes.sort())
-    statuses = [''].concat(statuses.sort())
+    locations = ['', 'N/A', ...locations.sort()]
+    boxes = ['', ...boxes.sort()]
+    statuses = ['', ...statuses.sort()]
     this.items = records.map(record => ({
-      id: record.id,
-      name: '',
-      brand: '',
-      details: '',
-      box: '',
+      'id': record.id,
+      'name': '',
+      'brand': '',
+      'details': '',
+      'box': '',
       boxes,
-      drawer: '',
-      location: '',
+      'drawer': '',
+      'location': '',
       locations,
-      reference: '',
-      barcode: '',
+      'reference': '',
+      'barcode': '',
       'ref-printed': false,
-      status: 'acheté',
+      'status': 'acheté',
       statuses,
       ...record.fields,
     }))
@@ -131,7 +130,7 @@ class App {
     this.initFuse()
   }
 
-  initFuse() {
+  initFuse () {
     // https://fusejs.io/
     const options = {
       distance: 200, // see the tip at https://fusejs.io/concepts/scoring-theory.html#scoring-theory
@@ -155,7 +154,7 @@ class App {
     this.isLoading(false)
   }
 
-  onSearchStart({ str, origin }) {
+  onSearchStart ({ str, origin }) {
     str = str.trim()
     this.lastSearchOrigin = origin
     const result = this.items.find(item => (item.reference === str || item.barcode === str))
@@ -164,7 +163,7 @@ class App {
     emit('app-search-results--show', { title, results, byReference: Boolean(result) })
   }
 
-  onSearchRetry() {
+  onSearchRetry () {
     console.log('retry and this.lastSearchOrigin', this.lastSearchOrigin)
     if (this.lastSearchOrigin === SEARCH_ORIGIN.type) return document.querySelector('#input-type').focus()
     if (this.lastSearchOrigin === SEARCH_ORIGIN.scan) return emit('app-scan-code--start')
@@ -172,13 +171,13 @@ class App {
     this.showError('un-handled search retry case')
   }
 
-  async fadeIn(element) {
+  async fadeIn (element) {
     if (!element.classList.contains('hide')) return console.warn('please add "hide" class before mounting dom element and then call fade-in')
     await sleep(10)
     element.style.opacity = 1
   }
 
-  async fadeOut(element, destroy = false) {
+  async fadeOut (element, destroy = false) {
     element.classList.add('hide')
     await sleep(350)
     element.classList.remove('hide')
@@ -188,17 +187,17 @@ class App {
     element.remove()
   }
 
-  showLog(message, data) {
+  showLog (message, data) {
     console.log(message, data || '')
     emit('app-toaster--show', { type: 'info', message })
   }
 
-  showError(message) {
+  showError (message) {
     console.error(message)
     emit('app-toaster--show', { type: 'error', message })
   }
 
-  async onUpdateItem(item) {
+  async onUpdateItem (item) {
     if (!item.id) return this.showError('cannot update an item without his id')
     this.isLoading(true)
     await this.updateItemRemotely(item)
@@ -206,7 +205,7 @@ class App {
     this.isLoading(false)
   }
 
-  async updateItemRemotely(item) {
+  async updateItemRemotely (item) {
     const fieldsToUpdate = ['name', 'brand', 'details', 'box', 'drawer', 'location', 'reference', 'barcode', 'ref-printed']
     const data = { fields: {} }
     fieldsToUpdate.forEach(field => {
@@ -217,18 +216,17 @@ class App {
     return this.patch(url, data)
   }
 
-  async updateItemLocally(itemToUpdate) {
+  async updateItemLocally (itemToUpdate) {
     const index = this.items.findIndex(item => item.id === itemToUpdate.id)
     if (index < 0) return this.showError('failed to find local item')
     Object.assign(this.items[index], itemToUpdate)
     this.initFuse()
   }
 
-  async patch(url, data) {
+  async patch (url, data) {
     const options = { headers: JSON_HEADERS, method: 'patch', body: JSON.stringify(data) }
     return fetch(url, options).then(response => response.json()).catch(error => this.showError(error.message))
   }
 }
 
-// eslint-disable-next-line no-new
 new App()

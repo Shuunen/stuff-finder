@@ -1,11 +1,10 @@
-/* global window, document, HTMLElement */
 import { BrowserMultiFormatReader, NotFoundException } from '@zxing/library'
 import { emit, on, sleep } from 'shuutils'
 import { SEARCH_ORIGIN } from '../constants.js'
 import { dom } from '../utils.js'
 
 class AppScanCode extends HTMLElement {
-  async initReader() {
+  async initReader () {
     console.log('init reader')
     this.reader = new BrowserMultiFormatReader()
     const sources = await this.reader.listVideoInputDevices()
@@ -13,14 +12,14 @@ class AppScanCode extends HTMLElement {
     console.log('sources ?', sources)
   }
 
-  onResult(code) {
+  onResult (code) {
     console.log('found qr or barcode :', code)
     emit('app-modal--scan-code--close')
     emit('app-sound--success')
     emit('search-start', { str: code, origin: SEARCH_ORIGIN.scan })
   }
 
-  async scanCode() {
+  async scanCode () {
     console.log('user wants to scan something')
     emit('app-modal--scan-code--open')
     if (this.reader === undefined) await this.initReader()
@@ -30,7 +29,7 @@ class AppScanCode extends HTMLElement {
     })
   }
 
-  async initModal() {
+  async initModal () {
     on('app-modal--scan-code--closed', () => this.reader.reset())
     let modal = dom('app-modal')
     modal.name = 'scan-code'
@@ -42,7 +41,7 @@ class AppScanCode extends HTMLElement {
     modal.append(this.els.video)
   }
 
-  async connectedCallback() {
+  async connectedCallback () {
     on('app-scan-code--start', () => this.scanCode())
     this.els = {}
     this.els.video = dom('video')

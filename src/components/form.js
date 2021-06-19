@@ -1,38 +1,36 @@
-/* global window, HTMLElement */
-
 import { emit, on } from 'shuutils'
 import { button, div, dom, p } from '../utils.js'
 
 class AppForm extends HTMLElement {
-  get name() {
+  get name () {
     return this.getAttribute('name')
   }
 
-  get columns() {
+  get columns () {
     return this.getAttribute('columns') || '1fr'
   }
 
-  get title() {
+  get title () {
     return this.getAttribute('title') === 'false' ? '' : this.getAttribute('title')
   }
 
-  get inline() {
+  get inline () {
     return this.getAttribute('inline') === 'true'
   }
 
-  get onCloseEventName() {
+  get onCloseEventName () {
     return this.getAttribute('on-close') || 'app-modal--close'
   }
 
-  get onSaveEventName() {
+  get onSaveEventName () {
     return this.getAttribute('on-save') || `${this._id}--save`
   }
 
-  get style() {
+  get style () {
     return 'app-form form { display: grid; grid-gap: .5rem; margin: 0.5rem 0 1.5rem; }'
   }
 
-  get data() {
+  get data () {
     const data = {};
     [...this.els.form.elements].forEach(element => {
       let value = element.value
@@ -42,7 +40,7 @@ class AppForm extends HTMLElement {
     return data
   }
 
-  set data(data) {
+  set data (data) {
     Object.entries(data).forEach(entry => {
       const [key, value] = entry;
       [...this.els.form.elements].find(element => element.name === key).value = value
@@ -50,26 +48,26 @@ class AppForm extends HTMLElement {
     this.validate()
   }
 
-  get dataChanged() {
+  get dataChanged () {
     return JSON.stringify(this.initialData) !== JSON.stringify(this.data)
   }
 
-  get error() {
+  get error () {
     return this.els.error.textContent
   }
 
-  set error(message) {
+  set error (message) {
     this.els.error.textContent = message
   }
 
-  createForm() {
+  createForm () {
     const form = dom('form', this.innerHTML, this._id)
     form.style = 'grid-template-columns: ' + this.columns
     form.append(dom('style', this.style))
     return form
   }
 
-  createFooter() {
+  createFooter () {
     const row = div('row center mts mb1')
     if (this.inline) row.classList.add('hidden')
     else {
@@ -86,19 +84,19 @@ class AppForm extends HTMLElement {
     return row
   }
 
-  onSave() {
+  onSave () {
     emit(this.onSaveEventName, this.data)
     this.els.footer.classList.add('hidden')
   }
 
-  destroy() {
+  destroy () {
     this.els.form.remove()
     this.els.header.remove()
     this.els.footer.remove()
     this.remove()
   }
 
-  validate() {
+  validate () {
     const isValid = this.els.form.checkValidity()
     if (isValid) this.els.save.removeAttribute('disabled')
     else this.els.save.setAttribute('disabled', true)
@@ -107,7 +105,7 @@ class AppForm extends HTMLElement {
   }
 
   // when copy pasting from a spreadsheet entry, values are like : "appABC keyXYZ tableName viewName"
-  handleMultiPaste() {
+  handleMultiPaste () {
     const input = this.els.form.querySelector('label > input[multi-paste]')
     if (!input) return
     const inputs = this.els.form.querySelectorAll('label > input')
@@ -119,14 +117,14 @@ class AppForm extends HTMLElement {
     })
   }
 
-  onMultiPaste(values, inputs) {
+  onMultiPaste (values, inputs) {
     console.log('multi paste detected, applying values', values, 'to', inputs)
     inputs.forEach((input, index) => {
       if (values[index]) input.value = values[index]
     })
   }
 
-  connectedCallback() {
+  connectedCallback () {
     this._id = `app-form--${this.name}`
     this.els = {}
     on(`${this._id}--set`, data => {

@@ -1,10 +1,8 @@
-/* global window, HTMLElement */
-
 import { on } from 'shuutils'
 import { div, dom } from '../utils.js'
 
 class AppLoader extends HTMLElement {
-  get style() {
+  get style () {
     return `
     .app-loader { z-index: var(--elevation-t-rex, 200); }
     .app-loader .lds-dual-ring { display: inline-block; height: 6rem; width: 6rem; }
@@ -12,24 +10,24 @@ class AppLoader extends HTMLElement {
     @keyframes lds-dual-ring { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }`
   }
 
-  constructor() {
+  constructor () {
     super()
     this._id = 'app-loader'
     this.els = {}
     on(`${this._id}--toggle`, active => this.toggle(active))
   }
 
-  toggle(active) {
+  toggle (active) {
     this.els.wrapper.classList.toggle('hidden', !active)
   }
 
-  createWrapper() {
+  createWrapper () {
     const wrapper = div(`${this._id} backdrop hidden`, '<div class="lds-dual-ring">.</div>')
     wrapper.append(dom('style', this.style))
     return wrapper
   }
 
-  connectedCallback() {
+  connectedCallback () {
     this.els.wrapper = this.createWrapper()
     this.parentNode.replaceChild(this.els.wrapper, this)
   }
