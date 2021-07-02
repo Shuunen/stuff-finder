@@ -6,7 +6,7 @@
     "@camwiegert/typical": "0.1.1",
     "@zxing/library": "0.18.6",
     "fuse.js": "6.4.6",
-    "shuunen-stack": "0.9.6",
+    "shuunen-stack": "0.11.1",
     "shuutils": "4.6.1",
     "webcomponent-qr-code": "1.0.5"
   },
