@@ -30,9 +30,10 @@
     "build": "stack build --minify",
     "dev": "stack build --serve --watch",
     "lint": "stack lint",
-    "mark": "node bin/mark.js",
+    "mark": "node bin/mark",
     "postversion": "git push && git push --tags",
     "preversion": "npm run lint && npm run build",
+    "test": "echo no tests yet",
     "update": "stack update"
   },
   "version": "0.1.0"
