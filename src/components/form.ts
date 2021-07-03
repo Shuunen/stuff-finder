@@ -1,7 +1,17 @@
-import { emit, on } from 'shuutils'
-import { button, div, dom, p } from '../utils.js'
+import { div, dom, emit, h2, on, p } from 'shuutils'
+import { button } from '../utils'
 
 class AppForm extends HTMLElement {
+  _id: string
+  els: {
+    error?: HTMLParagraphElement,
+    header?: HTMLHeadingElement,
+    form?: HTMLFormElement,
+    footer?: HTMLDivElement,
+    save?: HTMLButtonElement
+  } = {}
+  initialData: Record<string, string> = {}
+
   get name () {
     return this.getAttribute('name')
   }
@@ -26,24 +36,24 @@ class AppForm extends HTMLElement {
     return this.getAttribute('on-save') || `${this._id}--save`
   }
 
-  get style () {
-    return 'app-form form { display: grid; grid-gap: .5rem; margin: 0.5rem 0 1.5rem; }'
+  get inputs (): HTMLInputElement[] {
+    return [...this.els.form.elements as unknown as HTMLInputElement[]]
   }
 
   get data () {
-    const data = {};
-    [...this.els.form.elements].forEach(element => {
-      let value = element.value
-      if (element.type === 'checkbox') value = element.checked
-      data[element.name] = value
+    const data = {}
+    this.inputs.forEach(input => {
+      let value: string | boolean = input.value
+      if (input.type === 'checkbox') value = input.checked
+      data[input.name] = value
     })
     return data
   }
 
   set data (data) {
     Object.entries(data).forEach(entry => {
-      const [key, value] = entry;
-      [...this.els.form.elements].find(element => element.name === key).value = value
+      const [key, value = ''] = entry
+      this.inputs.find(input => (input.name === key)).value = value as string
     })
     this.validate()
   }
@@ -60,13 +70,6 @@ class AppForm extends HTMLElement {
     this.els.error.textContent = message
   }
 
-  createForm () {
-    const form = dom('form', this.innerHTML, this._id)
-    form.style = 'grid-template-columns: ' + this.columns
-    form.append(dom('style', this.style))
-    return form
-  }
-
   createFooter () {
     const row = div('row center mts mb1')
     if (this.inline) row.classList.add('hidden')
@@ -77,8 +80,8 @@ class AppForm extends HTMLElement {
     }
     const save = button('Save &check;', 'save ml1')
     save.addEventListener('click', () => this.onSave())
-    save.setAttribute('disabled', true)
-    this.els.form.addEventListener('change', this.els.form.addEventListener('keyup', () => this.validate()))
+    save.setAttribute('disabled', String(true))
+    this.els.form.addEventListener('keyup', () => this.validate())
     row.append(save)
     this.els.save = save
     return row
@@ -99,9 +102,9 @@ class AppForm extends HTMLElement {
   validate () {
     const isValid = this.els.form.checkValidity()
     if (isValid) this.els.save.removeAttribute('disabled')
-    else this.els.save.setAttribute('disabled', true)
+    else this.els.save.setAttribute('disabled', String(true))
     if (this.inline) this.els.footer.classList.toggle('hidden', !(this.dataChanged && isValid))
-    this.setAttribute('valid', isValid)
+    this.setAttribute('valid', String(isValid))
   }
 
   // when copy pasting from a spreadsheet entry, values are like : "appABC keyXYZ tableName viewName"
@@ -113,7 +116,8 @@ class AppForm extends HTMLElement {
     input.removeAttribute('multi-paste')
     const multiRegex = /"(\w+) (\w+) ([\w-]+) ([\w-]+)"/
     input.addEventListener('change', () => {
-      if (multiRegex.test(input.value)) this.onMultiPaste(input.value.match(multiRegex).splice(1, 4), inputs)
+      const value = (input as HTMLInputElement).value
+      if (multiRegex.test(value)) this.onMultiPaste(value.match(multiRegex).splice(1, 4), inputs)
     })
   }
 
@@ -126,21 +130,20 @@ class AppForm extends HTMLElement {
 
   connectedCallback () {
     this._id = `app-form--${this.name}`
-    this.els = {}
     on(`${this._id}--set`, data => {
       this.data = data
     })
     on(`${this._id}--error`, message => {
       this.error = message
     })
-    this.els.form = this.createForm()
+    this.els.form = dom('form', `grid-cols-${this.columns}`, this.innerHTML)
     this.innerHTML = ''
     this.append(this.els.form)
     this.handleMultiPaste()
-    this.els.error = p('', 'error')
+    this.els.error = p('error')
     this.els.form.parentElement.append(this.els.error)
     if (!this.inline) {
-      this.els.header = dom('h2', this.title)
+      this.els.header = h2('header', this.title)
       this.parentElement.prepend(this.els.header)
     }
     this.els.footer = this.createFooter()

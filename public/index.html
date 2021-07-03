@@ -10,11 +10,11 @@
   <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
-  <link rel="stylesheet" type="text/css" media="screen" href="main.css">
+  <link rel="stylesheet" type="text/css" media="screen" href="index.css">
   <link rel="manifest" href="assets/site.webmanifest">
 </head>
 
-<body class="stuff-finder col center full-height">
+<body class="flex flex-col items-center justify-center h-screen align-middle bg-gradient-to-tr from-purple-200 stuff-finder">
 
   <header>
     <app-prompter></app-prompter>
@@ -48,39 +48,38 @@
           <input name="view" pattern="\S+" placeholder="your table name" required value="stuff-finder">
         </label>
 
-      <details class="mb1 mt1 left">
-        <summary>What this app do with my credentials ?</summary>
-        <small>
-          <ul>
-            <li>fetch your Airtable data</li>
-            <li>store credentials locally in your browser</li>
-            <li>nothing else</li>
-          </ul>
-          Feel free to check this app source code on the <a href="https://github.com/Shuunen/stuff-finder" target="_blank" rel="noreferrer">Github
-            project
-            page</a>.
-        </small>
-      </details>
+        <details class="mb1 mt1 left">
+          <summary>What this app do with my credentials ?</summary>
+          <small>
+            <ul>
+              <li>fetch your Airtable data</li>
+              <li>store credentials locally in your browser</li>
+              <li>nothing else</li>
+            </ul>
+            Feel free to check this app source code on the <a href="https://github.com/Shuunen/stuff-finder" target="_blank" rel="noreferrer">Github
+              project
+              page</a>.
+          </small>
+        </details>
 
-      <details class="mb1 left">
-        <summary>About this app</summary>
-        <small class="mt1">
-          This is an open source project from Shuunen, you can check the source code on the <a href="https://github.com/Shuunen/stuff-finder"
-            target="_blank" rel="noreferrer">Github
-            project
-            page</a>.
-          <br>
-          <span id="commit"></span>
-        </small>
-      </details>
+        <details class="mb1 left">
+          <summary>About this app</summary>
+          <small class="mt1">
+            This is an open source project from Shuunen, you can check the source code on the <a href="https://github.com/Shuunen/stuff-finder"
+              target="_blank" rel="noreferrer">Github
+              project
+              page</a>.
+            <br>
+            <span id="commit"></span>
+          </small>
+        </details>
 
 
-    </app-form>
+      </app-form>
     </div>
   </app-modal>
 
-  <script>var global = { window }</script>
-  <script src="main.js"></script>
+  <script src="index.js"></script>
 </body>
 
 </html>

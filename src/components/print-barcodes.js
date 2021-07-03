@@ -1,6 +1,5 @@
-import { emit, on, sleep } from 'shuutils'
+import { div, emit, on, sleep } from 'shuutils'
 import 'webcomponent-qr-code'
-import { div, dom } from '../utils.js'
 
 class AppPrintBarcodes extends HTMLElement {
   get template () {
@@ -58,25 +57,6 @@ class AppPrintBarcodes extends HTMLElement {
         </div>`).join('\n')}
       </div>
     </div>`
-  }
-
-  get style () {
-    return `
-    .${this._id} .icon { --size: 2.8rem; color: var(--color-grey, grey); cursor: pointer; height: var(--size); overflow: hidden; position: absolute; right: 6rem; top: 2rem; width: var(--size); z-index: var(--elevation-child, 30); }
-    .${this._id} .icon svg { height: 100%; width: 100%; }
-    .a4-65 { display: grid; grid-template-columns: repeat(5, 1fr); grid-template-rows: repeat(13, 1fr); grid-column-gap: 10px; width: 1140px; height: 1540px; margin: auto; background: white; padding: 62px 30px 0 30px; }
-    .barcode { display: flex; align-items: center; border: 2px solid; border-radius: 8px; overflow: hidden; padding: 6px; }
-    .barcode:nth-child(even){ border-style: dashed; }
-    .barcode .col { overflow: hidden; padding-left: 10px; }
-    .barcode .name { overflow: hidden; line-height: 1.2rem; font-size: 0.8rem; font-family: sans-serif; letter-spacing: -0.5px; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
-    .barcode .location { padding-top: 0.3rem; font-weight: bold; font-family: monospace; font-size: 1.2rem; }
-    .print-zone { background: none; box-shadow: 0 0 1rem -0.3rem; height: 30vh; margin: 1rem; overflow: auto; position: inherit; width: 40vw; }
-    @media print {
-      .print-zone { background: grey; box-shadow: none; height: 100%; left: 0; margin: 0; overflow: visible; position: absolute; top: 0; width: 100%; z-index: 100; }
-      .barcode { border-color: white; }
-      body > div:not(.app-print-barcodes) { display: none; }
-    }
-    `
   }
 
   constructor () {
@@ -165,7 +145,6 @@ class AppPrintBarcodes extends HTMLElement {
     const wrapper = div(`${this._id}`, this.template)
     this.els.icon = wrapper.querySelector('.icon')
     this.els.icon.addEventListener('click', () => this.showModal(true))
-    wrapper.append(dom('style', this.style))
     return wrapper
   }
 

@@ -26,7 +26,9 @@
 - [Netlify](https://netlify.com) : awesome company that offers hosting for OSS
 - [Npm-run-all](https://github.com/mysticatea/npm-run-all) : to keep my npm scripts clean & readable
 - [Nyc](https://github.com/istanbuljs/nyc) : simple & effective cli for code coverage
+- [Pen, mic & settings icons](https://www.iconfinder.com/iconsets/minimalisticons) by Gökçe Kurt
 - [Repo-checker](https://github.com/Shuunen/repo-checker) : eslint cover /src code and this tool the rest ^^
 - [RIOT Optimizer](https://riot-optimizer.com) : Radical Image Optimization Tool, the best software I found to compress images
+- [Scan icon](https://www.iconfinder.com/icons/3702397/barcode_code_scan_scanner_icon) by Ghariza Mahavira
 - [Servor](https://github.com/lukejacksonn/servor) : dependency free dev server for single page app development
 - [Shields.io](https://shields.io) : for the nice badges on top of this readme

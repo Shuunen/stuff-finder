@@ -1,16 +1,24 @@
 import Fuse from 'fuse.js'
 import { emit, on, pickOne, sleep, storage } from 'shuutils'
-import './components/index.js'
+import './components'
 import { JSON_HEADERS, SEARCH_ORIGIN } from './constants.js'
 import './services/index.js'
 import './styles/main.css'
 
 const key = '@shuunen/stuff-finder_'
 
+interface Item {
+  id: string
+}
+
 class App {
+  apiUrl = ''
+  lastSearchOrigin = ''
+  items = []
+  fuse: Fuse<Item[]>
+
   constructor () {
     console.log('app start')
-    this.items = []
     on('app-form--settings--save', settings => this.onSettingsSave(settings))
     on('app-update--item', item => this.onUpdateItem(item))
     on('get-barcodes-to-print', () => this.getBarcodesToPrint())
@@ -59,7 +67,7 @@ class App {
 
   async loadItems () {
     this.isLoading(true)
-    const cachedItems = (await storage.get(key + 'items')) || []
+    const cachedItems: Item[] = (await storage.get(key + 'items')) || []
     let response = await this.fetchApi()
     if (!response || response.error) {
       this.isLoading(false)
@@ -87,7 +95,7 @@ class App {
     emit('barcodes-to-print', barcodes)
   }
 
-  async fetchApi (offset) {
+  async fetchApi (offset?: string) {
     const sortByUpdatedFirst = '&sort%5B0%5D%5Bfield%5D=updated-on&sort%5B0%5D%5Bdirection%5D=desc'
     const url = this.apiUrl + (offset ? `&offset=${offset}` : '') + sortByUpdatedFirst
     return fetch(url).then(response => response.json())
@@ -165,7 +173,7 @@ class App {
 
   onSearchRetry () {
     console.log('retry and this.lastSearchOrigin', this.lastSearchOrigin)
-    if (this.lastSearchOrigin === SEARCH_ORIGIN.type) return document.querySelector('#input-type').focus()
+    if (this.lastSearchOrigin === SEARCH_ORIGIN.type) return document.querySelector<HTMLInputElement>('#input-type').focus()
     if (this.lastSearchOrigin === SEARCH_ORIGIN.scan) return emit('app-scan-code--start')
     if (this.lastSearchOrigin === SEARCH_ORIGIN.speech) return emit('app-speech--start')
     this.showError('un-handled search retry case')
@@ -187,8 +195,8 @@ class App {
     element.remove()
   }
 
-  showLog (message, data) {
-    console.log(message, data || '')
+  showLog (message, data = '') {
+    console.log(message, data)
     emit('app-toaster--show', { type: 'info', message })
   }
 
