@@ -6,7 +6,7 @@ import { SEARCH_ORIGIN } from '../constants.js'
 window.customElements.define('app-scan-code', class extends HTMLElement {
   device = ''
   reader: BrowserMultiFormatReader
-  video = dom('video')
+  video = dom('video', 'rounded-lg')
 
   onResult (code) {
     console.log('found qr or barcode :', code)

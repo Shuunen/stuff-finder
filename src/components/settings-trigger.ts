@@ -9,7 +9,10 @@ window.customElements.define('app-settings-trigger', class extends HTMLElement {
     return wrapper
   }
   connectedCallback () {
-    on('app-settings-trigger--animate', active => this.wrapper.classList.toggle('animate', active))
+    on('app-settings-trigger--animate', active => {
+      this.wrapper.classList.toggle('animate-bounce', active)
+      if(active) emit('app-modal--settings--open')
+    })
     this.wrapper = this.createWrapper()
     this.parentNode.replaceChild(this.wrapper, this)
   }

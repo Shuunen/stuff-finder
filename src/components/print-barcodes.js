@@ -22,7 +22,7 @@ class AppPrintBarcodes extends HTMLElement {
     <div class="list ph1">
       ${this.barcodes.map(b => `<div class=row>
         <input type=checkbox id="${b.id}" data-action="select-one">
-        <app-form name="${b.id}" inline=true title=false on-save="app-update--item" columns="4fr 3fr 2fr 2fr 1fr 1fr">
+        <app-form name="${b.id}" inline=true title=false on-save="app-update--item" class="bg-red-300">
           <input type=hidden name=id value="${b.id}" />
           <input name=name placeholder=Name required minlength=3 maxlength=50 autofocus value="${b.name}">
           <input name=details placeholder=Details value="${b.details}">

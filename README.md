@@ -29,11 +29,11 @@
 - [Eye icon](https://www.iconfinder.com/icons/5925640/eye_no_view_icon) by IconPai
 - [Favicon.io](https://favicon.io/favicon-generator/?t=SF&ff=Istok+Web&fs=110&fc=#FFF&b=rounded&bc=#08F) : handy favicon generator
 - [Github](https://github.com) : this great, free and evolving platform
+- [Keyboard & mic icons](https://www.iconfinder.com/iconsets/bitsies) by Recep Kütük
 - [Mocha](https://github.com/mochajs/mocha) : great test runner easy to setup & use
 - [Netlify](https://netlify.com) : awesome company that offers hosting for OSS
 - [Npm-run-all](https://github.com/mysticatea/npm-run-all) : to keep my npm scripts clean & readable
 - [Nyc](https://github.com/istanbuljs/nyc) : simple & effective cli for code coverage
-- [Pen, mic & settings icons](https://www.iconfinder.com/iconsets/minimalisticons) by Gökçe Kurt
 - [Repo-checker](https://github.com/Shuunen/repo-checker) : eslint cover /src code and this tool the rest ^^
 - [RIOT Optimizer](https://riot-optimizer.com) : Radical Image Optimization Tool, the best software I found to compress images
 - [Scan icon](https://www.iconfinder.com/icons/3702397/barcode_code_scan_scanner_icon) by Ghariza Mahavira

@@ -71,7 +71,6 @@ class AppSearchResult extends HTMLElement {
     const form = dom('app-form', formName, this.formContent)
     this.els.form = form
     form.setAttribute('name', formName)
-    form.setAttribute('columns', (this.hasImage ? '1fr ' : '') + '2fr 1fr')
     form.setAttribute('title', false)
     form.setAttribute('on-close', this.formCloseEvent)
     form.setAttribute('on-save', this.formSaveEvent)

@@ -58,10 +58,13 @@ class App {
   settingsActionRequired (actionRequired, errorMessage = '') {
     emit('app-settings-trigger--animate', actionRequired)
     emit('app-form--settings--error', errorMessage)
+    emit('app-status', actionRequired ? 'settings-required' : 'ready')
+    this.isLoading(false)
     if (!actionRequired) emit('app-modal--close')
   }
 
   isLoading (active) {
+    console.log('isLoading active ?', active)
     emit('app-loader--toggle', active)
   }
 
@@ -76,7 +79,7 @@ class App {
     let records = response.records
     if (cachedItems.some(item => (item.id === records[0].id && item['updated-on'] === records[0].fields['updated-on']))) {
       this.items = cachedItems
-      this.showLog(`${this.items.length} item(s) cached ` + this.coolAscii())
+      console.log(`${this.items.length} item(s) cached ` + this.coolAscii())
       this.initFuse()
       return true
     }

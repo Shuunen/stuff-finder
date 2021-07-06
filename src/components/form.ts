@@ -16,10 +16,6 @@ class AppForm extends HTMLElement {
     return this.getAttribute('name')
   }
 
-  get columns () {
-    return this.getAttribute('columns') || '1fr'
-  }
-
   get title () {
     return this.getAttribute('title') === 'false' ? '' : this.getAttribute('title')
   }
@@ -70,15 +66,17 @@ class AppForm extends HTMLElement {
     this.els.error.textContent = message
   }
 
+  createClose () {
+    const element = button('Cancel', 'close', true)
+    element.addEventListener('click', () => emit(this.onCloseEventName))
+    return element
+  }
+
   createFooter () {
-    const row = div('row center mts mb1')
+    const row = div('flex justify-center mt-4')
     if (this.inline) row.classList.add('hidden')
-    else {
-      const close = button('&times; Cancel', 'close')
-      close.addEventListener('click', () => emit(this.onCloseEventName))
-      row.append(close)
-    }
-    const save = button('Save &check;', 'save ml1')
+    else row.append(this.createClose())
+    const save = button('Save', 'save ml-4')
     save.addEventListener('click', () => this.onSave())
     save.setAttribute('disabled', String(true))
     this.els.form.addEventListener('keyup', () => this.validate())
@@ -136,14 +134,14 @@ class AppForm extends HTMLElement {
     on(`${this._id}--error`, message => {
       this.error = message
     })
-    this.els.form = dom('form', `grid-cols-${this.columns}`, this.innerHTML)
+    this.els.form = dom('form', this.className + ' md:p-4', this.innerHTML)
     this.innerHTML = ''
     this.append(this.els.form)
     this.handleMultiPaste()
     this.els.error = p('error')
     this.els.form.parentElement.append(this.els.error)
     if (!this.inline) {
-      this.els.header = h2('header', this.title)
+      this.els.header = h2('header text-purple-700 text-2xl mt-2 mb-4 text-center', this.title)
       this.parentElement.prepend(this.els.header)
     }
     this.els.footer = this.createFooter()

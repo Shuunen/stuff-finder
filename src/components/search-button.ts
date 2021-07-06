@@ -3,32 +3,35 @@ import { SEARCH_ORIGIN } from '../constants.js'
 import { button } from '../utils'
 
 window.customElements.define('app-search-button', class extends HTMLElement {
-  search = dom('input', 'px-2 rounded-md shadow-md h-10 w-full border-2 border-purple-500')
-  scan = button('Scan it', 'h-10')
-  speech = button('Speech', 'h-10')
-  hint = p('text-center mt-8')
-  wrapper = div('app-search-button col mt2 ph1')
+  search = dom('input', 'search-button px-2 text-lg md:text-base rounded-md shadow-md hover:shadow-lg h-10 w-full border-2 border-purple-500')
+  scan = button('Scan it', 'search-button h-10')
+  speech = button('Speech', 'search-button h-10')
+  hint = p('text-center mt-8 p-4 rounded-md shadow text-lg md:text-base backdrop-filter backdrop-brightness-150 backdrop-opacity-30')
+  wrapper = div('app-search-button')
 
   onStatus (status) {
-    let label = ''
+    let speech = 'Say it'
     let hint = ''
     switch (status) {
     case 'listening':
-      label = pickOne(['👂 Listening to you', '👂 Give it to me', '👂 Tell me'])
+      speech = pickOne(['👂 Listening to you', '👂 Give it to me', '👂 Tell me'])
       hint = 'Say keywords about what you\'re looking for (ex. "tablet", "biking gloves")'
       break
     case 'ready':
-      label = 'Say it'
       hint = 'Search is ready for you sir, just type your search, scan or say something.'
       break
-    case 'no-match':
+    case 'settings-required':
+      hint = 'You need to configure this app to use it, please use the bouncing setting gear.'
+      break
     case 'failed':
-    default:
-      label = pickOne(['Retry', 'Try again'])
+      speech = pickOne(['Retry', 'Try again'])
       hint = 'Speech recognition has fail, just press the button to try again or use another method.'
       break
+    default:
+      console.error('un-expected status :', status)
+      hint = 'An un-expected case happen'
     }
-    this.speech.textContent = label
+    this.speech.textContent = speech
     this.hint.textContent = hint
   }
 
@@ -44,20 +47,20 @@ window.customElements.define('app-search-button', class extends HTMLElement {
   }
 
   createInputs () {
-    const row = div('grid px-4 md:grid-cols-3 gap-4 max-w-xl')
+    const row = div('grid px-4 md:grid-cols-3 gap-4 max-w-xl transition-opacity pointer-events-none opacity-50')
     const colA = div('grid gap-2')
     colA.append(this.scan)
     colA.append(image('icon', 'assets/scan.svg', 'scan'))
     row.append(colA)
     const colB = div('grid gap-2')
     colB.append(this.search)
-    colB.append(image('icon', 'assets/pen.svg', 'pen'))
+    colB.append(image('icon', 'assets/keyboard.svg', 'keyboard'))
     row.append(colB)
     const colC = div('grid gap-2')
     colC.append(this.speech)
     colC.append(image('icon', 'assets/mic.svg', 'mic'))
     row.append(colC)
-    row.append(dom('style', '', 'input[placeholder] { text-align: center; } .app-search-button .icon { height: 2.5rem; margin: auto; opacity: .5; }'))
+    row.append(dom('style', '', 'input.search-button[placeholder] { text-align: center; } .app-search-button .icon { width: 2rem; margin: auto; opacity: .5; transition: opacity .4s, filter .4s; filter: saturate(0); } .search-button:hover + img { opacity: .8; filter: saturate(1); }'))
     this.search.id = 'input-type'
     this.search.placeholder = 'Type it'
     this.search.addEventListener('change', () => {
@@ -71,11 +74,15 @@ window.customElements.define('app-search-button', class extends HTMLElement {
 
 
   connectedCallback () {
-    on('app-speech--status', status => this.onStatus(status))
-    this.wrapper.append(this.createInputs())
+    const inputs = this.createInputs()
+    this.wrapper.append(inputs)
     this.wrapper.append(this.hint)
-    this.onStatus('ready')
     this.parentNode.replaceChild(this.wrapper, this)
     this.handleFocusLessTyping()
+    on('app-status', status => this.onStatus(status))
+    on('items-ready', () => {
+      inputs.classList.remove('pointer-events-none')
+      inputs.classList.remove('opacity-50')
+    })
   }
 })

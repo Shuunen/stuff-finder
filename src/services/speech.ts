@@ -58,7 +58,7 @@ class AppSpeech {
   }
 
   setStatus (status) {
-    emit('app-speech--status', status)
+    emit('app-status', status)
     if (status === 'listening' && !this.isMobile) emit('app-sound--info')
     else if (status === 'failed') emit('app-sound--error')
   }
