@@ -10,7 +10,7 @@ window.customElements.define('app-print-barcodes', class extends HTMLElement {
   modal: HTMLDivElement
   trigger: HTMLDivElement
   updatePreviewButton () {
-    this.selection = [...document.querySelectorAll('input[data-action="select-one"]:checked')].map(element => element.id)
+    this.selection = [...this.modal.querySelectorAll('input[data-action="select-one"]:checked')].map(element => element.id)
     this.previewButton.disabled = this.selection.length <= 0 || this.selection.length > 65
     this.previewButton.textContent = `Preview ${this.selection.length} barcodes`
     this.previewError.textContent = ''
@@ -19,7 +19,7 @@ window.customElements.define('app-print-barcodes', class extends HTMLElement {
     if (this.selection.length > 65) this.previewError.textContent = 'You cannot select more than 65 items'
   }
   setAllItems (selected = true) {
-    document.querySelectorAll('input[data-action="select-one"]').forEach((element) => {
+    this.modal.querySelectorAll('input[data-action="select-one"]').forEach((element) => {
       (element as HTMLInputElement).checked = selected
     })
   }
@@ -46,10 +46,11 @@ window.customElements.define('app-print-barcodes', class extends HTMLElement {
     this.updatePreviewButton()
   }
   handlePreview () {
-    this.previewButton = button('Preview', 'mx-auto mt-4 hidden sm:block')
+    this.modal.querySelectorAll('button.preview, .preview.error').forEach(element => element.remove())
+    this.previewButton = button('Preview', 'preview mx-auto mt-2 hidden sm:block')
     this.previewButton.disabled = true
     this.previewButton.dataset.action = 'preview'
-    this.previewError = div('preview error mt-4 text-center font-medium text-red-500')
+    this.previewError = div('preview error leading-9 text-center font-medium text-red-500')
     this.modal.append(this.previewError, this.previewButton)
   }
   openModal () {
