@@ -60,7 +60,6 @@ class App {
     emit('app-form--settings--error', errorMessage)
     emit('app-status', actionRequired ? 'settings-required' : 'ready')
     this.isLoading(false)
-    if (!actionRequired) emit('app-modal--close')
   }
 
   isLoading (active) {
@@ -162,7 +161,6 @@ class App {
     }
     this.fuse = new Fuse(this.items, options)
     storage.set(key + 'items', this.items)
-    this.isLoading(false)
   }
 
   onSearchStart ({ str, origin }) {
