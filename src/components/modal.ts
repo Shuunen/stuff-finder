@@ -6,7 +6,7 @@ window.customElements.define('app-modal', class extends HTMLElement {
     const modal = div(`${id} flex flex-col m-4 p-4 bg-white relative overflow-x-hidden overscroll-y-auto rounded`, this.innerHTML)
     const close = link('close absolute text-4xl md:text-2xl opacity-50 font-mono top-2 right-5', 'x', '#')
     modal.append(close)
-    if (this.dataset.title) modal.append(h2('header text-2xl mb-4 leading-7 text-center', this.dataset.title))
+    if (this.dataset.title) modal.prepend(h2('header text-2xl mb-4 leading-7 text-center', this.dataset.title))
     close.addEventListener('click', () => emit('app-modal--close'))
     modal.addEventListener('click', event => event.stopPropagation())
     return modal

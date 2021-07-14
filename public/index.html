@@ -74,6 +74,33 @@
     </app-form>
   </app-modal>
 
+  <app-modal name="print-barcodes" data-title="Prepare Barcodes">
+    <p>Below is the list of non-printed items where valid ones have been pre-selected.</p>
+    <div class="flex justify-evenly">
+      <a href="#" data-action="select-all">select all</a>
+      <a href="#" data-action="select-valid">select all valid</a>
+      <a href="#" data-action="select-none">select none</a>
+    </div>
+    <div class="mt-4 list"></div>
+    <button disabled class=preview>Preview</button>
+    <div class="error preview"></div>
+  </app-modal>
+
+  <template id="print-barcodes-list-item">
+    <div class=flex>
+      <input type=checkbox id="{{ id }}" data-action="select-one">
+      <app-form name="{{ id }}" inline=true title=false on-save="app-update--item" class="bg-red-300">
+        <input type=hidden name=id value="{{ id }}" />
+        <input name=name placeholder=Name required minlength=3 maxlength=50 autofocus value="{{ name }}">
+        <input name=details placeholder=Details value="{{ details }}">
+        <input name=brand placeholder=Brand value="{{ brand }}">
+        <input name=reference placeholder=Reference required minlength=7 maxlength=20 value="{{ reference }}">
+        <select required name=box>{{ boxes }}</select>
+        <select name=drawer>{{ drawers }}</select>
+      </app-form>
+    </div>
+  </template>
+
   <script src="index.js"></script>
 </body>
 

@@ -1,7 +1,7 @@
 import './form'
 import './loader'
 import './modal'
-import './print-barcodes.js'
+import './print-barcodes'
 import './prompter'
 import './scan-code'
 import './search-button'
