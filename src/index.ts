@@ -4,18 +4,15 @@ import './components'
 import { JSON_HEADERS, SEARCH_ORIGIN } from './constants.js'
 import './services/index.js'
 import './styles.css'
+import { Item } from './types/item'
 
 const key = '@shuunen/stuff-finder_'
-
-interface Item {
-  id: string
-}
 
 class App {
   apiUrl = ''
   lastSearchOrigin = ''
-  items = []
-  fuse: Fuse<Item[]>
+  items: Item[] = []
+  fuse: Fuse<Item>
 
   constructor () {
     console.log('app start')
@@ -93,6 +90,7 @@ class App {
   }
 
   async getBarcodesToPrint () {
+    this.isLoading(true)
     const barcodes = this.items.filter(index => index['ref-printed'] === false && index.status === 'acheté')
     emit('barcodes-to-print', barcodes)
   }

@@ -3,7 +3,7 @@ import { div, emit, h2, link, on } from 'shuutils'
 window.customElements.define('app-modal', class extends HTMLElement {
   backdrop = div('backdrop opacity-0 pointer-events-none transition-opacity z-20 fixed bg-black bg-opacity-50 top-0 left-0 w-full h-full flex flex-col items-center justify-center align-middle')
   createModal (id: string) {
-    const modal = div(`${id} flex flex-col m-4 p-4 bg-white relative overflow-x-hidden overscroll-y-auto rounded`, this.innerHTML)
+    const modal = div(`${id} w-full max-w-md sm:w-auto sm:max-w-none flex flex-col m-4 p-4 bg-white relative overflow-x-hidden overscroll-y-auto rounded`, this.innerHTML)
     const close = link('close absolute text-4xl md:text-2xl opacity-50 font-mono top-2 right-5', 'x', '#')
     modal.append(close)
     if (this.dataset.title) modal.prepend(h2('header text-2xl mb-4 leading-7 text-center', this.dataset.title))

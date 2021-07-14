@@ -4,8 +4,8 @@ import { button } from '../utils'
 
 window.customElements.define('app-search-button', class extends HTMLElement {
   search = dom('input', 'search-button px-2 text-lg md:text-base rounded-md shadow-md hover:shadow-lg h-10 w-full border-2 border-purple-500')
-  scan = button('Scan it', 'search-button h-10')
-  speech = button('Speech', 'search-button h-10')
+  scan = button('Scan it', 'search-button')
+  speech = button('Speech', 'search-button')
   hint = p('text-center mt-8 p-4 rounded-md shadow text-lg md:text-base backdrop-filter backdrop-brightness-150 backdrop-opacity-30')
   wrapper = div('app-search-button')
 

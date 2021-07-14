@@ -75,21 +75,19 @@
   </app-modal>
 
   <app-modal name="print-barcodes" data-title="Prepare Barcodes">
-    <p>Below is the list of non-printed items where valid ones have been pre-selected.</p>
-    <div class="flex justify-evenly">
-      <a href="#" data-action="select-all">select all</a>
-      <a href="#" data-action="select-valid">select all valid</a>
-      <a href="#" data-action="select-none">select none</a>
+    <p class="font-medium text-yellow-700 sm:hidden">This content is too small for a mobile device, please use a bigger screen to access the barcode printing feature.</p>
+    <div class="hidden gap-2 my-2 sm:flex">
+      <p>Below is the list of non-printed items where valid ones have been pre-selected. You can</p>
+      <a href="#" data-action="select-all">select all</a>, <a href="#" data-action="select-valid">select all valid</a> or <a href="#"
+        data-action="select-none">select none</a>.
     </div>
-    <div class="mt-4 list"></div>
-    <button disabled class=preview>Preview</button>
-    <div class="error preview"></div>
+    <div class="hidden list sm:block"></div>
   </app-modal>
 
   <template id="print-barcodes-list-item">
-    <div class=flex>
-      <input type=checkbox id="{{ id }}" data-action="select-one">
-      <app-form name="{{ id }}" inline=true title=false on-save="app-update--item" class="bg-red-300">
+    <div class="flex items-center p-2 transition-colors rounded-md hover:bg-purple-100">
+      <input type=checkbox id="{{ id }}" data-action="select-one" class="mr-2">
+      <app-form name="{{ id }}" inline=true title=false on-save="app-update--item">
         <input type=hidden name=id value="{{ id }}" />
         <input name=name placeholder=Name required minlength=3 maxlength=50 autofocus value="{{ name }}">
         <input name=details placeholder=Details value="{{ details }}">

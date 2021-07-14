@@ -134,7 +134,7 @@ class AppForm extends HTMLElement {
     on(`${this._id}--error`, message => {
       this.error = message
     })
-    this.els.form = dom('form', this.className + ' md:p-4', this.innerHTML)
+    this.els.form = dom('form', this.className, this.innerHTML)
     this.innerHTML = ''
     this.append(this.els.form)
     this.handleMultiPaste()
