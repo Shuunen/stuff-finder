@@ -21,6 +21,7 @@ window.customElements.define('app-modal', class extends HTMLElement {
     on(`${id}--open`, () => this.toggle(true))
     on('app-modal--close', () => this.toggle(false))
     this.backdrop.addEventListener('click', () => emit('app-modal--close'))
+    this.backdrop.className = this.getAttribute('name') + ' ' + this.backdrop.className
     this.backdrop.append(this.createModal(id))
     this.parentNode.replaceChild(this.backdrop, this)
     emit(`${id}--ready`)

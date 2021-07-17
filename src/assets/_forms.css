@@ -1,7 +1,3 @@
-@import "tailwindcss/base";
-@import "tailwindcss/components";
-@import "tailwindcss/utilities";
-
 app-form:not([inline=true]) form {
   @apply grid gap-2 md:p-4;
 }
@@ -32,14 +28,6 @@ form select:invalid[required], form input:invalid[required] {
 
 input[type="checkbox"] {
   @apply w-4 h-4 cursor-pointer;
-}
-
-details summary {
-  @apply transition-colors cursor-pointer hover:text-purple-700;
-}
-
-details small {
-  @apply block mt-2 ml-4;
 }
 
 a[data-action] {

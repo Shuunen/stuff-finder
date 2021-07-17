@@ -6,6 +6,7 @@ export interface Item {
   details: string
   drawer: string
   id: string
+  location: string
   name: string
   reference: string
   status: string

@@ -1,0 +1,6 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+@import "./_barcodes.css";
+@import "./_details.css";
+@import "./_forms.css";

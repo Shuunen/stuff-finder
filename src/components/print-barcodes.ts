@@ -32,10 +32,31 @@ window.customElements.define('app-print-barcodes', class extends HTMLElement {
     })
     this.updatePreviewButton()
   }
+  async adjustQrCodes () {
+    // sometimes some qr code are too big
+    document.querySelectorAll('qr-code').forEach(wc => {
+      // reducing their module size do the trick & reduce their display size
+      if (Number.parseInt(wc.shadowRoot.firstElementChild.getAttribute('height')) > 63) wc.setAttribute('modulesize', '2')
+    })
+  }
   onPreview () {
     console.log('user wants to see preview')
+    if (customElements.get('qr-code') === undefined) require('webcomponent-qr-code')
+    emit('app-modal--print-barcodes--open')
+    const list = document.querySelector('.app-modal--print-barcodes .barcodes')
+    list.innerHTML = ''
+    const barcodes = this.barcodes.filter(b => this.selection.includes(b.id))
+    barcodes.forEach(b => {
+      const code = div('barcode', `<qr-code data="${b.reference.trim()}" margin=0 modulesize=3></qr-code>`)
+      const col = div('col')
+      col.append(div('name', [b.name, b.brand, b.details].join(' ').trim()))
+      col.append(div('location', b.box && b.box !== 'N/A' ? (b.box[0] + b.drawer) : b.location))
+      code.append(col)
+      list.append(code)
+    })
+    this.adjustQrCodes()
   }
-  onClick (event) {
+  onAction (event) {
     const action = event.target.getAttribute('data-action')
     console.log('action clicked :', action)
     if (!action) return
@@ -43,7 +64,11 @@ window.customElements.define('app-print-barcodes', class extends HTMLElement {
     if (action === 'select-none') this.setAllItems(false)
     if (action === 'select-valid') this.selectValidItems()
     if (action === 'preview') return this.onPreview()
+    if (action === 'print') return window.print()
     this.updatePreviewButton()
+  }
+  handleActions () {
+    document.querySelectorAll('.app-modal--prepare-barcodes [data-action], .app-modal--print-barcodes [data-action]').forEach(element => element.addEventListener('click', event => this.onAction(event)))
   }
   handlePreview () {
     this.modal.querySelectorAll('button.preview, .preview.error').forEach(element => element.remove())
@@ -54,10 +79,10 @@ window.customElements.define('app-print-barcodes', class extends HTMLElement {
     this.modal.append(this.previewError, this.previewButton)
   }
   openModal () {
-    this.modal = document.querySelector('.app-modal--print-barcodes')
+    this.modal = document.querySelector('.app-modal--prepare-barcodes')
     if (!this.modal) return console.error('failed to find modal element')
     const listElement = this.modal.querySelector('.list')
-    const template = document.querySelector('template#print-barcodes-list-item').innerHTML
+    const template = document.querySelector('template#barcodes-list-item').innerHTML
     console.log(this.barcodes[0])
     listElement.innerHTML = this.barcodes.map(bar => {
       const boxes = bar.boxes.map(box => `<option value="${box}" ${box.toLowerCase() === bar.box.toLowerCase() ? 'selected' : ''}>${box}</option>`).join('')
@@ -66,13 +91,13 @@ window.customElements.define('app-print-barcodes', class extends HTMLElement {
     }).join('')
     this.handlePreview()
     this.selectValidItems()
-    this.modal.addEventListener('click', event => this.onClick(event))
-    emit('app-modal--print-barcodes--open')
+    this.handleActions()
+    emit('app-modal--prepare-barcodes--open')
     emit('app-loader--toggle', false)
   }
   createTrigger () {
     const icon = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><defs/><path fill="currentColor" fill-rule="evenodd" d="M8 4h8v2H8V4zm10 2h4v12h-4v4H6v-4H2V6h4V2h12v4zm2 10h-2v-2H6v2H4V8h16v8zM8 16h8v4H8v-4zm0-6H6v2h2v-2z" clip-rule="evenodd"/></svg>'
-    const wrapper = div('app-print-barcodes-trigger hidden transition-colors text-purple-400 hover:text-purple-600 absolute top-5 right-20 h-10 w-10 cursor-pointer', icon)
+    const wrapper = div('app-prepare-barcodes-trigger hidden transition-colors text-purple-400 hover:text-purple-600 absolute top-5 right-20 h-10 w-10 cursor-pointer', icon)
     wrapper.title = 'Open print barcodes'
     wrapper.addEventListener('click', () => emit('get-barcodes-to-print'))
     return wrapper

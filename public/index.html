@@ -11,6 +11,7 @@
   <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
   <link rel="stylesheet" type="text/css" media="screen" href="index.css">
+  <link rel="stylesheet" type="text/css" media="print" href="assets/print.css">
   <link rel="manifest" href="assets/site.webmanifest">
 </head>
 
@@ -53,9 +54,10 @@
           <ul class="mb-2 list-disc list-inside">
             <li>fetch your Airtable data</li>
             <li>store credentials locally in your browser</li>
-            <li>nothing else</li>
           </ul>
-          Feel free to check this app source code on the <a href="https://github.com/Shuunen/stuff-finder" target="_blank" rel="noreferrer">Github
+          Only you can access your data on this browser.<br />
+          Feel free to check this app source code on the <a data-action href="https://github.com/Shuunen/stuff-finder" target="_blank"
+            rel="noreferrer">Github
             project page</a>.
         </small>
       </details>
@@ -63,8 +65,8 @@
       <details>
         <summary>About this app</summary>
         <small>
-          This is an open source project from Shuunen, you can check the source code on the <a href="https://github.com/Shuunen/stuff-finder"
-            target="_blank" rel="noreferrer">Github
+          This is an open source project from <a href="https://github.com/Shuunen" target="_blank" data-action>Shuunen</a>.<br />You can check the
+          source code on the <a href="https://github.com/Shuunen/stuff-finder" target="_blank" data-action rel="noreferrer">Github
             project page</a>.
           <br>
           <span id="commit"></span>
@@ -74,8 +76,9 @@
     </app-form>
   </app-modal>
 
-  <app-modal name="print-barcodes" data-title="Prepare Barcodes">
-    <p class="font-medium text-yellow-700 sm:hidden">This content is too small for a mobile device, please use a bigger screen to access the barcode printing feature.</p>
+  <app-modal name="prepare-barcodes" data-title="Prepare Barcodes">
+    <p class="font-medium text-yellow-700 sm:hidden">This content is too small for a mobile device, please use a bigger screen to access the barcode
+      printing feature.</p>
     <div class="hidden gap-2 my-2 sm:flex">
       <p>Below is the list of non-printed items where valid ones have been pre-selected. You can</p>
       <a href="#" data-action="select-all">select all</a>, <a href="#" data-action="select-valid">select all valid</a> or <a href="#"
@@ -84,7 +87,7 @@
     <div class="hidden list sm:block"></div>
   </app-modal>
 
-  <template id="print-barcodes-list-item">
+  <template id="barcodes-list-item">
     <div class="flex items-center p-2 transition-colors rounded-md hover:bg-purple-100">
       <input type=checkbox id="{{ id }}" data-action="select-one" class="mr-2">
       <app-form name="{{ id }}" inline=true title=false on-save="app-update--item">
@@ -98,6 +101,16 @@
       </app-form>
     </div>
   </template>
+
+  <app-modal name="print-barcodes" data-title="Print Barcodes">
+    <p>
+      Below is a preview of the page that will be printed. <br>
+      Make sure to remove any print margin in the <a data-action="print" href="#print">print modal</a>.
+    </p>
+    <div class="print-zone preview">
+      <div class="barcodes a4-65"></div>
+    </div>
+  </app-modal>
 
   <script src="index.js"></script>
 </body>

@@ -1,9 +1,9 @@
 import Fuse from 'fuse.js'
 import { emit, on, pickOne, sleep, storage } from 'shuutils'
+import './assets/styles.css'
 import './components'
 import { JSON_HEADERS, SEARCH_ORIGIN } from './constants.js'
 import './services/index.js'
-import './styles.css'
 import { Item } from './types/item'
 
 const key = '@shuunen/stuff-finder_'
