@@ -10,7 +10,7 @@ window.customElements.define('app-print-barcodes', class extends HTMLElement {
   modal: HTMLDivElement
   trigger: HTMLDivElement
   updatePreviewButton () {
-    this.selection = [...this.modal.querySelectorAll('input[data-action="select-one"]:checked')].map(element => element.id)
+    this.selection = [...document.querySelectorAll('input[data-action="barcodes-select-one"]:checked')].map(element => element.id)
     this.previewButton.disabled = this.selection.length <= 0 || this.selection.length > 65
     this.previewButton.textContent = `Preview ${this.selection.length} barcodes`
     this.previewError.textContent = ''
@@ -19,9 +19,10 @@ window.customElements.define('app-print-barcodes', class extends HTMLElement {
     if (this.selection.length > 65) this.previewError.textContent = 'You cannot select more than 65 items'
   }
   setAllItems (selected = true) {
-    this.modal.querySelectorAll('input[data-action="select-one"]').forEach((element) => {
+    this.modal.querySelectorAll('input[data-action="barcodes-select-one"]').forEach((element) => {
       (element as HTMLInputElement).checked = selected
     })
+    this.updatePreviewButton()
   }
   selectValidItems () {
     this.setAllItems(false)
@@ -56,25 +57,11 @@ window.customElements.define('app-print-barcodes', class extends HTMLElement {
     })
     this.adjustQrCodes()
   }
-  onAction (event) {
-    const action = event.target.getAttribute('data-action')
-    console.log('action clicked :', action)
-    if (!action) return
-    if (action === 'select-all') this.setAllItems(true)
-    if (action === 'select-none') this.setAllItems(false)
-    if (action === 'select-valid') this.selectValidItems()
-    if (action === 'preview') return this.onPreview()
-    if (action === 'print') return window.print()
-    this.updatePreviewButton()
-  }
-  handleActions () {
-    document.querySelectorAll('.app-modal--prepare-barcodes [data-action], .app-modal--print-barcodes [data-action]').forEach(element => element.addEventListener('click', event => this.onAction(event)))
-  }
   handlePreview () {
     this.modal.querySelectorAll('button.preview, .preview.error').forEach(element => element.remove())
     this.previewButton = button('Preview', 'preview mx-auto mt-2 hidden sm:block')
     this.previewButton.disabled = true
-    this.previewButton.dataset.action = 'preview'
+    this.previewButton.dataset.action = 'barcodes-preview'
     this.previewError = div('preview error leading-9 text-center font-medium text-red-500')
     this.modal.append(this.previewError, this.previewButton)
   }
@@ -83,7 +70,6 @@ window.customElements.define('app-print-barcodes', class extends HTMLElement {
     if (!this.modal) return console.error('failed to find modal element')
     const listElement = this.modal.querySelector('.list')
     const template = document.querySelector('template#barcodes-list-item').innerHTML
-    console.log(this.barcodes[0])
     listElement.innerHTML = this.barcodes.map(bar => {
       const boxes = bar.boxes.map(box => `<option value="${box}" ${box.toLowerCase() === bar.box.toLowerCase() ? 'selected' : ''}>${box}</option>`).join('')
       const drawers = ['', 1, 2, 3, 4, 5, 6, 7].map(d => `<option value="${d}" ${d.toString().toLowerCase() === bar.drawer.toLowerCase() ? 'selected' : ''}>${d}</option>`).join('')
@@ -91,7 +77,6 @@ window.customElements.define('app-print-barcodes', class extends HTMLElement {
     }).join('')
     this.handlePreview()
     this.selectValidItems()
-    this.handleActions()
     emit('app-modal--prepare-barcodes--open')
     emit('app-loader--toggle', false)
   }
@@ -110,6 +95,12 @@ window.customElements.define('app-print-barcodes', class extends HTMLElement {
     this.trigger = this.createTrigger()
     on('barcodes-to-print', barcodes => this.onBarcodes(barcodes))
     on('items-ready', () => (this.trigger.classList.remove('hidden')))
+    on('barcodes-select-all', () => this.setAllItems(true))
+    on('barcodes-select-none', () => this.setAllItems(false))
+    on('barcodes-select-one', () => this.updatePreviewButton())
+    on('barcodes-select-valid', () => this.selectValidItems())
+    on('barcodes-preview', () => this.onPreview())
+    on('barcodes-print', () => window.print())
     this.parentNode.replaceChild(this.trigger, this)
   }
 })

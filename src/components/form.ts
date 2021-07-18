@@ -140,8 +140,8 @@ class AppForm extends HTMLElement {
     this.handleMultiPaste()
     this.els.error = p('error')
     this.els.form.parentElement.append(this.els.error)
-    if (!this.inline) {
-      this.els.header = h2('header text-purple-700 text-2xl mt-2 mb-4 text-center', this.title)
+    if (!this.inline && this.dataset.title) {
+      this.els.header = h2('header text-purple-700 text-2xl mt-2 mb-4 text-center', this.dataset.title)
       this.parentElement.prepend(this.els.header)
     }
     this.els.footer = this.createFooter()

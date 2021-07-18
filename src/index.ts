@@ -26,6 +26,7 @@ class App {
     on('fade-out-destroy', element => this.fadeOut(element, true))
     this.checkExistingSettings()
     this.showTitle()
+    this.handleActions()
   }
 
   async checkExistingSettings () {
@@ -167,7 +168,7 @@ class App {
     const result = this.items.find(item => (item.reference === str || item.barcode === str))
     const results = result ? [result] : this.fuse.search(str).map(item => item.item)
     const title = `Results for “${str}”`
-    emit('app-search-results--show', { title, results, byReference: Boolean(result) })
+    emit('search-results', { title, results, byReference: Boolean(result) })
   }
 
   onSearchRetry () {
@@ -233,6 +234,18 @@ class App {
   async patch (url, data) {
     const options = { headers: JSON_HEADERS, method: 'patch', body: JSON.stringify(data) }
     return fetch(url, options).then(response => response.json()).catch(error => this.showError(error.message))
+  }
+
+  handleActions () {
+    document.addEventListener('click', (event) => {
+      const target = event.target as HTMLElement
+      if (!target || !target.dataset) return
+      const { action } = target.dataset
+      if (!action) return
+      console.log('action clicked :', action)
+      event.stopPropagation()
+      emit(action, target)
+    })
   }
 }
 
