@@ -2,16 +2,19 @@ import { emit, on, sleep } from 'shuutils'
 import { SEARCH_ORIGIN } from '../constants.js'
 
 class AppSpeech {
+  isMobile = typeof window.orientation !== 'undefined'
+  recognition: SpeechRecognition
+  recognitionSucceed = false
+
   constructor () {
     this.initRecognition()
-    this.isMobile = typeof window.orientation !== 'undefined'
     on('app-speech--start', () => this.onStart())
   }
 
   initRecognition () {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
     const recognition = new SpeechRecognition()
-    recognition.lang = navigator.language || navigator.userLanguage
+    recognition.lang = navigator.language
     recognition.interimResults = false
     recognition.maxAlternatives = 1
     recognition.onresult = event => {
@@ -46,7 +49,7 @@ class AppSpeech {
   }
 
   onError (reason) {
-    this.error('error occurred in recognition : ' + reason)
+    console.error('error occurred in recognition : ' + reason)
     this.onFail()
   }
 
@@ -55,7 +58,7 @@ class AppSpeech {
   }
 
   setStatus (status) {
-    emit('app-speech--status', status)
+    emit('app-status', status)
     if (status === 'listening' && !this.isMobile) emit('app-sound--info')
     else if (status === 'failed') emit('app-sound--error')
   }

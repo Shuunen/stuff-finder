@@ -1,5 +1,4 @@
-import { emit, on } from 'shuutils'
-import { div, dom } from '../utils.js'
+import { div, dom, emit, on } from 'shuutils'
 
 class AppSearchResult extends HTMLElement {
   get formContent () {
@@ -69,10 +68,9 @@ class AppSearchResult extends HTMLElement {
   edit () {
     this.closeOtherForms()
     const formName = `result-${this.data.id}`
-    const form = dom('app-form', this.formContent, formName)
+    const form = dom('app-form', formName, this.formContent)
     this.els.form = form
     form.setAttribute('name', formName)
-    form.setAttribute('columns', (this.hasImage ? '1fr ' : '') + '2fr 1fr')
     form.setAttribute('title', false)
     form.setAttribute('on-close', this.formCloseEvent)
     form.setAttribute('on-save', this.formSaveEvent)

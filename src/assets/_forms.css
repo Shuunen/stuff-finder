@@ -1,0 +1,35 @@
+app-form:not([inline=true]) form {
+  @apply grid gap-2 md:p-4;
+}
+
+app-form[inline=true] form {
+  @apply flex gap-2;
+}
+
+form label {
+  @apply grid items-center overflow-hidden text-left align-middle md:gap-4 md:grid-cols-2 whitespace-nowrap overflow-ellipsis;
+}
+
+form input, form select {
+  @apply relative p-2 mt-1 mb-1 leading-none border border-purple-300 rounded outline-none focus:bg-purple-50 focus:border-purple-500 md:mt-0 md:mb-0 h-9;
+}
+
+button:disabled {
+  @apply opacity-50 cursor-not-allowed grayscale;
+}
+
+form select {
+  @apply px-2 py-0 cursor-pointer;
+}
+
+form select:invalid[required], form input:invalid[required] {
+  @apply bg-red-100 border border-red-400;
+}
+
+input[type="checkbox"] {
+  @apply w-4 h-4 cursor-pointer;
+}
+
+a[data-action] {
+  @apply font-medium transition-colors border-b-2 border-current hover:text-purple-700;
+}

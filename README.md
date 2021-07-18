@@ -12,6 +12,13 @@
 ## Todo
 
 - [ ] nicer colorful identity ([something like this ?](https://www.iconfinder.com/icons/44859/cube_icon))
+- [ ] stop using huge html templates in js/ts => move them to index.html with `<template ...`
+- [ ] BrowserMultiFormatReader is responsible for 245KB of the 320KB js build, maybe let user choose qr or [barcode](https://zxing-js.github.io/library/examples/barcode-camera/) to import only 2 specific readers instead of the fat "multi"
+
+## Build sizes
+
+- 0.1.1 : 4KB html + 9KB css + 320KB js
+- 0.1.0 : 3KB html + 9KB css + 435KB js
 
 ## Thanks
 
@@ -22,11 +29,13 @@
 - [Eye icon](https://www.iconfinder.com/icons/5925640/eye_no_view_icon) by IconPai
 - [Favicon.io](https://favicon.io/favicon-generator/?t=SF&ff=Istok+Web&fs=110&fc=#FFF&b=rounded&bc=#08F) : handy favicon generator
 - [Github](https://github.com) : this great, free and evolving platform
+- [Keyboard & mic icons](https://www.iconfinder.com/iconsets/bitsies) by Recep Kütük
 - [Mocha](https://github.com/mochajs/mocha) : great test runner easy to setup & use
 - [Netlify](https://netlify.com) : awesome company that offers hosting for OSS
 - [Npm-run-all](https://github.com/mysticatea/npm-run-all) : to keep my npm scripts clean & readable
 - [Nyc](https://github.com/istanbuljs/nyc) : simple & effective cli for code coverage
 - [Repo-checker](https://github.com/Shuunen/repo-checker) : eslint cover /src code and this tool the rest ^^
 - [RIOT Optimizer](https://riot-optimizer.com) : Radical Image Optimization Tool, the best software I found to compress images
+- [Scan icon](https://www.iconfinder.com/icons/3702397/barcode_code_scan_scanner_icon) by Ghariza Mahavira
 - [Servor](https://github.com/lukejacksonn/servor) : dependency free dev server for single page app development
 - [Shields.io](https://shields.io) : for the nice badges on top of this readme

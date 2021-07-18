@@ -1,8 +1,9 @@
 import { on, sleep } from 'shuutils'
 
 class AppSound {
+  audioContext = new window.AudioContext({ latencyHint: 'interactive' })
+
   constructor () {
-    this.audioContext = undefined
     on('app-sound--info', () => this.onInfo())
     on('app-sound--error', () => this.onError())
     on('app-sound--success', () => this.onSuccess())
@@ -25,7 +26,6 @@ class AppSound {
   }
 
   playTone (frequency = 400, seconds = 1) {
-    if (!this.audioContext) this.audioContext = new window.AudioContext({ latencyHint: 'interactive' })
     const o = this.audioContext.createOscillator()
     const g = this.audioContext.createGain()
     o.connect(g)

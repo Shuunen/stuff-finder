@@ -1,16 +1,21 @@
 import Fuse from 'fuse.js'
 import { emit, on, pickOne, sleep, storage } from 'shuutils'
-import './components/index.js'
+import './assets/styles.css'
+import './components'
 import { JSON_HEADERS, SEARCH_ORIGIN } from './constants.js'
 import './services/index.js'
-import './styles/main.css'
+import { Item } from './types/item'
 
 const key = '@shuunen/stuff-finder_'
 
 class App {
+  apiUrl = ''
+  lastSearchOrigin = ''
+  items: Item[] = []
+  fuse: Fuse<Item>
+
   constructor () {
     console.log('app start')
-    this.items = []
     on('app-form--settings--save', settings => this.onSettingsSave(settings))
     on('app-update--item', item => this.onUpdateItem(item))
     on('get-barcodes-to-print', () => this.getBarcodesToPrint())
@@ -21,6 +26,7 @@ class App {
     on('fade-out-destroy', element => this.fadeOut(element, true))
     this.checkExistingSettings()
     this.showTitle()
+    this.handleActions()
   }
 
   async checkExistingSettings () {
@@ -50,16 +56,18 @@ class App {
   settingsActionRequired (actionRequired, errorMessage = '') {
     emit('app-settings-trigger--animate', actionRequired)
     emit('app-form--settings--error', errorMessage)
-    if (!actionRequired) emit('app-modal--close')
+    emit('app-status', actionRequired ? 'settings-required' : 'ready')
+    this.isLoading(false)
   }
 
   isLoading (active) {
+    console.log('isLoading active ?', active)
     emit('app-loader--toggle', active)
   }
 
   async loadItems () {
     this.isLoading(true)
-    const cachedItems = (await storage.get(key + 'items')) || []
+    const cachedItems: Item[] = (await storage.get(key + 'items')) || []
     let response = await this.fetchApi()
     if (!response || response.error) {
       this.isLoading(false)
@@ -68,7 +76,7 @@ class App {
     let records = response.records
     if (cachedItems.some(item => (item.id === records[0].id && item['updated-on'] === records[0].fields['updated-on']))) {
       this.items = cachedItems
-      this.showLog(`${this.items.length} item(s) cached ` + this.coolAscii())
+      console.log(`${this.items.length} item(s) cached ` + this.coolAscii())
       this.initFuse()
       return true
     }
@@ -83,11 +91,12 @@ class App {
   }
 
   async getBarcodesToPrint () {
+    this.isLoading(true)
     const barcodes = this.items.filter(index => index['ref-printed'] === false && index.status === 'acheté')
     emit('barcodes-to-print', barcodes)
   }
 
-  async fetchApi (offset) {
+  async fetchApi (offset?: string) {
     const sortByUpdatedFirst = '&sort%5B0%5D%5Bfield%5D=updated-on&sort%5B0%5D%5Bdirection%5D=desc'
     const url = this.apiUrl + (offset ? `&offset=${offset}` : '') + sortByUpdatedFirst
     return fetch(url).then(response => response.json())
@@ -151,7 +160,6 @@ class App {
     }
     this.fuse = new Fuse(this.items, options)
     storage.set(key + 'items', this.items)
-    this.isLoading(false)
   }
 
   onSearchStart ({ str, origin }) {
@@ -160,12 +168,12 @@ class App {
     const result = this.items.find(item => (item.reference === str || item.barcode === str))
     const results = result ? [result] : this.fuse.search(str).map(item => item.item)
     const title = `Results for “${str}”`
-    emit('app-search-results--show', { title, results, byReference: Boolean(result) })
+    emit('search-results', { title, results, byReference: Boolean(result) })
   }
 
   onSearchRetry () {
     console.log('retry and this.lastSearchOrigin', this.lastSearchOrigin)
-    if (this.lastSearchOrigin === SEARCH_ORIGIN.type) return document.querySelector('#input-type').focus()
+    if (this.lastSearchOrigin === SEARCH_ORIGIN.type) return document.querySelector<HTMLInputElement>('#input-type').focus()
     if (this.lastSearchOrigin === SEARCH_ORIGIN.scan) return emit('app-scan-code--start')
     if (this.lastSearchOrigin === SEARCH_ORIGIN.speech) return emit('app-speech--start')
     this.showError('un-handled search retry case')
@@ -187,8 +195,8 @@ class App {
     element.remove()
   }
 
-  showLog (message, data) {
-    console.log(message, data || '')
+  showLog (message, data = '') {
+    console.log(message, data)
     emit('app-toaster--show', { type: 'info', message })
   }
 
@@ -226,6 +234,18 @@ class App {
   async patch (url, data) {
     const options = { headers: JSON_HEADERS, method: 'patch', body: JSON.stringify(data) }
     return fetch(url, options).then(response => response.json()).catch(error => this.showError(error.message))
+  }
+
+  handleActions () {
+    document.addEventListener('click', (event) => {
+      const target = event.target as HTMLElement
+      if (!target || !target.dataset) return
+      const { action } = target.dataset
+      if (!action) return
+      console.log('action clicked :', action)
+      event.stopPropagation()
+      emit(action, target)
+    })
   }
 }
 
