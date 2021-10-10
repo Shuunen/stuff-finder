@@ -1,7 +1,7 @@
 {
+  "dependencyDashboard": false,
   "extends": [
     "config:base",
     ":automergeAll"
-  ],
-  "dependencyDashboard": false
+  ]
 }
