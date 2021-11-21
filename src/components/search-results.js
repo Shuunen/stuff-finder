@@ -1,16 +1,7 @@
-import { emit, on, pickOne, sleep } from 'shuutils'
-import { button, div, dom } from '../utils.js'
+import { div, dom, emit, h2, on, pickOne, sleep } from 'shuutils'
+import { button } from '../utils'
 
 class AppSearchResults extends HTMLElement {
-  get style () {
-    return `
-    .app-search-result { margin-top: .5rem; }
-    .app-search-result img { max-width: 18rem; max-height: 18rem; margin: auto; padding: 0 1rem; }
-    .app-search-result + .app-search-result { margin-bottom: .5rem; margin-top: 1rem; }
-    .app-search-result + .app-search-result.activated { box-shadow: 0 0 1rem 0 lightgrey; background-color: var(--color-accent-lighter); padding: .5rem; }
-    `
-  }
-
   constructor () {
     super()
     this.els = {}
@@ -58,13 +49,12 @@ class AppSearchResults extends HTMLElement {
   createWrapper () {
     const wrapper = dom('app-modal')
     wrapper.name = 'search-results'
-    wrapper.append(dom('style', this.style))
     return wrapper
   }
 
   addContent () {
     this.els.wrapper = document.querySelector('.app-modal--search-results')
-    this.els.title = dom('h2', 'def')
+    this.els.title = h2('def')
     this.els.wrapper.append(this.els.title)
     this.els.results = div('list')
     this.els.wrapper.append(this.els.results)

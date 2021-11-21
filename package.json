@@ -4,6 +4,7 @@
   "description": "Sorting things is pointless if you can't find them afterwards",
   "devDependencies": {
     "@camwiegert/typical": "0.1.1",
+    "@tailwindcss/forms": "0.3.4",
     "@zxing/library": "0.18.6",
     "fuse.js": "6.4.6",
     "shuunen-stack": "0.14.0",
@@ -27,12 +28,13 @@
     "url": "https://github.com/Shuunen/stuff-finder.git"
   },
   "scripts": {
-    "build": "stack build src/main.js --out-dir public --format iife --minify",
-    "dev": "npm run build -- --dev",
+    "build": "stack build --minify",
+    "dev": "stack build --serve --watch",
     "lint": "stack lint",
-    "mark": "node bin/mark.js",
+    "mark": "node bin/mark",
     "postversion": "git push && git push --tags",
     "preversion": "npm run lint && npm run build",
+    "test": "echo no tests yet",
     "update": "stack update"
   },
   "version": "0.1.0"
