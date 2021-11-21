@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 interface Window {
-  SpeechRecognition: typeof window['SpeechRecognition']
+  SpeechRecognition: any
+  webkitSpeechRecognition: any
 }

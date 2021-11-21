@@ -12,7 +12,8 @@ class AppSpeech {
   }
 
   initRecognition () {
-    const recognition = new window.SpeechRecognition()
+    const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition
+    const recognition = new Recognition()
     recognition.lang = navigator.language
     recognition.interimResults = false
     recognition.maxAlternatives = 1
