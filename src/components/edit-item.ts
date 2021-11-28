@@ -26,25 +26,5 @@ window.customElements.define('app-edit-item', class extends HTMLElement {
     if (!template) return console.error('no template')
     this.template = template.innerHTML
     on('edit-item', (item: Item) => this.edit(item))
-    /*
-    setTimeout(() => this.edit({
-      'id': 'recI1hOuhefVKbmNd',
-      'name': 'Ventilateur USB Bleu',
-      'brand': 'Arctic Breeze',
-      'details': 'USB desktop fan',
-      'box': 'X',
-      'boxes': ['', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'K', 'M', 'N/A', 'P', 'Q (sock)', 'S', 'T', 'X', 'Z'], 'drawer': '1',
-      'location': 'Cuisine',
-      'locations': ['', 'N/A', 'Boulot', 'Chambre', 'Cuisine', 'Entrée', 'Garage', 'SDB', 'Salon'],
-      'reference': '0872767008984',
-      'barcode': '',
-      'ref-printed': true,
-      'status': 'acheté',
-      'statuses': ['', 'acheté', 'défectueux', 'inconnu', 'à donner'],
-      'photo': [{ id: 'attaxJugiLEmrGiPP', width: 408, height: 408, url: 'https://dl.airtable.com/.attachments/f85a964b0ee82ee6c7f339e1b58a6c87/52358a66/Arctic_Breeze_Deep_Blue_USB_Fan_AEBRZ00020A_-_Frog.ee.ee', filename: 'Arctic_Breeze_Deep_Blue_USB_Fan_(AEBRZ00020A)_-_Frog.ee.ee', size: 8205, type: 'image/jpeg', thumbnails: { small: { url: 'https://dl.airtable.com/.attachmentThumbnails/6bb6767b1130c1fcd114d2e82fe9a0ac/728600e8', width: 36, height: 36 }, large: { url: 'https://dl.airtable.com/.attachmentThumbnails/fde9f2625b155006a3c94f9ebfc33a22/54d85224', width: 408, height: 408 }, full: { url: 'https://dl.airtable.com/.attachmentThumbnails/bb950bdfad09efbc8a424c33beb154c2/1aa1f3e9', width: 3000, height: 3000 } } }],
-      'category': 'Périphérique',
-      'updated-on': '2021-06-04T07:40:45.000Z',
-    }), 1000)
-    */
   }
 })

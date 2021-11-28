@@ -12,7 +12,6 @@
 ## Todo
 
 - [ ] nicer colorful identity ([something like this ?](https://www.iconfinder.com/icons/44859/cube_icon))
-- [ ] stop using huge html templates in js/ts => move them to index.html with `<template ...`
 - [ ] BrowserMultiFormatReader is responsible for 245KB of the 320KB js build, maybe let user choose qr or [barcode](https://zxing-js.github.io/library/examples/barcode-camera/) to import only 2 specific readers instead of the fat "multi"
 - [ ] find real SpeechRecognition typings (avoid native.d.ts)
 
@@ -20,6 +19,7 @@
 
 - 0.1.1 : 4KB html + 9KB css + 320KB js
 - 0.1.0 : 3KB html + 9KB css + 435KB js
+- 0.2.0 : 8KB html + 20KB css + 305KB js
 
 ## Thanks
 

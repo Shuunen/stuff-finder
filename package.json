@@ -45,8 +45,8 @@
     "url": "https://github.com/Shuunen/stuff-finder.git"
   },
   "scripts": {
-    "build": "run-p build:*",
-    "build:css": "tailwindcss -i src/assets/styles.css -o ./public/index.css",
+    "build": "run-p \"build:** -- --minify\"",
+    "build:css": "tailwindcss -i src/assets/styles.css -o ./public/index.css --minify",
     "build:js": "esbuild src/index.ts --outdir=public --bundle --target=es2020 --define:global=window",
     "check": "repo-check",
     "ci": "run-s build lint check test",
