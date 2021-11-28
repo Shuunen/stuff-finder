@@ -41,8 +41,8 @@ interface Item {
 }
 
 interface AirtableRecord {
+  id: string
   fields: {
-    id: string
     location?: string
     box?: string
     status?: string

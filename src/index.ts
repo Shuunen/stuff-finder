@@ -118,21 +118,22 @@ class App {
     boxes = ['', ...boxes.sort()]
     statuses = ['', ...statuses.sort()]
     this.items = records.map(record => ({
+      'id': record.id,
       'name': '',
       'category': '',
       'brand': '',
       'details': '',
       'box': '',
       'updated-on': '',
-      boxes,
+      'boxes': boxes,
       'drawer': '',
       'location': '',
-      locations,
+      'locations': locations,
       'reference': '',
       'barcode': '',
       'ref-printed': false,
       'status': 'acheté',
-      statuses,
+      'statuses': statuses,
       ...record.fields,
     }))
     this.showLog(`${this.items.length} item(s) loaded ` + this.coolAscii())
