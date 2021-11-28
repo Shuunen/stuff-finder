@@ -212,6 +212,7 @@ class App {
     await this.updateItemRemotely(item)
     await this.updateItemLocally(item)
     this.isLoading(false)
+    emit('app-modal--edit-item--close')
   }
 
   async updateItemRemotely (item: Item) {
