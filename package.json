@@ -62,5 +62,5 @@
     "test": "uvu -r tsm -r jsdom-global/register tests",
     "test:watch": "watchlist src tests -- npm test"
   },
-  "version": "0.1.0"
+  "version": "0.2.0"
 }
