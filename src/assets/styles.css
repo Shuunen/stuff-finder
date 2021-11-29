@@ -1,0 +1,134 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+html {
+  scroll-behavior: smooth;
+}
+
+::-webkit-scrollbar {
+  @apply w-2 h-2;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-purple-100;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-purple-600 border border-current;
+}
+
+.barcodes.a4-65 {
+  background: white;
+  display: grid;
+  grid-column-gap: 10px;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(13, 1fr);
+  height: 1540px;
+  margin: auto;
+  padding: 62px 30px 0 30px;
+  width: 1140px;
+}
+
+.barcode {
+  align-items: center;
+  border: 2px solid;
+  border-radius: 8px;
+  display: flex;
+  overflow: hidden;
+  padding: 6px;
+}
+
+.barcode:nth-child(even) {
+  border-style: dashed;
+}
+
+.barcode .col {
+  overflow: hidden;
+  padding-left: 10px;
+}
+
+.barcode .name {
+  -webkit-box-orient: vertical;
+  display: -webkit-box;
+  font-family: sans-serif;
+  font-size: 0.8rem;
+  letter-spacing: -0.5px;
+  -webkit-line-clamp: 2;
+  line-height: 1.2rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.barcode .location {
+  font-family: monospace;
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding-top: 0.3rem;
+}
+
+.print-zone {
+  background: none;
+  box-shadow: 0 0 1rem -0.3rem;
+  height: 30vh;
+  margin: 1rem;
+  overflow: auto;
+  position: inherit;
+  width: 40vw;
+}
+
+form {
+  @apply gap-3 pr-2;
+}
+
+app-form:not([inline=true]) form {
+  @apply grid;
+}
+
+app-form[inline=true] form {
+  @apply flex;
+}
+
+form input[type=text], form select {
+  @apply relative overflow-hidden leading-none border-purple-300 rounded focus:ring-transparent focus:bg-purple-50 focus:border-purple-500 md:mt-0 md:mb-0 h-9;
+}
+
+form label {
+  @apply grid items-center gap-1 overflow-hidden text-left align-middle cursor-pointer focus-within:text-purple-700 focus-within:font-semibold whitespace-nowrap overflow-ellipsis;
+}
+
+button:disabled {
+  @apply opacity-50 cursor-not-allowed grayscale;
+}
+
+form select:invalid[required], form input:invalid[required] {
+  @apply bg-red-100 border border-red-400;
+}
+
+input[type="checkbox"] {
+  @apply mt-2 cursor-pointer;
+}
+
+a[data-action] {
+  @apply font-medium transition-colors border-b-2 border-current whitespace-nowrap hover:text-purple-700;
+}
+
+img[src=""] {
+  @apply hidden;
+}
+
+details summary {
+  @apply transition-colors cursor-pointer hover:text-purple-700;
+}
+
+details summary::marker {
+  @apply text-purple-400 transition-colors;
+}
+
+details:hover summary::marker {
+  @apply text-purple-600;
+}
+
+details small {
+  @apply block mt-2 ml-4;
+}

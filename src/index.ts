@@ -1,16 +1,19 @@
 import Fuse from 'fuse.js'
 import { emit, on, pickOne, sleep, storage } from 'shuutils'
-import './components/index.js'
-import { JSON_HEADERS, SEARCH_ORIGIN } from './constants.js'
-import './services/index.js'
-import './styles/main.css'
+import './components'
+import { JSON_HEADERS, SEARCH_ORIGIN } from './constants'
+import './services'
 
 const key = '@shuunen/stuff-finder_'
 
 class App {
+  apiUrl = ''
+  lastSearchOrigin = ''
+  items: Item[] = []
+  fuse!: Fuse<Item>
+
   constructor () {
     console.log('app start')
-    this.items = []
     on('app-form--settings--save', settings => this.onSettingsSave(settings))
     on('app-update--item', item => this.onUpdateItem(item))
     on('get-barcodes-to-print', () => this.getBarcodesToPrint())
@@ -21,10 +24,11 @@ class App {
     on('fade-out-destroy', element => this.fadeOut(element, true))
     this.checkExistingSettings()
     this.showTitle()
+    this.handleActions()
   }
 
   async checkExistingSettings () {
-    const settings = await storage.get(key + 'app-settings')
+    const settings = await storage.get(key + 'app-settings') as AppSettings
     if (!settings) return this.settingsActionRequired(true)
     this.onSettingsSave(settings)
     on('app-form--settings--ready', () => emit('app-form--settings--set', settings))
@@ -38,28 +42,31 @@ class App {
     emit('app-prompter--type', ['Stuff Finder', 1000, `Stuff Finder\n${this.coolAscii()}`])
   }
 
-  async onSettingsSave (settings) {
+  async onSettingsSave (settings: AppSettings) {
     this.apiUrl = `https://api.airtable.com/v0/${settings.base}/${settings.table}?api_key=${settings.key}&view=${settings.view}`
     const itemsLoaded = await this.loadItems()
     if (!itemsLoaded) return this.settingsActionRequired(true, 'failed to use api settings')
     this.settingsActionRequired(false)
+    emit('app-modal--settings--close')
     if (this.items.length > 0) emit('items-ready')
     storage.set(key + 'app-settings', settings)
   }
 
-  settingsActionRequired (actionRequired, errorMessage = '') {
+  settingsActionRequired (actionRequired: boolean, errorMessage = '') {
     emit('app-settings-trigger--animate', actionRequired)
     emit('app-form--settings--error', errorMessage)
-    if (!actionRequired) emit('app-modal--close')
+    emit('app-status', actionRequired ? 'settings-required' : 'ready')
+    this.isLoading(false)
   }
 
-  isLoading (active) {
+  isLoading (active: boolean) {
+    console.log('isLoading active ?', active)
     emit('app-loader--toggle', active)
   }
 
   async loadItems () {
     this.isLoading(true)
-    const cachedItems = (await storage.get(key + 'items')) || []
+    const cachedItems: Item[] = (await storage.get(key + 'items')) || []
     let response = await this.fetchApi()
     if (!response || response.error) {
       this.isLoading(false)
@@ -68,7 +75,7 @@ class App {
     let records = response.records
     if (cachedItems.some(item => (item.id === records[0].id && item['updated-on'] === records[0].fields['updated-on']))) {
       this.items = cachedItems
-      this.showLog(`${this.items.length} item(s) cached ` + this.coolAscii())
+      console.log(`${this.items.length} item(s) cached ` + this.coolAscii())
       this.initFuse()
       return true
     }
@@ -83,21 +90,22 @@ class App {
   }
 
   async getBarcodesToPrint () {
+    this.isLoading(true)
     const barcodes = this.items.filter(index => index['ref-printed'] === false && index.status === 'acheté')
     emit('barcodes-to-print', barcodes)
   }
 
-  async fetchApi (offset) {
+  async fetchApi (offset?: string) {
     const sortByUpdatedFirst = '&sort%5B0%5D%5Bfield%5D=updated-on&sort%5B0%5D%5Bdirection%5D=desc'
     const url = this.apiUrl + (offset ? `&offset=${offset}` : '') + sortByUpdatedFirst
     return fetch(url).then(response => response.json())
   }
 
-  parseApiRecords (records) {
+  parseApiRecords (records: AirtableRecord[]) {
     // this.showLog('parsing api records :', records )
-    let boxes = []
-    let locations = []
-    let statuses = []
+    let boxes: string[] = []
+    let locations: string[] = []
+    let statuses: string[] = []
     records.forEach(record => {
       const location = (record.fields.location && record.fields.location !== 'N/A') ? record.fields.location : ''
       const box = record.fields.box || ''
@@ -112,18 +120,20 @@ class App {
     this.items = records.map(record => ({
       'id': record.id,
       'name': '',
+      'category': '',
       'brand': '',
       'details': '',
       'box': '',
-      boxes,
+      'updated-on': '',
+      'boxes': boxes,
       'drawer': '',
       'location': '',
-      locations,
+      'locations': locations,
       'reference': '',
       'barcode': '',
       'ref-printed': false,
       'status': 'acheté',
-      statuses,
+      'statuses': statuses,
       ...record.fields,
     }))
     this.showLog(`${this.items.length} item(s) loaded ` + this.coolAscii())
@@ -151,33 +161,32 @@ class App {
     }
     this.fuse = new Fuse(this.items, options)
     storage.set(key + 'items', this.items)
-    this.isLoading(false)
   }
 
-  onSearchStart ({ str, origin }) {
+  onSearchStart ({ str, origin }: { str: string, origin: string }) {
     str = str.trim()
     this.lastSearchOrigin = origin
     const result = this.items.find(item => (item.reference === str || item.barcode === str))
     const results = result ? [result] : this.fuse.search(str).map(item => item.item)
     const title = `Results for “${str}”`
-    emit('app-search-results--show', { title, results, byReference: Boolean(result) })
+    emit('search-results', { title, results, byReference: Boolean(result) })
   }
 
   onSearchRetry () {
     console.log('retry and this.lastSearchOrigin', this.lastSearchOrigin)
-    if (this.lastSearchOrigin === SEARCH_ORIGIN.type) return document.querySelector('#input-type').focus()
+    if (this.lastSearchOrigin === SEARCH_ORIGIN.type) return document.querySelector<HTMLInputElement>('#input-type')?.focus()
     if (this.lastSearchOrigin === SEARCH_ORIGIN.scan) return emit('app-scan-code--start')
     if (this.lastSearchOrigin === SEARCH_ORIGIN.speech) return emit('app-speech--start')
     this.showError('un-handled search retry case')
   }
 
-  async fadeIn (element) {
+  async fadeIn (element: HTMLElement) {
     if (!element.classList.contains('hide')) return console.warn('please add "hide" class before mounting dom element and then call fade-in')
     await sleep(10)
-    element.style.opacity = 1
+    element.style.opacity = '1'
   }
 
-  async fadeOut (element, destroy = false) {
+  async fadeOut (element: HTMLElement, destroy = false) {
     element.classList.add('hide')
     await sleep(350)
     element.classList.remove('hide')
@@ -187,27 +196,28 @@ class App {
     element.remove()
   }
 
-  showLog (message, data) {
-    console.log(message, data || '')
+  showLog (message: string, data = '') {
+    console.log(message, data)
     emit('app-toaster--show', { type: 'info', message })
   }
 
-  showError (message) {
+  showError (message: string) {
     console.error(message)
     emit('app-toaster--show', { type: 'error', message })
   }
 
-  async onUpdateItem (item) {
+  async onUpdateItem (item: Item) {
     if (!item.id) return this.showError('cannot update an item without his id')
     this.isLoading(true)
     await this.updateItemRemotely(item)
     await this.updateItemLocally(item)
     this.isLoading(false)
+    emit('app-modal--edit-item--close')
   }
 
-  async updateItemRemotely (item) {
-    const fieldsToUpdate = ['name', 'brand', 'details', 'box', 'drawer', 'location', 'reference', 'barcode', 'ref-printed']
-    const data = { fields: {} }
+  async updateItemRemotely (item: Item) {
+    const fieldsToUpdate = ['name', 'brand', 'details', 'box', 'drawer', 'location', 'reference', 'barcode', 'ref-printed'] as (keyof Item)[]
+    const data = { fields: {} as Record<keyof Item, unknown> }
     fieldsToUpdate.forEach(field => {
       if (item[field] || typeof item[field] === 'boolean') data.fields[field] = item[field]
     })
@@ -216,16 +226,28 @@ class App {
     return this.patch(url, data)
   }
 
-  async updateItemLocally (itemToUpdate) {
+  async updateItemLocally (itemToUpdate: Item) {
     const index = this.items.findIndex(item => item.id === itemToUpdate.id)
     if (index < 0) return this.showError('failed to find local item')
     Object.assign(this.items[index], itemToUpdate)
     this.initFuse()
   }
 
-  async patch (url, data) {
+  async patch (url: string, data: Record<string, unknown>) {
     const options = { headers: JSON_HEADERS, method: 'patch', body: JSON.stringify(data) }
     return fetch(url, options).then(response => response.json()).catch(error => this.showError(error.message))
+  }
+
+  handleActions () {
+    document.addEventListener('click', (event) => {
+      const target = event.target as HTMLElement
+      if (!target || !target.dataset) return
+      const { action } = target.dataset
+      if (!action) return
+      console.log('action clicked :', action)
+      event.stopPropagation()
+      emit(action, target)
+    })
   }
 }
 

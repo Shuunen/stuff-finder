@@ -1,8 +1,9 @@
 import { on, sleep } from 'shuutils'
 
 class AppSound {
+  audioContext: AudioContext
+
   constructor () {
-    this.audioContext = undefined
     on('app-sound--info', () => this.onInfo())
     on('app-sound--error', () => this.onError())
     on('app-sound--success', () => this.onSuccess())

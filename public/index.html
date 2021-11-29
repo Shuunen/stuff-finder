@@ -10,11 +10,12 @@
   <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
-  <link rel="stylesheet" type="text/css" media="screen" href="main.css">
+  <link rel="stylesheet" type="text/css" media="screen" href="index.css">
+  <link rel="stylesheet" type="text/css" media="print" href="assets/print.css">
   <link rel="manifest" href="assets/site.webmanifest">
 </head>
 
-<body class="stuff-finder col center full-height">
+<body class="flex flex-col items-center justify-center h-screen align-middle bg-gradient-to-tr from-purple-200 stuff-finder">
 
   <header>
     <app-prompter></app-prompter>
@@ -28,59 +29,136 @@
   <app-print-barcodes></app-print-barcodes>
   <app-settings-trigger></app-settings-trigger>
 
-  <app-modal name="settings">
-    <div class="col ph1">
-      <app-form name="settings" title="Settings">
-        <label>
-          <a href="https://airtable.com/api" target="_blank" rel="noreferrer">Airtable api base</a>
-          <input name="base" placeholder="your api base" pattern="^app\w{14}$" required autofocus multi-paste>
-        </label>
-        <label>
-          <a href="https://airtable.com/account" target="_blank" rel="noreferrer">Airtable api key</a>
-          <input name="key" placeholder="your api key" pattern="^key\w{14}$" required maxlength="17">
-        </label>
-        <label>
-          Airtable table name
-          <input name="table" pattern="\S+" placeholder="your table name" required>
-        </label>
-        <label>
-          Airtable view name
-          <input name="view" pattern="\S+" placeholder="your table name" required value="stuff-finder">
-        </label>
+  <app-modal name="search-results" data-title="Search results" class="px-2 md:max-h-96">
+    <div class="overflow-auto list results"></div>
+  </app-modal>
 
-      <details class="mb1 mt1 left">
+  <template id="search-results-list-item">
+    <div
+      class="grid items-center gap-4 p-2 mx-auto mb-4 text-center transition-colors rounded-md cursor-pointer sm:max-w-xl sm:text-left sm:grid-cols-3 hover:bg-purple-50"
+      id="{{ id }}" data-action="select-result">
+      <img class="object-contain w-24 h-24 mx-auto bg-white rounded-full pointer-events-none sm:w-36 sm:h-36" async src="{{ visual }}"
+        alt="{{ name }} visual" />
+      <div class="flex flex-col pointer-events-none sm:col-span-2">
+        <h3 class="font-medium text-purple-900">{{ name }} {{ brand }}</h3>
+        <p>{{ category }}, {{ details }}</p>
+        <p class="hidden sm:block">Reference : {{ reference }} {{ barcode }}</p>
+        <p class="hidden sm:block">Updated {{ updated }}</p>
+        <p><strong>{{ location }}</strong> box <strong>{{ box }}{{ drawer }}</strong></p>
+      </div>
+    </div>
+    <div class="w-1/3 h-1 mx-auto my-4 bg-gray-200 divider"></div>
+  </template>
+
+  <template id="edit-item">
+    <app-form name="{{ id }}" on-save="app-update--item" on-close="app-modal--edit-item--close"
+      class="items-center sm:grid-cols-2 md:grid-cols-3 sm:gap-4">
+      <img class="mx-auto mb-6 sm:row-span-4 md:row-span-5 sm:mb-0 max-h-72" src="{{ photo }}" />
+      <input type=hidden name=id value="{{ id }}" />
+      <label>Name<input required name=name type=text minlength=3 maxlength=50 autofocus value="{{ name }}" /></label>
+      <label>Brand<input name=brand type=text value="{{ brand }}" /></label>
+      <label>Details<input name=details type=text value="{{ details }}" /></label>
+      <label>Reference<input name=reference type=text minlength=7 maxlength=20 value="{{ reference }}" /></label>
+      <label>Barcode<input name=barcode type=text value="{{ barcode }}" /></label>
+      <label>Status<select name=status>{{ statuses }}</select></label>
+      <label>Location <select required name=location>{{ locations }}</select></label>
+      <label>Box <select required name=box>{{ boxes }}</select></label>
+      <label>Drawer <select name=drawer>{{ drawers }}</select></label>
+      <label>Printed ?<input class="push-left" type=checkbox name="ref-printed" /></label>
+    </app-form>
+  </template>
+
+  <app-modal name="edit-item" data-title="Edit item">
+    <div class="overflow-auto content"></div>
+  </app-modal>
+
+  <app-edit-item></app-edit-item>
+
+  <app-modal name="settings" data-title="Settings">
+    <app-form name="settings" class="md:grid-cols-1">
+      <label>
+        <a href="https://airtable.com/api" target="_blank" rel="noreferrer">Airtable api base</a>
+        <input name="base" type="text" placeholder="your api base" pattern="^app\w{14}$" required autofocus multi-paste>
+      </label>
+      <label>
+        <a href="https://airtable.com/account" target="_blank" rel="noreferrer">Airtable api key</a>
+        <input name="key" type="text" placeholder="your api key" pattern="^key\w{14}$" required maxlength="17">
+      </label>
+      <label>
+        Airtable table name
+        <input name="table" type="text" pattern="\S+" placeholder="your table name" required value="all">
+      </label>
+      <label>
+        Airtable view name
+        <input name="view" type="text" pattern="\S+" placeholder="your table name" required value="stuff-finder">
+      </label>
+
+      <details class="mt-2">
         <summary>What this app do with my credentials ?</summary>
         <small>
-          <ul>
+          <ul class="mb-2 list-disc list-inside">
             <li>fetch your Airtable data</li>
             <li>store credentials locally in your browser</li>
-            <li>nothing else</li>
           </ul>
-          Feel free to check this app source code on the <a href="https://github.com/Shuunen/stuff-finder" target="_blank" rel="noreferrer">Github
-            project
-            page</a>.
+          Only you can access your data on this browser.<br />
+          Feel free to check this app source code on the <a data-action="see-project" href="https://github.com/Shuunen/stuff-finder" target="_blank"
+            rel="noreferrer">Github
+            project page</a>.
         </small>
       </details>
 
-      <details class="mb1 left">
+      <details>
         <summary>About this app</summary>
-        <small class="mt1">
-          This is an open source project from Shuunen, you can check the source code on the <a href="https://github.com/Shuunen/stuff-finder"
-            target="_blank" rel="noreferrer">Github
-            project
-            page</a>.
+        <small>
+          This is an open source project from <a href="https://github.com/Shuunen" target="_blank" data-action="see-profile">Shuunen</a>.<br />You can
+          check the
+          source code on the <a href="https://github.com/Shuunen/stuff-finder" target="_blank" data-action="see-project" rel="noreferrer">Github
+            project page</a>.
           <br>
           <span id="commit"></span>
         </small>
       </details>
 
-
     </app-form>
+  </app-modal>
+
+  <app-modal name="prepare-barcodes" data-title="Prepare Barcodes">
+    <p class="font-medium text-yellow-700 sm:hidden">This content is too small for a mobile device, please use a bigger screen to access the barcode
+      printing feature.</p>
+    <div class="items-baseline hidden gap-2 my-2 sm:flex">
+      <p>Below is the list of non-printed items where valid ones have been pre-selected. You can</p>
+      <a href="#" data-action="barcodes-select-all">select all</a>, <a href="#" data-action="barcodes-select-valid">select all valid</a> or <a
+        href="#" data-action="barcodes-select-none">select none</a>.
+    </div>
+    <div class="hidden list sm:block"></div>
+  </app-modal>
+
+  <template id="barcodes-list-item">
+    <div class="flex items-center p-2 transition-colors rounded-md hover:bg-purple-100">
+      <input type=checkbox id="{{ id }}" data-action="barcodes-select-one" class="flex-shrink-0 mr-2">
+      <app-form name="{{ id }}" inline=true on-save="app-update--item">
+        <input type=hidden name=id value="{{ id }}" />
+        <input name=name type=text placeholder=Name required minlength=3 maxlength=50 autofocus value="{{ name }}">
+        <input name=details type=text placeholder=Details value="{{ details }}">
+        <input name=brand type=text placeholder=Brand value="{{ brand }}">
+        <input name=reference type=text placeholder=Reference required minlength=7 maxlength=20 value="{{ reference }}">
+        <select required name=box>{{ boxes }}</select>
+        <select name=drawer>{{ drawers }}</select>
+      </app-form>
+    </div>
+  </template>
+
+  <app-modal name="print-barcodes" data-title="Print Barcodes">
+    <p>
+      Below is a preview of the page that will be printed. <br>
+      Make sure to remove any print margin in the <a data-action="barcodes-print" href="#print">print modal</a>.
+    </p>
+    <div class="print-zone preview">
+      <div class="barcodes a4-65"></div>
     </div>
   </app-modal>
 
-  <script>var global = { window }</script>
-  <script src="main.js"></script>
+  <script src="index.js"></script>
 </body>
 
 </html>

@@ -12,21 +12,34 @@
 ## Todo
 
 - [ ] nicer colorful identity ([something like this ?](https://www.iconfinder.com/icons/44859/cube_icon))
+- [ ] BrowserMultiFormatReader is responsible for 245KB of the 320KB js build, maybe let user choose qr or [barcode](https://zxing-js.github.io/library/examples/barcode-camera/) to import only 2 specific readers instead of the fat "multi", and import on the fly
+- [ ] take a url parameter to trigger a search
+- [ ] find real SpeechRecognition typings (avoid native.d.ts)
+
+## Build sizes
+
+- 0.1.1 : 4KB html + 9KB css + 320KB js
+- 0.1.0 : 3KB html + 9KB css + 435KB js
+- 0.2.0 : 8KB html + 20KB css + 305KB js
 
 ## Thanks
 
 - [Box icon](https://www.iconfinder.com/icons/2123914/app_box_essential_ui_icon) by Just Icon
-- [Chokidar](https://github.com/paulmillr/chokidar) : minimal and efficient cross-platform file watching library
+- [C8](https://github.com/bcoe/c8) : simple & effective cli for code coverage
 - [Esbuild](https://github.com/evanw/esbuild) : an extremely fast JavaScript bundler and minifier
 - [Eslint](https://eslint.org) : super tool to find & fix problems
 - [Eye icon](https://www.iconfinder.com/icons/5925640/eye_no_view_icon) by IconPai
 - [Favicon.io](https://favicon.io/favicon-generator/?t=SF&ff=Istok+Web&fs=110&fc=#FFF&b=rounded&bc=#08F) : handy favicon generator
 - [Github](https://github.com) : this great, free and evolving platform
-- [Mocha](https://github.com/mochajs/mocha) : great test runner easy to setup & use
+- [Keyboard & mic icons](https://www.iconfinder.com/iconsets/bitsies) by Recep Kütük
 - [Netlify](https://netlify.com) : awesome company that offers hosting for OSS
 - [Npm-run-all](https://github.com/mysticatea/npm-run-all) : to keep my npm scripts clean & readable
-- [Nyc](https://github.com/istanbuljs/nyc) : simple & effective cli for code coverage
 - [Repo-checker](https://github.com/Shuunen/repo-checker) : eslint cover /src code and this tool the rest ^^
 - [RIOT Optimizer](https://riot-optimizer.com) : Radical Image Optimization Tool, the best software I found to compress images
+- [Scan icon](https://www.iconfinder.com/icons/3702397/barcode_code_scan_scanner_icon) by Ghariza Mahavira
 - [Servor](https://github.com/lukejacksonn/servor) : dependency free dev server for single page app development
 - [Shields.io](https://shields.io) : for the nice badges on top of this readme
+- [Shuutils](https://github.com/Shuunen/shuutils) : collection of pure JS utils
+- [TailwindCss](https://tailwindcss.com) : awesome lib to produce maintainable style
+- [UvU](https://github.com/lukeed/uvu) : extremely fast and lightweight test runner for Node.js and the browser
+- [Watchlist](https://github.com/lukeed/watchlist) : recursively watch a list of directories & run a command on any file system

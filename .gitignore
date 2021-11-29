@@ -3,7 +3,9 @@
 .env
 *.log
 *.tgz
+coverage
 dist
+meta.json
 node_modules
 public/*.css
 public/*.js

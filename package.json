@@ -3,12 +3,30 @@
   "bugs": "https://github.com/Shuunen/stuff-finder/issues",
   "description": "Sorting things is pointless if you can't find them afterwards",
   "devDependencies": {
-    "@camwiegert/typical": "0.1.1",
-    "@zxing/library": "0.18.6",
-    "fuse.js": "6.4.6",
-    "shuunen-stack": "0.14.0",
-    "shuutils": "5.3.0",
-    "webcomponent-qr-code": "1.0.5"
+    "@camwiegert/typical": "^0.1",
+    "@tailwindcss/forms": "^0.3",
+    "@types/node": "16",
+    "@typescript-eslint/eslint-plugin": "5",
+    "@typescript-eslint/parser": "5",
+    "@zxing/library": "^0.18",
+    "c8": "7",
+    "esbuild": "^0.13",
+    "eslint": "8",
+    "eslint-plugin-html": "6",
+    "eslint-plugin-unicorn": "39",
+    "fuse.js": "^6.4",
+    "jsdom": "18",
+    "jsdom-global": "3",
+    "npm-run-all": "4",
+    "repo-check": "^1.21",
+    "servor": "4",
+    "shuutils": "^5.3",
+    "tailwindcss": "2",
+    "tsm": "2",
+    "typescript": "4",
+    "uvu": "0",
+    "watchlist": "0",
+    "webcomponent-qr-code": "^1.0"
   },
   "files": [
     "src"
@@ -27,13 +45,22 @@
     "url": "https://github.com/Shuunen/stuff-finder.git"
   },
   "scripts": {
-    "build": "stack build src/main.js --out-dir public --format iife --minify",
-    "dev": "npm run build -- --dev",
-    "lint": "stack lint",
-    "mark": "node bin/mark.js",
+    "build": "run-p \"build:** -- --minify\"",
+    "build:css": "tailwindcss -i src/assets/styles.css -o ./public/index.css --minify",
+    "build:js": "esbuild src/index.ts --outdir=public --bundle --target=es2020 --define:global=window",
+    "check": "repo-check",
+    "ci": "run-s build lint check test",
+    "dev": "run-p dev:* serve",
+    "dev:css": "npm run build:css -- --watch",
+    "dev:js": "npm run build:js -- --watch",
+    "lint": "tsc --noEmit && eslint --fix --ignore-path .gitignore --ext .js,.ts,.html .",
+    "mark": "node bin/mark",
     "postversion": "git push && git push --tags",
-    "preversion": "npm run lint && npm run build",
-    "update": "stack update"
+    "preversion": "npm run ci",
+    "serve": "servor public --reload --browse",
+    "start": "npm run dev",
+    "test": "uvu -r tsm -r jsdom-global/register tests",
+    "test:watch": "watchlist src tests -- npm test"
   },
   "version": "0.1.0"
 }
