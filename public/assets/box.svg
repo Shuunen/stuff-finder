@@ -1,7 +1,1 @@
-<?xml version="1.0" encoding="utf-8"?>
-<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-  <g style="" transform="matrix(0.59322, 0, 0, 0.59322, 6.508479, 6.508479)">
-    <path fill="none" stroke-linejoin="round" stroke-width="2" d="M1 2h30v8H1zm2 8h26v20H3z" style="stroke: rgb(0, 0, 0);"/>
-    <path d="M9 16h14v4H9z" style="stroke: rgb(0, 0, 0);"/>
-  </g>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><g><path fill="none" stroke-linejoin="round" stroke-width="2" d="M1 2h30v8H1zm2 8h26v20H3z" transform="matrix(0.59322, 0, 0, 0.59322, 6.508479, 6.508479)" style="stroke:#000"/><path d="M9 16h14v4H9z" transform="matrix(0.59322, 0, 0, 0.59322, 6.508479, 6.508479)" style="stroke:#000"/></g></svg>
