@@ -1,5 +1,5 @@
 import { emit, on, sleep } from 'shuutils'
-import { SEARCH_ORIGIN } from '../constants.js'
+import { SEARCH_ORIGIN } from '../constants'
 
 class AppSpeech {
   isMobile = typeof window.orientation !== 'undefined'

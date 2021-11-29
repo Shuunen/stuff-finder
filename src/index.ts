@@ -1,8 +1,8 @@
 import Fuse from 'fuse.js'
 import { emit, on, pickOne, sleep, storage } from 'shuutils'
 import './components'
-import { JSON_HEADERS, SEARCH_ORIGIN } from './constants.js'
-import './services/index.js'
+import { JSON_HEADERS, SEARCH_ORIGIN } from './constants'
+import './services'
 
 const key = '@shuunen/stuff-finder_'
 

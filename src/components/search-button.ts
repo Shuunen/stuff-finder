@@ -1,5 +1,5 @@
 import { div, dom, emit, image, on, p, pickOne } from 'shuutils'
-import { SEARCH_ORIGIN } from '../constants.js'
+import { SEARCH_ORIGIN } from '../constants'
 import { button } from '../utils'
 
 window.customElements.define('app-search-button', class extends HTMLElement {

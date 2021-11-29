@@ -9,24 +9,6 @@
     "plugin:@typescript-eslint/recommended",
     "plugin:unicorn/recommended"
   ],
-  "overrides": [
-    {
-      "files": [
-        "tests/*"
-      ],
-      "rules": {
-        "func-names": "off"
-      }
-    },
-    {
-      "files": [
-        "repo-checker.config.js"
-      ],
-      "rules": {
-        "@typescript-eslint/explicit-module-boundary-types": "off"
-      }
-    }
-  ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaVersion": 2021,

@@ -1,7 +1,7 @@
 import { BrowserMultiFormatReader } from '@zxing/library/es2015/browser/BrowserMultiFormatReader'
 import NotFoundException from '@zxing/library/es2015/core/NotFoundException'
 import { dom, emit, on, sleep } from 'shuutils'
-import { SEARCH_ORIGIN } from '../constants.js'
+import { SEARCH_ORIGIN } from '../constants'
 
 window.customElements.define('app-scan-code', class extends HTMLElement {
   device = ''
