@@ -98,6 +98,7 @@ class App {
   async fetchApi (offset?: string) {
     const sortByUpdatedFirst = '&sort%5B0%5D%5Bfield%5D=updated-on&sort%5B0%5D%5Bdirection%5D=desc'
     const url = this.apiUrl + (offset ? `&offset=${offset}` : '') + sortByUpdatedFirst
+    if (!url.startsWith('https://api.airtable.com/v0/')) throw new Error('invalid api url')
     return fetch(url).then(response => response.json())
   }
 
