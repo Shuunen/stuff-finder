@@ -1,8 +1,9 @@
 import Fuse from 'fuse.js'
-import { emit, on, pickOne, sleep, storage } from 'shuutils'
+import { emit, fillTemplate, on, pickOne, sleep } from 'shuutils'
 import './components'
-import { JSON_HEADERS, SEARCH_ORIGIN } from './constants'
+import { SEARCH_ORIGIN } from './constants'
 import './services'
+import { storage } from './services/storage'
 import { patch, post, showError, showLog } from './utils'
 
 class App {
@@ -27,7 +28,7 @@ class App {
   }
 
   async checkExistingSettings () {
-    const settings = await storage.get(key + 'app-settings') as AppSettings
+    const settings = await storage.get<AppSettings>('app-settings')
     if (!settings) return this.settingsActionRequired(true)
     this.onSettingsSave(settings)
     on('app-form--settings--ready', () => emit('app-form--settings--set', settings))
@@ -48,7 +49,7 @@ class App {
     this.settingsActionRequired(false)
     emit('app-modal--settings--close')
     if (this.items.length > 0) emit('items-ready')
-    storage.set(key + 'app-settings', settings)
+    storage.set('app-settings', settings)
   }
 
   settingsActionRequired (actionRequired: boolean, errorMessage = '') {
@@ -65,7 +66,7 @@ class App {
 
   async loadItems () {
     this.isLoading(true)
-    const cachedItems: Item[] = (await storage.get(key + 'items')) || []
+    const cachedItems: Item[] = (await storage.get('items')) || []
     let response = await this.fetchApi()
     if (!response || response.error) {
       this.isLoading(false)
@@ -159,7 +160,7 @@ class App {
       }], // this is not generic ^^"
     }
     this.fuse = new Fuse(this.items, options)
-    storage.set(key + 'items', this.items)
+    storage.set('items', this.items)
   }
 
   onSearchStart ({ str, origin }: { str: string, origin: string }) {
