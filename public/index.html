@@ -53,9 +53,14 @@
 
   <template id="edit-item">
     <app-form name="edit-item" class="items-center sm:grid-cols-2 md:grid-cols-4 sm:gap-4">
-      <img class="mx-auto mb-6 sm:row-span-4 md:row-span-5 sm:mb-0 max-h-72" src="assets/no-visual.svg" />
       <input type=hidden name=id />
-      <input type=hidden name=photo />
+      <div class="mb-6 sm:row-span-4 md:row-span-5 sm:mb-0 max-h-72">
+        <img class="w-3/4 mx-auto" src="assets/no-visual.svg" />
+        <div class="flex mt-3 justify-evenly">
+          <a data-action="app-form--edit-item--set" data-payload='{ "photo": "" }' href="#">Clear current image</a>
+        </div>
+        <input type=hidden name=photo />
+      </div>
       <label>Name<input required name=name type=text minlength=3 maxlength=50 autofocus /></label>
       <label>Brand<input name=brand type=text /></label>
       <label>Details<input name=details type=text /></label>

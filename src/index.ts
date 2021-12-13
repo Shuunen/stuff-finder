@@ -236,11 +236,14 @@ class App {
     document.addEventListener('click', (event) => {
       const target = event.target as HTMLElement
       if (!target || !target.dataset) return
-      const { action } = target.dataset
+      let { action, payload } = target.dataset
       if (!action) return
+      action = action.trim()
       console.log('action clicked :', action)
+      if (payload && payload[0] === '{') payload = JSON.parse(payload)
+      if (payload) console.log('payload :', payload)
       event.stopPropagation()
-      emit(action, target)
+      emit(action, payload ?? target)
     })
   }
 
