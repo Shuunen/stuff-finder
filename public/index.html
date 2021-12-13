@@ -52,7 +52,7 @@
   </template>
 
   <template id="edit-item">
-    <app-form name="edit-item" class="items-center sm:grid-cols-2 md:grid-cols-4 sm:gap-4">
+    <app-form name="edit-item" class="items-center sm:grid-cols-2 md:grid-cols-4 sm:gap-4" on-close="app-modal--edit-item--close">
       <input type=hidden name=id />
       <div class="mb-6 sm:row-span-4 md:row-span-5 sm:mb-0 max-h-72">
         <img class="w-3/4 mx-auto" src="assets/no-visual.svg" />
