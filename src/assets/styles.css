@@ -114,7 +114,7 @@ app-form .error {
   @apply font-bold text-red-700;
 }
 
-form input[type=text], form select {
+form input[type=text], form input[type=number], form select {
   @apply relative overflow-hidden leading-none border-purple-300 rounded focus:ring-transparent focus:bg-purple-50 focus:border-purple-500 md:mt-0 md:mb-0 h-9;
 }
 
