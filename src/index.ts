@@ -106,15 +106,19 @@ class App {
     const boxes: string[] = []
     const locations: string[] = []
     const statuses: string[] = []
+    const categories: string[] = []
+    const drawers = ['', '1', '2', '3', '4', '5', '6', '7']
     records.forEach(record => {
       const location = (record.fields.location && record.fields.location !== 'N/A') ? record.fields.location : ''
       const box = record.fields.box || ''
       const status = record.fields.status || 'acheté'
+      const category = record.fields.category || ''
       if (location.length > 0 && !locations.includes(location)) locations.push(location)
       if (box.length > 0 && !boxes.includes(box)) boxes.push(box)
+      if (category.length > 0 && !categories.includes(category)) categories.push(category)
       if (!statuses.includes(status)) statuses.push(status)
     })
-    this.saveCommonLists({ boxes, locations, statuses })
+    this.saveCommonLists({ boxes, locations, statuses, categories, drawers })
     this.items = records.map(record => ({
       'id': record.id,
       'name': '',
@@ -201,7 +205,7 @@ class App {
   }
 
   async pushItemRemotely (item: Item) {
-    const fieldsToUpdate = ['name', 'brand', 'price', 'photo', 'details', 'box', 'drawer', 'location', 'reference', 'barcode', 'ref-printed'] as (keyof Item)[]
+    const fieldsToUpdate = ['name', 'brand', 'price', 'photo', 'category', 'details', 'box', 'drawer', 'location', 'reference', 'barcode', 'ref-printed'] as (keyof Item)[]
     const data = { fields: {} as Record<keyof Item, unknown> }
     fieldsToUpdate.forEach(field => {
       if (item[field] && field === 'photo') data.fields[field] = [{ url: item[field] }]
@@ -257,7 +261,7 @@ class App {
   }
 
   toOptions (array: string[]) {
-    return array.map(value => `<option value=${value}>${value}</option>`).join('')
+    return array.map(value => `<option value="${value}">${value}</option>`).join('')
   }
 
   async readCommonLists (): Promise<boolean> {
@@ -273,12 +277,14 @@ class App {
     console.log('common lists found', lists)
     const template = document.querySelector('template#edit-item')
     if (!template) throw new Error('no edit-item template found')
-    template.innerHTML = fillTemplate(template.innerHTML, {
+    const data: Record<keyof CommonLists, string> = {
       boxes: this.toOptions(lists.boxes),
       locations: this.toOptions(lists.locations),
       statuses: this.toOptions(lists.statuses),
-      drawers: this.toOptions(['', '1', '2', '3', '4', '5', '6', '7']),
-    })
+      drawers: this.toOptions(lists.drawers),
+      categories: this.toOptions(lists.categories),
+    }
+    template.innerHTML = fillTemplate(template.innerHTML, data)
     this.commonListsLoaded = true
     return true
   }

@@ -59,4 +59,6 @@ interface CommonLists {
   boxes: string[]
   locations: string[]
   statuses: string[]
+  drawers: string[]
+  categories: string[]
 }
