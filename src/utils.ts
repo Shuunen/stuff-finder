@@ -1,4 +1,4 @@
-import { dom, emit } from 'shuutils'
+import { dom, emit, sleep } from 'shuutils'
 import { JSON_HEADERS } from './constants'
 import { storage } from './services/storage'
 
@@ -40,4 +40,21 @@ export const showError = (message: string) => {
 export const showLog = (message: string, data = '') => {
   console.log(message, data)
   emit('app-toaster--show', { type: 'info', message })
+}
+
+export const fadeIn = async (element: HTMLElement) => {
+  if (!element.classList.contains('hide')) return console.warn('please add "hide" class before mounting dom element and then call fade-in')
+  element.classList.remove('hidden')
+  await sleep(10)
+  element.style.opacity = '1'
+}
+
+export const fadeOut = async (element: HTMLElement, destroy = false) => {
+  element.classList.add('hide')
+  element.style.opacity = '0'
+  await sleep(350)
+  element.classList.add('hidden')
+  if (!destroy) return
+  await sleep(350)
+  element.remove()
 }

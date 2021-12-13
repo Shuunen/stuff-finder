@@ -18,6 +18,10 @@ html {
   @apply bg-purple-600 border border-current;
 }
 
+.hide {
+  @apply transition-opacity duration-300 opacity-0;
+}
+
 .barcodes.a4-65 {
   background: white;
   display: grid;

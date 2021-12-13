@@ -1,7 +1,8 @@
 import { div, emit, h2, link, on } from 'shuutils'
+import { fadeIn, fadeOut } from '../utils'
 
 window.customElements.define('app-modal', class extends HTMLElement {
-  backdrop = div('backdrop pointer-events-none z-20 fixed bg-black bg-opacity-50 top-0 left-0 w-full h-full flex flex-col items-center justify-center align-middle')
+  backdrop = div('backdrop hide pointer-events-none z-20 fixed bg-black bg-opacity-50 top-0 left-0 w-full h-full flex flex-col items-center justify-center align-middle')
   modal: HTMLDivElement
   createModal (id: string) {
     const modal = div(`${id} w-full shadow-md z-50 md:w-auto flex flex-col m-4 p-4 bg-white relative overflow-hidden rounded ${this.className}`, this.innerHTML)
@@ -13,9 +14,10 @@ window.customElements.define('app-modal', class extends HTMLElement {
   }
   toggle (active: boolean) {
     document.body.classList.toggle('overflow-hidden', active)
-    this.backdrop.classList.toggle('opacity-0', !active)
     this.modal.classList.toggle('hidden', !active)
     this.backdrop.classList.toggle('pointer-events-none', !active)
+    if (active) fadeIn(this.backdrop)
+    else fadeOut(this.backdrop)
   }
   connectedCallback () {
     const id = `app-modal--${this.getAttribute('name')}`
