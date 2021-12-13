@@ -67,7 +67,7 @@ class ItemSearch {
       details: data.description,
       photo: data.image[0],
       reference: data.gtin13,
-      price: Math.round(Number.parseFloat(data.offers[0].price)),
+      price: ['string', 'undefined'].includes(typeof data.offers[0]) ? undefined : Math.round(Number.parseFloat((data.offers[0] as { price: string }).price)),
     }
   }
 }
