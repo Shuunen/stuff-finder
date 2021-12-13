@@ -1,11 +1,3 @@
-export const SEARCH_ORIGIN = {
-  type: 'type',
-  scan: 'scan',
-  searchResults: 'searchResults',
-  speech: 'speech',
-  url: 'url',
-}
-
 export const JSON_HEADERS = {
   'Accept': 'application/json',
   'Content-Type': 'application/json',

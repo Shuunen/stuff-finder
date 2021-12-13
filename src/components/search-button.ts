@@ -1,5 +1,4 @@
 import { div, dom, emit, image, on, p, pickOne } from 'shuutils'
-import { SEARCH_ORIGIN } from '../constants'
 import { button } from '../utils'
 
 window.customElements.define('app-search-button', class extends HTMLElement {
@@ -67,7 +66,7 @@ window.customElements.define('app-search-button', class extends HTMLElement {
     this.search.id = 'input-type'
     this.search.placeholder = 'Type it'
     this.search.addEventListener('change', () => {
-      emit('search-start', { str: this.search.value, origin: SEARCH_ORIGIN.type })
+      emit('search-start', { str: this.search.value, origin: 'type' } as SearchStartEvent)
       this.search.value = ''
     })
     this.speech.addEventListener('click', () => emit('app-speech--start'))

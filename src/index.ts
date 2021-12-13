@@ -2,14 +2,13 @@ import Fuse from 'fuse.js'
 import { emit, fillTemplate, on, pickOne } from 'shuutils'
 import './assets/styles.min.css'
 import './components'
-import { SEARCH_ORIGIN } from './constants'
 import './services'
 import { storage } from './services/storage'
 import { patch, post, showError, showLog } from './utils'
 
 class App {
   apiUrl = ''
-  lastSearchOrigin = ''
+  lastSearchOrigin: SearchOrigin = 'default'
   items: Item[] = []
   fuse!: Fuse<Item>
   commonListsLoaded = false
@@ -19,7 +18,7 @@ class App {
     on('app-form--settings--save', settings => this.onSettingsSave(settings))
     on('app-form--edit-item--save', item => this.onEditItem(item))
     on('get-barcodes-to-print', () => this.getBarcodesToPrint())
-    on('search-start', data => this.onSearchStart(data))
+    on('search-start', event => this.onSearchStart(event))
     on('search-retry', () => this.onSearchRetry())
     this.checkExistingSettings()
     this.showTitle()
@@ -163,21 +162,21 @@ class App {
     storage.set('items', this.items)
   }
 
-  onSearchStart ({ str, origin }: { str: string, origin: string }) {
-    str = str.trim()
-    this.lastSearchOrigin = origin
-    const result = this.items.find(item => (item.reference === str || item.barcode === str))
-    const results = result ? [result] : this.fuse.search(str).map(item => item.item)
-    const title = `${results.length === 0 ? 'No result found' : (results.length === 1 ? 'One result found' : `Found ${results.length} results`)} for “${str}”`
-    const data: SearchResultEvent = { title, results, byReference: Boolean(result), input: str }
+  onSearchStart (event: SearchStartEvent) {
+    const input = event.str.trim()
+    this.lastSearchOrigin = event.origin
+    const result = this.items.find(item => (item.reference === input || item.barcode === input))
+    const results = result ? [result] : this.fuse.search(input).map(item => item.item)
+    const title = `${results.length === 0 ? 'No result found' : (results.length === 1 ? 'One result found' : `Found ${results.length} results`)} for “${input}”`
+    const data: SearchResultEvent = { title, results, byReference: Boolean(result), input, scrollTop: event.scrollTop }
     emit('search-results', data)
   }
 
   onSearchRetry () {
     console.log('retry and this.lastSearchOrigin', this.lastSearchOrigin)
-    if (this.lastSearchOrigin === SEARCH_ORIGIN.type) return document.querySelector<HTMLInputElement>('#input-type')?.focus()
-    if (this.lastSearchOrigin === SEARCH_ORIGIN.scan) return emit('app-scan-code--start')
-    if (this.lastSearchOrigin === SEARCH_ORIGIN.speech) return emit('app-speech--start')
+    if (this.lastSearchOrigin === 'type') return document.querySelector<HTMLInputElement>('#input-type')?.focus()
+    if (this.lastSearchOrigin === 'scan') return emit('app-scan-code--start')
+    if (this.lastSearchOrigin === 'speech') return emit('app-speech--start')
     showError('un-handled search retry case')
   }
 

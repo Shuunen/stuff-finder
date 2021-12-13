@@ -1,5 +1,4 @@
 import { emit, on, sleep } from 'shuutils'
-import { SEARCH_ORIGIN } from '../constants'
 
 class AppSpeech {
   isMobile = typeof window.orientation !== 'undefined'
@@ -36,7 +35,7 @@ class AppSpeech {
   onSuccess (sentence, confidence) {
     this.recognitionSucceed = true
     console.log('confidence : ' + confidence)
-    emit('search-start', { str: sentence, origin: SEARCH_ORIGIN.speech })
+    emit('search-start', { str: sentence, origin: 'speech' } as SearchStartEvent)
   }
 
   async onEnd () {
