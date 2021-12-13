@@ -1,5 +1,6 @@
 import Fuse from 'fuse.js'
 import { emit, fillTemplate, on, pickOne, sleep } from 'shuutils'
+import './assets/styles.min.css'
 import './components'
 import { SEARCH_ORIGIN } from './constants'
 import './services'
