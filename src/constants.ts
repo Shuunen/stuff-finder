@@ -1,6 +1,7 @@
 export const SEARCH_ORIGIN = {
   type: 'type',
   scan: 'scan',
+  searchResults: 'searchResults',
   speech: 'speech',
   url: 'url',
 }
