@@ -11,7 +11,7 @@
     "@zxing/library": "^0.18",
     "autoprefixer": "10",
     "c8": "7",
-    "esbuild": "^0.13",
+    "esbuild": "^0.14",
     "eslint": "8",
     "eslint-plugin-html": "6",
     "eslint-plugin-unicorn": "39",
