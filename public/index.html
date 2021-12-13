@@ -28,6 +28,7 @@
   <app-search-results></app-search-results>
   <app-print-barcodes></app-print-barcodes>
   <app-settings-trigger></app-settings-trigger>
+  <app-add-item-trigger></app-add-item-trigger>
 
   <app-modal name="search-results" data-title="Search results" class="px-2 md:max-h-96">
     <div class="overflow-auto list results"></div>
@@ -51,25 +52,35 @@
   </template>
 
   <template id="edit-item">
-    <app-form name="{{ id }}" on-save="app-update--item" on-close="app-modal--edit-item--close"
-      class="items-center sm:grid-cols-2 md:grid-cols-3 sm:gap-4">
-      <img class="mx-auto mb-6 sm:row-span-4 md:row-span-5 sm:mb-0 max-h-72" src="{{ photo }}" />
-      <input type=hidden name=id value="{{ id }}" />
-      <label>Name<input required name=name type=text minlength=3 maxlength=50 autofocus value="{{ name }}" /></label>
-      <label>Brand<input name=brand type=text value="{{ brand }}" /></label>
-      <label>Details<input name=details type=text value="{{ details }}" /></label>
-      <label>Reference<input name=reference type=text minlength=7 maxlength=20 value="{{ reference }}" /></label>
-      <label>Barcode<input name=barcode type=text value="{{ barcode }}" /></label>
+    <app-form name="edit-item" class="items-center sm:grid-cols-2 md:grid-cols-4 sm:gap-4">
+      <img class="mx-auto mb-6 sm:row-span-4 md:row-span-5 sm:mb-0 max-h-72" src="assets/no-visual.svg" />
+      <input type=hidden name=id />
+      <input type=hidden name=photo />
+      <label>Name<input required name=name type=text minlength=3 maxlength=50 autofocus /></label>
+      <label>Brand<input name=brand type=text /></label>
+      <label>Details<input name=details type=text /></label>
+      <label>Reference<input name=reference type=text minlength=7 maxlength=20 /></label>
+      <label>Barcode<input name=barcode type=text /></label>
       <label>Status<select name=status>{{ statuses }}</select></label>
-      <label>Location <select required name=location>{{ locations }}</select></label>
-      <label>Box <select required name=box>{{ boxes }}</select></label>
+      <label>Location <select name=location>{{ locations }}</select></label>
+      <label>Box <select name=box>{{ boxes }}</select></label>
       <label>Drawer <select name=drawer>{{ drawers }}</select></label>
+      <label>Price <input name=price type=number /></label>
       <label>Printed ?<input class="push-left" type=checkbox name="ref-printed" /></label>
     </app-form>
   </template>
 
   <app-modal name="edit-item" data-title="Edit item">
     <div class="overflow-auto content"></div>
+  </app-modal>
+
+  <app-modal name="add-item" data-title="Add item">
+    <div class="overflow-auto content">
+      <app-form class="justify-center" name="search-item" inline=true no-hid save-label="Search" on-save="app-search-item">
+        <label>Search online by name or reference : <input required name=input type=text minlength=3 maxlength=150 autofocus /></label>
+      </app-form>
+      <div class="w-1/2 mx-auto mt-5 mb-4 border-b-2 separator"></div>
+    </div>
   </app-modal>
 
   <app-edit-item></app-edit-item>
