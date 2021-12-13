@@ -37,6 +37,16 @@ interface Item {
   'updated-on': string
 }
 
+interface PrefillItem {
+  name: string
+  brand: string
+  details: string
+  reference: string
+  barcode: string
+  price?: number
+  photo: string
+}
+
 interface AirtableRecord {
   id: string
   fields: Item

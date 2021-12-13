@@ -13,8 +13,9 @@
 
 - [ ] nicer colorful identity ([something like this ?](https://www.iconfinder.com/icons/44859/cube_icon))
 - [ ] BrowserMultiFormatReader is responsible for 245KB of the 320KB js build, maybe let user choose qr or [barcode](https://zxing-js.github.io/library/examples/barcode-camera/) to import only 2 specific readers instead of the fat "multi", and import on the fly
-- [ ] take a url parameter to trigger a search
 - [ ] find real SpeechRecognition typings (avoid native.d.ts)
+- [ ] display various suggestions for some fields when adding an item
+- [ ] type every events, enforce emit<> & on<>
 
 ## Build sizes
 
@@ -24,6 +25,7 @@
 
 ## Thanks
 
+- [Add icon](https://www.iconfinder.com/icons/1814113/add_more_plus_icon) by Alexander Madyankin & Roman Shamin
 - [Box icon](https://www.iconfinder.com/icons/2123914/app_box_essential_ui_icon) by Just Icon
 - [C8](https://github.com/bcoe/c8) : simple & effective cli for code coverage
 - [Esbuild](https://github.com/evanw/esbuild) : an extremely fast JavaScript bundler and minifier
@@ -40,6 +42,7 @@
 - [Servor](https://github.com/lukejacksonn/servor) : dependency free dev server for single page app development
 - [Shields.io](https://shields.io) : for the nice badges on top of this readme
 - [Shuutils](https://github.com/Shuunen/shuutils) : collection of pure JS utils
+- [SvgOmg](https://jakearchibald.github.io/svgomg/) : great tool to reduce svg image size
 - [TailwindCss](https://tailwindcss.com) : awesome lib to produce maintainable style
 - [UvU](https://github.com/lukeed/uvu) : extremely fast and lightweight test runner for Node.js and the browser
 - [Watchlist](https://github.com/lukeed/watchlist) : recursively watch a list of directories & run a command on any file system

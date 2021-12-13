@@ -85,8 +85,29 @@ app-form:not([inline=true]) form {
   @apply grid;
 }
 
-app-form[inline=true] form {
-  @apply flex;
+app-form[inline=true] form,
+app-form[inline=true] form label {
+  @apply flex flex-col sm:flex-row;
+}
+
+app-form[inline=true] form label {
+  @apply gap-5;
+}
+
+app-form[name="search-item"] {
+  @apply flex flex-col items-center justify-center gap-2 sm:flex-row;
+}
+
+app-form[name="search-item"] .footer {
+  @apply m-0;
+}
+
+app-form[name="search-item"] .error {
+  @apply absolute top-24;
+}
+
+app-form .error {
+  @apply font-bold text-red-700;
 }
 
 form input[type=text], form select {

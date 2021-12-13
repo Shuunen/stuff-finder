@@ -1,3 +1,4 @@
+import './add-item-trigger'
 import './edit-item'
 import './form'
 import './loader'
