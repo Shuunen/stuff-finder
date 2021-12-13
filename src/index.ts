@@ -137,8 +137,7 @@ class App {
       'statuses': statuses,
       ...record.fields,
     }))
-    this.showLog(`${this.items.length} item(s) loaded ` + this.coolAscii())
-    this.initFuse()
+    showLog(`${this.items.length} item(s) loaded ` + this.coolAscii())
   }
 
   initFuse () {
@@ -178,7 +177,7 @@ class App {
     if (this.lastSearchOrigin === SEARCH_ORIGIN.type) return document.querySelector<HTMLInputElement>('#input-type')?.focus()
     if (this.lastSearchOrigin === SEARCH_ORIGIN.scan) return emit('app-scan-code--start')
     if (this.lastSearchOrigin === SEARCH_ORIGIN.speech) return emit('app-speech--start')
-    this.showError('un-handled search retry case')
+    showError('un-handled search retry case')
   }
 
   async fadeIn (element: HTMLElement) {

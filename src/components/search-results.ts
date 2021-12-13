@@ -16,9 +16,7 @@ window.customElements.define('app-search-results', class extends HTMLElement {
     }).join('')
     emit('app-modal--search-results--open')
   }
-  onSelect (id: string) {
-    const item = this.results.find(r => r.id === id)
-    if (!item) return console.error('failed to find item with this id :', id)
+    if (!item) return showError('failed to find item with this id : ' + id)
     emit('edit-item', item)
   }
   connectedCallback () {
