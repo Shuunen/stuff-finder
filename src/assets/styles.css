@@ -157,3 +157,11 @@ details:hover summary::marker {
 details small {
   @apply block mt-2 ml-4;
 }
+
+input[name=photo] + a.clear {
+  @apply hidden;
+}
+
+input[name=photo][value^="http"] + a.clear {
+  @apply block;
+}
