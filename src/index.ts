@@ -125,15 +125,12 @@ class App {
       'details': '',
       'box': '',
       'updated-on': '',
-      'boxes': boxes,
       'drawer': '',
       'location': '',
-      'locations': locations,
       'reference': '',
       'barcode': '',
       'ref-printed': false,
       'status': 'acheté',
-      'statuses': statuses,
       ...record.fields,
     }))
     showLog(`${this.items.length} item(s) loaded ` + this.coolAscii())
