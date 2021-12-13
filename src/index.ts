@@ -3,8 +3,7 @@ import { emit, on, pickOne, sleep, storage } from 'shuutils'
 import './components'
 import { JSON_HEADERS, SEARCH_ORIGIN } from './constants'
 import './services'
-
-const key = '@shuunen/stuff-finder_'
+import { patch, post, showError, showLog } from './utils'
 
 class App {
   apiUrl = ''
@@ -196,40 +195,56 @@ class App {
     element.remove()
   }
 
-  showLog (message: string, data = '') {
-    console.log(message, data)
-    emit('app-toaster--show', { type: 'info', message })
+  airtableRecordToItem (record: AirtableRecord): Item {
+    return {
+      id: record.id,
+      ...record.fields,
+    }
   }
 
-  showError (message: string) {
-    console.error(message)
-    emit('app-toaster--show', { type: 'error', message })
-  }
-
-  async onUpdateItem (item: Item) {
-    if (!item.id) return this.showError('cannot update an item without his id')
+  async onEditItem (data: Item) {
     this.isLoading(true)
-    await this.updateItemRemotely(item)
-    await this.updateItemLocally(item)
+    const response = await this.pushItemRemotely(data) as AirtableRecord
+    console.log('onEditItem response', response)
     this.isLoading(false)
-    emit('app-modal--edit-item--close')
+    if (response.error) showLog(response.error)
+    else {
+      const item = this.airtableRecordToItem(response)
+      await this.pushItemLocally(item)
+    }
+    if (data.id) emit('app-modal--edit-item--close')
+    else emit('app-modal--add-item--close')
   }
 
-  async updateItemRemotely (item: Item) {
-    const fieldsToUpdate = ['name', 'brand', 'details', 'box', 'drawer', 'location', 'reference', 'barcode', 'ref-printed'] as (keyof Item)[]
+  async pushItemRemotely (item: Item) {
+    const fieldsToUpdate = ['name', 'brand', 'price', 'photo', 'details', 'box', 'drawer', 'location', 'reference', 'barcode', 'ref-printed'] as (keyof Item)[]
     const data = { fields: {} as Record<keyof Item, unknown> }
     fieldsToUpdate.forEach(field => {
-      if (item[field] || typeof item[field] === 'boolean') data.fields[field] = item[field]
+      if (item[field] && field === 'photo') data.fields[field] = [{ url: item[field] }]
+      else if (['name', 'brand', 'details', 'reference', 'barcode'].includes(field)) data.fields[field] = item[field]
+      else if (item[field] || typeof item[field] === 'boolean') data.fields[field] = item[field]
     })
-    if (Object.keys(data.fields).length === 0) return this.showError('cannot update an item without data')
+    if (item.id) {
+      const existing = this.items.find(existing => existing.id === item.id)
+      if (!existing) throw new Error('existing item not found locally')
+      Object.keys(data.fields).forEach(field => {
+        const samePhoto = field === 'photo' && existing.photo[0].url === data.fields.photo[0].url
+        const sameValue = existing[field] === data.fields[field]
+        if (samePhoto || sameValue) delete data.fields[field]
+      })
+    }
+    if (Object.keys(data.fields).length === 0) return { error: 'nothing to post or patch... ?' }
+    if (!item.id) return post(this.apiUrl, data)
     const url = this.apiUrl.replace('?', `/${item.id}?`)
-    return this.patch(url, data)
+    return patch(url, data)
   }
 
-  async updateItemLocally (itemToUpdate: Item) {
-    const index = this.items.findIndex(item => item.id === itemToUpdate.id)
-    if (index < 0) return this.showError('failed to find local item')
-    Object.assign(this.items[index], itemToUpdate)
+  async pushItemLocally (itemTouched: Item) {
+    console.log('pushing item locally', itemTouched)
+    const index = this.items.findIndex(item => item.id === itemTouched.id)
+    if (index >= 0) this.items[index] = itemTouched // update existing item
+    else if (itemTouched.id) this.items.push(itemTouched) // new item with id
+    else showError('cannot add item without id')
     this.initFuse()
   }
 
