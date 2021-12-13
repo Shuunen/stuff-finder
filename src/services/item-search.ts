@@ -1,4 +1,5 @@
 import { div, emit, on } from 'shuutils'
+import { DEFAULT_IMAGE } from '../constants'
 import { getCached, showLog } from '../utils'
 import { storage } from './storage'
 
@@ -48,7 +49,7 @@ class ItemSearch {
     emit('app-loader--toggle', false)
   }
   async getData (str: string) {
-    const data: PrefillItem = { name: '', brand: '', details: '', reference: '', barcode: '', photo: 'assets/no-visual.svg' }
+    const data: PrefillItem = { name: '', brand: '', details: '', reference: '', barcode: '', photo: DEFAULT_IMAGE }
     Object.assign(data, { name: str }, await this.getDataFromDeyes(str))
     console.log('final data', data)
     return data
