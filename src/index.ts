@@ -16,7 +16,7 @@ class App {
   constructor () {
     console.log('app start')
     on('app-form--settings--save', settings => this.onSettingsSave(settings))
-    on('app-update--item', item => this.onUpdateItem(item))
+    on('app-form--edit-item--save', item => this.onEditItem(item))
     on('get-barcodes-to-print', () => this.getBarcodesToPrint())
     on('search-start', data => this.onSearchStart(data))
     on('search-retry', () => this.onSearchRetry())
@@ -166,8 +166,9 @@ class App {
     this.lastSearchOrigin = origin
     const result = this.items.find(item => (item.reference === str || item.barcode === str))
     const results = result ? [result] : this.fuse.search(str).map(item => item.item)
-    const title = `Results for “${str}”`
-    emit('search-results', { title, results, byReference: Boolean(result) })
+    const title = `${results.length === 0 ? 'No result found' : (results.length === 1 ? 'One result found' : `Found ${results.length} results`)} for “${str}”`
+    const data: SearchResultEvent = { title, results, byReference: Boolean(result), input: str }
+    emit('search-results', data)
   }
 
   onSearchRetry () {
