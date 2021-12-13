@@ -12,3 +12,4 @@ public/*.css
 public/*.js
 public/*.map
 sample.*
+styles.min.css
