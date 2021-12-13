@@ -11,8 +11,6 @@ window.customElements.define('app-edit-item', class extends HTMLElement {
     if (!this.modal) return console.error('no modal')
     this.modal.innerHTML = fillTemplate(template.innerHTML, data)
     emit('app-form--edit-item--set', item)
-    const printed = this.modal.querySelector('input[name="ref-printed"]') as HTMLInputElement
-    printed.checked = data['ref-printed']
     emit('app-modal--edit-item--open')
   }
   async connectedCallback () {
