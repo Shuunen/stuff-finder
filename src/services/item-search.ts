@@ -42,7 +42,7 @@ class ItemSearch {
     emit('app-loader--toggle', true)
     const items = await storage.get<Item[]>('items')
     const result = items.find(item => (item.reference === str || item.barcode === str))
-    document.querySelector('app-form[name="search-item"] .error').textContent = result ? 'ITEM ALREADY EXISTS ! You might not want to add it... again.' : ''
+    document.querySelector('app-form[name="search-item"] .error').textContent = (result && str.length > 0) ? 'ITEM ALREADY EXISTS ! You might not want to add it... again.' : ''
     emit('app-form--edit-item--set', await this.getData(str))
     // emit('app-form--edit-item--suggestions', { name: ['Popop', 'Polop'] }) // TODO
     emit('app-loader--toggle', false)
