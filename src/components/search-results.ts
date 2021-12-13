@@ -1,4 +1,5 @@
 import { emit, fillTemplate, on, readableTimeAgo, text } from 'shuutils'
+import { DEFAULT_IMAGE } from '../constants'
 import { storage } from '../services/storage'
 import { showError } from '../utils'
 
@@ -11,7 +12,7 @@ window.customElements.define('app-search-results', class extends HTMLElement {
     this.header.textContent = data.title
     this.results = data.results
     this.list.innerHTML = data.results.map(result => {
-      const visual = result.photo === undefined ? 'assets/no-visual.svg' : result.photo[0].url
+      const visual = result.photo === undefined ? DEFAULT_IMAGE : result.photo[0].url
       const updated = readableTimeAgo((new Date(result['updated-on'])))
       const data = { barcode: '', ...result, visual, updated }
       return fillTemplate(this.template, data)

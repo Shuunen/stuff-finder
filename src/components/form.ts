@@ -1,4 +1,5 @@
 import { debounce, div, dom, emit, h2, on, p } from 'shuutils'
+import { DEFAULT_IMAGE } from '../constants'
 import { button, showError } from '../utils'
 
 class AppForm extends HTMLElement {
@@ -97,6 +98,10 @@ class AppForm extends HTMLElement {
     console.log('set photo', url, input)
     const img = this.els.form.querySelector('img')
     if (!img) return showError(`wanted to set "${url}" but no img found`)
+    img.addEventListener('error', () => {
+      img.src = DEFAULT_IMAGE
+      input.value = ''
+    })
     img.src = url
   }
   connectedCallback () {
