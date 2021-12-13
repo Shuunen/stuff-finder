@@ -22,21 +22,18 @@ interface ItemPhoto {
 interface Item {
   'barcode': string
   'box': string
-  'boxes': string[]
   'brand': string
   'category': string
   'details': string
   'drawer': string
   'id': string
   'location': string
-  'locations': string[]
   'name': string
   'price'?: number
   'photo'?: ItemPhoto[]
   'reference': string
   'ref-printed': boolean
   'status': string
-  'statuses': string[]
   'updated-on': string
 }
 
