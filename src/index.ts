@@ -11,6 +11,7 @@ class App {
   lastSearchOrigin = ''
   items: Item[] = []
   fuse!: Fuse<Item>
+  commonListsLoaded = false
 
   constructor () {
     console.log('app start')
@@ -76,7 +77,7 @@ class App {
     if (cachedItems.some(item => (item.id === records[0].id && item['updated-on'] === records[0].fields['updated-on']))) {
       this.items = cachedItems
       console.log(`${this.items.length} item(s) cached ` + this.coolAscii())
-      this.initFuse()
+      await this.initFuse()
       return true
     }
     let offset = response.offset
@@ -85,7 +86,7 @@ class App {
       offset = response.offset
       records = [...records, ...response.records]
     }
-    this.parseApiRecords(records)
+    await this.parseApiRecords(records)
     return true
   }
 
@@ -102,11 +103,11 @@ class App {
     return fetch(url).then(response => response.json())
   }
 
-  parseApiRecords (records: AirtableRecord[]) {
+  async parseApiRecords (records: AirtableRecord[]) {
     // this.showLog('parsing api records :', records )
-    let boxes: string[] = []
-    let locations: string[] = []
-    let statuses: string[] = []
+    const boxes: string[] = []
+    const locations: string[] = []
+    const statuses: string[] = []
     records.forEach(record => {
       const location = (record.fields.location && record.fields.location !== 'N/A') ? record.fields.location : ''
       const box = record.fields.box || ''
@@ -115,9 +116,7 @@ class App {
       if (box.length > 0 && !boxes.includes(box)) boxes.push(box)
       if (!statuses.includes(status)) statuses.push(status)
     })
-    locations = ['', 'N/A', ...locations.sort()]
-    boxes = ['', ...boxes.sort()]
-    statuses = ['', ...statuses.sort()]
+    this.saveCommonLists({ boxes, locations, statuses })
     this.items = records.map(record => ({
       'id': record.id,
       'name': '',
@@ -138,9 +137,11 @@ class App {
       ...record.fields,
     }))
     showLog(`${this.items.length} item(s) loaded ` + this.coolAscii())
+    return this.initFuse()
   }
 
-  initFuse () {
+  async initFuse () {
+    if (!await this.readCommonLists()) return
     // https://fusejs.io/
     const options = {
       distance: 200, // see the tip at https://fusejs.io/concepts/scoring-theory.html#scoring-theory
@@ -249,11 +250,6 @@ class App {
     this.initFuse()
   }
 
-  async patch (url: string, data: Record<string, unknown>) {
-    const options = { headers: JSON_HEADERS, method: 'patch', body: JSON.stringify(data) }
-    return fetch(url, options).then(response => response.json()).catch(error => this.showError(error.message))
-  }
-
   handleActions () {
     document.addEventListener('click', (event) => {
       const target = event.target as HTMLElement
@@ -264,6 +260,42 @@ class App {
       event.stopPropagation()
       emit(action, target)
     })
+  }
+
+  saveCommonLists (lists: CommonLists) {
+    console.log('saving common lists :', lists)
+    Object.keys(lists).forEach(name => {
+      lists[name] = ['', 'N/A', ...lists[name].sort()]
+    })
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    storage.set('lists', lists)
+  }
+
+  toOptions (array: string[]) {
+    return array.map(value => `<option value=${value}>${value}</option>`).join('')
+  }
+
+  async readCommonLists (): Promise<boolean> {
+    if (this.commonListsLoaded) return true
+    const lists = await storage.get<CommonLists>('lists')
+    if (!lists) {
+      console.error('no lists found, clearing cached items to fetch fresh data and set lists')
+      await storage.clear('items')
+      this.items = []
+      showError('please restart the app to set lists')
+      return false
+    }
+    console.log('common lists found', lists)
+    const template = document.querySelector('template#edit-item')
+    if (!template) throw new Error('no edit-item template found')
+    template.innerHTML = fillTemplate(template.innerHTML, {
+      boxes: this.toOptions(lists.boxes),
+      locations: this.toOptions(lists.locations),
+      statuses: this.toOptions(lists.statuses),
+      drawers: this.toOptions(['', '1', '2', '3', '4', '5', '6', '7']),
+    })
+    this.commonListsLoaded = true
+    return true
   }
 }
 

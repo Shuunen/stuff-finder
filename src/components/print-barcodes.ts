@@ -1,4 +1,5 @@
 import { div, emit, fillTemplate, on } from 'shuutils'
+import { storage } from '../services/storage'
 import { button } from '../utils'
 
 window.customElements.define('app-print-barcodes', class extends HTMLElement {
@@ -64,13 +65,14 @@ window.customElements.define('app-print-barcodes', class extends HTMLElement {
     this.previewError = div('preview error leading-9 text-center font-medium text-red-500')
     this.modal.append(this.previewError, this.previewButton)
   }
-  openModal () {
+  async openModal () {
     this.modal = document.querySelector('.app-modal--prepare-barcodes')
     if (!this.modal) return console.error('failed to find modal element')
     const listElement = this.modal.querySelector('.list')
     const template = document.querySelector('template#barcodes-list-item').innerHTML
+    const lists = await storage.get<CommonLists>('lists')
     listElement.innerHTML = this.barcodes.map(bar => {
-      const boxes = bar.boxes.map(box => `<option value="${box}" ${box.toLowerCase() === bar.box.toLowerCase() ? 'selected' : ''}>${box}</option>`).join('')
+      const boxes = lists.boxes.map(box => `<option value="${box}" ${box.toLowerCase() === bar.box.toLowerCase() ? 'selected' : ''}>${box}</option>`).join('')
       const drawers = ['', 1, 2, 3, 4, 5, 6, 7].map(d => `<option value="${d}" ${d.toString().toLowerCase() === bar.drawer.toLowerCase() ? 'selected' : ''}>${d}</option>`).join('')
       return fillTemplate(template, { id: bar.id, name: bar.name, brand: bar.brand, details: bar.details, reference: bar.reference, boxes, drawers })
     }).join('')

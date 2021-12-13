@@ -42,9 +42,12 @@ interface Item {
 
 interface AirtableRecord {
   id: string
-  fields: {
-    location?: string
-    box?: string
-    status?: string
-  }
+  fields: Item
+  error?: string
+}
+
+interface CommonLists {
+  boxes: string[]
+  locations: string[]
+  statuses: string[]
 }
