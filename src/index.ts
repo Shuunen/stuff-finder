@@ -194,8 +194,10 @@ class App {
       const item = this.airtableRecordToItem(response)
       await this.pushItemLocally(item)
     }
-    if (data.id) emit('app-modal--edit-item--close')
-    else emit('app-modal--add-item--close')
+    if (data.id) return emit('app-modal--edit-item--close')
+    emit('app-modal--add-item--close')
+    emit('app-modal--search-results--close')
+    document.location.search = ''
   }
 
   async pushItemRemotely (item: Item) {
