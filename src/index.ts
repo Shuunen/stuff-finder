@@ -21,9 +21,6 @@ class App {
     on('get-barcodes-to-print', () => this.getBarcodesToPrint())
     on('search-start', data => this.onSearchStart(data))
     on('search-retry', () => this.onSearchRetry())
-    on('fade-in', element => this.fadeIn(element))
-    on('fade-out', element => this.fadeOut(element))
-    on('fade-out-destroy', element => this.fadeOut(element, true))
     this.checkExistingSettings()
     this.showTitle()
     this.handleActions()
@@ -178,22 +175,6 @@ class App {
     if (this.lastSearchOrigin === SEARCH_ORIGIN.scan) return emit('app-scan-code--start')
     if (this.lastSearchOrigin === SEARCH_ORIGIN.speech) return emit('app-speech--start')
     showError('un-handled search retry case')
-  }
-
-  async fadeIn (element: HTMLElement) {
-    if (!element.classList.contains('hide')) return console.warn('please add "hide" class before mounting dom element and then call fade-in')
-    await sleep(10)
-    element.style.opacity = '1'
-  }
-
-  async fadeOut (element: HTMLElement, destroy = false) {
-    element.classList.add('hide')
-    await sleep(350)
-    element.classList.remove('hide')
-    element.classList.add('hidden')
-    if (!destroy) return
-    await sleep(350)
-    element.remove()
   }
 
   airtableRecordToItem (record: AirtableRecord): Item {
