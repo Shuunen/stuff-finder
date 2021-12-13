@@ -30,7 +30,7 @@
   <app-settings-trigger></app-settings-trigger>
   <app-add-item-trigger></app-add-item-trigger>
 
-  <app-modal name="search-results" data-title="Search results" class="px-2 md:max-h-96">
+  <app-modal name="search-results" data-title="Search results" class="hidden px-2 md:max-h-96">
     <div class="overflow-auto list results"></div>
   </app-modal>
 
@@ -70,11 +70,11 @@
     </app-form>
   </template>
 
-  <app-modal name="edit-item" data-title="Edit item">
+  <app-modal name="edit-item" data-title="Edit item" class="hidden">
     <div class="overflow-auto content"></div>
   </app-modal>
 
-  <app-modal name="add-item" data-title="Add item">
+  <app-modal name="add-item" data-title="Add item" class="hidden">
     <div class="overflow-auto content">
       <app-form class="justify-center" name="search-item" inline=true no-hid save-label="Search" on-save="app-search-item">
         <label>Search online by name or reference : <input required name=input type=text minlength=3 maxlength=150 autofocus /></label>
@@ -85,7 +85,7 @@
 
   <app-edit-item></app-edit-item>
 
-  <app-modal name="settings" data-title="Settings">
+  <app-modal name="settings" data-title="Settings" class="hidden">
     <app-form name="settings" class="md:grid-cols-1">
       <label>
         <a href="https://airtable.com/api" target="_blank" rel="noreferrer">Airtable api base</a>
@@ -146,7 +146,7 @@
     </app-form>
   </app-modal>
 
-  <app-modal name="prepare-barcodes" data-title="Prepare Barcodes">
+  <app-modal name="prepare-barcodes" data-title="Prepare Barcodes" class="hidden">
     <p class="font-medium text-yellow-700 sm:hidden">This content is too small for a mobile device, please use a bigger screen to access the barcode
       printing feature.</p>
     <div class="items-baseline hidden gap-2 my-2 sm:flex">
@@ -172,7 +172,7 @@
     </div>
   </template>
 
-  <app-modal name="print-barcodes" data-title="Print Barcodes">
+  <app-modal name="print-barcodes" data-title="Print Barcodes" class="hidden">
     <p>
       Below is a preview of the page that will be printed. <br>
       Make sure to remove any print margin in the <a data-action="barcodes-print" href="#print">print modal</a>.
