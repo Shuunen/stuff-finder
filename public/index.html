@@ -92,6 +92,10 @@
         Airtable view name
         <input name="view" type="text" pattern="\S+" placeholder="your table name" required value="stuff-finder">
       </label>
+      <label>
+        <a href="https://wrapapi.com/user/api" target="_blank" rel="noreferrer">Wrap Api key (optional)</a>
+        <input name="wrap" type="text" pattern="\w{32}" placeholder="your wrap api key" maxlength="32">
+      </label>
 
       <details class="mt-2">
         <summary>What this app do with my credentials ?</summary>
@@ -104,6 +108,15 @@
           Feel free to check this app source code on the <a data-action="see-project" href="https://github.com/Shuunen/stuff-finder" target="_blank"
             rel="noreferrer">Github
             project page</a>.
+        </small>
+      </details>
+
+      <details>
+        <summary>What about that Wrap api optional field ?</summary>
+        <small>
+          Wrap api is a great & <strong>free</strong> service to fetch data, it ease the process to add products to your Airtable database.<br />
+          For exemple, <u>give him the EAN code of your product, he will fetch the name and image</u>.<br />
+          Check their <a href="https://wrapapi.com" target="_blank" rel="noreferrer">website</a> to register your free account.
         </small>
       </details>
 

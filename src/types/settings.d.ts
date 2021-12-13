@@ -3,4 +3,5 @@ interface AppSettings extends Record<string, unknown>{
   key: string
   table: string
   view: string
+  wrap: string
 }
