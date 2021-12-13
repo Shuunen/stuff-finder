@@ -57,9 +57,9 @@
       <div class="mb-6 sm:row-span-4 md:row-span-5 sm:mb-0 max-h-72">
         <img class="w-3/4 mx-auto" src="assets/no-visual.svg" />
         <div class="flex mt-3 justify-evenly">
-          <a data-action="app-form--edit-item--set" data-payload='{ "photo": "" }' href="#">Clear current image</a>
+          <input type=hidden name=photo />
+          <a class="clear" data-action="app-form--edit-item--set" data-payload='{ "photo": "" }' href="#">Clear current image</a>
         </div>
-        <input type=hidden name=photo />
       </div>
       <label>Name<input required name=name type=text minlength=3 maxlength=50 autofocus /></label>
       <label>Brand<input name=brand type=text /></label>
