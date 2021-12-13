@@ -1,4 +1,6 @@
-import { emit, fillTemplate, on, readableTimeAgo } from 'shuutils'
+import { emit, fillTemplate, on, readableTimeAgo, text } from 'shuutils'
+import { storage } from '../services/storage'
+import { showError } from '../utils'
 
 window.customElements.define('app-search-results', class extends HTMLElement {
   template = ''
@@ -16,6 +18,9 @@ window.customElements.define('app-search-results', class extends HTMLElement {
     }).join('')
     emit('app-modal--search-results--open')
   }
+  async onSelect (id: string) {
+    const items = await storage.get<Item[]>('items')
+    const item = items.find(item => item.id === id)
     if (!item) return showError('failed to find item with this id : ' + id)
     emit('edit-item', item)
   }
