@@ -51,6 +51,7 @@ class ItemSearch {
   async getData (str: string) {
     const data: PrefillItem = { 'name': str, 'brand': '', 'details': '', 'reference': '', 'barcode': '', 'photo': DEFAULT_IMAGE, 'status': 'acheté', 'ref-printed': true }
     Object.assign(data, await this.getDataFromDeyes(str))
+    if (data.reference.length === 0 || data.details.length === 0) Object.assign(data, await this.getDataFromAmzn(str))
     console.log('final data', data)
     return data
   }
@@ -60,7 +61,7 @@ class ItemSearch {
     const response = await getCached<WrapApiDeyesResponse>(`https://wrapapi.com/use/jojo/deyes/json/0.0.2?code=${code}&wrapAPIKey=${wrapApiKey}`)
     if (!response.success) return {}
     const data = response.data
-    console.log('data', data)
+    console.log('deyes data', data)
     return {
       name: data.name,
       brand: data.brand.name,
@@ -68,6 +69,21 @@ class ItemSearch {
       photo: data.image[0],
       reference: data.gtin13,
       price: ['string', 'undefined'].includes(typeof data.offers[0]) ? undefined : Math.round(Number.parseFloat((data.offers[0] as { price: string }).price)),
+    }
+  }
+  async getDataFromAmzn (str: string) {
+    const wrapApiKey = await this.getWrapApiKey()
+    if (wrapApiKey === '') return {}
+    const response = await getCached<WrapApiAmznResponse>(`https://wrapapi.com/use/jojo/amzn/search/0.0.3?keywords=${str}&wrapAPIKey=${wrapApiKey}`)
+    if (!response.success) return {}
+    const data = response.data
+    console.log('amazon data', data)
+    const item = data.items[0]
+    return {
+      details: item.title,
+      reference: (item.url.match(/\/dp\/(\w+)/) || [])[1], // get the asin from url
+      photo: item.photo,
+      price: Math.round(item.price),
     }
   }
 }
