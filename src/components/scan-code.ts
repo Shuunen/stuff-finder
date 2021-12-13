@@ -1,7 +1,6 @@
 import { BrowserMultiFormatReader } from '@zxing/library/es2015/browser/BrowserMultiFormatReader'
 import NotFoundException from '@zxing/library/es2015/core/NotFoundException'
 import { dom, emit, on, sleep } from 'shuutils'
-import { SEARCH_ORIGIN } from '../constants'
 
 window.customElements.define('app-scan-code', class extends HTMLElement {
   device = ''
@@ -12,7 +11,7 @@ window.customElements.define('app-scan-code', class extends HTMLElement {
     console.log('found qr or barcode :', code)
     emit('app-modal--close')
     emit('app-sound--success')
-    emit('search-start', { str: code, origin: SEARCH_ORIGIN.scan })
+    emit('search-start', { str: code, origin: 'scan' } as SearchStartEvent)
   }
 
   async scanCode () {

@@ -1,5 +1,4 @@
 import { emit, on, sleep } from 'shuutils'
-import { SEARCH_ORIGIN } from '../constants'
 
 class UrlService {
   constructor () {
@@ -9,7 +8,7 @@ class UrlService {
     await sleep(100) // needed
     const parameters = new URLSearchParams(window.location.search)
     parameters.forEach((value, key) => {
-      if (key === 'search') emit('search-start', { str: value, origin: SEARCH_ORIGIN.url })
+      if (key === 'search') emit('search-start', { str: value, origin: 'url' } as SearchStartEvent)
       else if (key === 'add') this.openAddItemModal(value)
     })
   }
