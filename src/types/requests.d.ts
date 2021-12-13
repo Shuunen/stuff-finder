@@ -14,3 +14,14 @@ interface WrapApiDeyesResponse extends WrapApiResponse {
     offers: { price: string }[] | ''
   }
 }
+
+interface WrapApiAmznResponse extends WrapApiResponse {
+  data: {
+    items: {
+      title: string
+      price?: number
+      url: string
+      photo: string
+    }[]
+  }
+}
