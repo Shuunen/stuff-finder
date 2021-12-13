@@ -38,13 +38,15 @@ interface Item {
 }
 
 interface PrefillItem {
-  name: string
-  brand: string
-  details: string
-  reference: string
-  barcode: string
-  price?: number
-  photo: string
+  'barcode': string
+  'brand': string
+  'details': string
+  'name': string
+  'photo': string
+  'price'?: number
+  'reference': string
+  'ref-printed': boolean
+  'status': string
 }
 
 interface AirtableRecord {
