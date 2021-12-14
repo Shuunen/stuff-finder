@@ -215,7 +215,7 @@ class App {
       const existing = this.items.find(existing => existing.id === item.id)
       if (!existing) throw new Error('existing item not found locally')
       Object.keys(data.fields).forEach(field => {
-        const samePhoto = field === 'photo' && existing.photo[0].url === data.fields.photo[0].url
+        const samePhoto = field === 'photo' && existing.photo && existing.photo[0].url === data.fields.photo[0].url
         const sameValue = existing[field] === data.fields[field]
         if (samePhoto || sameValue) delete data.fields[field]
       })
