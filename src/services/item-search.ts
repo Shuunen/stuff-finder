@@ -44,7 +44,7 @@ class ItemSearch {
     const items = await storage.get<Item[]>('items')
     const result = items.find(item => (item.reference === str || item.barcode === str))
     document.querySelector('app-form[name="search-item"] .error').textContent = (result && str.length > 0) ? 'ITEM ALREADY EXISTS ! You might not want to add it... again.' : ''
-    emit('app-form--edit-item--set', await this.getData(str))
+    if (str.length > 0) emit('app-form--edit-item--set', await this.getData(str))
     // emit('app-form--edit-item--suggestions', { name: ['Popop', 'Polop'] }) // TODO
     emit('app-loader--toggle', false)
   }
@@ -52,38 +52,54 @@ class ItemSearch {
     const data: PrefillItem = { 'name': str, 'brand': '', 'details': '', 'reference': '', 'barcode': '', 'photo': DEFAULT_IMAGE, 'status': 'acheté', 'ref-printed': true }
     Object.assign(data, await this.getDataFromDeyes(str))
     if (data.reference.length === 0 || data.details.length === 0) Object.assign(data, await this.getDataFromAmzn(str))
+    if (data.reference.length === 0) Object.assign(data, await this.getDataFromCampo(str))
     console.log('final data', data)
     return data
   }
-  async getDataFromDeyes (code: string): Promise<Partial<PrefillItem>> {
+  async getDataFromWrap<T> (endpoint: string): Promise<T> {
     const wrapApiKey = await this.getWrapApiKey()
-    if (wrapApiKey === '') return {}
-    const response = await getCached<WrapApiDeyesResponse>(`https://wrapapi.com/use/jojo/deyes/json/0.0.2?code=${code}&wrapAPIKey=${wrapApiKey}`)
-    if (!response.success) return {}
+    if (wrapApiKey === '') return {} as T
+    return getCached<T>(`https://wrapapi.com/use/jojo/${endpoint}&wrapAPIKey=${wrapApiKey}`)
+  }
+  async getDataFromDeyes (code: string): Promise<Partial<PrefillItem>> {
+    const response = await this.getDataFromWrap<WrapApiDeyesResponse>(`deyes/json/0.0.2?code=${code}`)
     const data = response.data
+    if (!response.success) return {}
     console.log('deyes data', data)
     return {
-      name: data.name,
       brand: data.brand.name,
       details: data.description,
+      name: data.name,
       photo: data.image[0],
-      reference: data.gtin13,
       price: ['string', 'undefined'].includes(typeof data.offers[0]) ? undefined : Math.round(Number.parseFloat((data.offers[0] as { price: string }).price)),
+      reference: data.gtin13,
     }
   }
-  async getDataFromAmzn (str: string) {
-    const wrapApiKey = await this.getWrapApiKey()
-    if (wrapApiKey === '') return {}
-    const response = await getCached<WrapApiAmznResponse>(`https://wrapapi.com/use/jojo/amzn/search/0.0.3?keywords=${str}&wrapAPIKey=${wrapApiKey}`)
+  async getDataFromAmzn (str: string): Promise<Partial<PrefillItem>> {
+    const response = await this.getDataFromWrap<WrapApiAmznResponse>(`amzn/search/0.0.3?keywords=${str}`)
     if (!response.success) return {}
     const data = response.data
     console.log('amazon data', data)
     const item = data.items[0]
     return {
       details: item.title,
-      reference: (item.url.match(/\/dp\/(\w+)/) || [])[1], // get the asin from url
       photo: item.photo,
       price: Math.round(item.price),
+      reference: (item.url.match(/\/dp\/(\w+)/) || [])[1], // get the asin from url
+    }
+  }
+  async getDataFromCampo (str: string): Promise<Partial<PrefillItem>> {
+    const response = await this.getDataFromWrap<WrapApiCampoResponse>(`alcampo/search/0.0.3?str=${str}`)
+    if (!response.success) return {}
+    const data = response.data
+    console.log('campo data', data)
+    const item = data.items[0]
+    return {
+      brand: item.brand,
+      name: item.title,
+      photo: item.photo,
+      price: item.price,
+      reference: item.uuid,
     }
   }
 }
