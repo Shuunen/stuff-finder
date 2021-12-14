@@ -25,3 +25,17 @@ interface WrapApiAmznResponse extends WrapApiResponse {
     }[]
   }
 }
+
+interface WrapApiCampoResponse extends WrapApiResponse {
+  data: {
+    items: {
+      brand: string
+      photo: string
+      price?: number
+      rating?: number
+      title: string
+      url: string
+      uuid: string
+    }[]
+  }
+}
