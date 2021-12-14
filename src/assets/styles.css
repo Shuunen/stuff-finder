@@ -126,7 +126,7 @@ button:disabled {
   @apply opacity-50 cursor-not-allowed grayscale;
 }
 
-form select:invalid[required], form input:invalid[required] {
+form select:invalid, form input:invalid {
   @apply bg-red-100 border border-red-400;
 }
 
@@ -158,10 +158,10 @@ details small {
   @apply block mt-2 ml-4;
 }
 
-input[name=photo] + a.clear {
+app-form[name="search-item"] img + div > a.clear {
   @apply hidden;
 }
 
-input[name=photo][value^="http"] + a.clear {
+app-form[name="search-item"] img[src^="http"] + div > a.clear {
   @apply block;
 }
