@@ -15,7 +15,7 @@ window.customElements.define('app-search-results', class extends HTMLElement {
     this.list.innerHTML = event.results.map(result => {
       const visual = result.photo === undefined ? DEFAULT_IMAGE : result.photo[0].url
       const updated = readableTimeAgo((new Date(result['updated-on'])))
-      const data = { barcode: '', drawer: '', ...result, visual, updated }
+      const data = { barcode: '', brand: '', box: 'N/A', drawer: '', ...result, visual, updated }
       return fillTemplate(this.template, data)
     }).join('')
     if (event.results.length === 0) this.list.innerHTML = '<p class="text-center py-4"><span class="text-4xl opacity-50">¯\\_(ツ)_/¯</span><br><br>No results found.</p>'
