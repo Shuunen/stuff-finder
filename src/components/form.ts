@@ -81,8 +81,13 @@ class AppForm extends HTMLElement {
   validateSync () {
     const isValid = this.els.form?.checkValidity()
     console.log(`form is ${isValid ? 'valid' : 'invalid'}`)
+    this.error = ''
     if (isValid) this.els.save?.removeAttribute('disabled')
-    else this.els.save?.setAttribute('disabled', String(true))
+    else {
+      this.els.save?.setAttribute('disabled', String(true))
+      const input = this.inputs.find(input => input.validationMessage.length > 0)
+      if (input) this.error = `Field "${input.name}" is invalid. ${input.validationMessage}`
+    }
     if (this.inline) this.els.footer?.classList.toggle('hidden', !(this.dataChanged && isValid))
     this.setAttribute('valid', String(isValid))
   }
@@ -112,7 +117,7 @@ class AppForm extends HTMLElement {
     this.removeAttribute('class')
     this.innerHTML = ''
     this.append(this.els.form)
-    this.els.error = p('error')
+    this.els.error = p('error text-center')
     this.els.form.parentElement?.append(this.els.error)
     if (!this.inline && this.dataset.title) {
       this.els.header = h2('header text-purple-700 text-2xl mt-2 mb-4 text-center', this.dataset.title)
