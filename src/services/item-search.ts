@@ -43,63 +43,66 @@ class ItemSearch {
     const items = await storage.get<Item[]>('items')
     const result = items.find(item => (item.reference === str || item.barcode === str))
     document.querySelector('app-form[name="search-item"] .error').textContent = (result && str.length > 0) ? 'ITEM ALREADY EXISTS ! You might not want to add it... again.' : ''
-    if (str.length > 0) emit('app-form--edit-item--set', await this.getData(str))
-    // emit('app-form--edit-item--suggestions', { name: ['Popop', 'Polop'] }) // TODO
+    if (str.length > 0) emit('app-form--edit-item--suggestions', await this.getSuggestions(str))
     emit('app-loader--toggle', false)
   }
-  async getData (str: string) {
-    const data: PrefillItem = { 'name': str, 'brand': '', 'details': '', 'reference': '', 'barcode': '', 'photo': '', 'status': 'acheté', 'ref-printed': true }
-    Object.assign(data, await this.getDataFromDeyes(str))
-    if (data.reference.length === 0 || data.details.length === 0) Object.assign(data, await this.getDataFromAmzn(str))
-    if (data.reference.length === 0) Object.assign(data, await this.getDataFromCampo(str))
-    console.log('final data', data)
-    return data
+  priceParse (price: string | number): string {
+    if (price === undefined) return ''
+    if (typeof price === 'string') return Math.round(Number.parseFloat(price)).toString()
+    return Math.round(price).toString()
   }
-  async getDataFromWrap<T> (endpoint: string): Promise<T> {
+  async getSuggestions (str: string) {
+    const suggestions: ItemSuggestions = { 'name': [], 'brand': [], 'details': [], 'reference': [], 'barcode': [], 'photo': [], 'status': ['acheté'], 'ref-printed': ['true'], 'category': [], 'box': [], 'drawer': [], 'id': [], 'location': [], 'price': [], 'updated-on': [] }
+    await this.addSuggestionsFromDeyes(suggestions, str)
+    if (suggestions.reference.length === 0 || suggestions.details.length === 0) await this.addSuggestionsFromAmzn(suggestions, str)
+    if (suggestions.reference.length === 0) await this.addSuggestionsFromCampo(suggestions, str)
+    for (const key in suggestions)
+      if (suggestions[key].length === 0) delete suggestions[key] // clear empty fields
+      else suggestions[key] = suggestions[key].filter((value, index, array) => array.indexOf(value) === index) // remove duplicates
+    console.log('final suggestions', suggestions)
+    return suggestions
+  }
+  async addSuggestionsFromWrap<T> (endpoint: string): Promise<T> {
     const wrapApiKey = await this.getWrapApiKey()
     if (wrapApiKey === '') return {} as T
     return getCached<T>(`https://wrapapi.com/use/jojo/${endpoint}&wrapAPIKey=${wrapApiKey}`)
   }
-  async getDataFromDeyes (code: string): Promise<Partial<PrefillItem>> {
-    const response = await this.getDataFromWrap<WrapApiDeyesResponse>(`deyes/json/0.0.2?code=${code}`)
+  async addSuggestionsFromDeyes (suggestions: ItemSuggestions, code: string) {
+    const response = await this.addSuggestionsFromWrap<WrapApiDeyesResponse>(`deyes/json/0.0.2?code=${code}`)
     const data = response.data
     if (!response.success) return {}
     console.log('deyes data', data)
-    return {
-      brand: data.brand.name,
-      details: data.description,
-      name: data.name,
-      photo: data.image[0],
-      price: ['string', 'undefined'].includes(typeof data.offers[0]) ? undefined : Math.round(Number.parseFloat((data.offers[0] as { price: string }).price)),
-      reference: data.gtin13,
-    }
+    suggestions.name.push(data.name)
+    suggestions.brand.push(data.brand.name)
+    suggestions.details.push(data.description)
+    suggestions.photo.push(data.image[0])
+    suggestions.price.push(this.priceParse(data.offers === '' ? undefined : data.offers[0].price))
+    suggestions.reference.push(data.gtin13)
   }
-  async getDataFromAmzn (str: string): Promise<Partial<PrefillItem>> {
-    const response = await this.getDataFromWrap<WrapApiAmznResponse>(`amzn/search/0.0.3?keywords=${str}`)
+  async addSuggestionsFromAmzn (suggestions: ItemSuggestions, str: string) {
+    const response = await this.addSuggestionsFromWrap<WrapApiAmznResponse>(`amzn/search/0.0.3?keywords=${str}`)
     if (!response.success) return {}
     const data = response.data
     console.log('amazon data', data)
-    const item = data.items[0]
-    return {
-      details: item.title,
-      photo: item.photo,
-      price: Math.round(item.price),
-      reference: (item.url.match(/\/dp\/(\w+)/) || [])[1], // get the asin from url
-    }
+    data.items.forEach(item => {
+      suggestions.details.push(item.title)
+      suggestions.photo.push(item.photo)
+      suggestions.price.push(this.priceParse(item.price))
+      suggestions.reference.push((item.url.match(/\/dp\/(\w+)/) || [])[1]) // get the asin from url
+    })
   }
-  async getDataFromCampo (str: string): Promise<Partial<PrefillItem>> {
-    const response = await this.getDataFromWrap<WrapApiCampoResponse>(`alcampo/search/0.0.3?str=${str}`)
+  async addSuggestionsFromCampo (suggestions: ItemSuggestions, str: string) {
+    const response = await this.addSuggestionsFromWrap<WrapApiCampoResponse>(`alcampo/search/0.0.3?str=${str}`)
     if (!response.success) return {}
     const data = response.data
     console.log('campo data', data)
-    const item = data.items[0]
-    return {
-      brand: item.brand,
-      name: item.title,
-      photo: item.photo,
-      price: item.price,
-      reference: item.uuid,
-    }
+    data.items.forEach(item => {
+      suggestions.brand.push(item.brand)
+      suggestions.name.push(item.title)
+      suggestions.photo.push(item.photo)
+      suggestions.price.push(this.priceParse(item.price))
+      suggestions.reference.push(item.uuid)
+    })
   }
 }
 

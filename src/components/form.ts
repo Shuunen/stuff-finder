@@ -1,6 +1,6 @@
 import { debounce, div, dom, emit, h2, on, p } from 'shuutils'
 import { DEFAULT_IMAGE } from '../constants'
-import { button, showError } from '../utils'
+import { button, showError, valuesToOptions } from '../utils'
 
 class AppForm extends HTMLElement {
   _id = ''
@@ -34,10 +34,7 @@ class AppForm extends HTMLElement {
     Object.entries(data).forEach(entry => {
       const [key, value = ''] = entry
       const input = this.inputs.find(input => (input.name === key))
-      if (input)
-        if (key === 'photo') this.setPhoto(input, value)
-        else if (input.type === 'checkbox') setTimeout(() => { input.checked = String(value) === 'true' }, 100) // need to be async ¯\_(ツ)_/¯
-        else input.value = value as string
+      if (input) this.setInputValue(input, value)
     })
     this.validateSync()
   }
@@ -91,6 +88,11 @@ class AppForm extends HTMLElement {
     if (this.inline) this.els.footer?.classList.toggle('hidden', !(this.dataChanged && isValid))
     this.setAttribute('valid', String(isValid))
   }
+  setInputValue (input, value) {
+    if (input.name === 'photo') this.setPhoto(input, value)
+    else if (input.type === 'checkbox') setTimeout(() => { input.checked = String(value) === 'true' }, 100) // need to be async ¯\_(ツ)_/¯
+    else input.value = value as string
+  }
   setPhoto (input: HTMLInputElement, data: string | boolean | number | string[]) {
     if (['boolean', 'number'].includes(typeof data)) return console.error('photo data must be a string or array')
     let url = ''
@@ -109,10 +111,23 @@ class AppForm extends HTMLElement {
     })
     img.src = url
   }
+  addSuggestions (suggestions: Record<string, string[]>) {
+    this.inputs.forEach(input => {
+      let suggestionsForInput = (suggestions[input.name] || []).filter(value => value !== '')
+      if (input.type === 'number') suggestionsForInput = suggestionsForInput.filter(value => value !== '0')
+      if (!suggestionsForInput || suggestionsForInput.length === 0) return
+      this.setInputValue(input, suggestionsForInput[0])
+      if (suggestionsForInput.length === 1) return
+      const select = dom('select', `suggestions suggestions--${input.name}`, valuesToOptions(suggestionsForInput))
+      input.after(select)
+      select.addEventListener('change', () => this.setInputValue(input, select.value))
+    })
+  }
   connectedCallback () {
     this._id = `app-form--${this.name}`
     on(`${this._id}--set`, data => { this.data = data })
     on(`${this._id}--error`, message => { this.error = message })
+    on(`${this._id}--suggestions`, suggestions => this.addSuggestions(suggestions))
     this.els.form = dom('form', this.className, this.innerHTML)
     this.removeAttribute('class')
     this.innerHTML = ''
