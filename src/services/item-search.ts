@@ -55,6 +55,7 @@ class ItemSearch {
     const suggestions: ItemSuggestions = { 'name': [], 'brand': [], 'details': [], 'reference': [], 'barcode': [], 'photo': [], 'status': ['acheté'], 'ref-printed': ['true'], 'category': [], 'box': [], 'drawer': [], 'id': [], 'location': [], 'price': [], 'updated-on': [] }
     await this.addSuggestionsFromDeyes(suggestions, str)
     if (suggestions.reference.length === 0 || suggestions.details.length === 0) await this.addSuggestionsFromAmzn(suggestions, str)
+    if (suggestions.reference.length === 0) await this.addSuggestionsFromAliEx(suggestions, str)
     if (suggestions.reference.length === 0) await this.addSuggestionsFromCampo(suggestions, str)
     for (const key in suggestions)
       if (suggestions[key].length === 0) delete suggestions[key] // clear empty fields
@@ -89,6 +90,18 @@ class ItemSearch {
       suggestions.photo.push(item.photo)
       suggestions.price.push(this.priceParse(item.price))
       suggestions.reference.push((item.url.match(/\/dp\/(\w+)/) || [])[1]) // get the asin from url
+    })
+  }
+  async addSuggestionsFromAliEx (suggestions: ItemSuggestions, str: string) {
+    const response = await this.addSuggestionsFromWrap<WrapApiAliExResponse>(`aliex/search/0.0.1?str=${str}`)
+    if (!response.success) return {}
+    const data = response.data
+    console.log('AliEx data', data)
+    data.items.forEach(item => {
+      suggestions.name.push(item.title)
+      suggestions.photo.push(item.photo)
+      suggestions.price.push(this.priceParse(item.price))
+      suggestions.reference.push(item.reference)
     })
   }
   async addSuggestionsFromCampo (suggestions: ItemSuggestions, str: string) {

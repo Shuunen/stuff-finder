@@ -39,3 +39,16 @@ interface WrapApiCampoResponse extends WrapApiResponse {
     }[]
   }
 }
+
+interface WrapApiAliExResponse extends WrapApiResponse {
+  data: {
+    items: {
+      title: string
+      photo: string
+      reference: string
+      rating: number
+      price: number
+      store: string
+    }[]
+  }
+}
