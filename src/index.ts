@@ -4,7 +4,7 @@ import './assets/styles.min.css'
 import './components'
 import './services'
 import { storage } from './services/storage'
-import { patch, post, showError, showLog } from './utils'
+import { patch, post, showError, showLog, valuesToOptions } from './utils'
 
 class App {
   apiUrl = ''
@@ -259,10 +259,6 @@ class App {
     storage.set('lists', lists)
   }
 
-  toOptions (array: string[]) {
-    return array.map(value => `<option value="${value}">${value}</option>`).join('')
-  }
-
   async readCommonLists (): Promise<boolean> {
     if (this.commonListsLoaded) return true
     const lists = await storage.get<CommonLists>('lists')
@@ -277,11 +273,11 @@ class App {
     const template = document.querySelector('template#edit-item')
     if (!template) throw new Error('no edit-item template found')
     const data: Record<keyof CommonLists, string> = {
-      boxes: this.toOptions(lists.boxes),
-      locations: this.toOptions(lists.locations),
-      statuses: this.toOptions(lists.statuses),
-      drawers: this.toOptions(lists.drawers),
-      categories: this.toOptions(lists.categories),
+      boxes: valuesToOptions(lists.boxes),
+      locations: valuesToOptions(lists.locations),
+      statuses: valuesToOptions(lists.statuses),
+      drawers: valuesToOptions(lists.drawers),
+      categories: valuesToOptions(lists.categories),
     }
     template.innerHTML = fillTemplate(template.innerHTML, data)
     this.commonListsLoaded = true

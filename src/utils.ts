@@ -58,3 +58,7 @@ export const fadeOut = async (element: HTMLElement, destroy = false) => {
   await sleep(350)
   element.remove()
 }
+
+export const valuesToOptions = (array: string[]): string => {
+  return array.map(value => `<option value="${value}">${value}</option>`).join('')
+}

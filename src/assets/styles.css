@@ -119,7 +119,19 @@ form input[type=text], form input[type=number], form select {
 }
 
 form label {
-  @apply grid items-center gap-1 overflow-hidden text-left align-middle cursor-pointer focus-within:text-purple-700 focus-within:font-semibold whitespace-nowrap overflow-ellipsis;
+  @apply relative grid items-center gap-1 overflow-hidden text-left align-middle cursor-pointer focus-within:text-purple-700 focus-within:font-semibold whitespace-nowrap overflow-ellipsis;
+}
+
+form .suggestions {
+  @apply absolute bottom-0 right-0 w-10 p-2 text-transparent;
+}
+
+form .suggestions.suggestions--photo {
+  @apply top-0;
+}
+
+form .suggestions > option {
+ @apply text-purple-600;
 }
 
 button:disabled {

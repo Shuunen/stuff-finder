@@ -37,17 +37,7 @@ interface Item {
   'updated-on': string
 }
 
-interface PrefillItem {
-  'barcode': string
-  'brand': string
-  'details': string
-  'name': string
-  'photo': string
-  'price'?: number
-  'reference': string
-  'ref-printed': boolean
-  'status': string
-}
+type ItemSuggestions = Record<keyof Item, string[]>
 
 interface AirtableRecord {
   id: string
