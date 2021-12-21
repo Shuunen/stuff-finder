@@ -54,9 +54,9 @@ class ItemSearch {
   async getSuggestions (str: string) {
     const suggestions: ItemSuggestions = { 'name': [], 'brand': [], 'details': [], 'reference': [], 'barcode': [], 'photo': [], 'status': ['acheté'], 'ref-printed': ['true'], 'category': [], 'box': [], 'drawer': [], 'id': [], 'location': [], 'price': [], 'updated-on': [] }
     await this.addSuggestionsFromDeyes(suggestions, str)
-    if (suggestions.reference.length === 0 || suggestions.details.length === 0) await this.addSuggestionsFromAmzn(suggestions, str)
-    if (suggestions.reference.length === 0) await this.addSuggestionsFromAliEx(suggestions, str)
-    if (suggestions.reference.length === 0) await this.addSuggestionsFromCampo(suggestions, str)
+    await this.addSuggestionsFromAliEx(suggestions, str)
+    await this.addSuggestionsFromAmzn(suggestions, str)
+    await this.addSuggestionsFromCampo(suggestions, str)
     for (const key in suggestions)
       if (suggestions[key].length === 0) delete suggestions[key] // clear empty fields
       else suggestions[key] = suggestions[key].filter((value, index, array) => array.indexOf(value) === index) // remove duplicates
@@ -85,7 +85,7 @@ class ItemSearch {
     if (!response.success) return {}
     const data = response.data
     console.log('amazon data', data)
-    data.items.forEach(item => {
+    data.items.splice(0, 5).forEach(item => {
       suggestions.details.push(item.title)
       suggestions.photo.push(item.photo)
       suggestions.price.push(this.priceParse(item.price))
