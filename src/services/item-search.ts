@@ -1,4 +1,4 @@
-import { div, emit, on } from 'shuutils'
+import { capitalize, div, emit, on } from 'shuutils'
 import { getCached, showLog } from '../utils'
 import { storage } from './storage'
 
@@ -60,6 +60,8 @@ class ItemSearch {
     for (const key in suggestions)
       if (suggestions[key].length === 0) delete suggestions[key] // clear empty fields
       else suggestions[key] = suggestions[key].filter((value, index, array) => array.indexOf(value) === index) // remove duplicates
+    const clean = ['name', 'details']
+    clean.forEach(key => { suggestions[key] = suggestions[key].map(suggestion => capitalize(suggestion, true)) })
     console.log('final suggestions', suggestions)
     return suggestions
   }
