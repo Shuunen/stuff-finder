@@ -22,13 +22,13 @@ const request = async (method: 'patch' | 'post' | 'get', url: string, data?: Rec
 }
 export const patch = async (url: string, data: Record<string, unknown>) => request('patch', url, data)
 export const post = async (url: string, data: Record<string, unknown>) => request('post', url, data)
-export const get = async (url: string) => request('get', url)
+export const get = async <T> (url: string): Promise<T> => request('get', url)
 export const getCached = async <T> (url: string): Promise<T> => {
   const uuid = urlToUuid(url)
-  const cached = await storage.get<T>(uuid)
+  const cached = await storage.get<T>(uuid, sessionStorage)
   if (cached) return cached
   const response = await request('get', url)
-  storage.set(uuid, response)
+  storage.set(uuid, response, sessionStorage)
   return response as T
 }
 
