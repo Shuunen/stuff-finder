@@ -1,0 +1,39 @@
+[
+  {
+    "path": "/*",
+    "resourceCounts": [
+      {
+        "budget": 1,
+        "resourceType": "third-party"
+      },
+      {
+        "budget": 10,
+        "resourceType": "total"
+      }
+    ],
+    "resourceSizes": [
+      {
+        "budget": 10,
+        "resourceType": "document"
+      },
+      {
+        "budget": 150,
+        "resourceType": "script"
+      },
+      {
+        "budget": 200,
+        "resourceType": "total"
+      }
+    ],
+    "timings": [
+      {
+        "budget": 3000,
+        "metric": "interactive"
+      },
+      {
+        "budget": 2500,
+        "metric": "first-meaningful-paint"
+      }
+    ]
+  }
+]
