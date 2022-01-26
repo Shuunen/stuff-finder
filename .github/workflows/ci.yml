@@ -47,3 +47,17 @@ jobs:
 
       - name: Run tests 👀
         run: npm run test
+
+      - name: Wait for the Netlify Preview
+        uses: jakepartusch/wait-for-netlify-action@v1
+        id: netlify
+        with:
+          site_name: 'stuff-finder'
+
+      - name: Audit URLs using Lighthouse
+        uses: treosh/lighthouse-ci-action@v8
+        with:
+          urls: |
+            ${{ steps.netlify.outputs.url }}
+          budgetPath: ./budget.json
+          uploadArtifacts: true
