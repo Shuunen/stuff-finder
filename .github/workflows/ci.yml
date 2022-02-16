@@ -55,7 +55,7 @@ jobs:
           site_name: 'stuff-finder'
 
       - name: Audit URLs using Lighthouse
-        uses: treosh/lighthouse-ci-action@v8
+        uses: treosh/lighthouse-ci-action@v9
         with:
           urls: |
             ${{ steps.netlify.outputs.url }}
