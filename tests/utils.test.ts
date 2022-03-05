@@ -1,5 +1,5 @@
-import { strictEqual as equal } from 'assert'
 import { test } from 'uvu'
+import { equal } from 'uvu/assert'
 import { button } from '../src/utils'
 
 test('button', () => {
