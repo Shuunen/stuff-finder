@@ -14,7 +14,7 @@
     "esbuild": "^0.14",
     "eslint": "8",
     "eslint-plugin-html": "6",
-    "eslint-plugin-unicorn": "40",
+    "eslint-plugin-unicorn": "41",
     "fuse.js": "^6.4",
     "jsdom": "19",
     "jsdom-global": "3",
