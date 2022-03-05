@@ -11,7 +11,7 @@ interface WrapApiDeyesResponse extends WrapApiResponse {
     description: string
     image: string[]
     gtin13: string
-    offers: { price: string }[] | ''
+    offers: { price: string }
   }
 }
 

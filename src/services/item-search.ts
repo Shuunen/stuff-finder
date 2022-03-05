@@ -79,7 +79,7 @@ class ItemSearch {
     suggestions.brand.push(data.brand.name)
     suggestions.details.push(data.description)
     suggestions.photo.push(data.image[0])
-    suggestions.price.push(this.priceParse(data.offers === '' ? undefined : data.offers[0].price))
+    suggestions.price.push(this.priceParse(data.offers.price))
     suggestions.reference.push(data.gtin13)
   }
   async addSuggestionsFromAmzn (suggestions: ItemSuggestions, str: string) {
