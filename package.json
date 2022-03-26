@@ -12,7 +12,7 @@
     "autoprefixer": "10",
     "c8": "7",
     "esbuild": "^0.14",
-    "eslint": "8.11",
+    "eslint": "8.12",
     "eslint-plugin-html": "6",
     "eslint-plugin-unicorn": "41",
     "fuse.js": "^6.4",
