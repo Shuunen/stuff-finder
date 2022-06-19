@@ -16,7 +16,7 @@
     "eslint-plugin-html": "6",
     "eslint-plugin-unicorn": "42",
     "fuse.js": "^6.4",
-    "jsdom": "19",
+    "jsdom": "20",
     "jsdom-global": "3",
     "npm-run-all": "4",
     "postcss": "8",
