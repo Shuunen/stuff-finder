@@ -17,14 +17,14 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        node: [14]
+        node: [16]
 
     steps:
       - name: Checkout 🛎
         uses: actions/checkout@master
 
       - name: Setup node env 🏗
-        uses: actions/setup-node@v3.4.1
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node }}
 
@@ -52,7 +52,8 @@ jobs:
         uses: jakepartusch/wait-for-netlify-action@v1
         id: netlify
         with:
-          site_name: 'stuff-finder'
+          site_name: "stuff-finder"
+        if: ${{ github.event_name == 'pull_request' }}
 
       - name: Audit URLs using Lighthouse
         uses: treosh/lighthouse-ci-action@v9
@@ -61,3 +62,4 @@ jobs:
             ${{ steps.netlify.outputs.url }}
           budgetPath: ./budget.json
           uploadArtifacts: true
+        if: ${{ github.event_name == 'pull_request' }}
