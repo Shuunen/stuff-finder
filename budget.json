@@ -27,7 +27,7 @@
     ],
     "timings": [
       {
-        "budget": 3000,
+        "budget": 3500,
         "metric": "interactive"
       },
       {
