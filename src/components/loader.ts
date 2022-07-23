@@ -5,7 +5,7 @@ const icon = div('animate-spin opacity-50 h-24 w-24', svg)
 
 window.customElements.define('app-loader', class extends HTMLElement {
   backdrop = div('app-loader flex items-center justify-center top-0 left-0 h-full w-full z-50 bg-white bg-opacity-50 fixed')
-  connectedCallback () {
+  connectedCallback (): void {
     this.backdrop.append(icon)
     const toggle = debounce((active: boolean) => this.backdrop.classList.toggle('hidden', !active), 100)
     on('app-loader--toggle', active => toggle(active))

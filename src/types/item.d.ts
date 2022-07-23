@@ -39,12 +39,6 @@ interface Item {
 
 type ItemSuggestions = Record<keyof Item, string[]>
 
-interface AirtableRecord {
-  id: string
-  fields: Item
-  error?: string
-}
-
 interface CommonLists {
   boxes: string[]
   locations: string[]

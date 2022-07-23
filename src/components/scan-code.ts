@@ -7,24 +7,22 @@ window.customElements.define('app-scan-code', class extends HTMLElement {
   reader: BrowserMultiFormatReader
   video = dom('video', 'rounded-lg max-h-full overflow-hidden object-cover')
 
-  onResult (code) {
+  onResult (code): void {
     console.log('found qr or barcode :', code)
     emit('app-modal--close')
     emit('app-sound--success')
     emit('search-start', { str: code, origin: 'scan' } as SearchStartEvent)
   }
-
-  async scanCode () {
+  async scanCode (): Promise<void> {
     console.log('user wants to scan something')
     emit('app-modal--scan-code--open')
     if (this.reader === undefined) await this.setupReader()
     this.reader.decodeFromVideoDevice(this.device, this.video, (result, error) => {
       if (error && !(error instanceof NotFoundException)) return console.error(error)
-      if (result) this.onResult((result as unknown as { text: string }).text)
+      if (result) this.onResult(result.getText())
     })
   }
-
-  async setupModal () {
+  async setupModal (): Promise<void> {
     on('app-modal--close', () => this.stopReader())
     const modal = document.createElement('app-modal')
     modal.setAttribute('name', 'scan-code')
@@ -34,22 +32,19 @@ window.customElements.define('app-scan-code', class extends HTMLElement {
     this.video.addEventListener('ended', () => console.log('video ENDED'))
     document.querySelector('.app-modal--scan-code').append(this.video)
   }
-
-  async setupReader () {
+  async setupReader (): Promise<void> {
     console.log('setup reader')
     this.reader = new BrowserMultiFormatReader()
     const sources = await this.reader.listVideoInputDevices()
     this.device = (sources.find(s => s.label.includes('back')) || sources[0]).deviceId
     console.log('sources ?', sources)
   }
-
-  stopReader () {
+  stopReader (): void {
     if (!this.reader) return
     console.log('stop reader')
     this.reader.reset()
   }
-
-  async connectedCallback () {
+  async connectedCallback (): Promise<void> {
     on('app-scan-code--start', () => this.scanCode())
     await this.setupModal()
   }

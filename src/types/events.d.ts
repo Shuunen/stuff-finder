@@ -13,3 +13,7 @@ interface SearchStartEvent {
   scrollTop: boolean
   str: string
 }
+
+interface RecognitionResultEvent {
+  results: RecognitionResult[]
+}

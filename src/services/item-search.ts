@@ -1,5 +1,5 @@
 import { capitalize, div, emit, on } from 'shuutils'
-import { getCached, showLog } from '../utils'
+import { get, showLog } from '../utils'
 import { storage } from './storage'
 
 class ItemSearch {
@@ -10,14 +10,14 @@ class ItemSearch {
     on('app-modal--add-item--open', (element: HTMLElement) => this.onModalOpen(element))
     on('app-search-item', data => this.search(data.input))
   }
-  async getWrapApiKey () {
+  async getWrapApiKey (): Promise<string> {
     if (this.wrap.length > 0) return this.wrap
     const settings = await storage.get<AppSettings>('app-settings')
     this.wrap = (!settings.wrap || settings.wrap.length === 0) ? '' : settings.wrap
     if (this.wrap === '') showLog('no wrap api key available in settings stored')
     return this.wrap
   }
-  onModalOpen (element?: HTMLElement) {
+  onModalOpen (element?: HTMLElement): void {
     const str = element ? element.dataset.input : ''
     const input = document.querySelector<HTMLInputElement>('app-form[name="search-item"] input')
     if (input) input.value = str
@@ -25,19 +25,19 @@ class ItemSearch {
     this.setupItemForm()
     this.search(str)
   }
-  setupItemForm () {
+  setupItemForm (): void {
     const modal = document.querySelector('.app-modal--add-item')
     if (!modal) return console.error('No modal found')
     const old = modal.querySelector('app-form[name="edit-item"]')
     if (old) old.remove()
     const template = document.querySelector<HTMLTemplateElement>('template#edit-item')
     if (!template) return console.error('no item form template')
-    const form = div('container', template.innerHTML).firstElementChild as HTMLFormElement
+    const form = div('container', template.innerHTML).firstElementChild
     form.setAttribute('on-close', 'app-modal--add-item--close')
     modal.querySelector('.content').append(form)
-    this.form = form
+    this.form = form as HTMLFormElement
   }
-  async search (str) {
+  async search (str: string): Promise<void> {
     console.log(str)
     emit('app-loader--toggle', true)
     const items = await storage.get<Item[]>('items')
@@ -51,7 +51,7 @@ class ItemSearch {
     if (typeof price === 'string') return Math.round(Number.parseFloat(price)).toString()
     return Math.round(price).toString()
   }
-  async getSuggestions (str: string) {
+  async getSuggestions (str: string): Promise<ItemSuggestions> {
     const suggestions: ItemSuggestions = { 'name': [], 'brand': [], 'details': [], 'reference': [], 'barcode': [], 'photo': [], 'status': ['acheté'], 'ref-printed': ['true'], 'category': [], 'box': [], 'drawer': [], 'id': [], 'location': [], 'price': [], 'updated-on': [] }
     await this.addSuggestionsFromDeyes(suggestions, str)
     await this.addSuggestionsFromAliEx(suggestions, str)
@@ -67,13 +67,13 @@ class ItemSearch {
   }
   async addSuggestionsFromWrap<T> (endpoint: string): Promise<T> {
     const wrapApiKey = await this.getWrapApiKey()
-    if (wrapApiKey === '') return {} as T
-    return getCached<T>(`https://wrapapi.com/use/jojo/${endpoint}&wrapAPIKey=${wrapApiKey}`)
+    if (wrapApiKey === '') return <T>{}
+    return get<T>(`https://wrapapi.com/use/jojo/${endpoint}&wrapAPIKey=${wrapApiKey}`)
   }
-  async addSuggestionsFromDeyes (suggestions: ItemSuggestions, code: string) {
+  async addSuggestionsFromDeyes (suggestions: ItemSuggestions, code: string): Promise<void> {
     const response = await this.addSuggestionsFromWrap<WrapApiDeyesResponse>(`deyes/json/0.0.2?code=${code}`)
     const data = response.data
-    if (!response.success) return {}
+    if (!response.success) return
     console.log('deyes data', data)
     suggestions.name.push(data.name)
     suggestions.brand.push(data.brand.name)
@@ -82,9 +82,9 @@ class ItemSearch {
     suggestions.price.push(this.priceParse(data.offers.price))
     suggestions.reference.push(data.gtin13)
   }
-  async addSuggestionsFromAmzn (suggestions: ItemSuggestions, str: string) {
+  async addSuggestionsFromAmzn (suggestions: ItemSuggestions, str: string): Promise<void> {
     const response = await this.addSuggestionsFromWrap<WrapApiAmznResponse>(`amzn/search/0.0.3?keywords=${str}`)
-    if (!response.success) return {}
+    if (!response.success) return
     const data = response.data
     console.log('amazon data', data)
     data.items.splice(0, 5).forEach(item => {
@@ -94,9 +94,9 @@ class ItemSearch {
       suggestions.reference.push((item.url.match(/\/dp\/(\w+)/) || [])[1]) // get the asin from url
     })
   }
-  async addSuggestionsFromAliEx (suggestions: ItemSuggestions, str: string) {
+  async addSuggestionsFromAliEx (suggestions: ItemSuggestions, str: string): Promise<void> {
     const response = await this.addSuggestionsFromWrap<WrapApiAliExResponse>(`aliex/search/0.0.1?str=${str}`)
-    if (!response.success) return {}
+    if (!response.success) return
     const data = response.data
     console.log('AliEx data', data)
     data.items.forEach(item => {
@@ -106,9 +106,9 @@ class ItemSearch {
       suggestions.reference.push(item.reference)
     })
   }
-  async addSuggestionsFromCampo (suggestions: ItemSuggestions, str: string) {
+  async addSuggestionsFromCampo (suggestions: ItemSuggestions, str: string): Promise<void> {
     const response = await this.addSuggestionsFromWrap<WrapApiCampoResponse>(`alcampo/search/0.0.3?str=${str}`)
-    if (!response.success) return {}
+    if (!response.success) return
     const data = response.data
     console.log('campo data', data)
     data.items.forEach(item => {

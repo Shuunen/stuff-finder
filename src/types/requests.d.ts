@@ -52,3 +52,15 @@ interface WrapApiAliExResponse extends WrapApiResponse {
     }[]
   }
 }
+
+interface AirtableRecord {
+  id: string
+  fields: Item
+  error?: string
+}
+
+interface AirtableResponse {
+  records: AirtableRecord[]
+  error?: string
+  offset?: string
+}
