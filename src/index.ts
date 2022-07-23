@@ -25,22 +25,22 @@ class App {
     this.handleActions()
   }
 
-  async checkExistingSettings () {
+  async checkExistingSettings (): Promise<void> {
     const settings = await storage.get<AppSettings>('app-settings')
     if (!settings) return this.settingsActionRequired(true)
     this.onSettingsSave(settings)
     on('app-form--settings--ready', () => emit('app-form--settings--set', settings))
   }
 
-  coolAscii () {
+  coolAscii (): string | undefined {
     return pickOne(['( ＾◡＾)', '♥‿♥', '八(＾□＾*)', '(◡ ‿ ◡ ✿)', '(=^ェ^=)', 'ʕ •ᴥ•ʔ', '(*°∀°)', '\\(-ㅂ-)/', 'ლ(╹◡╹ლ)', 'ლ(o◡oლ)', '＼(＾O＾)／'])
   }
 
-  showTitle () {
+  showTitle (): void {
     emit('app-prompter--type', ['Stuff Finder', 1000, `Stuff Finder\n${this.coolAscii()}`])
   }
 
-  async onSettingsSave (settings: AppSettings) {
+  async onSettingsSave (settings: AppSettings): Promise<void> {
     this.apiUrl = `https://api.airtable.com/v0/${settings.base}/${settings.table}?api_key=${settings.key}&view=${settings.view}`
     const itemsLoaded = await this.loadItems()
     if (!itemsLoaded) return this.settingsActionRequired(true, 'failed to use api settings')
@@ -50,19 +50,19 @@ class App {
     storage.set('app-settings', settings)
   }
 
-  settingsActionRequired (actionRequired: boolean, errorMessage = '') {
+  settingsActionRequired (actionRequired: boolean, errorMessage = ''): void {
     emit('app-settings-trigger--animate', actionRequired)
     emit('app-form--settings--error', errorMessage)
     emit('app-status', actionRequired ? 'settings-required' : 'ready')
     this.isLoading(false)
   }
 
-  isLoading (active: boolean) {
+  isLoading (active: boolean): void {
     console.log('isLoading active ?', active)
     emit('app-loader--toggle', active)
   }
 
-  async loadItems () {
+  async loadItems (): Promise<boolean> {
     this.isLoading(true)
     const cachedItems: Item[] = (await storage.get('items')) || []
     let response = await this.fetchApi()
@@ -71,6 +71,7 @@ class App {
       return false
     }
     let records = response.records
+    if (records.length === 0) return true
     if (cachedItems.some(item => (item.id === records[0].id && item['updated-on'] === records[0].fields['updated-on']))) {
       this.items = cachedItems
       console.log(`${this.items.length} item(s) cached ` + this.coolAscii())
@@ -87,20 +88,20 @@ class App {
     return true
   }
 
-  async getBarcodesToPrint () {
+  async getBarcodesToPrint (): Promise<void> {
     this.isLoading(true)
     const barcodes = this.items.filter(index => index['ref-printed'] === false && index.status === 'acheté')
     emit('barcodes-to-print', barcodes)
   }
 
-  async fetchApi (offset?: string) {
+  async fetchApi (offset?: string): Promise<AirtableResponse> {
     const sortByUpdatedFirst = '&sort%5B0%5D%5Bfield%5D=updated-on&sort%5B0%5D%5Bdirection%5D=desc'
     const url = this.apiUrl + (offset ? `&offset=${offset}` : '') + sortByUpdatedFirst
     if (!url.startsWith('https://api.airtable.com/v0/')) throw new Error('invalid api url')
     return fetch(url).then(response => response.json())
   }
 
-  async parseApiRecords (records: AirtableRecord[]) {
+  async parseApiRecords (records: AirtableRecord[]): Promise<void> {
     // this.showLog('parsing api records :', records )
     const boxes: string[] = []
     const locations: string[] = []
@@ -138,7 +139,7 @@ class App {
     return this.initFuse()
   }
 
-  async initFuse () {
+  async initFuse (): Promise<void> {
     if (!await this.readCommonLists()) return
     // https://fusejs.io/
     const options = {
@@ -162,7 +163,7 @@ class App {
     storage.set('items', this.items)
   }
 
-  onSearchStart (event: SearchStartEvent) {
+  onSearchStart (event: SearchStartEvent): void {
     const input = event.str.trim()
     this.lastSearchOrigin = event.origin
     const result = this.items.find(item => (item.reference === input || item.barcode === input))
@@ -172,7 +173,7 @@ class App {
     emit('search-results', data)
   }
 
-  onSearchRetry () {
+  onSearchRetry (): boolean | void {
     console.log('retry and this.lastSearchOrigin', this.lastSearchOrigin)
     if (this.lastSearchOrigin === 'type') return document.querySelector<HTMLInputElement>('#input-type')?.focus()
     if (this.lastSearchOrigin === 'scan') return emit('app-scan-code--start')
@@ -187,9 +188,9 @@ class App {
     }
   }
 
-  async onEditItem (data: Item) {
+  async onEditItem (data: Item): Promise<boolean> {
     this.isLoading(true)
-    const response = await this.pushItemRemotely(data) as AirtableRecord
+    const response = await this.pushItemRemotely(data)
     console.log('onEditItem response', response)
     this.isLoading(false)
     if (response.error) showLog(response.error)
@@ -203,9 +204,10 @@ class App {
     document.location.search = ''
   }
 
-  async pushItemRemotely (item: Item) {
-    const fieldsToUpdate = ['name', 'brand', 'price', 'photo', 'category', 'details', 'box', 'drawer', 'location', 'reference', 'barcode', 'ref-printed'] as (keyof Item)[]
-    const data = { fields: {} as Record<keyof Item, unknown> }
+  async pushItemRemotely (item: Item): Promise<AirtableRecord> {
+    const fieldsToUpdate: (keyof Item)[] = ['name', 'brand', 'price', 'photo', 'category', 'details', 'box', 'drawer', 'location', 'reference', 'barcode', 'ref-printed']
+    const fields: Partial<Record<keyof Item, unknown>> = {}
+    const data = { fields }
     fieldsToUpdate.forEach(field => {
       if (item[field] && field === 'photo') data.fields[field] = [{ url: item[field] }]
       else if (['name', 'brand', 'details', 'reference', 'barcode'].includes(field)) data.fields[field] = item[field]
@@ -220,13 +222,13 @@ class App {
         if (samePhoto || sameValue) delete data.fields[field]
       })
     }
-    if (Object.keys(data.fields).length === 0) return { error: 'nothing to post or patch... ?' }
+    if (Object.keys(data.fields).length === 0) throw new Error('nothing to post or patch... ?')
     if (!item.id) return post(this.apiUrl, data)
     const url = this.apiUrl.replace('?', `/${item.id}?`)
     return patch(url, data)
   }
 
-  async pushItemLocally (itemTouched: Item) {
+  async pushItemLocally (itemTouched: Item): Promise<void> {
     console.log('pushing item locally', itemTouched)
     const index = this.items.findIndex(item => item.id === itemTouched.id)
     if (index >= 0) this.items[index] = itemTouched // update existing item
@@ -235,9 +237,10 @@ class App {
     this.initFuse()
   }
 
-  handleActions () {
+  handleActions (): void {
     document.addEventListener('click', (event) => {
-      const target = event.target as HTMLElement
+      if (!(event.target instanceof HTMLElement)) return
+      const { target } = event
       if (!target || !target.dataset) return
       let { action, payload } = target.dataset
       if (!action) return
@@ -250,7 +253,7 @@ class App {
     })
   }
 
-  saveCommonLists (lists: CommonLists) {
+  saveCommonLists (lists: CommonLists): void {
     console.log('saving common lists :', lists)
     Object.keys(lists).forEach(name => {
       lists[name] = ['', 'N/A', ...lists[name].sort()]

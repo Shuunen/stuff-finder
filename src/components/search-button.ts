@@ -8,7 +8,7 @@ window.customElements.define('app-search-button', class extends HTMLElement {
   hint = p('text-center mt-8 p-4 rounded-md shadow text-lg md:text-base backdrop-filter backdrop-brightness-150 backdrop-opacity-30')
   wrapper = div('app-search-button')
 
-  onStatus (status: string) {
+  onStatus (status: string): void {
     let speech = 'Say it'
     let hint = ''
     switch (status) {
@@ -35,20 +35,17 @@ window.customElements.define('app-search-button', class extends HTMLElement {
     this.speech.textContent = speech
     this.hint.textContent = hint
   }
-
-  handleFocusLessTyping () {
+  handleFocusLessTyping (): void {
     document.body.addEventListener('keydown', event => this.onKeyDown(event))
   }
-
-  onKeyDown (event: KeyboardEvent) {
+  onKeyDown (event: KeyboardEvent): void {
     const filter = /^[\s\w-]$/i // this filter let user use special keys like CTRL without interfering
-    const target = event.target as HTMLInputElement
-    if (target.tagName.toLowerCase() !== 'body' || !filter.test(event.key)) return
+    if (!(event.target instanceof HTMLInputElement)) return
+    if (event.target.tagName.toLowerCase() !== 'body' || !filter.test(event.key)) return
     console.log('redirecting user input char :', event.key, 'to search input')
     this.search.focus()
   }
-
-  createInputs () {
+  createInputs (): HTMLDivElement {
     const row = div('grid px-4 sm:grid-cols-3 gap-4 justify-center transition-opacity pointer-events-none opacity-50')
     const colA = div('grid gap-2')
     colA.append(this.scan)
@@ -73,9 +70,7 @@ window.customElements.define('app-search-button', class extends HTMLElement {
     this.scan.addEventListener('click', () => emit('app-scan-code--start'))
     return row
   }
-
-
-  connectedCallback () {
+  connectedCallback (): void {
     const inputs = this.createInputs()
     this.wrapper.append(inputs)
     this.wrapper.append(this.hint)

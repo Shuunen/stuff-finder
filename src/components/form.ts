@@ -13,12 +13,12 @@ class AppForm extends HTMLElement {
   } = {}
   initialData: Record<string, string | boolean | number | string[]> = {}
   validate = debounce(() => this.validateSync(), 200) // eslint-disable-line unicorn/consistent-function-scoping
-  get name () { return this.getAttribute('name') }
-  get saveLabel () { return this.getAttribute('save-label') || 'Save' }
+  get name (): string { return this.getAttribute('name') }
+  get saveLabel (): string { return this.getAttribute('save-label') || 'Save' }
   get title (): string { return this.getAttribute('title') === 'false' ? '' : (this.getAttribute('title') || '') }
-  get inline () { return this.getAttribute('inline') === 'true' }
-  get onCloseEventName () { return this.getAttribute('on-close') || 'app-modal--close' }
-  get onSaveEventName () { return this.getAttribute('on-save') || `${this._id}--save` }
+  get inline (): boolean { return this.getAttribute('inline') === 'true' }
+  get onCloseEventName (): string { return this.getAttribute('on-close') || 'app-modal--close' }
+  get onSaveEventName (): string { return this.getAttribute('on-save') || `${this._id}--save` }
   get inputs (): HTMLInputElement[] { return [...this.els.form?.elements as unknown as HTMLInputElement[]] }
   get data (): Record<string, string | boolean | number | string[]> {
     const data: Record<string, string | boolean | number> = {}
@@ -38,21 +38,21 @@ class AppForm extends HTMLElement {
     })
     this.validateSync()
   }
-  get dataChanged () {
+  get dataChanged (): boolean {
     return JSON.stringify(this.initialData) !== JSON.stringify(this.data)
   }
-  get error () {
-    return this.els.error?.textContent
+  get error (): string {
+    return this.els.error?.textContent ?? ''
   }
   set error (message) {
     if (this.els.error) this.els.error.textContent = message || ''
   }
-  createClose () {
+  createClose (): HTMLButtonElement {
     const element = button('Cancel', 'close', true)
     element.addEventListener('click', () => emit(this.onCloseEventName))
     return element
   }
-  createFooter () {
+  createFooter (): HTMLDivElement {
     const row = div('footer flex justify-center mt-4')
     if (this.inline) row.classList.add('hidden')
     else row.append(this.createClose())
@@ -65,17 +65,17 @@ class AppForm extends HTMLElement {
     this.els.save = save
     return row
   }
-  onSave () {
+  onSave (): void {
     emit(this.onSaveEventName, this.data)
     this.els.footer?.classList.add('hidden')
   }
-  destroy () {
+  destroy (): void {
     this.els.form?.remove()
     this.els.header?.remove()
     this.els.footer?.remove()
     this.remove()
   }
-  validateSync () {
+  validateSync (): void {
     const isValid = this.els.form?.checkValidity()
     console.log(`form is ${isValid ? 'valid' : 'invalid'}`)
     this.error = ''
@@ -88,12 +88,12 @@ class AppForm extends HTMLElement {
     if (this.inline) this.els.footer?.classList.toggle('hidden', !(this.dataChanged && isValid))
     this.setAttribute('valid', String(isValid))
   }
-  setInputValue (input, value) {
+  setInputValue (input, value): void {
     if (input.name === 'photo') this.setPhoto(input, value)
     else if (input.type === 'checkbox') setTimeout(() => { input.checked = String(value) === 'true' }, 100) // need to be async ¯\_(ツ)_/¯
     else input.value = value as string
   }
-  setPhoto (input: HTMLInputElement, data: string | boolean | number | string[]) {
+  setPhoto (input: HTMLInputElement, data: string | boolean | number | string[]): void {
     if (['boolean', 'number'].includes(typeof data)) return console.error('photo data must be a string or array')
     let url = ''
     if (typeof data === 'string') url = data
@@ -111,7 +111,7 @@ class AppForm extends HTMLElement {
     })
     img.src = url
   }
-  addSuggestions (suggestions: Record<string, string[]>) {
+  addSuggestions (suggestions: Record<string, string[]>): void {
     this.inputs.forEach(input => {
       let suggestionsForInput = (suggestions[input.name] || []).filter(value => value !== '')
       if (input.type === 'number') suggestionsForInput = suggestionsForInput.filter(value => value !== '0')
@@ -123,7 +123,7 @@ class AppForm extends HTMLElement {
       select.addEventListener('change', () => this.setInputValue(input, select.value))
     })
   }
-  connectedCallback () {
+  connectedCallback (): void {
     this._id = `app-form--${this.name}`
     on(`${this._id}--set`, data => { this.data = data })
     on(`${this._id}--error`, message => { this.error = message })

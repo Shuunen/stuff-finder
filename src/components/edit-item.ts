@@ -2,7 +2,7 @@ import { emit, fillTemplate, on, sleep } from 'shuutils'
 
 window.customElements.define('app-edit-item', class extends HTMLElement {
   modal?: HTMLElement
-  edit (item: Item) {
+  edit (item: Item): void {
     console.log('edit', item)
     const template = document.querySelector('template#edit-item')
     if (!template) return console.error('no edit-item template found')
@@ -13,7 +13,7 @@ window.customElements.define('app-edit-item', class extends HTMLElement {
     emit('app-form--edit-item--set', item)
     emit('app-modal--edit-item--open')
   }
-  async connectedCallback () {
+  async connectedCallback (): Promise<void> {
     await sleep(100)
     const modal = document.querySelector<HTMLElement>('.app-modal--edit-item .content')
     if (!modal) return console.error('no modal')

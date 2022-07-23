@@ -15,41 +15,40 @@ const urlToUuid = (url: string): string => {
   return url.split('://')[1].split('&wrapAPIKey')[0].replace(/\W/g, '')
 }
 
-const request = async (method: 'patch' | 'post' | 'get', url: string, data?: Record<string, unknown>) => {
+const request = async <T> (method: 'patch' | 'post' | 'get', url: string, data?: Record<string, unknown>): Promise<T> => {
   const options: RequestInit = { headers: JSON_HEADERS, method }
   if (data) options.body = JSON.stringify(data)
   return fetch(url, options).then(response => response.json()).catch(error => showError(error.message))
 }
-export const patch = async (url: string, data: Record<string, unknown>) => request('patch', url, data)
-export const post = async (url: string, data: Record<string, unknown>) => request('post', url, data)
-export const get = async <T> (url: string): Promise<T> => request('get', url)
-export const getCached = async <T> (url: string): Promise<T> => {
+export const patch = async (url: string, data: Record<string, unknown>): Promise<AirtableRecord> => request('patch', url, data)
+export const post = async (url: string, data: Record<string, unknown>): Promise<AirtableRecord> => request('post', url, data)
+export const get = async <T> (url: string): Promise<T> => {
   const uuid = urlToUuid(url)
   const cached = await storage.get<T>(uuid, sessionStorage)
   if (cached) return cached
-  const response = await request('get', url)
+  const response = await request<T>('get', url)
   storage.set(uuid, response, sessionStorage)
-  return response as T
+  return response
 }
 
-export const showError = (message: string) => {
+export const showError = (message: string): void => {
   console.error(message)
   emit('app-toaster--show', { type: 'error', message })
 }
 
-export const showLog = (message: string, data = '') => {
+export const showLog = (message: string, data = ''): void => {
   console.log(message, data)
   emit('app-toaster--show', { type: 'info', message })
 }
 
-export const fadeIn = async (element: HTMLElement) => {
+export const fadeIn = async (element: HTMLElement): Promise<void> => {
   if (!element.classList.contains('hide')) return console.warn('please add "hide" class before mounting dom element and then call fade-in')
   element.classList.remove('hidden')
   await sleep(10)
   element.style.opacity = '1'
 }
 
-export const fadeOut = async (element: HTMLElement, destroy = false) => {
+export const fadeOut = async (element: HTMLElement, destroy = false): Promise<void> => {
   element.classList.add('hide')
   element.style.opacity = '0'
   await sleep(350)

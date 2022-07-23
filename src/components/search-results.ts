@@ -8,7 +8,7 @@ window.customElements.define('app-search-results', class extends HTMLElement {
   list: HTMLDivElement
   input: string
   results: Item[]
-  async onResults (event: SearchResultEvent) {
+  async onResults (event: SearchResultEvent): Promise<void> {
     this.header.textContent = event.title
     this.results = event.results
     this.input = event.input
@@ -25,17 +25,17 @@ window.customElements.define('app-search-results', class extends HTMLElement {
     await sleep(300)
     if (event.scrollTop) this.list.firstElementChild.scrollIntoView()
   }
-  onSelect (id: string) {
+  onSelect (id: string): void {
     const item = this.results.find(item => item.id === id)
     if (!item) return showError('failed to find item with this id : ' + id)
     emit('edit-item', item)
   }
-  updateResults () {
+  updateResults (): void {
     showLog('update search results...')
     const data: SearchStartEvent = { str: this.input, origin: 'search-results', scrollTop: false }
     emit('search-start', data)
   }
-  connectedCallback () {
+  connectedCallback (): void {
     on('search-results', (event: SearchResultEvent) => this.onResults(event))
     on('select-result', (element) => this.onSelect(element.id))
     on('app-modal--edit-item--close', () => this.updateResults())
