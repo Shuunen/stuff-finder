@@ -1,6 +1,7 @@
 import { dom, emit, sleep } from 'shuutils'
-import { JSON_HEADERS } from './constants'
-import { storage } from './services/storage'
+import { JSON_HEADERS } from '../constants'
+import { storage } from '../services/storage'
+import { urlToUuid } from './url'
 
 export const button = (content: string, classes = '', secondary = false): HTMLButtonElement => {
   const theme = secondary ? 'hover:opacity-100 opacity-80' : 'from-purple-500 to-purple-700 text-white hover:from-purple-700 hover:to-purple-900'
@@ -9,19 +10,16 @@ export const button = (content: string, classes = '', secondary = false): HTMLBu
   return button_
 }
 
-const urlToUuid = (url: string): string => {
-  // in: https://wrapapi.com/use/jojo/deyes/json/0.0.2?code=3760052142741&wrapAPIKey=xyz
-  // out: wrapapicomusejojodeyesjson002code3760052142741
-  return url.split('://')[1].split('&wrapAPIKey')[0].replace(/\W/g, '')
-}
-
 const request = async <T> (method: 'patch' | 'post' | 'get', url: string, data?: Record<string, unknown>): Promise<T> => {
   const options: RequestInit = { headers: JSON_HEADERS, method }
   if (data) options.body = JSON.stringify(data)
   return fetch(url, options).then(response => response.json()).catch(error => showError(error.message))
 }
+
 export const patch = async (url: string, data: Record<string, unknown>): Promise<AirtableRecord> => request('patch', url, data)
+
 export const post = async (url: string, data: Record<string, unknown>): Promise<AirtableRecord> => request('post', url, data)
+
 export const get = async <T> (url: string): Promise<T> => {
   const uuid = urlToUuid(url)
   const cached = await storage.get<T>(uuid, sessionStorage)
