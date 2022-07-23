@@ -1,13 +1,9 @@
 import { test } from 'uvu'
 import { equal } from 'uvu/assert'
-import { button } from '../src/utils'
+import { urlToUuid } from '../src/utils/url'
 
-test('button', () => {
-  const button_ = button('A')
-  equal(button_.tagName, 'BUTTON')
-  equal(button_.textContent, 'A')
-  equal(button_.type, 'button')
-  equal(button_.disabled, false)
+test('urlToUuid', () => {
+  equal(urlToUuid('https://wrapapi.com/use/jojo/deyes/json/0.0.2?code=3760052142741&wrapAPIKey=xyz'), 'wrapapicomusejojodeyesjson002code3760052142741')
 })
 
 test.run()

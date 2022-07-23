@@ -61,7 +61,7 @@
     "preversion": "npm run ci",
     "serve": "servor public --reload --browse",
     "start": "npm run dev",
-    "test": "uvu -r tsm -r jsdom-global/register tests",
+    "test": "c8 uvu -r tsm -r jsdom-global/register tests",
     "test:watch": "watchlist src tests -eager -- npm test"
   },
   "version": "0.2.0"
