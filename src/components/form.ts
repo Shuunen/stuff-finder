@@ -20,10 +20,10 @@ class AppForm extends HTMLElement {
   get onCloseEventName (): string { return this.getAttribute('on-close') || 'app-modal--close' }
   get onSaveEventName (): string { return this.getAttribute('on-save') || `${this._id}--save` }
   get inputs (): HTMLInputElement[] { return [...this.els.form?.elements as unknown as HTMLInputElement[]] }
-  get data (): Record<string, string | boolean | number | string[]> {
-    const data: Record<string, string | boolean | number> = {}
+  get data (): AppFormData {
+    const data: AppFormData = {}
     this.inputs.forEach(input => {
-      let value: string | boolean | number | string[] = input.value
+      let value: AppFormDataValue = input.value
       if (input.type === 'checkbox') value = input.checked
       else if (input.type === 'number') value = Number.parseFloat(value)
       data[input.name] = value
@@ -66,7 +66,7 @@ class AppForm extends HTMLElement {
     return row
   }
   onSave (): void {
-    emit(this.onSaveEventName, this.data)
+    emit<FormOnSaveEvent>(this.onSaveEventName, this.data)
     this.els.footer?.classList.add('hidden')
   }
   destroy (): void {
@@ -88,7 +88,7 @@ class AppForm extends HTMLElement {
     if (this.inline) this.els.footer?.classList.toggle('hidden', !(this.dataChanged && isValid))
     this.setAttribute('valid', String(isValid))
   }
-  setInputValue (input, value): void {
+  setInputValue (input: HTMLInputElement, value: AppFormDataValue): void {
     if (input.name === 'photo') this.setPhoto(input, value)
     else if (input.type === 'checkbox') setTimeout(() => { input.checked = String(value) === 'true' }, 100) // need to be async ¯\_(ツ)_/¯
     else input.value = value as string
@@ -111,7 +111,7 @@ class AppForm extends HTMLElement {
     })
     img.src = url
   }
-  addSuggestions (suggestions: Record<string, string[]>): void {
+  addSuggestions (suggestions: FormSuggestions): void {
     this.inputs.forEach(input => {
       let suggestionsForInput = (suggestions[input.name] || []).filter(value => value !== '')
       if (input.type === 'number') suggestionsForInput = suggestionsForInput.filter(value => value !== '0')
@@ -125,9 +125,9 @@ class AppForm extends HTMLElement {
   }
   connectedCallback (): void {
     this._id = `app-form--${this.name}`
-    on(`${this._id}--set`, data => { this.data = data })
-    on(`${this._id}--error`, message => { this.error = message })
-    on(`${this._id}--suggestions`, suggestions => this.addSuggestions(suggestions))
+    on<FormIdSetEvent>(`${this._id}--set`, data => { this.data = data })
+    on<FormIdErrorEvent>(`${this._id}--error`, message => { this.error = message })
+    on<FormIdSuggestionsEvent>(`${this._id}--suggestions`, suggestions => this.addSuggestions(suggestions))
     this.els.form = dom('form', this.className, this.innerHTML)
     this.removeAttribute('class')
     this.innerHTML = ''

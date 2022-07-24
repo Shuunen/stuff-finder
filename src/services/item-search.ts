@@ -1,6 +1,5 @@
-import { capitalize, div, emit, on } from 'shuutils'
+import { capitalize, div, emit, on, storage } from 'shuutils'
 import { get, showLog } from '../utils'
-import { storage } from './storage'
 
 class ItemSearch {
   str = 'plop'
@@ -8,7 +7,7 @@ class ItemSearch {
   wrap = ''
   constructor () {
     on('app-modal--add-item--open', (element: HTMLElement) => this.onModalOpen(element))
-    on('app-search-item', data => this.search(data.input))
+    on<AppSearchItemEvent>('app-search-item', data => this.search(String(data.input)))
   }
   async getWrapApiKey (): Promise<string> {
     if (this.wrap.length > 0) return this.wrap
@@ -39,12 +38,12 @@ class ItemSearch {
   }
   async search (str: string): Promise<void> {
     console.log(str)
-    emit('app-loader--toggle', true)
+    emit<AppLoaderToggleEvent>('app-loader--toggle', true)
     const items = await storage.get<Item[]>('items')
     const result = items.find(item => (item.reference === str || item.barcode === str))
     document.querySelector('app-form[name="search-item"] .error').textContent = (result && str.length > 0) ? 'ITEM ALREADY EXISTS ! You might not want to add it... again.' : ''
-    if (str.length > 0) emit('app-form--edit-item--suggestions', await this.getSuggestions(str))
-    emit('app-loader--toggle', false)
+    if (str.length > 0) emit<AppFormEditItemSuggestionsEvent>('app-form--edit-item--suggestions', await this.getSuggestions(str))
+    emit<AppLoaderToggleEvent>('app-loader--toggle', false)
   }
   priceParse (price: string | number): string {
     if (price === undefined) return ''
@@ -57,11 +56,13 @@ class ItemSearch {
     await this.addSuggestionsFromAliEx(suggestions, str)
     await this.addSuggestionsFromAmzn(suggestions, str)
     await this.addSuggestionsFromCampo(suggestions, str)
-    for (const key in suggestions)
-      if (suggestions[key].length === 0) delete suggestions[key] // clear empty fields
-      else suggestions[key] = suggestions[key].filter((value, index, array) => array.indexOf(value) === index) // remove duplicates
+    for (const key in suggestions) {
+      const k = key as keyof Item
+      if (suggestions[k].length === 0) delete suggestions[k] // clear empty fields
+      else suggestions[k] = suggestions[k].filter((value, index, array) => array.indexOf(value) === index) // remove duplicates
+    }
     const clean = ['name', 'details']
-    clean.forEach(key => { suggestions[key] = (suggestions[key] || []).map(suggestion => capitalize(suggestion, true)) })
+    clean.forEach((key: keyof Item) => { suggestions[key] = (suggestions[key] || []).map(suggestion => capitalize(suggestion, true)) })
     console.log('final suggestions', suggestions)
     return suggestions
   }

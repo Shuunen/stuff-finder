@@ -20,7 +20,7 @@ class AppSpeech {
     }
     recognition.onspeechend = (): Promise<void> => this.onEnd()
     recognition.onnomatch = (): void => this.onFail()
-    recognition.addEventListener('error', event => this.onError(event.error))
+    recognition.addEventListener('error', (event: RecognitionErrorEvent) => this.onError(event.error))
     this.recognition = recognition
   }
   onStart (): void {
@@ -28,10 +28,10 @@ class AppSpeech {
     this.recognitionSucceed = false
     this.setStatus('listening')
   }
-  onSuccess (sentence, confidence): void {
+  onSuccess (sentence: string, confidence: number): void {
     this.recognitionSucceed = true
     console.log('confidence : ' + confidence)
-    emit('search-start', { str: sentence, origin: 'speech' } as SearchStartEvent)
+    emit<SearchStartEvent>('search-start', { str: sentence, origin: 'speech' })
   }
   async onEnd (): Promise<void> {
     this.recognition.stop()
@@ -41,15 +41,15 @@ class AppSpeech {
     await sleep(200)
     this.setStatus(this.recognitionSucceed ? 'ready' : 'failed')
   }
-  onError (reason): void {
+  onError (reason: string): void {
     console.error('error occurred in recognition : ' + reason)
     this.onFail()
   }
   onFail (): void {
     this.setStatus('failed')
   }
-  setStatus (status): void {
-    emit('app-status', status)
+  setStatus (status: AppStatus): void {
+    emit<AppStatusEvent>('app-status', status)
     if (status === 'listening' && !this.isMobile) emit('app-sound--info')
     else if (status === 'failed') emit('app-sound--error')
   }

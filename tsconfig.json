@@ -7,6 +7,7 @@
       "DOM"
     ],
     "moduleResolution": "Node",
+    "noImplicitAny": true,
     "outDir": "./dist",
     "resolveJsonModule": true,
     "skipLibCheck": true,
@@ -14,6 +15,7 @@
     "target": "ES2020"
   },
   "include": [
-    "src"
+    "src",
+    "tests"
   ]
 }

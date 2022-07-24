@@ -63,7 +63,7 @@ window.customElements.define('app-search-button', class extends HTMLElement {
     this.search.id = 'input-type'
     this.search.placeholder = 'Type it'
     this.search.addEventListener('change', () => {
-      emit('search-start', { str: this.search.value, origin: 'type' } as SearchStartEvent)
+      emit<SearchStartEvent>('search-start', { str: this.search.value, origin: 'type' })
       this.search.value = ''
     })
     this.speech.addEventListener('click', () => emit('app-speech--start'))
@@ -76,7 +76,7 @@ window.customElements.define('app-search-button', class extends HTMLElement {
     this.wrapper.append(this.hint)
     this.parentNode?.replaceChild(this.wrapper, this)
     this.handleFocusLessTyping()
-    on('app-status', status => this.onStatus(status))
+    on<AppStatusEvent>('app-status', status => this.onStatus(status))
     on('items-ready', () => {
       inputs.classList.remove('pointer-events-none')
       inputs.classList.remove('opacity-50')

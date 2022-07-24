@@ -1,5 +1,4 @@
-import { div, emit, fillTemplate, on } from 'shuutils'
-import { storage } from '../services/storage'
+import { div, emit, fillTemplate, on, storage } from 'shuutils'
 import { button } from '../utils'
 
 window.customElements.define('app-print-barcodes', class extends HTMLElement {
@@ -10,7 +9,7 @@ window.customElements.define('app-print-barcodes', class extends HTMLElement {
   modal?: HTMLDivElement
   trigger = this.createTrigger()
   updatePreviewButton (): void {
-    this.selection = Array.prototype.slice.call(document.querySelectorAll('input[data-action="barcodes-select-one"]:checked')).map(element => element.id)
+    this.selection = Array.prototype.slice.call(document.querySelectorAll('input[data-action="barcodes-select-one"]:checked')).map((element: HTMLInputElement) => element.id)
     this.previewButton.disabled = this.selection.length <= 0 || this.selection.length > 65
     this.previewButton.textContent = `Preview ${this.selection.length} barcodes`
     this.previewError.textContent = ''
@@ -94,7 +93,7 @@ window.customElements.define('app-print-barcodes', class extends HTMLElement {
     this.handlePreview()
     this.selectValidItems()
     emit('app-modal--prepare-barcodes--open')
-    emit('app-loader--toggle', false)
+    emit<AppLoaderToggleEvent>('app-loader--toggle', false)
   }
   createTrigger (): HTMLDivElement {
     const icon = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><defs/><path fill="currentColor" fill-rule="evenodd" d="M8 4h8v2H8V4zm10 2h4v12h-4v4H6v-4H2V6h4V2h12v4zm2 10h-2v-2H6v2H4V8h16v8zM8 16h8v4H8v-4zm0-6H6v2h2v-2z" clip-rule="evenodd"/></svg>'
