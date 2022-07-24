@@ -1,9 +1,8 @@
 import Fuse from 'fuse.js'
-import { emit, fillTemplate, on, pickOne } from 'shuutils'
+import { emit, fillTemplate, on, pickOne, storage } from 'shuutils'
 import './assets/styles.min.css'
 import './components'
 import './services'
-import { storage } from './services/storage'
 import { patch, post, showError, showLog, valuesToOptions } from './utils'
 
 class App {
@@ -15,10 +14,11 @@ class App {
 
   constructor () {
     console.log('app start')
-    on('app-form--settings--save', settings => this.onSettingsSave(settings))
-    on('app-form--edit-item--save', item => this.onEditItem(item))
+    storage.prefix = '@shuunen/stuff-finder_'
+    on<AppFormSettingsSaveEvent>('app-form--settings--save', settings => this.onSettingsSave(settings))
+    on<AppFormEditItemSaveEvent>('app-form--edit-item--save', item => this.onEditItem(item))
     on('get-barcodes-to-print', () => this.getBarcodesToPrint())
-    on('search-start', event => this.onSearchStart(event))
+    on<SearchStartEvent>('search-start', event => this.onSearchStart(event))
     on('search-retry', () => this.onSearchRetry())
     this.checkExistingSettings()
     this.showTitle()
@@ -29,7 +29,7 @@ class App {
     const settings = await storage.get<AppSettings>('app-settings')
     if (!settings) return this.settingsActionRequired(true)
     this.onSettingsSave(settings)
-    on('app-form--settings--ready', () => emit('app-form--settings--set', settings))
+    on('app-form--settings--ready', () => emit<AppFormSettingsSetEvent>('app-form--settings--set', settings))
   }
 
   coolAscii (): string | undefined {
@@ -37,7 +37,7 @@ class App {
   }
 
   showTitle (): void {
-    emit('app-prompter--type', ['Stuff Finder', 1000, `Stuff Finder\n${this.coolAscii()}`])
+    emit<AppPrompterTypeEvent>('app-prompter--type', ['Stuff Finder', 1000, `Stuff Finder\n${this.coolAscii()}`])
   }
 
   async onSettingsSave (settings: AppSettings): Promise<void> {
@@ -51,15 +51,15 @@ class App {
   }
 
   settingsActionRequired (actionRequired: boolean, errorMessage = ''): void {
-    emit('app-settings-trigger--animate', actionRequired)
-    emit('app-form--settings--error', errorMessage)
-    emit('app-status', actionRequired ? 'settings-required' : 'ready')
+    emit<AppSettingsTriggerAnimateEvent>('app-settings-trigger--animate', actionRequired)
+    emit<AppFormSettingsErrorEvent>('app-form--settings--error', errorMessage)
+    emit<AppStatusEvent>('app-status', actionRequired ? 'settings-required' : 'ready')
     this.isLoading(false)
   }
 
   isLoading (active: boolean): void {
     console.log('isLoading active ?', active)
-    emit('app-loader--toggle', active)
+    emit<AppLoaderToggleEvent>('app-loader--toggle', active)
   }
 
   async loadItems (): Promise<boolean> {
@@ -91,7 +91,7 @@ class App {
   async getBarcodesToPrint (): Promise<void> {
     this.isLoading(true)
     const barcodes = this.items.filter(index => index['ref-printed'] === false && index.status === 'acheté')
-    emit('barcodes-to-print', barcodes)
+    emit<BarcodesToPrintEvent>('barcodes-to-print', barcodes)
   }
 
   async fetchApi (offset?: string): Promise<AirtableResponse> {
@@ -170,7 +170,7 @@ class App {
     const results = result ? [result] : this.fuse.search(input).map(item => item.item)
     const title = `${results.length === 0 ? 'No result found' : (results.length === 1 ? 'One result found' : `Found ${results.length} results`)} for “${input}”`
     const data: SearchResultEvent = { title, results, byReference: Boolean(result), input, scrollTop: event.scrollTop }
-    emit('search-results', data)
+    emit<SearchResultEvent>('search-results', data)
   }
 
   onSearchRetry (): boolean | void {
@@ -216,8 +216,8 @@ class App {
     if (item.id) {
       const existing = this.items.find(existing => existing.id === item.id)
       if (!existing) throw new Error('existing item not found locally')
-      Object.keys(data.fields).forEach(field => {
-        const samePhoto = field === 'photo' && existing.photo && existing.photo[0].url === data.fields.photo[0].url
+      Object.keys(data.fields).forEach((field: keyof Item) => {
+        const samePhoto = field === 'photo' && existing.photo && existing.photo[0].url === (data.fields.photo as ItemPhoto[])[0].url
         const sameValue = existing[field] === data.fields[field]
         if (samePhoto || sameValue) delete data.fields[field]
       })
@@ -255,10 +255,9 @@ class App {
 
   saveCommonLists (lists: CommonLists): void {
     console.log('saving common lists :', lists)
-    Object.keys(lists).forEach(name => {
+    Object.keys(lists).forEach((name: keyof CommonLists) => {
       lists[name] = ['', 'N/A', ...lists[name].sort()]
     })
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     storage.set('lists', lists)
   }
 

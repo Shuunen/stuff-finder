@@ -1,19 +1,30 @@
+type AppFormData = Record<string, AppFormDataValue>
+type AppFormDataValue = string | boolean | number | string[]
+type AppFormEditItemSuggestionsEvent = FormSuggestions
+type AppFormEditItemSaveEvent = Item
+type AppFormSettingsSaveEvent = AppSettings
+type AppFormSettingsSetEvent = AppSettings
+type AppFormSettingsErrorEvent = string
+type AppLoaderToggleEvent = boolean
+type AppModalAddItemOpenEvent = HTMLElement
+type AppSearchItemEvent = AppFormData
+type AppSettingsTriggerAnimateEvent = boolean
+type AppStatus = 'loading' | 'ready' | 'failed' | 'listening' | 'settings-required'
+type AppStatusEvent = AppStatus
+type AppToasterShowEvent = { type: 'error' | 'success' | 'info'; message: string; delay?: number }
+type FormIdErrorEvent = string
+type FormIdSetEvent = AppFormData
+type FormIdSuggestionsEvent = FormSuggestions
+type FormOnSaveEvent = AppFormData
+type FormSuggestions = Record<string, string[]>
+type RecognitionErrorEvent = { error: string }
+type RecognitionResult = { confidence: number; transcript: string }
+type RecognitionResultEvent = { results: RecognitionResult[][] }
 type SearchOrigin = 'default' | 'type' | 'scan' | 'search-results' | 'speech' | 'url'
-
-interface SearchResultEvent {
-  byReference: boolean
-  input: string
-  results: SearchResult[]
-  scrollTop: boolean
-  title: string
-}
-
-interface SearchStartEvent {
-  origin: SearchOrigin
-  scrollTop: boolean
-  str: string
-}
-
-interface RecognitionResultEvent {
-  results: RecognitionResult[]
-}
+type SearchResultEvent = { byReference: boolean; input: string; results: SearchResult[]; scrollTop: boolean; title: string }
+type SearchStartEvent = { origin: SearchOrigin; scrollTop?: boolean; str: string }
+type SelectResultEvent = HTMLElement
+type AppPrompterTypeEvent = TypicalArguments
+type BarcodesToPrintEvent = Item[]
+type AppFormEditItemSetEvent = Item
+type EditItemEvent = Item

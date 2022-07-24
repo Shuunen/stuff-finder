@@ -10,7 +10,7 @@ window.customElements.define('app-edit-item', class extends HTMLElement {
     const data = { id: item.id, photo }
     if (!this.modal) return console.error('no modal')
     this.modal.innerHTML = fillTemplate(template.innerHTML, data)
-    emit('app-form--edit-item--set', item)
+    emit<AppFormEditItemSetEvent>('app-form--edit-item--set', item)
     emit('app-modal--edit-item--open')
   }
   async connectedCallback (): Promise<void> {

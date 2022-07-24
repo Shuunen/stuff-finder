@@ -1,6 +1,5 @@
-import { dom, emit, sleep } from 'shuutils'
+import { dom, emit, sleep, storage } from 'shuutils'
 import { JSON_HEADERS } from '../constants'
-import { storage } from '../services/storage'
 import { urlToUuid } from './url'
 
 export const button = (content: string, classes = '', secondary = false): HTMLButtonElement => {
@@ -31,12 +30,12 @@ export const get = async <T> (url: string): Promise<T> => {
 
 export const showError = (message: string): void => {
   console.error(message)
-  emit('app-toaster--show', { type: 'error', message })
+  emit<AppToasterShowEvent>('app-toaster--show', { type: 'error', message })
 }
 
 export const showLog = (message: string, data = ''): void => {
   console.log(message, data)
-  emit('app-toaster--show', { type: 'info', message })
+  emit<AppToasterShowEvent>('app-toaster--show', { type: 'info', message })
 }
 
 export const fadeIn = async (element: HTMLElement): Promise<void> => {

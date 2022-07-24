@@ -8,7 +8,7 @@ window.customElements.define('app-loader', class extends HTMLElement {
   connectedCallback (): void {
     this.backdrop.append(icon)
     const toggle = debounce((active: boolean) => this.backdrop.classList.toggle('hidden', !active), 100)
-    on('app-loader--toggle', active => toggle(active))
+    on<AppLoaderToggleEvent>('app-loader--toggle', active => toggle(active))
     this.parentNode.replaceChild(this.backdrop, this)
   }
 })

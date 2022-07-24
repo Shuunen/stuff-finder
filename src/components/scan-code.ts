@@ -7,11 +7,11 @@ window.customElements.define('app-scan-code', class extends HTMLElement {
   reader: BrowserMultiFormatReader
   video = dom('video', 'rounded-lg max-h-full overflow-hidden object-cover')
 
-  onResult (code): void {
+  onResult (code: string): void {
     console.log('found qr or barcode :', code)
     emit('app-modal--close')
     emit('app-sound--success')
-    emit('search-start', { str: code, origin: 'scan' } as SearchStartEvent)
+    emit<SearchStartEvent>('search-start', { str: code, origin: 'scan' })
   }
   async scanCode (): Promise<void> {
     console.log('user wants to scan something')
@@ -45,7 +45,7 @@ window.customElements.define('app-scan-code', class extends HTMLElement {
     this.reader.reset()
   }
   async connectedCallback (): Promise<void> {
-    on('app-scan-code--start', () => this.scanCode())
+    on('app-scan-code--start', this.scanCode)
     await this.setupModal()
   }
 })

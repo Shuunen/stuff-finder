@@ -28,16 +28,17 @@ window.customElements.define('app-search-results', class extends HTMLElement {
   onSelect (id: string): void {
     const item = this.results.find(item => item.id === id)
     if (!item) return showError('failed to find item with this id : ' + id)
-    emit('edit-item', item)
+    emit<EditItemEvent>('edit-item', item)
   }
   updateResults (): void {
     showLog('update search results...')
-    const data: SearchStartEvent = { str: this.input, origin: 'search-results', scrollTop: false }
-    emit('search-start', data)
+    const origin: SearchOrigin = 'search-results'
+    const data = { str: this.input, origin, scrollTop: false }
+    emit<SearchStartEvent>('search-start', data)
   }
   connectedCallback (): void {
     on('search-results', (event: SearchResultEvent) => this.onResults(event))
-    on('select-result', (element) => this.onSelect(element.id))
+    on<SelectResultEvent>('select-result', (element) => this.onSelect(element.id))
     on('app-modal--edit-item--close', () => this.updateResults())
     this.template = document.querySelector('template#search-results-list-item').innerHTML
     const modal = document.querySelector('.app-modal--search-results')
