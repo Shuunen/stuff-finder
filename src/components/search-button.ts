@@ -74,6 +74,7 @@ window.customElements.define('app-search-button', class extends HTMLElement {
     const inputs = this.createInputs()
     this.wrapper.append(inputs)
     this.wrapper.append(this.hint)
+    if (!this.parentNode) throw new Error('no parentNode for app-search-button')
     this.parentNode?.replaceChild(this.wrapper, this)
     this.handleFocusLessTyping()
     on<AppStatusEvent>('app-status', status => this.onStatus(status))

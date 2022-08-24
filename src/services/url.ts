@@ -14,7 +14,7 @@ class UrlService {
   }
   openAddItemModal (input: string): void {
     const link = document.createElement('a')
-    link.dataset.input = input
+    link.dataset['input'] = input
     emit<AppModalAddItemOpenEvent>('app-modal--add-item--open', link)
   }
 }

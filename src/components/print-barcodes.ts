@@ -71,7 +71,7 @@ window.customElements.define('app-print-barcodes', class extends HTMLElement {
     if (!this.modal) return console.error('no modal element for handlePreview')
     this.modal.querySelectorAll('button.preview, .preview.error').forEach(element => element.remove())
     this.previewButton.disabled = true
-    this.previewButton.dataset.action = 'barcodes-preview'
+    this.previewButton.dataset['action'] = 'barcodes-preview'
     this.modal.append(this.previewError, this.previewButton)
   }
   async openModal (): Promise<void> {
@@ -85,6 +85,7 @@ window.customElements.define('app-print-barcodes', class extends HTMLElement {
     if (!item) return console.error('failed to find template element item')
     const template = item.innerHTML
     const lists = await storage.get<CommonLists>('lists')
+    if (!lists) throw new Error('failed to get lists')
     listElement.innerHTML = this.barcodes.map(bar => {
       const boxes = lists.boxes.map(box => `<option value="${box}" ${box.toLowerCase() === bar.box.toLowerCase() ? 'selected' : ''}>${box}</option>`).join('')
       const drawers = ['', 1, 2, 3, 4, 5, 6, 7].map(d => `<option value="${d}" ${d.toString().toLowerCase() === bar.drawer.toLowerCase() ? 'selected' : ''}>${d}</option>`).join('')

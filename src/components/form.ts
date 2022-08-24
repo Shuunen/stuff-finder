@@ -13,9 +13,9 @@ class AppForm extends HTMLElement {
   } = {}
   initialData: Record<string, string | boolean | number | string[]> = {}
   validate = debounce(() => this.validateSync(), 200) // eslint-disable-line unicorn/consistent-function-scoping
-  get name (): string { return this.getAttribute('name') }
+  get name (): string { return this.getAttribute('name') ?? 'unknown' }
   get saveLabel (): string { return this.getAttribute('save-label') || 'Save' }
-  get title (): string { return this.getAttribute('title') === 'false' ? '' : (this.getAttribute('title') || '') }
+  override get title (): string { return this.getAttribute('title') === 'false' ? '' : (this.getAttribute('title') || '') }
   get inline (): boolean { return this.getAttribute('inline') === 'true' }
   get onCloseEventName (): string { return this.getAttribute('on-close') || 'app-modal--close' }
   get onSaveEventName (): string { return this.getAttribute('on-save') || `${this._id}--save` }
@@ -103,6 +103,7 @@ class AppForm extends HTMLElement {
     } else return showError('unhandled case where photo data is neither string or array')
     input.value = url
     console.log('set photo', url, input)
+    if (!this.els.form) throw new Error('No form found')
     const img = this.els.form.querySelector('img')
     if (!img) return showError(`wanted to set "${url}" but no img found`)
     img.addEventListener('error', () => {
@@ -116,7 +117,9 @@ class AppForm extends HTMLElement {
       let suggestionsForInput = (suggestions[input.name] || []).filter(value => value !== '')
       if (input.type === 'number') suggestionsForInput = suggestionsForInput.filter(value => value !== '0')
       if (!suggestionsForInput || suggestionsForInput.length === 0) return
-      this.setInputValue(input, suggestionsForInput[0])
+      const value = suggestionsForInput[0]
+      if (!value) throw new Error('no value found')
+      this.setInputValue(input, value)
       if (suggestionsForInput.length === 1) return
       const select = dom('select', `suggestions suggestions--${input.name}`, valuesToOptions(suggestionsForInput))
       input.after(select)
@@ -134,8 +137,8 @@ class AppForm extends HTMLElement {
     this.append(this.els.form)
     this.els.error = p('error text-center')
     this.els.form.parentElement?.append(this.els.error)
-    if (!this.inline && this.dataset.title) {
-      this.els.header = h2('header text-purple-700 text-2xl mt-2 mb-4 text-center', this.dataset.title)
+    if (!this.inline && this.dataset['title']) {
+      this.els.header = h2('header text-purple-700 text-2xl mt-2 mb-4 text-center', this.dataset['title'])
       this.parentElement?.prepend(this.els.header)
     }
     this.els.footer = this.createFooter()
