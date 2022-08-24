@@ -193,7 +193,7 @@ class App {
     const response = await this.pushItemRemotely(data)
     console.log('onEditItem response', response)
     this.isLoading(false)
-    if (response.error) showLog(response.error)
+    if (response.error) showError(response.error.message)
     else {
       const item = this.airtableRecordToItem(response)
       await this.pushItemLocally(item)
