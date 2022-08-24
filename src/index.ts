@@ -105,7 +105,7 @@ class App {
     // this.showLog('parsing api records :', records )
     const boxes: string[] = []
     const locations: string[] = []
-    const statuses: string[] = []
+    const statuses = ['vendu', 'donné', 'renvoyé', 'défectueux', 'jeté']
     const categories: string[] = []
     const drawers = ['', '1', '2', '3', '4', '5', '6', '7']
     records.forEach(record => {
