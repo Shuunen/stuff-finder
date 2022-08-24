@@ -205,7 +205,7 @@ class App {
   }
 
   async pushItemRemotely (item: Item): Promise<AirtableRecord> {
-    const fieldsToUpdate: (keyof Item)[] = ['name', 'brand', 'price', 'photo', 'category', 'details', 'box', 'drawer', 'location', 'reference', 'barcode', 'ref-printed']
+    const fieldsToUpdate: (keyof Item)[] = ['name', 'brand', 'price', 'status', 'photo', 'category', 'details', 'box', 'drawer', 'location', 'reference', 'barcode', 'ref-printed']
     const fields: Partial<Record<keyof Item, unknown>> = {}
     const data = { fields }
     fieldsToUpdate.forEach(field => {
