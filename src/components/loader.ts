@@ -9,6 +9,7 @@ window.customElements.define('app-loader', class extends HTMLElement {
     this.backdrop.append(icon)
     const toggle = debounce((active: boolean) => this.backdrop.classList.toggle('hidden', !active), 100)
     on<AppLoaderToggleEvent>('app-loader--toggle', active => toggle(active))
+    if (!this.parentNode) throw new Error('no parentNode for app-loader')
     this.parentNode.replaceChild(this.backdrop, this)
   }
 })

@@ -15,7 +15,10 @@ class AppSpeech {
     recognition.interimResults = false
     recognition.maxAlternatives = 1
     recognition.onresult = (event: RecognitionResultEvent): void => {
-      const result = event.results[event.results.length - 1][0]
+      const results = event.results[event.results.length - 1]
+      if (!results) throw new Error('no recognition results found')
+      const result = results[0]
+      if (!result) throw new Error('no recognition first result found')
       this.onSuccess(result.transcript, result.confidence)
     }
     recognition.onspeechend = (): Promise<void> => this.onEnd()

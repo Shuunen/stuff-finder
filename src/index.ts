@@ -202,6 +202,7 @@ class App {
     emit('app-modal--add-item--close')
     emit('app-modal--search-results--close')
     document.location.search = ''
+    return true
   }
 
   async pushItemRemotely (item: Item): Promise<AirtableRecord> {

@@ -7,7 +7,7 @@ class ItemSearch {
   wrap = ''
   constructor () {
     on('app-modal--add-item--open', (element: HTMLElement) => this.onModalOpen(element))
-    on<AppSearchItemEvent>('app-search-item', data => this.search(String(data.input)))
+    on<AppSearchItemEvent>('app-search-item', data => this.search(String(data['input'])))
   }
   async getWrapApiKey (): Promise<string> {
     if (this.wrap.length > 0) return this.wrap
@@ -17,7 +17,7 @@ class ItemSearch {
     return this.wrap
   }
   onModalOpen (element?: HTMLElement): void {
-    const str = element ? element.dataset.input : ''
+    const str = element ? element.dataset['input'] : ''
     const input = document.querySelector<HTMLInputElement>('app-form[name="search-item"] input')
     if (input) input.value = str
     else console.error('no input found')

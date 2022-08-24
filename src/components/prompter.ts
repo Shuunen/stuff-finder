@@ -7,6 +7,7 @@ window.customElements.define('app-prompter', class extends HTMLElement {
     const prompter = h1('highlight text-4xl whitespace-pre text-center text-purple-700 mb-12 mt-8')
     wrapper.append(prompter)
     on<AppPrompterTypeEvent>('app-prompter--type', options => type(prompter, ...options))
+    if (!this.parentNode) throw new Error('no parentNode found for app-prompter')
     this.parentNode.replaceChild(wrapper, this)
   }
 })

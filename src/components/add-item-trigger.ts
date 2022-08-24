@@ -5,6 +5,7 @@ window.customElements.define('app-add-item-trigger', class extends HTMLElement {
   icon = div('add-item hidden transition-colors opacity-80 hover:opacity-100 text-purple-400 hover:text-purple-600 absolute top-5 right-32 -mt-0.5 mr-2 h-11 w-11 cursor-pointer', this.svg)
   connectedCallback (): void {
     on('items-ready', () => (this.icon.classList.remove('hidden')))
+    if (!this.parentNode) throw new Error('no parentNode for app-add-item-trigger')
     this.parentNode.replaceChild(this.icon, this)
     this.icon.addEventListener('click', () => emit('app-modal--add-item--open'))
   }
