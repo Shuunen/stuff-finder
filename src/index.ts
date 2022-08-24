@@ -256,7 +256,7 @@ class App {
   saveCommonLists (lists: CommonLists): void {
     console.log('saving common lists :', lists)
     Object.keys(lists).forEach((name: keyof CommonLists) => {
-      lists[name] = ['', 'N/A', ...lists[name].sort()]
+      lists[name] = ['', 'N/A', ...lists[name].sort(Intl.Collator().compare)]
     })
     storage.set('lists', lists)
   }
