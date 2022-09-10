@@ -109,7 +109,7 @@ class App {
     const categories: string[] = []
     const drawers = ['', '1', '2', '3', '4', '5', '6', '7']
     records.forEach(record => {
-      const location = (record.fields.location && record.fields.location !== 'N/A') ? record.fields.location : ''
+      const location = record.fields.location ?? ''
       const box = record.fields.box || ''
       const status = record.fields.status || 'acheté'
       const category = record.fields.category || ''
@@ -257,7 +257,7 @@ class App {
   saveCommonLists (lists: CommonLists): void {
     console.log('saving common lists :', lists)
     Object.keys(lists).forEach((name: keyof CommonLists) => {
-      lists[name] = ['', 'N/A', ...lists[name].sort(Intl.Collator().compare)]
+      lists[name] = ['', ...lists[name].sort(Intl.Collator().compare)]
     })
     storage.set('lists', lists)
   }

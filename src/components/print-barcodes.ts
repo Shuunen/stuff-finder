@@ -61,7 +61,7 @@ window.customElements.define('app-print-barcodes', class extends HTMLElement {
       const code = div('barcode', `<qr-code data="${b.reference.trim()}" margin=0 modulesize=3></qr-code>`)
       const col = div('col')
       col.append(div('name', [b.name, b.brand, b.details].join(' ').trim()))
-      col.append(div('location', b.box && b.box !== 'N/A' ? (b.box[0] + b.drawer) : b.location))
+      col.append(div('location', b.box ? (b.box[0] + b.drawer) : b.location))
       code.append(col)
       list.append(code)
     })
