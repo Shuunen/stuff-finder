@@ -19,8 +19,9 @@ window.customElements.define('app-search-results', class extends HTMLElement {
       return fillTemplate(this.template, data)
     }).join('')
     if (event.results.length === 0) this.list.innerHTML = '<p class="text-center py-4"><span class="text-4xl opacity-50">¯\\_(ツ)_/¯</span><br><br>No results found.</p>'
-    this.list.parentElement.querySelector('.add-item')?.remove()
-    this.list.parentElement.append(text('add-item text-center pt-3 border-t', `Do you want to <a href="#" data-action="app-modal--add-item--open" data-input="${event.input}">add a new item</a> ?`))
+    this.list.parentElement.querySelector('.app-add-item')?.remove()
+    const content = `Do you want to <a href="#" data-action="app-modal--add-item--open" data-input="${event.input}">add a new item</a> ?`
+    this.list.parentElement.append(text('app-add-item border-t pt-3 text-center', content))
     emit('app-modal--search-results--open')
     await sleep(300)
     if (event.scrollTop) this.list.firstElementChild.scrollIntoView()
@@ -42,7 +43,7 @@ window.customElements.define('app-search-results', class extends HTMLElement {
     on('app-modal--edit-item--close', () => this.updateResults())
     this.template = document.querySelector('template#search-results-list-item').innerHTML
     const modal = document.querySelector('.app-modal--search-results')
-    this.header = modal.querySelector('.header')
-    this.list = modal.querySelector('.list.results')
+    this.header = modal.querySelector('.app-header')
+    this.list = modal.querySelector('.app-list.app-results')
   }
 })

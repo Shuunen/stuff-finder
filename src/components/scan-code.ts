@@ -1,11 +1,11 @@
 import { BrowserMultiFormatReader } from '@zxing/library/es2015/browser/BrowserMultiFormatReader'
 import NotFoundException from '@zxing/library/es2015/core/NotFoundException'
-import { dom, emit, on, sleep } from 'shuutils'
+import { dom, emit, on, sleep, tw } from 'shuutils'
 
 window.customElements.define('app-scan-code', class extends HTMLElement {
   device = ''
   reader: BrowserMultiFormatReader | undefined
-  video = dom('video', 'rounded-lg max-h-full overflow-hidden object-cover')
+  video = dom('video', tw('max-h-full overflow-hidden rounded-lg object-cover'))
 
   onResult (code: string): void {
     console.log('found qr or barcode :', code)

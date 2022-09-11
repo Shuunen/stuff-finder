@@ -3,6 +3,7 @@
   "bugs": "https://github.com/Shuunen/stuff-finder/issues",
   "description": "Sorting things is pointless if you can't find them afterwards",
   "devDependencies": {
+    "@angular-eslint/template-parser": "14",
     "@camwiegert/typical": "0.1",
     "@tailwindcss/forms": "0.5",
     "@types/node": "16",
@@ -14,6 +15,7 @@
     "esbuild": "0.15",
     "eslint": "8.23",
     "eslint-plugin-html": "7",
+    "eslint-plugin-tailwindcss": "3",
     "eslint-plugin-unicorn": "43",
     "fuse.js": "6.6",
     "jsdom": "20",

@@ -1,10 +1,10 @@
-import { dom, emit, sleep, storage } from 'shuutils'
+import { dom, emit, sleep, storage, tw } from 'shuutils'
 import { JSON_HEADERS } from '../constants'
 import { urlToUuid } from './url'
 
 export const button = (content: string, classes = '', secondary = false): HTMLButtonElement => {
-  const theme = secondary ? 'hover:opacity-100 opacity-80' : 'from-purple-500 to-purple-700 text-white hover:from-purple-700 hover:to-purple-900'
-  const button_ = dom('button', `text-lg h-10 max-w-xs px-12 md:text-base bg-gradient-to-tr shadow-md hover:shadow-lg rounded transition-all duration-200 each-in-out sm:px-6 ${theme} ${classes}`, content)
+  const theme = secondary ? tw('opacity-80 hover:opacity-100') : tw('from-purple-500 to-purple-700 text-white hover:from-purple-700 hover:to-purple-900')
+  const button_ = dom('button', tw(`h-10 max-w-xs rounded bg-gradient-to-tr px-12 text-lg shadow-md transition-all duration-200 ease-in-out hover:shadow-lg sm:px-6 md:text-base ${theme} ${classes}`), content)
   button_.type = 'button'
   return button_
 }
@@ -39,14 +39,14 @@ export const showLog = (message: string, data = ''): void => {
 }
 
 export const fadeIn = async (element: HTMLElement): Promise<void> => {
-  if (!element.classList.contains('hide')) return console.warn('please add "hide" class before mounting dom element and then call fade-in')
+  if (!element.classList.contains('app-hide')) return console.warn('please add "app-hide" class before mounting dom element and then call fade-in')
   element.classList.remove('hidden')
   await sleep(10)
   element.style.opacity = '1'
 }
 
 export const fadeOut = async (element: HTMLElement, destroy = false): Promise<void> => {
-  element.classList.add('hide')
+  element.classList.add('app-hide')
   element.style.opacity = '0'
   await sleep(350)
   element.classList.add('hidden')
