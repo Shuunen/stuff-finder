@@ -49,16 +49,16 @@
     "url": "https://github.com/Shuunen/stuff-finder.git"
   },
   "scripts": {
-    "build": "npm run build:css && npm run build:js && npm run build:mark -- --minify",
+    "build": "npm run build:css && npm run build:js -- --minify",
     "build:css": "tailwindcss -i src/assets/styles.css -o src/assets/styles.min.css --minify",
     "build:js": "esbuild src/index.ts --outdir=public --bundle",
-    "build:mark": "unique-mark public/index.html",
     "check": "repo-check",
     "ci": "npm run build && npm run lint && npm run check && npm run test",
     "dev": "parallel dev:css dev:js serve",
     "dev:css": "npm run build:css -- --watch",
     "dev:js": "npm run build:js -- --watch",
     "lint": "tsc --noEmit && eslint --fix --ignore-path .gitignore --ext .js,.ts,.html .",
+    "mark": "unique-mark public/index.html",
     "postversion": "git push && git push --tags",
     "preversion": "npm run ci",
     "serve": "servor public --reload --browse",
