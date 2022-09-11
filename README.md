@@ -16,6 +16,7 @@
 - [ ] find real SpeechRecognition typings (avoid native.d.ts)
 - [ ] display various suggestions for some fields when adding an item
 - [ ] type every events, enforce emit<> & on<>
+- [ ] enforce tsconfig rules with exactOptionalPropertyTypes, strictNullChecks, strict
 
 ## Build sizes
 
