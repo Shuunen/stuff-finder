@@ -41,7 +41,7 @@ class ItemSearch {
     emit<AppLoaderToggleEvent>('app-loader--toggle', true)
     const items = await storage.get<Item[]>('items')
     const result = items.find(item => (item.reference === str || item.barcode === str))
-    document.querySelector('app-form[name="search-item"] .error').textContent = (result && str.length > 0) ? 'ITEM ALREADY EXISTS ! You might not want to add it... again.' : ''
+    document.querySelector('app-form[name="search-item"] .app-error').textContent = (result && str.length > 0) ? 'ITEM ALREADY EXISTS ! You might not want to add it... again.' : ''
     if (str.length > 0) emit<AppFormEditItemSuggestionsEvent>('app-form--edit-item--suggestions', await this.getSuggestions(str))
     emit<AppLoaderToggleEvent>('app-loader--toggle', false)
   }

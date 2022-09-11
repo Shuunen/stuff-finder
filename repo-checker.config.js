@@ -1,4 +1,4 @@
-/* eslint-disable camelcase */
+/* eslint-disable camelcase, unicorn/prefer-module */
 module.exports = {
   user_name: 'Romain Racamier-Lafon',
   user_mail: 'romain.racamier@gmail.com',

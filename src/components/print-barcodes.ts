@@ -1,11 +1,11 @@
-import { div, emit, fillTemplate, on, storage } from 'shuutils'
+import { div, emit, fillTemplate, on, storage, tw } from 'shuutils'
 import { button } from '../utils'
 
 window.customElements.define('app-print-barcodes', class extends HTMLElement {
   barcodes: Item[] = []
   selection: string[] = []
-  previewButton = button('Preview', 'preview mx-auto mt-2 hidden sm:block')
-  previewError = div('preview error leading-9 text-center font-medium text-red-500')
+  previewButton = button('Preview', tw('app-preview mx-auto mt-2 hidden sm:block'))
+  previewError = div('app-preview app-error text-center font-medium leading-9 text-red-500')
   modal?: HTMLDivElement
   trigger = this.createTrigger()
   updatePreviewButton (): void {
@@ -28,7 +28,7 @@ window.customElements.define('app-print-barcodes', class extends HTMLElement {
   selectValidItems (): void {
     this.setAllItems(false)
     if (!this.modal) return console.error('no modal element for selectValidItems')
-    const forms = this.modal.querySelectorAll<HTMLFormElement>('.list app-form')
+    const forms = this.modal.querySelectorAll<HTMLFormElement>('.app-list app-form')
     forms.forEach(form => {
       // check valid form related checkbox
       const formValid = form.getAttribute('valid') === 'true'
@@ -53,15 +53,16 @@ window.customElements.define('app-print-barcodes', class extends HTMLElement {
     console.log('user wants to see preview')
     if (customElements.get('qr-code') === undefined) require('webcomponent-qr-code')
     emit('app-modal--print-barcodes--open')
-    const list = document.querySelector('.app-modal--print-barcodes .barcodes')
+    const list = document.querySelector('.app-modal--print-barcodes .app-barcodes')
     if (!list) return console.error('onPreview, failed to find list element')
     list.innerHTML = ''
     const barcodes = this.barcodes.filter(b => this.selection.includes(b.id))
     barcodes.forEach(b => {
-      const code = div('barcode', `<qr-code data="${b.reference.trim()}" margin=0 modulesize=3></qr-code>`)
-      const col = div('col')
-      col.append(div('name', [b.name, b.brand, b.details].join(' ').trim()))
-      col.append(div('location', b.box ? (b.box[0] + b.drawer) : b.location))
+      const wc = `<qr-code data="${b.reference.trim()}" margin=0 modulesize=3></qr-code>`
+      const code = div('app-barcode', wc)
+      const col = div('app-col')
+      col.append(div('app-name', [b.name, b.brand, b.details].join(' ').trim()))
+      col.append(div('app-location', b.box ? (b.box[0] + b.drawer) : b.location))
       code.append(col)
       list.append(code)
     })
@@ -69,7 +70,7 @@ window.customElements.define('app-print-barcodes', class extends HTMLElement {
   }
   handlePreview (): void {
     if (!this.modal) return console.error('no modal element for handlePreview')
-    this.modal.querySelectorAll('button.preview, .preview.error').forEach(element => element.remove())
+    this.modal.querySelectorAll('button.app-preview, .app-preview.app-error').forEach(element => element.remove())
     this.previewButton.disabled = true
     this.previewButton.dataset['action'] = 'barcodes-preview'
     this.modal.append(this.previewError, this.previewButton)
@@ -79,7 +80,7 @@ window.customElements.define('app-print-barcodes', class extends HTMLElement {
     if (!modal) return console.error('openModal, failed to find existing modal element')
     this.modal = modal
     if (!this.modal) return console.error('failed to find modal element')
-    const listElement = this.modal.querySelector('.list')
+    const listElement = this.modal.querySelector('.app-list')
     if (!listElement) return console.error('failed to find list element')
     const item = document.querySelector('template#barcodes-list-item')
     if (!item) return console.error('failed to find template element item')
@@ -98,7 +99,7 @@ window.customElements.define('app-print-barcodes', class extends HTMLElement {
   }
   createTrigger (): HTMLDivElement {
     const icon = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><defs/><path fill="currentColor" fill-rule="evenodd" d="M8 4h8v2H8V4zm10 2h4v12h-4v4H6v-4H2V6h4V2h12v4zm2 10h-2v-2H6v2H4V8h16v8zM8 16h8v4H8v-4zm0-6H6v2h2v-2z" clip-rule="evenodd"/></svg>'
-    const wrapper = div('app-prepare-barcodes-trigger hidden transition-colors text-purple-400 hover:text-purple-600 absolute top-5 right-20 h-10 w-10 cursor-pointer', icon)
+    const wrapper = div('app-prepare-barcodes-trigger absolute top-5 right-20 hidden h-10 w-10 cursor-pointer text-purple-400 transition-colors hover:text-purple-600', icon)
     wrapper.title = 'Open print barcodes'
     wrapper.addEventListener('click', () => emit('get-barcodes-to-print'))
     return wrapper

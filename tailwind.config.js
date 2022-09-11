@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/prefer-module */
 module.exports = {
   content: ['public/*.html', 'src/**/*.ts'],
   theme: {

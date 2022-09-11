@@ -1,11 +1,11 @@
-import { div, dom, emit, image, on, p, pickOne } from 'shuutils'
+import { div, dom, emit, image, on, p, pickOne, tw } from 'shuutils'
 import { button } from '../utils'
 
 window.customElements.define('app-search-button', class extends HTMLElement {
-  search = dom('input', 'search-button px-2 text-lg md:text-base max-w-xs rounded-md shadow-md hover:shadow-lg h-10 w-full border-2 border-purple-500')
-  scan = button('Scan it', 'search-button')
-  speech = button('Speech', 'search-button')
-  hint = p('text-center mt-8 p-4 rounded-md shadow text-lg md:text-base backdrop-filter backdrop-brightness-150 backdrop-opacity-30')
+  search = dom('input', tw('app-search-button h-10 w-full max-w-xs rounded-md border-2 border-purple-500 px-2 text-lg shadow-md hover:shadow-lg md:text-base'))
+  scan = button('Scan it', tw('app-search-button'))
+  speech = button('Speech', tw('app-search-button'))
+  hint = p('mt-8 rounded-md p-4 text-center text-lg shadow backdrop-brightness-150 backdrop-opacity-30 md:text-base')
   wrapper = div('app-search-button')
 
   onStatus (status: AppStatus): void {
@@ -54,7 +54,7 @@ window.customElements.define('app-search-button', class extends HTMLElement {
     this.search.focus()
   }
   createInputs (): HTMLDivElement {
-    const row = div('grid px-4 sm:grid-cols-3 gap-4 justify-center transition-opacity pointer-events-none opacity-50')
+    const row = div('pointer-events-none grid justify-center gap-4 px-4 opacity-50 transition-opacity sm:grid-cols-3')
     const colA = div('grid gap-2')
     colA.append(this.scan)
     colA.append(image('icon', 'assets/scan.svg', 'scan'))
@@ -67,7 +67,7 @@ window.customElements.define('app-search-button', class extends HTMLElement {
     colC.append(this.speech)
     colC.append(image('icon', 'assets/mic.svg', 'mic'))
     row.append(colC)
-    row.append(dom('style', '', 'input.search-button[placeholder] { text-align: center; } .app-search-button .icon { width: 2rem; margin: auto; opacity: .5; transition: opacity .4s, filter .4s; filter: saturate(0); } .search-button:hover + img { opacity: .8; filter: saturate(1); }'))
+    row.append(dom('style', '', 'input.app-search-button[placeholder] { text-align: center; } .app-search-button .icon { width: 2rem; margin: auto; opacity: .5; transition: opacity .4s, .4s; filter: saturate(0); } .app-search-button:hover + img { opacity: .8; filter: saturate(1); }'))
     this.search.id = 'input-type'
     this.search.placeholder = 'Type it'
     this.search.addEventListener('change', () => {

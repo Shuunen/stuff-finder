@@ -53,7 +53,7 @@ class AppForm extends HTMLElement {
     return element
   }
   createFooter (): HTMLDivElement {
-    const row = div('footer flex justify-center mt-4')
+    const row = div('app-footer mt-4 flex justify-center')
     if (this.inline) row.classList.add('hidden')
     else row.append(this.createClose())
     const save = button(this.saveLabel, 'save ml-4')
@@ -102,7 +102,6 @@ class AppForm extends HTMLElement {
       url = photo.url
     } else return showError('unhandled case where photo data is neither string or array')
     input.value = url
-    console.log('set photo', url, input)
     if (!this.els.form) throw new Error('No form found')
     const img = this.els.form.querySelector('img')
     if (!img) return showError(`wanted to set "${url}" but no img found`)
@@ -135,10 +134,10 @@ class AppForm extends HTMLElement {
     this.removeAttribute('class')
     this.innerHTML = ''
     this.append(this.els.form)
-    this.els.error = p('error text-center')
+    this.els.error = p('app-error text-center')
     this.els.form.parentElement?.append(this.els.error)
     if (!this.inline && this.dataset['title']) {
-      this.els.header = h2('header text-purple-700 text-2xl mt-2 mb-4 text-center', this.dataset['title'])
+      this.els.header = h2('app-header mt-2 mb-4 text-center text-2xl text-purple-700', this.dataset['title'])
       this.parentElement?.prepend(this.els.header)
     }
     this.els.footer = this.createFooter()

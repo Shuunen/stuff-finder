@@ -2,7 +2,7 @@ body {
   margin: 0;
 }
 
-.print-zone {
+.app-print-zone {
   background: grey;
   box-shadow: none;
   height: 100%;
@@ -15,7 +15,7 @@ body {
   z-index: 100;
 }
 
-.barcode {
+.app-barcode {
   align-items: center;
   border-radius: 8px;
   display: flex;
@@ -30,7 +30,7 @@ body > div:not(.print-barcodes) {
 
 /* below some copy of _barcodes.css */
 
-.barcodes.a4-65 {
+.app-barcodes.app-a4-65 {
   background: white;
   display: grid;
   grid-column-gap: 10px;
@@ -42,12 +42,12 @@ body > div:not(.print-barcodes) {
   width: 1140px;
 }
 
-.barcode .col {
+.app-barcode .app-col {
   overflow: hidden;
   padding-left: 10px;
 }
 
-.barcode .name {
+.app-barcode .app-name {
   -webkit-box-orient: vertical;
   display: -webkit-box;
   font-family: sans-serif;
@@ -59,7 +59,7 @@ body > div:not(.print-barcodes) {
   text-overflow: ellipsis;
 }
 
-.barcode .location {
+.app-barcode .app-location {
   font-family: monospace;
   font-size: 1.2rem;
   font-weight: bold;

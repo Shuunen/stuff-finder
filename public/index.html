@@ -16,7 +16,7 @@
   <link rel="manifest" href="assets/site.webmanifest">
 </head>
 
-<body class="flex flex-col items-center justify-center h-screen align-middle bg-gradient-to-tr from-purple-200 stuff-finder">
+<body class="flex h-screen flex-col items-center justify-center bg-gradient-to-tr from-purple-200 align-middle">
 
   <header>
     <app-prompter></app-prompter>
@@ -32,16 +32,16 @@
   <app-add-item-trigger></app-add-item-trigger>
 
   <app-modal name="search-results" data-title="Search results" class="hidden px-2 md:max-h-96">
-    <div class="overflow-auto list results"></div>
+    <div class="app-list app-results overflow-auto"></div>
   </app-modal>
 
   <template id="search-results-list-item">
     <div
-      class="grid items-center gap-4 p-2 mx-auto mb-4 text-center transition-colors rounded-md cursor-pointer sm:max-w-xl sm:text-left sm:grid-cols-3 hover:bg-purple-50"
+      class="mx-auto mb-4 grid cursor-pointer items-center gap-4 rounded-md p-2 text-center transition-colors hover:bg-purple-50 sm:max-w-xl sm:grid-cols-3 sm:text-left"
       id="{{ id }}" data-action="select-result">
-      <img class="object-contain w-24 h-24 mx-auto bg-white rounded-full pointer-events-none sm:w-36 sm:h-36" async src="{{ visual }}"
+      <img class="pointer-events-none mx-auto h-24 w-24 rounded-full bg-white object-contain sm:h-36 sm:w-36" async src="{{ visual }}"
         alt="{{ name }} visual" />
-      <div class="flex flex-col pointer-events-none sm:col-span-2">
+      <div class="pointer-events-none flex flex-col sm:col-span-2">
         <h3 class="font-medium text-purple-900">{{ name }} {{ brand }}</h3>
         <p>{{ category }}, {{ details }}</p>
         <p class="hidden sm:block">Reference : {{ reference }} {{ barcode }}</p>
@@ -49,17 +49,19 @@
         <p>Location : <strong class="mr-1">{{ location }}</strong><strong>{{ box }}{{ drawer }}</strong></p>
       </div>
     </div>
-    <div class="w-1/3 h-1 mx-auto my-4 bg-gray-200 divider"></div>
+    <div class="mx-auto my-4 h-1 w-1/3 bg-gray-200"></div> <!-- divider -->
   </template>
 
   <template id="edit-item">
-    <app-form name="edit-item" class="items-center sm:grid-cols-2 md:grid-cols-4 sm:gap-4" on-close="app-modal--edit-item--close">
+    <app-form name="edit-item" class="items-center sm:grid-cols-2 sm:gap-4 md:grid-cols-4" on-close="app-modal--edit-item--close">
       <input type=hidden name=id />
-      <div class="mb-6 sm:row-span-4 md:row-span-5 sm:mb-0 max-h-72">
-        <img class="w-3/4 mx-auto" src="assets/no-visual.svg" />
-        <div class="relative flex flex-col mt-3 mb-6 justify-evenly">
-          <input type=text name=photo onchange="window.dispatchEvent(new CustomEvent('app-form--edit-item--set', { detail: { photo: this.value } }))" />
-          <a data-action="clear" class="mx-auto mt-2 mb-7 clear" onclick="window.dispatchEvent(new CustomEvent('app-form--edit-item--set', { detail: { photo: '' } }))" href="#">Clear image</a>
+      <div class="mb-6 max-h-72 sm:row-span-4 sm:mb-0 md:row-span-5">
+        <img class="mx-auto w-3/4" src="assets/no-visual.svg" />
+        <div class="relative mt-3 mb-6 flex flex-col justify-evenly">
+          <input type=text name=photo
+            onchange="window.dispatchEvent(new CustomEvent('app-form--edit-item--set', { detail: { photo: this.value } }))" />
+          <a data-action="clear" class="mx-auto mt-2 mb-7"
+            onclick="window.dispatchEvent(new CustomEvent('app-form--edit-item--set', { detail: { photo: '' } }))" href="#">Clear image</a>
         </div>
       </div>
       <label>Name<input required name=name type=text minlength=3 maxlength=50 autofocus /></label>
@@ -73,20 +75,20 @@
       <label>Drawer <select name=drawer>{{ drawers }}</select></label>
       <label>Category <select name=category>{{ categories }}</select></label>
       <label>Price <input name=price type=number step=1 pattern="\d+" /></label>
-      <label>Printed ?<input class="push-left" type=checkbox name="ref-printed" /></label>
+      <label>Printed ?<input type=checkbox name="ref-printed" /></label>
     </app-form>
   </template>
 
   <app-modal name="edit-item" data-title="Edit item" class="hidden">
-    <div class="overflow-auto content"></div>
+    <div class="content overflow-auto"></div>
   </app-modal>
 
   <app-modal name="add-item" data-title="Add item" class="hidden">
-    <div class="overflow-auto content">
+    <div class="content overflow-auto">
       <app-form class="justify-center" name="search-item" inline=true no-hid save-label="Search" on-save="app-search-item">
         <label>Search online by name or reference : <input required name=input type=text minlength=3 maxlength=150 autofocus /></label>
       </app-form>
-      <div class="w-1/2 mx-auto mt-5 mb-4 border-b-2 separator"></div>
+      <div class="mx-auto mt-5 mb-4 w-1/2 border-b-2"></div> <!-- separator -->
     </div>
   </app-modal>
 
@@ -118,7 +120,7 @@
       <details class="mt-2">
         <summary>What this app do with my credentials ?</summary>
         <small>
-          <ul class="mb-2 list-disc list-inside">
+          <ul class="mb-2 list-inside list-disc">
             <li>fetch your Airtable data</li>
             <li>store credentials locally in your browser</li>
           </ul>
@@ -156,17 +158,17 @@
   <app-modal name="prepare-barcodes" data-title="Prepare Barcodes" class="hidden">
     <p class="font-medium text-yellow-700 sm:hidden">This content is too small for a mobile device, please use a bigger screen to access the barcode
       printing feature.</p>
-    <div class="items-baseline hidden gap-2 my-2 sm:flex">
+    <div class="my-2 hidden items-baseline gap-2 sm:flex">
       <p>Below is the list of non-printed items where valid ones have been pre-selected. You can</p>
       <a href="#" data-action="barcodes-select-all">select all</a>, <a href="#" data-action="barcodes-select-valid">select all valid</a> or <a
         href="#" data-action="barcodes-select-none">select none</a>.
     </div>
-    <div class="hidden list sm:block"></div>
+    <div class="app-list hidden sm:block"></div>
   </app-modal>
 
   <template id="barcodes-list-item">
-    <div class="flex items-center p-2 transition-colors rounded-md hover:bg-purple-100">
-      <input type=checkbox id="{{ id }}" data-action="barcodes-select-one" class="flex-shrink-0 mr-2">
+    <div class="flex items-center rounded-md p-2 transition-colors hover:bg-purple-100">
+      <input type=checkbox id="{{ id }}" data-action="barcodes-select-one" class="mr-2 shrink-0">
       <app-form name="{{ id }}" inline=true on-save="app-update--item">
         <input type=hidden name=id value="{{ id }}" />
         <input name=name type=text placeholder=Name required minlength=3 maxlength=50 autofocus value="{{ name }}">
@@ -184,8 +186,8 @@
       Below is a preview of the page that will be printed. <br>
       Make sure to remove any print margin in the <a data-action="barcodes-print" href="#print">print modal</a>.
     </p>
-    <div class="print-zone preview">
-      <div class="barcodes a4-65"></div>
+    <div class="app-print-zone app-preview">
+      <div class="app-barcodes app-a4-65"></div>
     </div>
   </app-modal>
 
