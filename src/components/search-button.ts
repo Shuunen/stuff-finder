@@ -8,32 +8,40 @@ window.customElements.define('app-search-button', class extends HTMLElement {
   hint = p('text-center mt-8 p-4 rounded-md shadow text-lg md:text-base backdrop-filter backdrop-brightness-150 backdrop-opacity-30')
   wrapper = div('app-search-button')
 
-  onStatus (status: string): void {
-    let speech = 'Say it'
-    let hint = ''
-    switch (status) {
-    case 'listening':
-      this.speech.style.pointerEvents = 'none'
-      speech = pickOne(['👂 Listening to you', '👂 Give it to me', '👂 Tell me'])
-      hint = 'Say keywords about what you\'re looking for (ex. "tablet", "biking gloves")'
-      break
-    case 'ready':
-      this.speech.style.pointerEvents = 'auto'
-      hint = 'Search is ready for you sir, just type your search, scan or say something.'
-      break
-    case 'settings-required':
-      hint = 'You need to configure this app to use it, please use the bouncing setting gear.'
-      break
-    case 'failed':
-      speech = pickOne(['Retry', 'Try again'])
-      hint = 'Speech recognition has fail, just press the button to try again or use another method.'
-      break
-    default:
-      console.error('un-expected status :', status)
-      hint = 'An un-expected case happen'
-    }
+  onStatus (status: AppStatus): void {
+    const { speech, hint } = this.getSpeechAndHint(status)
     this.speech.textContent = speech
     this.hint.textContent = hint
+  }
+  getSpeechAndHint (status: AppStatus): { speech: string, hint: string } {
+    if (status === 'listening') {
+      this.speech.style.pointerEvents = 'none'
+      return {
+        speech: pickOne(['👂 Listening to you', '👂 Give it to me', '👂 Tell me']),
+        hint: 'Say keywords about what you\'re looking for (ex. "tablet", "biking gloves")',
+      }
+    }
+    if (status === 'ready') {
+      this.speech.style.pointerEvents = 'auto'
+      return {
+        speech: pickOne(['Say it', 'Speech']),
+        hint: 'Search is ready for you sir, just type your search, scan or say something.',
+      }
+    }
+    if (status === 'settings-required') return {
+      speech: 'Settings',
+      hint: 'You need to configure this app to use it, please use the bouncing setting gear.',
+    }
+    if (status === 'failed') return {
+      speech: pickOne(['Retry', 'Try again']),
+      hint: 'Speech recognition has fail, just press the button to try again or use another method.',
+    }
+    if (status === 'loading') return {
+      speech: 'Loading',
+      hint: 'Loading...',
+    }
+    console.error('un-expected status :', status)
+    return { speech: pickOne(['Retry', 'Try again']), hint: 'An un-expected case happen' }
   }
   handleFocusLessTyping (): void {
     document.body.addEventListener('keydown', event => this.onKeyDown(event))
