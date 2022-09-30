@@ -12,16 +12,16 @@
   ],
   "overrides": [
     {
-      "parser": "@angular-eslint/template-parser",
       "files": [
         "*.html"
-      ]
+      ],
+      "parser": "@angular-eslint/template-parser"
     },
     {
-      "parser": "@typescript-eslint/parser",
       "files": [
         "*.ts"
       ],
+      "parser": "@typescript-eslint/parser",
       "rules": {
         "@typescript-eslint/brace-style": [
           "error",
@@ -118,7 +118,7 @@
         "small",
         "strong",
         "text",
-        "tw", // used for dom, image, link
+        "tw",
         "ul"
       ],
       "cssFiles": [
@@ -126,7 +126,7 @@
       ],
       "whitelist": [
         "app-[a-z\\d-]+",
-        "content" // from tailwindcss/typography
+        "content"
       ]
     }
   }

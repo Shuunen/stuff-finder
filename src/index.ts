@@ -2,6 +2,7 @@ import Fuse from 'fuse.js'
 import { emit, fillTemplate, on, pickOne, storage } from 'shuutils'
 import './assets/styles.min.css'
 import './components'
+import { EMPTY_APP_SETTINGS, EMPTY_COMMON_LISTS } from './constants'
 import './services'
 import { patch, post, showError, showLog, valuesToOptions } from './utils'
 
@@ -26,8 +27,8 @@ class App {
   }
 
   async checkExistingSettings (): Promise<void> {
-    const settings = await storage.get<AppSettings>('app-settings')
-    if (!settings) return this.settingsActionRequired(true)
+    const settings = storage.get<AppSettings>('app-settings', EMPTY_APP_SETTINGS)
+    if (!settings.base) return this.settingsActionRequired(true)
     this.onSettingsSave(settings)
     on('app-form--settings--ready', () => emit<AppFormSettingsSetEvent>('app-form--settings--set', settings))
   }
@@ -64,7 +65,7 @@ class App {
 
   async loadItems (): Promise<boolean> {
     this.isLoading(true)
-    const cachedItems: Item[] = (await storage.get('items')) || []
+    const cachedItems = storage.get<Item[]>('items', [])
     let response = await this.fetchApi()
     if (!response || response.error) {
       this.isLoading(false)
@@ -264,8 +265,8 @@ class App {
 
   async readCommonLists (): Promise<boolean> {
     if (this.commonListsLoaded) return true
-    const lists = await storage.get<CommonLists>('lists')
-    if (!lists) {
+    const lists = storage.get<CommonLists>('lists', EMPTY_COMMON_LISTS)
+    if (!lists.boxes) {
       console.error('no lists found, clearing cached items to fetch fresh data and set lists')
       await storage.clear('items')
       this.items = []

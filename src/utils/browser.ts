@@ -21,7 +21,7 @@ export const post = async (url: string, data: Record<string, unknown>): Promise<
 
 export const get = async <T> (url: string): Promise<T> => {
   const uuid = urlToUuid(url)
-  const cached = await storage.get<T>(uuid, sessionStorage)
+  const cached = storage.get<T>(uuid, undefined, sessionStorage)
   if (cached) return cached
   const response = await request<T>('get', url)
   storage.set(uuid, response, sessionStorage)

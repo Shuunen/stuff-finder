@@ -1,4 +1,5 @@
 import { capitalize, div, emit, on, storage } from 'shuutils'
+import { EMPTY_APP_SETTINGS } from '../constants'
 import { get, showLog } from '../utils'
 
 class ItemSearch {
@@ -11,7 +12,7 @@ class ItemSearch {
   }
   async getWrapApiKey (): Promise<string> {
     if (this.wrap.length > 0) return this.wrap
-    const settings = await storage.get<AppSettings>('app-settings')
+    const settings = storage.get<AppSettings>('app-settings', EMPTY_APP_SETTINGS)
     this.wrap = (!settings.wrap || settings.wrap.length === 0) ? '' : settings.wrap
     if (this.wrap === '') showLog('no wrap api key available in settings stored')
     return this.wrap
@@ -39,7 +40,7 @@ class ItemSearch {
   async search (str: string): Promise<void> {
     console.log(str)
     emit<AppLoaderToggleEvent>('app-loader--toggle', true)
-    const items = await storage.get<Item[]>('items')
+    const items = storage.get<Item[]>('items', [])
     const result = items.find(item => (item.reference === str || item.barcode === str))
     document.querySelector('app-form[name="search-item"] .app-error').textContent = (result && str.length > 0) ? 'ITEM ALREADY EXISTS ! You might not want to add it... again.' : ''
     if (str.length > 0) emit<AppFormEditItemSuggestionsEvent>('app-form--edit-item--suggestions', await this.getSuggestions(str))

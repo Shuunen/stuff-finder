@@ -1,4 +1,5 @@
 import { div, emit, fillTemplate, on, storage, tw } from 'shuutils'
+import { EMPTY_COMMON_LISTS } from '../constants'
 import { button } from '../utils'
 
 window.customElements.define('app-print-barcodes', class extends HTMLElement {
@@ -85,8 +86,8 @@ window.customElements.define('app-print-barcodes', class extends HTMLElement {
     const item = document.querySelector('template#barcodes-list-item')
     if (!item) return console.error('failed to find template element item')
     const template = item.innerHTML
-    const lists = await storage.get<CommonLists>('lists')
-    if (!lists) throw new Error('failed to get lists')
+    const lists = storage.get<CommonLists>('lists', EMPTY_COMMON_LISTS)
+    if (!lists.boxes) throw new Error('failed to get lists')
     listElement.innerHTML = this.barcodes.map(bar => {
       const boxes = lists.boxes.map(box => `<option value="${box}" ${box.toLowerCase() === bar.box.toLowerCase() ? 'selected' : ''}>${box}</option>`).join('')
       const drawers = ['', 1, 2, 3, 4, 5, 6, 7].map(d => `<option value="${d}" ${d.toString().toLowerCase() === bar.drawer.toLowerCase() ? 'selected' : ''}>${d}</option>`).join('')
