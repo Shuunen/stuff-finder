@@ -6,7 +6,7 @@ window.customElements.define('app-modal', class extends HTMLElement {
   modal = div('app-modal')
   createModal (id: string): HTMLDivElement {
     const modal = div(`${id} relative z-50 m-4 flex w-full flex-col overflow-hidden rounded bg-white p-4 shadow-md md:w-auto ${this.className}`, this.innerHTML)
-    const close = link(tw('app-close absolute top-2 right-5 font-mono text-4xl opacity-50 md:text-2xl'), 'x', '#')
+    const close = link(tw('app-close absolute !border-b-0 top-2 right-5 font-mono text-4xl opacity-50 md:text-2xl'), 'x', '#')
     modal.append(close)
     if (this.dataset['title']) modal.prepend(h2('app-header mx-20 mb-4 text-center text-2xl leading-7 text-purple-700', this.dataset['title']))
     close.dataset['action'] = `${id}--close`
