@@ -60,7 +60,7 @@ interface AirtableError {
 
 interface AirtableRecord {
   id: string
-  fields: Item
+  fields: Omit<Item, 'id'>
   error?: AirtableError
 }
 

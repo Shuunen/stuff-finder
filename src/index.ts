@@ -175,7 +175,10 @@ class App {
   }
 
   airtableRecordToItem (record: AirtableRecord): Item {
-    return record.fields
+    return {
+      id: record.id,
+      ...record.fields,
+    }
   }
 
   async onEditItem (data: Item): Promise<boolean> {
