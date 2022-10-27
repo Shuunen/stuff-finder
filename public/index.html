@@ -38,7 +38,7 @@
   <template id="search-results-list-item">
     <div
       class="mx-auto mb-4 grid cursor-pointer items-center gap-4 rounded-md p-2 text-center transition-colors hover:bg-purple-50 sm:max-w-xl sm:grid-cols-3 sm:text-left"
-      id="{{ id }}" data-action="select-result">
+      id="{{ id }}" data-action="select-result" data-payload="{{ id }}">
       <img class="pointer-events-none mx-auto h-24 w-24 rounded-full bg-white object-contain sm:h-36 sm:w-36" async src="{{ visual }}"
         alt="{{ name }} visual" />
       <div class="pointer-events-none flex flex-col sm:col-span-2">

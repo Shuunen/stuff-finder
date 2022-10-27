@@ -39,7 +39,7 @@ window.customElements.define('app-search-results', class extends HTMLElement {
   }
   connectedCallback (): void {
     on('search-results', (event: SearchResultEvent) => this.onResults(event))
-    on<SelectResultEvent>('select-result', (element) => this.onSelect(element.id))
+    on<SelectResultEvent>('select-result', (id) => this.onSelect(id))
     on('app-modal--edit-item--close', () => this.updateResults())
     const template = document.querySelector('template#search-results-list-item')
     if (!template) return showError('failed to find template#search-results-list-item')
