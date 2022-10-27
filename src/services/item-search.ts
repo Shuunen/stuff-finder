@@ -1,10 +1,10 @@
-import { capitalize, div, emit, on, storage } from 'shuutils'
+import { capitalize, div, dom, emit, on, storage } from 'shuutils'
 import { EMPTY_APP_SETTINGS } from '../constants'
 import { get, showLog } from '../utils'
 
 class ItemSearch {
   str = 'plop'
-  form: HTMLFormElement
+  form = dom('form')
   wrap = ''
   constructor () {
     on('app-modal--add-item--open', (element: HTMLElement) => this.onModalOpen(element))
@@ -68,8 +68,8 @@ class ItemSearch {
       if (suggestions[k].length === 0) delete suggestions[k] // clear empty fields
       else suggestions[k] = suggestions[k].filter((value, index, array) => array.indexOf(value) === index) // remove duplicates
     }
-    const clean = ['name', 'details']
-    clean.forEach((key: keyof Item) => { suggestions[key] = (suggestions[key] || []).map(suggestion => capitalize(suggestion, true)) })
+    const clean: Array<keyof Item> = ['name', 'details']
+    clean.forEach((key) => { suggestions[key] = (suggestions[key] || []).map(suggestion => capitalize(suggestion, true)) })
     console.log('final suggestions', suggestions)
     return suggestions
   }
