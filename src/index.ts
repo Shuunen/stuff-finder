@@ -38,7 +38,7 @@ class App {
   }
 
   showTitle (): void {
-    emit<AppPrompterTypeEvent>('app-prompter--type', ['Stuff Finder', 1000, `Stuff Finder\n${this.coolAscii()}`])
+    emit<AppPrompterTypeEvent>('app-prompter--type', ['Stuff Finder', 300, `Stuff Finder\n${this.coolAscii()}`])
   }
 
   async onSettingsSave (settings: AppSettings): Promise<void> {
@@ -66,16 +66,23 @@ class App {
   async loadItems (): Promise<boolean> {
     this.isLoading(true)
     const cachedItems = storage.get<Item[]>('items', [])
+    if (cachedItems.length === 0) console.log('no cached items found')
     let response = await this.fetchApi()
     if (!response || response.error) {
       this.isLoading(false)
+      emit<AppToasterShowEvent>('app-toaster--show', { message: 'airtable fetch failed', type: 'error' })
       return false
     }
     let records = response.records
-    if (records.length === 0) return true
-    if (cachedItems.some(item => (item.id === records[0]?.id && item['updated-on'] === records[0].fields['updated-on']))) {
+    if (!records[0] || records.length === 0) {
+      this.isLoading(false)
+      emit<AppToasterShowEvent>('app-toaster--show', { message: 'airtable returned no item', type: 'error' })
+      return false
+    }
+    const remote = this.airtableRecordToItem(records[0])
+    if (cachedItems.some(item => (item.id === remote.id && item['updated-on'] === remote['updated-on']))) {
       this.items = cachedItems
-      console.log(`${this.items.length} item(s) cached ` + this.coolAscii())
+      console.log(`${this.items.length} item(s) cached and no updates from Airtable`)
       await this.initFuse()
       return true
     }
