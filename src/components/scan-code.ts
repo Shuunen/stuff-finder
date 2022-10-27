@@ -9,7 +9,7 @@ window.customElements.define('app-scan-code', class extends HTMLElement {
 
   onResult (code: string): void {
     console.log('found qr or barcode :', code)
-    emit('app-modal--close')
+    emit('app-modal--scan-code--close')
     emit('app-sound--success')
     emit<SearchStartEvent>('search-start', { str: code, origin: 'scan' })
   }
