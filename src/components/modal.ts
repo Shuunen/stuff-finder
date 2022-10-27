@@ -9,7 +9,7 @@ window.customElements.define('app-modal', class extends HTMLElement {
     const close = link(tw('app-close absolute top-2 right-5 font-mono text-4xl opacity-50 md:text-2xl'), 'x', '#')
     modal.append(close)
     if (this.dataset['title']) modal.prepend(h2('app-header mx-20 mb-4 text-center text-2xl leading-7 text-purple-700', this.dataset['title']))
-    close.addEventListener('click', () => this.toggle(false))
+    close.dataset['action'] = `${id}--close`
     return modal
   }
   toggle (active: boolean): void {
