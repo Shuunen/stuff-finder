@@ -41,6 +41,7 @@ window.customElements.define('app-scan-code', class extends HTMLElement {
     const sources = await this.reader.listVideoInputDevices()
     console.log('video sources found :', sources)
     const source = (sources.find(s => s.label.includes('back')) || sources[0])
+    sources.forEach(s => emit<AppToasterShowEvent>('app-toaster--show', { message: `${s.label} [${s.kind}]`, type: 'info', delay: 5000 }))
     if (!source) throw new Error('no source found for setupReader')
     this.deviceId = source.deviceId
   }
