@@ -19,12 +19,12 @@ window.customElements.define('app-search-results', class extends HTMLElement {
       return fillTemplate(this.template, data)
     }).join('')
     if (event.results.length === 0) this.list.innerHTML = '<p class="text-center py-4"><span class="text-4xl opacity-50">¯\\_(ツ)_/¯</span><br><br>No results found.</p>'
-    this.list.parentElement.querySelector('.app-add-item')?.remove()
+    this.list.parentElement?.querySelector('.app-add-item')?.remove()
     const content = `Do you want to <a href="#" data-action="app-modal--add-item--open" data-input="${event.input}">add a new item</a> ?`
-    this.list.parentElement.append(text('app-add-item border-t pt-3 text-center', content))
+    this.list.parentElement?.append(text('app-add-item border-t pt-3 text-center', content))
     emit('app-modal--search-results--open')
     await sleep(300)
-    if (event.scrollTop) this.list.firstElementChild.scrollIntoView()
+    if (event.scrollTop) this.list.firstElementChild?.scrollIntoView()
   }
   onSelect (id: string): void {
     const item = this.results.find(item => item.id === id)
@@ -41,9 +41,16 @@ window.customElements.define('app-search-results', class extends HTMLElement {
     on('search-results', (event: SearchResultEvent) => this.onResults(event))
     on<SelectResultEvent>('select-result', (element) => this.onSelect(element.id))
     on('app-modal--edit-item--close', () => this.updateResults())
-    this.template = document.querySelector('template#search-results-list-item').innerHTML
+    const template = document.querySelector('template#search-results-list-item')
+    if (!template) return showError('failed to find template#search-results-list-item')
+    this.template = template.innerHTML
     const modal = document.querySelector('.app-modal--search-results')
-    this.header = modal.querySelector('.app-header')
-    this.list = modal.querySelector('.app-list.app-results')
+    if (!modal) return showError('failed to find .app-modal--search-results')
+    const header = modal.querySelector<HTMLHeadingElement>('.app-header')
+    if (!header) return showError('failed to find .app-header')
+    this.header = header
+    const list = modal.querySelector<HTMLDivElement>('.app-list.app-results')
+    if (!list) return showError('failed to find .app-list.app-results')
+    this.list = list
   }
 })

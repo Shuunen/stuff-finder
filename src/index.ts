@@ -73,7 +73,7 @@ class App {
     }
     let records = response.records
     if (records.length === 0) return true
-    if (cachedItems.some(item => (item.id === records[0].id && item['updated-on'] === records[0].fields['updated-on']))) {
+    if (cachedItems.some(item => (item.id === records[0]?.id && item['updated-on'] === records[0].fields['updated-on']))) {
       this.items = cachedItems
       console.log(`${this.items.length} item(s) cached ` + this.coolAscii())
       await this.initFuse()
@@ -120,22 +120,7 @@ class App {
       if (!statuses.includes(status)) statuses.push(status)
     })
     this.saveCommonLists({ boxes, locations, statuses, categories, drawers })
-    this.items = records.map(record => ({
-      'id': record.id,
-      'name': '',
-      'category': '',
-      'brand': '',
-      'details': '',
-      'box': '',
-      'updated-on': '',
-      'drawer': '',
-      'location': '',
-      'reference': '',
-      'barcode': '',
-      'ref-printed': false,
-      'status': 'acheté',
-      ...record.fields,
-    }))
+    this.items = records.map(record => this.airtableRecordToItem(record))
     showLog(`${this.items.length} item(s) loaded ` + this.coolAscii())
     return this.initFuse()
   }
@@ -170,7 +155,7 @@ class App {
     const result = this.items.find(item => (item.reference === input || item.barcode === input))
     const results = result ? [result] : this.fuse.search(input).map(item => item.item)
     const title = `${results.length === 0 ? 'No result found' : (results.length === 1 ? 'One result found' : `Found ${results.length} results`)} for “${input}”`
-    const data: SearchResultEvent = { title, results, byReference: Boolean(result), input, scrollTop: event.scrollTop }
+    const data: SearchResultEvent = { title, results, byReference: Boolean(result), input, scrollTop: Boolean(event.scrollTop) }
     emit<SearchResultEvent>('search-results', data)
   }
 
@@ -183,10 +168,7 @@ class App {
   }
 
   airtableRecordToItem (record: AirtableRecord): Item {
-    return {
-      id: record.id,
-      ...record.fields,
-    }
+    return record.fields
   }
 
   async onEditItem (data: Item): Promise<boolean> {
@@ -219,7 +201,7 @@ class App {
       const existing = this.items.find(existing => existing.id === item.id)
       if (!existing) throw new Error('existing item not found locally')
       Object.keys(data.fields).forEach((field: keyof Item) => {
-        const samePhoto = field === 'photo' && existing.photo && existing.photo[0].url === (data.fields.photo as ItemPhoto[])[0].url
+        const samePhoto = field === 'photo' && existing.photo && existing.photo[0]?.url === (data.fields.photo as ItemPhoto[])[0]?.url
         const sameValue = existing[field] === data.fields[field]
         if (samePhoto || sameValue) delete data.fields[field]
       })
