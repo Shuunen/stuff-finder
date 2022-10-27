@@ -19,6 +19,7 @@ class ItemSearch {
   }
   onModalOpen (element?: HTMLElement): void {
     const str = element ? element.dataset['input'] : ''
+    if (!str) return console.error('no str found')
     const input = document.querySelector<HTMLInputElement>('app-form[name="search-item"] input')
     if (input) input.value = str
     else console.error('no input found')
@@ -33,8 +34,11 @@ class ItemSearch {
     const template = document.querySelector<HTMLTemplateElement>('template#edit-item')
     if (!template) return console.error('no item form template')
     const form = div('container', template.innerHTML).firstElementChild
+    if (!form) return console.error('no form found')
     form.setAttribute('on-close', 'app-modal--add-item--close')
-    modal.querySelector('.content').append(form)
+    const content = modal.querySelector('.content')
+    if (!content) return console.error('no content found')
+    content.append(form)
     this.form = form as HTMLFormElement
   }
   async search (str: string): Promise<void> {
@@ -42,7 +46,9 @@ class ItemSearch {
     emit<AppLoaderToggleEvent>('app-loader--toggle', true)
     const items = storage.get<Item[]>('items', [])
     const result = items.find(item => (item.reference === str || item.barcode === str))
-    document.querySelector('app-form[name="search-item"] .app-error').textContent = (result && str.length > 0) ? 'ITEM ALREADY EXISTS ! You might not want to add it... again.' : ''
+    const appError = document.querySelector('app-form[name="search-item"] .app-error')
+    if (!appError) return console.error('no app error found')
+    appError.textContent = (result && str.length > 0) ? 'ITEM ALREADY EXISTS ! You might not want to add it... again.' : ''
     if (str.length > 0) emit<AppFormEditItemSuggestionsEvent>('app-form--edit-item--suggestions', await this.getSuggestions(str))
     emit<AppLoaderToggleEvent>('app-loader--toggle', false)
   }
@@ -80,7 +86,7 @@ class ItemSearch {
     suggestions.name.push(data.name)
     suggestions.brand.push(data.brand.name)
     suggestions.details.push(data.description)
-    suggestions.photo.push(data.image[0])
+    if (data.image[0]) suggestions.photo.push(data.image[0])
     suggestions.price.push(this.priceParse(data.offers.price))
     suggestions.reference.push(data.gtin13)
   }
@@ -92,8 +98,9 @@ class ItemSearch {
     data.items.splice(0, 5).forEach(item => {
       suggestions.details.push(item.title)
       suggestions.photo.push(item.photo)
-      suggestions.price.push(this.priceParse(item.price))
-      suggestions.reference.push((item.url.match(/\/dp\/(\w+)/) || [])[1]) // get the asin from url
+      if (item.price) suggestions.price.push(this.priceParse(item.price))
+      const asin = item.url.match(/\/dp\/(\w+)/) // get the asin from url
+      if (asin?.[1]) suggestions.reference.push(asin[1])
     })
   }
   async addSuggestionsFromAliEx (suggestions: ItemSuggestions, str: string): Promise<void> {
@@ -117,7 +124,7 @@ class ItemSearch {
       suggestions.brand.push(item.brand)
       suggestions.name.push(item.title)
       suggestions.photo.push(item.photo)
-      suggestions.price.push(this.priceParse(item.price))
+      if (item.price) suggestions.price.push(this.priceParse(item.price))
       suggestions.reference.push(item.uuid)
     })
   }
