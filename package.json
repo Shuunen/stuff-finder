@@ -1,4 +1,5 @@
 {
+  "$schema": "https://json.schemastore.org/package",
   "author": "Romain Racamier-Lafon <romain.racamier@gmail.com>",
   "bugs": "https://github.com/Shuunen/stuff-finder/issues",
   "description": "Sorting things is pointless if you can't find them afterwards",
