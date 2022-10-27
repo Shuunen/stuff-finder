@@ -7,7 +7,7 @@ window.customElements.define('app-edit-item', class extends HTMLElement {
     const template = document.querySelector('template#edit-item')
     if (!template) return console.error('no edit-item template found')
     const photo = item.photo && item.photo[0]?.url || ''
-    const data = { id: item.id, photo }
+    const data = { photo, ...item }
     if (!this.modal) return console.error('no modal')
     this.modal.innerHTML = fillTemplate(template.innerHTML, data)
     emit<AppFormEditItemSetEvent>('app-form--edit-item--set', item)
