@@ -1,13 +1,13 @@
-import { emit, fillTemplate, on, readableTimeAgo, sleep, text } from 'shuutils'
+import { div, emit, fillTemplate, h1, on, readableTimeAgo, sleep, text } from 'shuutils'
 import { DEFAULT_IMAGE } from '../constants'
 import { showError, showLog } from '../utils'
 
 window.customElements.define('app-search-results', class extends HTMLElement {
   template = ''
-  header: HTMLHeadingElement
-  list: HTMLDivElement
-  input: string
-  results: Item[]
+  header = h1('')
+  list = div('')
+  input = ''
+  results: Item[] = []
   async onResults (event: SearchResultEvent): Promise<void> {
     this.header.textContent = event.title
     this.results = event.results

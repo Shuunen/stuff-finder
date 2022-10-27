@@ -210,7 +210,8 @@ class App {
     if (item.id) {
       const existing = this.items.find(existing => existing.id === item.id)
       if (!existing) throw new Error('existing item not found locally')
-      Object.keys(data.fields).forEach((field: keyof Item) => {
+      const fields = Object.keys(data.fields) as Array<keyof Item>
+      fields.forEach((field) => {
         const samePhoto = field === 'photo' && existing.photo && existing.photo[0]?.url === (data.fields.photo as ItemPhoto[])[0]?.url
         const sameValue = existing[field] === data.fields[field]
         if (samePhoto || sameValue) delete data.fields[field]
@@ -249,7 +250,8 @@ class App {
 
   saveCommonLists (lists: CommonLists): void {
     console.log('saving common lists :', lists)
-    Object.keys(lists).forEach((name: keyof CommonLists) => {
+    const names = Object.keys(lists) as Array<keyof CommonLists>
+    names.forEach((name) => {
       lists[name] = ['', ...lists[name].sort(Intl.Collator().compare)]
     })
     storage.set('lists', lists)
