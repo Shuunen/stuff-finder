@@ -17,7 +17,7 @@ class AppForm extends HTMLElement {
   get saveLabel (): string { return this.getAttribute('save-label') || 'Save' }
   override get title (): string { return this.getAttribute('title') === 'false' ? '' : (this.getAttribute('title') || '') }
   get inline (): boolean { return this.getAttribute('inline') === 'true' }
-  get onCloseEventName (): string { return this.getAttribute('on-close') || 'app-modal--close' }
+  get onCloseEventName (): string { return this.getAttribute('on-close') || `${this._id}--close` }
   get onSaveEventName (): string { return this.getAttribute('on-save') || `${this._id}--save` }
   get inputs (): HTMLInputElement[] { return [...this.els.form?.elements as unknown as HTMLInputElement[]] }
   get data (): AppFormData {
@@ -49,6 +49,7 @@ class AppForm extends HTMLElement {
   }
   createClose (): HTMLButtonElement {
     const element = button('Cancel', 'close', true)
+    console.log('form cancel will emit close event :', this.onCloseEventName, element)
     element.addEventListener('click', () => emit(this.onCloseEventName))
     return element
   }
@@ -67,7 +68,7 @@ class AppForm extends HTMLElement {
   }
   onSave (): void {
     emit<FormOnSaveEvent>(this.onSaveEventName, this.data)
-    this.els.footer?.classList.add('hidden')
+    // this.els.footer?.classList.add('hidden') // not sure if needed
   }
   destroy (): void {
     this.els.form?.remove()
@@ -79,8 +80,10 @@ class AppForm extends HTMLElement {
     const isValid = this.els.form?.checkValidity()
     console.log(`form is ${isValid ? 'valid' : 'invalid'}`)
     this.error = ''
-    if (isValid) this.els.save?.removeAttribute('disabled')
-    else {
+    if (isValid) {
+      this.els.save?.removeAttribute('disabled')
+      emit(`${this._id}--change`, this.data)
+    } else {
       this.els.save?.setAttribute('disabled', String(true))
       const input = this.inputs.find(input => input.validationMessage.length > 0)
       if (input) this.error = `Field "${input.name}" is invalid. ${input.validationMessage}`
