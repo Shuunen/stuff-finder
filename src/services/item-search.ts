@@ -18,8 +18,8 @@ class ItemSearch {
     return this.wrap
   }
   onModalOpen (element?: HTMLElement): void {
-    const str = element ? element.dataset['input'] : ''
-    if (!str) return console.error('no str found')
+    const str = element ? (element.dataset['input'] ?? '') : ''
+    if (str.length === 0) console.log('no search input found')
     const input = document.querySelector<HTMLInputElement>('app-form[name="search-item"] input')
     if (input) input.value = str
     else console.error('no input found')
