@@ -2,6 +2,7 @@ import { div, emit, h2, link, on, tw } from 'shuutils'
 import { fadeIn, fadeOut } from '../utils'
 
 window.customElements.define('app-modal', class extends HTMLElement {
+  active = false
   backdrop = div('app-backdrop app-hide pointer-events-none fixed top-0 left-0 z-20 flex h-full w-full flex-col items-center justify-center bg-black/50 align-middle')
   modal = div('app-modal')
   createModal (id: string): HTMLDivElement {
@@ -13,6 +14,8 @@ window.customElements.define('app-modal', class extends HTMLElement {
     return modal
   }
   toggle (active: boolean): void {
+    if (active === this.active) return
+    this.active = active
     document.body.classList.toggle('overflow-hidden', active)
     this.modal.classList.toggle('hidden', !active)
     this.backdrop.classList.toggle('pointer-events-none', !active)
