@@ -23,7 +23,7 @@
     "jsdom-global": "3",
     "npm-parallel": "2",
     "postcss": "8",
-    "repo-check": "1.27",
+    "repo-check": "1.28",
     "servor": "4",
     "shuutils": "6.3",
     "tailwindcss": "3",
