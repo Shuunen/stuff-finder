@@ -1,5 +1,6 @@
 interface PrintData {
-  text: string
-  barcode: string
   location: string
+  qrCodeValue: string
+  qrCodeVisual: string
+  text: string
 }
