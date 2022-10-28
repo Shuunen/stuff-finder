@@ -82,6 +82,7 @@ class AppForm extends HTMLElement {
     this.error = ''
     if (isValid) {
       this.els.save?.removeAttribute('disabled')
+      console.log('emitting :', `${this._id}--change`, this.data)
       emit(`${this._id}--change`, this.data)
     } else {
       this.els.save?.setAttribute('disabled', String(true))
