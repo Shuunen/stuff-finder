@@ -100,22 +100,34 @@
 
   <app-modal name="print-one" data-title="Print one item" class="hidden">
     <div class="app-print-one--preview mx-auto mb-4"></div>
-    <app-form name="print-one" save-label="Print" on-save="do-print-one" class="mb-4">
+    <app-form name="print-one" save-label="Print" on-save="do-print-one" on-close="app-modal--print-one--close" class="mb-4">
       <label>
         Print size ?
         <select name="size">
-          <option value="40x30" selected>40mm x 30mm</option>
+          <option value="40x30">40mm x 30mm</option>
+          <option value="40x20" selected>40mm x 20mm</option>
         </select>
       </label>
     </app-form>
   </app-modal>
 
   <template id="print-one--40x30">
-    <div class="app-print-one grid text-center border border-black text-sm overflow-hidden"
-      style="padding: 4px; gap: 4px; width:145px; height: 110px; aspect-ratio: 4/3;">
-      <div style="height: 40px;" class="bg-red-100 overflow-hidden">{{ text }}</div>
-      <div style="height: 32px; line-height: 2;" class="bg-purple-100">{{ barcode }}</div>
-      <div class="bg-blue-100">{{ location }}</div>
+    <div class="app-print-one app-barcode" style="width:145px; height: 110px; aspect-ratio: 4/3;">
+      <div class="app-qr-code-visual">{{ qrCodeVisual }}</div>
+      <div class="app-col">
+        <div class="app-name">{{ text }}</div>
+        <div class="app-location">{{ location }}</div>
+      </div>
+    </div>
+  </template>
+
+  <template id="print-one--40x20">
+    <div class="app-print-one app-barcode" style="width:145px; height: 72px; aspect-ratio: 4/2;">
+      <div class="app-qr-code-visual">{{ qrCodeVisual }}</div>
+      <div class="app-col">
+        <div class="app-name">{{ text }}</div>
+        <div class="app-location">{{ location }}</div>
+      </div>
     </div>
   </template>
 
