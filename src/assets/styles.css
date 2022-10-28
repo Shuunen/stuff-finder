@@ -22,65 +22,6 @@ html {
   @apply transition-opacity duration-300 opacity-0;
 }
 
-.app-barcodes.app-a4-65 {
-  background: white;
-  display: grid;
-  grid-column-gap: 10px;
-  grid-template-columns: repeat(5, 1fr);
-  grid-template-rows: repeat(13, 1fr);
-  height: 1540px;
-  margin: auto;
-  padding: 62px 30px 0 30px;
-  width: 1140px;
-}
-
-.app-barcode {
-  align-items: center;
-  border: 2px solid;
-  border-radius: 8px;
-  display: flex;
-  overflow: hidden;
-  padding: 6px;
-}
-
-.app-barcode:nth-child(even) {
-  border-style: dashed;
-}
-
-.app-barcode .app-col {
-  overflow: hidden;
-  padding-left: 10px;
-}
-
-.app-barcode .app-name {
-  -webkit-box-orient: vertical;
-  display: -webkit-box;
-  font-family: sans-serif;
-  font-size: 0.8rem;
-  letter-spacing: -0.5px;
-  -webkit-line-clamp: 2;
-  line-height: 1.2rem;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.app-barcode .app-location {
-  font-family: monospace;
-  font-size: 1.2rem;
-  font-weight: bold;
-  padding-top: 0.3rem;
-}
-
-.app-print-zone {
-  background: none;
-  box-shadow: 0 0 1rem -0.3rem;
-  height: 30vh;
-  margin: 1rem;
-  overflow: auto;
-  position: inherit;
-  width: 40vw;
-}
-
 form {
   @apply gap-3 pr-2;
 }
@@ -176,4 +117,20 @@ app-form[name="search-item"] img + div > a.clear {
 
 app-form[name="search-item"] img[src^="http"] + div > a.clear {
   @apply block;
+}
+
+.app-barcode {
+  @apply border border-black mx-auto px-1 rounded;
+}
+
+.app-barcode .app-qr-code-visual {
+  @apply bg-green-400;
+}
+
+.app-barcode .app-name {
+  @apply bg-red-400;
+}
+
+.app-barcode .app-location {
+  @apply bg-blue-400;
 }
