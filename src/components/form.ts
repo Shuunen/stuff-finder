@@ -145,7 +145,7 @@ class AppForm extends HTMLElement {
     this.els.form.addEventListener('submit', event => { event.preventDefault() })
     this.initialData = this.data
     this.validateSync()
-    emit(`${this._id}--ready`)
+    emit(`${this._id}--ready`, this.data)
   }
 }
 
