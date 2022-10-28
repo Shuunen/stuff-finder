@@ -24,6 +24,7 @@ window.customElements.define('app-print-one', class extends HTMLElement {
     if (!this.previewElement) return console.error('no preview element')
     this.data = itemToPrintData(this.item)
     this.previewElement.innerHTML = fillTemplate(template.innerHTML + '<div class="font-mono mt-4">QR Code value : {{ qrCodeValue }}</div>', { ...this.data })
+    sleep(300).then(() => this.doPrintOne())
   }
   onFormChange (form: PrintOneFormData): void {
     console.log('print one form change', form)
