@@ -28,6 +28,7 @@
   <app-search-button></app-search-button>
   <app-search-results></app-search-results>
   <app-print-barcodes></app-print-barcodes>
+  <app-print-one></app-print-one>
   <app-settings-trigger></app-settings-trigger>
   <app-add-item-trigger></app-add-item-trigger>
 
@@ -75,7 +76,10 @@
       <label>Drawer <select name=drawer>{{ drawers }}</select></label>
       <label>Category <select name=category>{{ categories }}</select></label>
       <label>Price <input name=price type=number step=1 pattern="\d+" /></label>
-      <label>Printed ?<input type=checkbox name="ref-printed" /></label>
+      <div class="flex gap-4">
+        <label>Printed ?<input type=checkbox name="ref-printed" /></label>
+        <a class="self-start cursor-pointer" data-action="app-modal--print-one--open" data-payload="{{ id }}">Print</a>
+      </div>
     </app-form>
   </template>
 
@@ -91,6 +95,27 @@
       <div class="mx-auto mt-5 mb-4 w-1/2 border-b-2"></div> <!-- separator -->
     </div>
   </app-modal>
+
+  <app-modal name="print-one" data-title="Print one item" class="hidden">
+    <div class="app-print-one--preview mx-auto mb-4"></div>
+    <app-form name="print-one" save-label="Print" on-save="do-print-one" class="mb-4">
+      <label>
+        Print size ?
+        <select name="size">
+          <option value="40x30" selected>40mm x 30mm</option>
+        </select>
+      </label>
+    </app-form>
+  </app-modal>
+
+  <template id="print-one--40x30">
+    <div class="app-print-one grid text-center border border-black text-sm overflow-hidden"
+      style="padding: 4px; gap: 4px; width:145px; height: 110px; aspect-ratio: 4/3;">
+      <div style="height: 40px;" class="bg-red-100 overflow-hidden">{{ text }}</div>
+      <div style="height: 32px; line-height: 2;" class="bg-purple-100">{{ barcode }}</div>
+      <div class="bg-blue-100">{{ location }}</div>
+    </div>
+  </template>
 
   <app-edit-item></app-edit-item>
 
