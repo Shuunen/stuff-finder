@@ -1,38 +1,53 @@
 import { fillTemplate, on, sleep, storage } from 'shuutils'
-import { printService } from '../services/print.service'
+import { itemToPrintData } from '../services/print.service'
 
 window.customElements.define('app-print-one', class extends HTMLElement {
-  data: PrintData = { text: '', barcode: '', location: '' }
+  data: PrintData | undefined
+  item: Item | undefined
   previewElement?: HTMLElement
   size: PrintSize = '40x30'
-  preview (id: PrintOneEvent): void {
-    console.log('preview', id)
+
+  findItem (id?: PrintOneEvent): Item {
+    if (!id) throw new Error('cannot find item without id')
     const items = storage.get<Item[]>('items', [])
-    if (!items) return console.error('no items, cannot preview')
+    if (!items) throw new Error('no items found')
     const item = items.find(item => item.id === id)
-    if (!item) return console.error('no item, cannot preview')
+    if (!item) throw new Error('no item found in items')
     console.log('found item to preview in', this.size, item)
+    return item
+  }
+  preview (id?: PrintOneEvent): void {
+    console.log('preview in', this.size)
+    this.item = this.item ?? this.findItem(id)
     const template = document.querySelector(`template#print-one--${this.size}`)
     if (!template) return console.error('no edit-item template found')
     if (!this.previewElement) return console.error('no preview element')
-    this.data = printService.getData(item)
-    this.previewElement.innerHTML = fillTemplate(template.innerHTML, { ...this.data })
+    this.data = itemToPrintData(this.item)
+    this.previewElement.innerHTML = fillTemplate(template.innerHTML + '<div class="font-mono mt-4">QR Code value : {{ qrCodeValue }}</div>', { ...this.data })
   }
-  onFormChange (form: PrintOneFormReadyEvent): void {
+  onFormChange (form: PrintOneFormData): void {
     console.log('print one form change', form)
     this.size = form.size
+    if (this.item) this.preview()
   }
   doPrintOne (): void {
     console.log('do print one', this.data)
+    window.print()
+  }
+  onClose (): void {
+    console.log('print one modal closed')
+    this.item = undefined
   }
   async connectedCallback (): Promise<void> {
     await sleep(100)
     const previewElement = document.querySelector<HTMLElement>('.app-print-one--preview')
     if (!previewElement) return console.error('no print one modal found')
     this.previewElement = previewElement
+    if (customElements.get('qr-code') === undefined) require('webcomponent-qr-code')
     on<PrintOneEvent>('print-one', this.preview.bind(this))
+    on('app-modal--print-one--close', this.onClose.bind(this))
     on<PrintOneEvent>('app-modal--print-one--open', this.preview.bind(this))
-    on<PrintOneFormReadyEvent>('app-form--print-one--ready', this.onFormChange.bind(this))
+    on<PrintOneFormData>('app-form--print-one--change', this.onFormChange.bind(this))
     on<PrintOneSubmitEvent>('do-print-one', this.doPrintOne.bind(this))
   }
 })
