@@ -22,6 +22,7 @@ type FormIdSuggestionsEvent = FormSuggestions
 type FormOnSaveEvent = AppFormData
 type FormSuggestions = Record<string, string[]>
 type PrintOneEvent = string // the id of the item to print
+type PrintOneInputData = Omit<Item, 'id' | 'category' | 'photo' | 'price' | 'ref-printed' | 'status' | 'updated-on'>
 type PrintOneFormData = { size: PrintSize }
 type PrintOneSubmitEvent = PrintData
 type PrintSize = '40x30'

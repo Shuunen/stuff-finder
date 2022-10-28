@@ -1,4 +1,4 @@
-import { capitalize, div, dom, emit, on, storage } from 'shuutils'
+import { capitalize, debounce, div, dom, emit, on, storage } from 'shuutils'
 import { EMPTY_APP_SETTINGS } from '../constants'
 import { get, showLog } from '../utils'
 
@@ -7,8 +7,17 @@ class ItemSearch {
   form = dom('form')
   wrap = ''
   constructor () {
+    const onFormChange = debounce(this.onFormChangeSync, 200)
     on('app-modal--add-item--open', (element: HTMLElement) => this.onModalOpen(element))
+    on('app-form--edit-item--change', onFormChange)
     on<AppSearchItemEvent>('app-search-item', data => this.search(String(data['input'])))
+  }
+  onFormChangeSync (data: Item): void {
+    console.log('onFormChangeSync', data)
+    const printInputData: PrintOneInputData = { name: data.name, brand: data.brand, details: data.details, reference: data.reference, barcode: data.barcode, box: data.box, drawer: data.drawer, location: data.location }
+    const printTrigger = document.querySelector<HTMLElement>('[data-action="app-modal--print-one--open"]')
+    if (!printTrigger) return console.error('no print trigger found')
+    printTrigger.dataset['payload'] = JSON.stringify(printInputData)
   }
   async getWrapApiKey (): Promise<string> {
     if (this.wrap.length > 0) return this.wrap
