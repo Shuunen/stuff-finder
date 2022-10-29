@@ -1,4 +1,4 @@
-import { debounce, div, dom, emit, h2, on, p } from 'shuutils'
+import { copy, debounce, div, dom, emit, h2, objectSum, on, p } from 'shuutils'
 import { DEFAULT_IMAGE } from '../constants'
 import { button, showError, valuesToOptions } from '../utils'
 
@@ -11,8 +11,10 @@ class AppForm extends HTMLElement {
     footer?: HTMLDivElement,
     save?: HTMLButtonElement
   } = {}
-  initialData: Record<string, string | boolean | number | string[]> = {}
-  validate = debounce(() => this.validateSync(), 200) // eslint-disable-line unicorn/consistent-function-scoping
+  initialData: AppFormData = {}
+  emittedData: AppFormData = {}
+  validate = debounce(this.validateSync.bind(this), 200)
+  emitChange = debounce(this.emitChangeSync.bind(this), 200)
   get name (): string { return this.getAttribute('name') ?? 'unknown' }
   get saveLabel (): string { return this.getAttribute('save-label') || 'Save' }
   override get title (): string { return this.getAttribute('title') === 'false' ? '' : (this.getAttribute('title') || '') }
@@ -39,7 +41,7 @@ class AppForm extends HTMLElement {
     this.validateSync()
   }
   get dataChanged (): boolean {
-    return JSON.stringify(this.initialData) !== JSON.stringify(this.data)
+    return objectSum(this.initialData) !== objectSum(this.data)
   }
   get error (): string {
     return this.els.error?.textContent ?? ''
@@ -76,14 +78,19 @@ class AppForm extends HTMLElement {
     this.els.footer?.remove()
     this.remove()
   }
+  emitChangeSync (): void {
+    if (objectSum(this.emittedData) === objectSum(this.data)) return
+    this.emittedData = copy(this.data)
+    console.log('emitting :', `${this._id}--change`, this.data)
+    emit(`${this._id}--change`, this.data)
+  }
   validateSync (): void {
     const isValid = this.els.form?.checkValidity()
     console.log(`form is ${isValid ? 'valid' : 'invalid'}`)
     this.error = ''
     if (isValid) {
       this.els.save?.removeAttribute('disabled')
-      console.log('emitting :', `${this._id}--change`, this.data)
-      emit(`${this._id}--change`, this.data)
+      this.emitChange()
     } else {
       this.els.save?.setAttribute('disabled', String(true))
       const input = this.inputs.find(input => input.validationMessage.length > 0)
