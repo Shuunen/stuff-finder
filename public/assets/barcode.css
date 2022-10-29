@@ -1,7 +1,7 @@
 .app-barcode {
   display: flex;
   overflow: hidden;
-  align-items: flex-start;
+  align-items: center;
   padding-top: 4px;
 }
 
