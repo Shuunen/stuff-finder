@@ -93,7 +93,7 @@
 
   <app-modal name="add-item" data-title="Add item" class="hidden">
     <div class="content overflow-auto">
-      <app-form class="justify-center" name="search-item" inline=true no-hid save-label="Search" on-save="app-search-item">
+      <app-form class="justify-center" name="search-item" allow-submit inline=true no-hid save-label="Search" on-save="app-search-item">
         <label>Search online by name or reference : <input name=input type=text minlength=3 maxlength=150 autofocus /></label>
       </app-form>
       <div class="mx-auto mt-5 mb-4 w-1/2 border-b-2"></div> <!-- separator -->
@@ -102,7 +102,7 @@
 
   <app-modal name="print-one" data-title="Print one item" class="hidden">
     <div class="app-print-one--preview mx-auto mb-4"></div>
-    <app-form name="print-one" save-label="Print" on-save="do-print-one" on-close="app-modal--print-one--close" class="mb-4">
+    <app-form name="print-one" cancel-label="Close" save-label="Print" on-save="do-print-one" on-close="app-modal--print-one--close" class="mb-4">
       <label>
         Print size ?
         <select name="size">

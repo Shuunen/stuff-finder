@@ -15,8 +15,10 @@ export class AppForm extends HTMLElement {
   emittedData: AppFormData = { formValid: false }
   validate = debounce(this.validateSync.bind(this), 200)
   emitChange = debounce(this.emitChangeSync.bind(this), 200)
+  get allowSubmit (): boolean { return this.hasAttribute('allow-submit') }
   get name (): string { return this.getAttribute('name') ?? 'unknown' }
   get saveLabel (): string { return this.getAttribute('save-label') || 'Save' }
+  get cancelLabel (): string { return this.getAttribute('cancel-label') || 'Cancel' }
   override get title (): string { return this.getAttribute('title') === 'false' ? '' : (this.getAttribute('title') || '') }
   get inline (): boolean { return this.getAttribute('inline') === 'true' }
   get onCloseEventName (): string { return this.getAttribute('on-close') || `${this._id}--close` }
@@ -51,7 +53,7 @@ export class AppForm extends HTMLElement {
     if (this.els.error) this.els.error.textContent = message || ''
   }
   createClose (): HTMLButtonElement {
-    const element = button('Cancel', 'close', true)
+    const element = button(this.cancelLabel, 'close', true)
     logger.log('form cancel will emit close event :', this.onCloseEventName, element)
     element.addEventListener('click', () => emit(this.onCloseEventName))
     return element
@@ -155,7 +157,10 @@ export class AppForm extends HTMLElement {
     }
     this.els.footer = this.createFooter()
     this.els.form.parentElement?.append(this.els.footer)
-    this.els.form.addEventListener('submit', event => { event.preventDefault() })
+    this.els.form.addEventListener('submit', event => {
+      event.preventDefault()
+      if (this.allowSubmit) this.onSave()
+    })
     this.initialData = this.data
     this.validateSync()
     emit(`${this._id}--ready`, this.data)
