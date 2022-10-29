@@ -9,13 +9,13 @@ class ItemSearch {
   constructor () {
     const onFormChange = debounce(this.onFormChangeSync, 200)
     on('app-modal--add-item--open', (element: HTMLElement) => this.onModalOpen(element))
-    on('app-form--edit-item--change', onFormChange)
+    on('app-form--edit-item--change', onFormChange.bind(this))
     on<AppSearchItemEvent>('app-search-item', data => this.search(String(data['input'])))
   }
   onFormChangeSync (data: Item): void {
     console.log('onFormChangeSync', data)
     const printInputData: PrintOneInputData = { name: data.name, brand: data.brand, details: data.details, reference: data.reference, barcode: data.barcode, box: data.box, drawer: data.drawer, location: data.location }
-    const printTrigger = document.querySelector<HTMLElement>('[data-action="app-modal--print-one--open"]')
+    const printTrigger = document.querySelector<HTMLElement>('.app-modal.visible [data-action="app-modal--print-one--open"]')
     if (!printTrigger) return console.error('no print trigger found')
     printTrigger.dataset['payload'] = JSON.stringify(printInputData)
   }
