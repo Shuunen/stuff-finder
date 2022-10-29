@@ -4,7 +4,7 @@ import './assets/styles.min.css'
 import './components'
 import { EMPTY_APP_SETTINGS, EMPTY_COMMON_LISTS } from './constants'
 import './services'
-import { patch, post, showError, showLog, valuesToOptions } from './utils'
+import { find, logger, patch, post, valuesToOptions } from './utils'
 
 class App {
   apiUrl = ''
@@ -14,7 +14,7 @@ class App {
   commonListsLoaded = false
 
   constructor () {
-    console.log('app start')
+    logger.log('app start')
     storage.prefix = '@shuunen/stuff-finder_'
     on<AppFormSettingsSaveEvent>('app-form--settings--save', settings => this.onSettingsSave(settings))
     on<AppFormEditItemSaveEvent>('app-form--edit-item--save', item => this.onEditItem(item))
@@ -59,14 +59,14 @@ class App {
   }
 
   isLoading (active: boolean): void {
-    console.log('isLoading active ?', active)
+    logger.log('isLoading active ?', active)
     emit<AppLoaderToggleEvent>('app-loader--toggle', active)
   }
 
   async loadItems (): Promise<boolean> {
     this.isLoading(true)
     const cachedItems = storage.get<Item[]>('items', [])
-    if (cachedItems.length === 0) console.log('no cached items found')
+    if (cachedItems.length === 0) logger.showLog('no cached items found')
     let response = await this.fetchApi()
     if (!response || response.error) {
       this.isLoading(false)
@@ -82,7 +82,7 @@ class App {
     const remote = this.airtableRecordToItem(records[0])
     if (cachedItems.some(item => (item.id === remote.id && item['updated-on'] === remote['updated-on']))) {
       this.items = cachedItems
-      console.log(`${this.items.length} item(s) cached and no updates from Airtable`)
+      logger.showLog(`${this.items.length} item(s) cached and no updates from Airtable`)
       await this.initFuse()
       return true
     }
@@ -128,7 +128,7 @@ class App {
     })
     this.saveCommonLists({ boxes, locations, statuses, categories, drawers })
     this.items = records.map(record => this.airtableRecordToItem(record))
-    showLog(`${this.items.length} item(s) loaded ` + this.coolAscii())
+    logger.showLog(`${this.items.length} item(s) loaded ` + this.coolAscii())
     return this.initFuse()
   }
 
@@ -167,11 +167,11 @@ class App {
   }
 
   onSearchRetry (): boolean | void {
-    console.log('retry and this.lastSearchOrigin', this.lastSearchOrigin)
-    if (this.lastSearchOrigin === 'type') return document.querySelector<HTMLInputElement>('#input-type')?.focus()
+    logger.log('retry and this.lastSearchOrigin', this.lastSearchOrigin)
+    if (this.lastSearchOrigin === 'type') return find.one<HTMLInputElement>('#input-type').focus()
     if (this.lastSearchOrigin === 'scan') return emit('app-scan-code--start')
     if (this.lastSearchOrigin === 'speech') return emit('app-speech--start')
-    showError('un-handled search retry case')
+    logger.showError('un-handled search retry case')
   }
 
   airtableRecordToItem (record: AirtableRecord): Item {
@@ -184,9 +184,9 @@ class App {
   async onEditItem (data: Item): Promise<boolean> {
     this.isLoading(true)
     const response = await this.pushItemRemotely(data)
-    console.log('onEditItem response', response)
+    logger.log('onEditItem response', response)
     this.isLoading(false)
-    if (response.error) showError(response.error.message)
+    if (response.error) logger.showError(response.error.message)
     else {
       const item = this.airtableRecordToItem(response)
       await this.pushItemLocally(item)
@@ -224,11 +224,11 @@ class App {
   }
 
   async pushItemLocally (itemTouched: Item): Promise<void> {
-    console.log('pushing item locally', itemTouched)
+    logger.log('pushing item locally', itemTouched)
     const index = this.items.findIndex(item => item.id === itemTouched.id)
     if (index >= 0) this.items[index] = itemTouched // update existing item
     else if (itemTouched.id) this.items.push(itemTouched) // new item with id
-    else showError('cannot add item without id')
+    else logger.showError('cannot add item without id')
     this.initFuse()
   }
 
@@ -240,16 +240,16 @@ class App {
       let { action, payload } = target.dataset
       if (!action) return
       action = action.trim()
-      console.log('action clicked :', action)
+      logger.log('action clicked :', action)
       if (payload && payload[0] === '{') payload = JSON.parse(payload)
-      if (payload) console.log('payload :', payload)
+      if (payload) logger.log('payload :', payload)
       event.stopPropagation()
       emit(action, payload ?? target)
     })
   }
 
   saveCommonLists (lists: CommonLists): void {
-    console.log('saving common lists :', lists)
+    logger.log('saving common lists :', lists)
     const names = Object.keys(lists) as Array<keyof CommonLists>
     names.forEach((name) => {
       lists[name] = ['', ...lists[name].sort(Intl.Collator().compare)]
@@ -261,15 +261,14 @@ class App {
     if (this.commonListsLoaded) return true
     const lists = storage.get<CommonLists>('lists', EMPTY_COMMON_LISTS)
     if (!lists.boxes) {
-      console.error('no lists found, clearing cached items to fetch fresh data and set lists')
+      logger.error('no lists found, clearing cached items to fetch fresh data and set lists')
       await storage.clear('items')
       this.items = []
-      showError('please restart the app to set lists')
+      logger.showError('please restart the app to set lists') // TODO ???
       return false
     }
-    console.log('common lists found', lists)
-    const template = document.querySelector('template#edit-item')
-    if (!template) throw new Error('no edit-item template found')
+    logger.log('common lists found', lists)
+    const template = find.one('template#edit-item')
     const data: Record<keyof CommonLists, string> = {
       boxes: valuesToOptions(lists.boxes),
       locations: valuesToOptions(lists.locations),

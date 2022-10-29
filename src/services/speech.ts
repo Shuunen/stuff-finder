@@ -1,4 +1,5 @@
 import { emit, on, sleep } from 'shuutils'
+import { logger } from '../utils'
 
 class AppSpeech {
   isMobile = typeof window.orientation !== 'undefined'
@@ -33,7 +34,7 @@ class AppSpeech {
   }
   onSuccess (sentence: string, confidence: number): void {
     this.recognitionSucceed = true
-    console.log('confidence : ' + confidence)
+    logger.log('confidence : ' + confidence)
     emit<SearchStartEvent>('search-start', { str: sentence, origin: 'speech' })
   }
   async onEnd (): Promise<void> {
@@ -45,7 +46,7 @@ class AppSpeech {
     this.setStatus(this.recognitionSucceed ? 'ready' : 'failed')
   }
   onError (reason: string): void {
-    console.error('error occurred in recognition : ' + reason)
+    logger.showError('error occurred in recognition : ' + reason)
     this.onFail()
   }
   onFail (): void {

@@ -1,6 +1,6 @@
 import { copy, debounce, div, dom, emit, h2, objectSum, on, p } from 'shuutils'
 import { DEFAULT_IMAGE } from '../constants'
-import { button, showError, valuesToOptions } from '../utils'
+import { button, find, logger, valuesToOptions } from '../utils'
 
 class AppForm extends HTMLElement {
   _id = ''
@@ -51,7 +51,7 @@ class AppForm extends HTMLElement {
   }
   createClose (): HTMLButtonElement {
     const element = button('Cancel', 'close', true)
-    console.log('form cancel will emit close event :', this.onCloseEventName, element)
+    logger.log('form cancel will emit close event :', this.onCloseEventName, element)
     element.addEventListener('click', () => emit(this.onCloseEventName))
     return element
   }
@@ -81,12 +81,12 @@ class AppForm extends HTMLElement {
   emitChangeSync (): void {
     if (objectSum(this.emittedData) === objectSum(this.data)) return
     this.emittedData = copy(this.data)
-    console.log('emitting :', `${this._id}--change`, this.data)
+    logger.log('emitting :', `${this._id}--change`, this.data)
     emit(`${this._id}--change`, this.data)
   }
   validateSync (): void {
     const isValid = this.els.form?.checkValidity()
-    console.log(`form is ${isValid ? 'valid' : 'invalid'}`)
+    logger.log(`form is ${isValid ? 'valid' : 'invalid'}`)
     this.error = ''
     if (isValid) {
       this.els.save?.removeAttribute('disabled')
@@ -105,17 +105,16 @@ class AppForm extends HTMLElement {
     else input.value = value as string
   }
   setPhoto (input: HTMLInputElement, data: string | boolean | number | string[]): void {
-    if (['boolean', 'number'].includes(typeof data)) return console.error('photo data must be a string or array')
+    if (['boolean', 'number'].includes(typeof data)) return logger.showError('photo data must be a string or array')
     let url = ''
     if (typeof data === 'string') url = data
     else if (Array.isArray(data)) {
       const photo = data[0] as unknown as ItemPhoto
       url = photo.url
-    } else return showError('unhandled case where photo data is neither string or array')
+    } else return logger.showError('unhandled case where photo data is neither string or array')
     input.value = url
     if (!this.els.form) throw new Error('No form found')
-    const img = this.els.form.querySelector('img')
-    if (!img) return showError(`wanted to set "${url}" but no img found`)
+    const img = find.one<HTMLImageElement>('img', this.els.form)
     img.addEventListener('error', () => {
       img.src = DEFAULT_IMAGE
       input.value = ''

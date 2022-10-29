@@ -1,16 +1,16 @@
 import { div, emit, fillTemplate, on, storage, tw } from 'shuutils'
 import { EMPTY_COMMON_LISTS } from '../constants'
-import { button } from '../utils'
+import { button, find, logger } from '../utils'
 
 window.customElements.define('app-print-barcodes', class extends HTMLElement {
   barcodes: Item[] = []
   selection: string[] = []
   previewButton = button('Preview', tw('app-preview mx-auto mt-2 hidden sm:block'))
   previewError = div('app-preview app-error text-center font-medium leading-9 text-red-500')
-  modal?: HTMLDivElement
+  modal = div('')
   trigger = this.createTrigger()
   updatePreviewButton (): void {
-    this.selection = Array.prototype.slice.call(document.querySelectorAll('input[data-action="barcodes-select-one"]:checked')).map((element: HTMLInputElement) => element.id)
+    this.selection = find.all<HTMLInputElement>('input[data-action="barcodes-select-one"]:checked').map((element) => element.id)
     this.previewButton.disabled = this.selection.length <= 0 || this.selection.length > 65
     this.previewButton.textContent = `Preview ${this.selection.length} barcodes`
     this.previewError.textContent = ''
@@ -19,43 +19,40 @@ window.customElements.define('app-print-barcodes', class extends HTMLElement {
     if (this.selection.length > 65) this.previewError.textContent = 'You cannot select more than 65 items'
   }
   setAllItems (selected = true): void {
-    if (!this.modal) return console.error('no modal element for setAllItems')
-    this.modal.querySelectorAll('input[data-action="barcodes-select-one"]').forEach((element) => {
-      if (!(element instanceof HTMLInputElement)) return console.error('setAllItems, element is not an input element', element)
+    find.all<HTMLInputElement>('input[data-action="barcodes-select-one"]', this.modal).forEach((element) => {
+      if (!(element instanceof HTMLInputElement)) return logger.showError('setAllItems, element is not an input element', element)
       element.checked = selected
     })
     this.updatePreviewButton()
   }
   selectValidItems (): void {
     this.setAllItems(false)
-    if (!this.modal) return console.error('no modal element for selectValidItems')
-    const forms = this.modal.querySelectorAll<HTMLFormElement>('.app-list app-form')
+    const forms = find.all<HTMLFormElement>('.app-list app-form', this.modal)
     forms.forEach(form => {
       // check valid form related checkbox
       const formValid = form.getAttribute('valid') === 'true'
       if (!formValid) return
-      const element = document.querySelector('#' + form.name)
+      const element = find.one('#' + form.name)
       if (element instanceof HTMLInputElement) element.checked = true
     })
     this.updatePreviewButton()
   }
   async adjustQrCodes (): Promise<void> {
     // sometimes some qr code are too big
-    document.querySelectorAll('qr-code').forEach(wc => {
+    find.all('qr-code').forEach(wc => {
       // reducing their module size do the trick & reduce their display size
-      if (!wc.shadowRoot) return console.error('no shadowRoot for qr-code custom element', wc)
-      if (!wc.shadowRoot.firstElementChild) return console.error('no firstElementChild for qr-code custom element shadowRoot', wc.shadowRoot)
+      if (!wc.shadowRoot) return logger.showError('no shadowRoot for qr-code custom element', wc)
+      if (!wc.shadowRoot.firstElementChild) return logger.showError('no firstElementChild for qr-code custom element shadowRoot', wc.shadowRoot)
       const height = wc.shadowRoot.firstElementChild.getAttribute('height')
       if (!height) return
       if (Number.parseInt(height) > 63) wc.setAttribute('modulesize', '2')
     })
   }
   onPreview (): void {
-    console.log('user wants to see preview')
+    logger.log('user wants to see preview')
     if (customElements.get('qr-code') === undefined) require('webcomponent-qr-code')
     emit('app-modal--print-barcodes--open')
-    const list = document.querySelector('.app-modal--print-barcodes .app-barcodes')
-    if (!list) return console.error('onPreview, failed to find list element')
+    const list = find.one('.app-modal--print-barcodes .app-barcodes')
     list.innerHTML = ''
     const barcodes = this.barcodes.filter(b => this.selection.includes(b.id))
     barcodes.forEach(b => {
@@ -70,21 +67,15 @@ window.customElements.define('app-print-barcodes', class extends HTMLElement {
     this.adjustQrCodes()
   }
   handlePreview (): void {
-    if (!this.modal) return console.error('no modal element for handlePreview')
-    this.modal.querySelectorAll('button.app-preview, .app-preview.app-error').forEach(element => element.remove())
+    find.allOrNone('button.app-preview, .app-preview.app-error', this.modal).forEach(element => element.remove())
     this.previewButton.disabled = true
     this.previewButton.dataset['action'] = 'barcodes-preview'
     this.modal.append(this.previewError, this.previewButton)
   }
   async openModal (): Promise<void> {
-    const modal = document.querySelector<HTMLDivElement>('.app-modal--prepare-barcodes')
-    if (!modal) return console.error('openModal, failed to find existing modal element')
-    this.modal = modal
-    if (!this.modal) return console.error('failed to find modal element')
-    const listElement = this.modal.querySelector('.app-list')
-    if (!listElement) return console.error('failed to find list element')
-    const item = document.querySelector('template#barcodes-list-item')
-    if (!item) return console.error('failed to find template element item')
+    this.modal = find.one<HTMLDivElement>('.app-modal--prepare-barcodes')
+    const listElement = find.one('.app-list', this.modal)
+    const item = find.one('template#barcodes-list-item')
     const template = item.innerHTML
     const lists = storage.get<CommonLists>('lists', EMPTY_COMMON_LISTS)
     if (!lists.boxes) throw new Error('failed to get lists')
@@ -118,7 +109,7 @@ window.customElements.define('app-print-barcodes', class extends HTMLElement {
     on('barcodes-select-valid', () => this.selectValidItems())
     on('barcodes-preview', () => this.onPreview())
     on('barcodes-print', () => window.print())
-    if (!this.parentNode) return console.error('no parentNode for barcodes-print-modal')
+    if (!this.parentNode) return logger.showError('no parentNode for barcodes-print-modal')
     this.parentNode.replaceChild(this.trigger, this)
   }
 })

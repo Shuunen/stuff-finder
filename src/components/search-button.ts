@@ -1,5 +1,5 @@
 import { div, dom, emit, image, on, p, pickOne, tw } from 'shuutils'
-import { button } from '../utils'
+import { button, logger } from '../utils'
 
 window.customElements.define('app-search-button', class extends HTMLElement {
   search = dom('input', tw('app-search-button h-10 w-full max-w-xs rounded-md border-2 border-purple-500 px-2 text-lg shadow-md hover:shadow-lg md:text-base'))
@@ -40,7 +40,7 @@ window.customElements.define('app-search-button', class extends HTMLElement {
       speech: 'Loading',
       hint: 'Loading...',
     }
-    console.error('un-expected status :', status)
+    logger.showError('un-expected status :', status)
     return { speech: pickOne(['Retry', 'Try again']), hint: 'An un-expected case happen' }
   }
   handleFocusLessTyping (): void {
@@ -50,7 +50,7 @@ window.customElements.define('app-search-button', class extends HTMLElement {
     const filter = /^[\s\w-]$/i // this filter let user use special keys like CTRL without interfering
     if (!(event.target instanceof HTMLInputElement)) return
     if (event.target.tagName.toLowerCase() !== 'body' || !filter.test(event.key)) return
-    console.log('redirecting user input char :', event.key, 'to search input')
+    logger.log('redirecting user input char :', event.key, 'to search input')
     this.search.focus()
   }
   createInputs (): HTMLDivElement {

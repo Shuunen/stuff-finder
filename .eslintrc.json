@@ -58,7 +58,18 @@
         ],
         "lines-between-class-members": "off",
         "max-statements-per-line": "off",
-        "no-console": "off",
+        "no-console": "error",
+        "no-restricted-properties": [
+          "error",
+          {
+            "message": "Please use find.one or find.oneOrNone util instead",
+            "property": "querySelector"
+          },
+          {
+            "message": "Please use find.all or find.allOrNone util instead",
+            "property": "querySelectorAll"
+          }
+        ],
         "object-curly-spacing": [
           "error",
           "always"

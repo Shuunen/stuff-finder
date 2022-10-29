@@ -1,6 +1,6 @@
 import { capitalize, debounce, div, dom, emit, on, storage } from 'shuutils'
 import { EMPTY_APP_SETTINGS } from '../constants'
-import { get, showLog } from '../utils'
+import { find, get, logger } from '../utils'
 
 class ItemSearch {
   str = 'plop'
@@ -13,50 +13,43 @@ class ItemSearch {
     on<AppSearchItemEvent>('app-search-item', data => this.search(String(data['input'])))
   }
   onFormChangeSync (data: Item): void {
-    console.log('onFormChangeSync', data)
+    logger.log('onFormChangeSync', data)
     const printInputData: PrintOneInputData = { name: data.name, brand: data.brand, details: data.details, reference: data.reference, barcode: data.barcode, box: data.box, drawer: data.drawer, location: data.location }
-    const printTrigger = document.querySelector<HTMLElement>('.app-modal.visible [data-action="app-modal--print-one--open"]')
-    if (!printTrigger) return console.error('no print trigger found')
+    const printTrigger = find.one<HTMLElement>('.app-modal.visible [data-action="app-modal--print-one--open"]')
     printTrigger.dataset['payload'] = JSON.stringify(printInputData)
   }
   async getWrapApiKey (): Promise<string> {
     if (this.wrap.length > 0) return this.wrap
     const settings = storage.get<AppSettings>('app-settings', EMPTY_APP_SETTINGS)
     this.wrap = (!settings.wrap || settings.wrap.length === 0) ? '' : settings.wrap
-    if (this.wrap === '') showLog('no wrap api key available in settings stored')
+    if (this.wrap === '') logger.showLog('no wrap api key available in settings stored')
     return this.wrap
   }
   onModalOpen (element?: HTMLElement): void {
     const str = element ? (element.dataset['input'] ?? '') : ''
-    if (str.length === 0) console.log('no search input found')
-    const input = document.querySelector<HTMLInputElement>('app-form[name="search-item"] input')
-    if (input) input.value = str
-    else console.error('no input found')
+    if (str.length === 0) logger.log('no search input found')
+    const input = find.one<HTMLInputElement>('app-form[name="search-item"] input')
+    input.value = str
     this.setupItemForm()
     this.search(str)
   }
   setupItemForm (): void {
-    const modal = document.querySelector('.app-modal--add-item')
-    if (!modal) return console.error('No modal found')
-    const old = modal.querySelector('app-form[name="edit-item"]')
-    if (old) old.remove()
-    const template = document.querySelector<HTMLTemplateElement>('template#edit-item')
-    if (!template) return console.error('no item form template')
+    const modal = find.one('.app-modal--add-item')
+    find.oneOrNone('app-form[name="edit-item"]', modal)?.remove()
+    const template = find.one<HTMLTemplateElement>('template#edit-item')
     const form = div('container', template.innerHTML).firstElementChild
-    if (!form) return console.error('no form found')
+    if (!form) return logger.showError('no form found')
     form.setAttribute('on-close', 'app-modal--add-item--close')
-    const content = modal.querySelector('.content')
-    if (!content) return console.error('no content found')
+    const content = find.one('.content', modal)
     content.append(form)
     this.form = form as HTMLFormElement
   }
   async search (str: string): Promise<void> {
-    console.log(str)
+    logger.log('search', str)
     emit<AppLoaderToggleEvent>('app-loader--toggle', true)
     const items = storage.get<Item[]>('items', [])
     const result = items.find(item => (item.reference === str || item.barcode === str))
-    const appError = document.querySelector('app-form[name="search-item"] .app-error')
-    if (!appError) return console.error('no app error found')
+    const appError = find.one('app-form[name="search-item"] .app-error')
     appError.textContent = (result && str.length > 0) ? 'ITEM ALREADY EXISTS ! You might not want to add it... again.' : ''
     if (str.length > 0) emit<AppFormEditItemSuggestionsEvent>('app-form--edit-item--suggestions', await this.getSuggestions(str))
     emit<AppLoaderToggleEvent>('app-loader--toggle', false)
@@ -79,7 +72,7 @@ class ItemSearch {
     }
     const clean: Array<keyof Item> = ['name', 'details']
     clean.forEach((key) => { suggestions[key] = (suggestions[key] || []).map(suggestion => capitalize(suggestion, true)) })
-    console.log('final suggestions', suggestions)
+    logger.log('final suggestions', suggestions)
     return suggestions
   }
   async addSuggestionsFromWrap<T> (endpoint: string): Promise<T> {
@@ -91,7 +84,7 @@ class ItemSearch {
     const response = await this.addSuggestionsFromWrap<WrapApiDeyesResponse>(`deyes/json/0.0.2?code=${code}`)
     const data = response.data
     if (!response.success) return
-    console.log('deyes data', data)
+    logger.log('deyes data', data)
     suggestions.name.push(data.name)
     suggestions.brand.push(data.brand.name)
     suggestions.details.push(data.description)
@@ -103,7 +96,7 @@ class ItemSearch {
     const response = await this.addSuggestionsFromWrap<WrapApiAmznResponse>(`amzn/search/0.0.3?keywords=${str}`)
     if (!response.success) return
     const data = response.data
-    console.log('amazon data', data)
+    logger.log('amazon data', data)
     data.items.splice(0, 5).forEach(item => {
       suggestions.details.push(item.title)
       suggestions.photo.push(item.photo)
@@ -116,7 +109,7 @@ class ItemSearch {
     const response = await this.addSuggestionsFromWrap<WrapApiAliExResponse>(`aliex/search/0.0.1?str=${str}`)
     if (!response.success) return
     const data = response.data
-    console.log('AliEx data', data)
+    logger.log('AliEx data', data)
     data.items.forEach(item => {
       suggestions.name.push(item.title)
       suggestions.photo.push(item.photo)
@@ -128,7 +121,7 @@ class ItemSearch {
     const response = await this.addSuggestionsFromWrap<WrapApiCampoResponse>(`alcampo/search/0.0.3?str=${str}`)
     if (!response.success) return
     const data = response.data
-    console.log('campo data', data)
+    logger.log('campo data', data)
     data.items.forEach(item => {
       suggestions.brand.push(item.brand)
       suggestions.name.push(item.title)

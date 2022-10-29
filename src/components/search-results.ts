@@ -1,6 +1,6 @@
 import { div, emit, fillTemplate, h1, on, readableTimeAgo, sleep, text } from 'shuutils'
 import { DEFAULT_IMAGE } from '../constants'
-import { showError, showLog } from '../utils'
+import { find, logger } from '../utils'
 
 window.customElements.define('app-search-results', class extends HTMLElement {
   template = ''
@@ -19,7 +19,7 @@ window.customElements.define('app-search-results', class extends HTMLElement {
       return fillTemplate(this.template, data)
     }).join('')
     if (event.results.length === 0) this.list.innerHTML = '<p class="text-center py-4"><span class="text-4xl opacity-50">¯\\_(ツ)_/¯</span><br><br>No results found.</p>'
-    this.list.parentElement?.querySelector('.app-add-item')?.remove()
+    if (this.list.parentElement) find.oneOrNone('.app-add-item', this.list.parentElement)?.remove()
     const content = `Do you want to <a href="#" data-action="app-modal--add-item--open" data-input="${event.input}">add a new item</a> ?`
     this.list.parentElement?.append(text('app-add-item border-t pt-3 text-center', content))
     emit('app-modal--search-results--open')
@@ -28,11 +28,11 @@ window.customElements.define('app-search-results', class extends HTMLElement {
   }
   onSelect (id: string): void {
     const item = this.results.find(item => item.id === id)
-    if (!item) return showError('failed to find item with this id : ' + id)
+    if (!item) return logger.showError('failed to find item with this id : ' + id)
     emit<EditItemEvent>('edit-item', item)
   }
   updateResults (): void {
-    showLog('update search results...')
+    logger.showLog('update search results...')
     const origin: SearchOrigin = 'search-results'
     const data = { str: this.input, origin, scrollTop: false }
     emit<SearchStartEvent>('search-start', data)
@@ -40,17 +40,10 @@ window.customElements.define('app-search-results', class extends HTMLElement {
   connectedCallback (): void {
     on('search-results', (event: SearchResultEvent) => this.onResults(event))
     on<SelectResultEvent>('select-result', (id) => this.onSelect(id))
-    on('app-modal--edit-item--close', () => this.updateResults())
-    const template = document.querySelector('template#search-results-list-item')
-    if (!template) return showError('failed to find template#search-results-list-item')
-    this.template = template.innerHTML
-    const modal = document.querySelector('.app-modal--search-results')
-    if (!modal) return showError('failed to find .app-modal--search-results')
-    const header = modal.querySelector<HTMLHeadingElement>('.app-header')
-    if (!header) return showError('failed to find .app-header')
-    this.header = header
-    const list = modal.querySelector<HTMLDivElement>('.app-list.app-results')
-    if (!list) return showError('failed to find .app-list.app-results')
-    this.list = list
+    on('app-modal--edit-item--close', () => this.updateResults()) // TODO avoid refreshing every time
+    this.template = find.one('template#search-results-list-item').innerHTML
+    const modal = find.one<HTMLDivElement>('.app-modal--search-results')
+    this.header = find.one<HTMLHeadingElement>('.app-header', modal)
+    this.list = find.one<HTMLDivElement>('.app-list.app-results', modal)
   }
 })
