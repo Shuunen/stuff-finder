@@ -1,4 +1,4 @@
-import { capitalize, debounce, div, dom, emit, on, storage } from 'shuutils'
+import { capitalize, div, dom, emit, on, storage } from 'shuutils'
 import { EMPTY_APP_SETTINGS } from '../constants'
 import { find, get, logger } from '../utils'
 
@@ -6,16 +6,21 @@ class ItemSearch {
   str = 'plop'
   form = dom('form')
   wrap = ''
+  get formValid (): boolean {
+    return this.form.dataset['valid'] === 'true'
+  }
   constructor () {
-    const onFormChange = debounce(this.onFormChangeSync, 200)
     on('app-modal--add-item--open', (element: HTMLElement) => this.onModalOpen(element))
-    on('app-form--edit-item--change', onFormChange.bind(this))
+    on('app-form--edit-item--change', this.setPrintData.bind(this))
+    on('app-modal--print-one--open', this.setPrinted.bind(this))
     on<AppSearchItemEvent>('app-search-item', data => this.search(String(data['input'])))
   }
-  onFormChangeSync (data: Item): void {
-    logger.log('onFormChangeSync', data)
+  setPrintData (data: Item): void {
+    const printTrigger = find.one<HTMLButtonElement>('.app-modal.visible [data-action="app-modal--print-one--open"]')
+    printTrigger.disabled = !this.formValid
+    if (!this.formValid) return logger.log('form not valid, not setting print data')
+    logger.log('setPrintDataSync for item', data)
     const printInputData: PrintOneInputData = { name: data.name, brand: data.brand, details: data.details, reference: data.reference, barcode: data.barcode, box: data.box, drawer: data.drawer, location: data.location }
-    const printTrigger = find.one<HTMLElement>('.app-modal.visible [data-action="app-modal--print-one--open"]')
     printTrigger.dataset['payload'] = JSON.stringify(printInputData)
   }
   async getWrapApiKey (): Promise<string> {
@@ -43,6 +48,10 @@ class ItemSearch {
     const content = find.one('.content', modal)
     content.append(form)
     this.form = form as HTMLFormElement
+  }
+  setPrinted (): void {
+    if (!this.formValid) return logger.log('form not valid, not setting item as printed')
+    find.one<HTMLInputElement>('input[name="ref-printed"]', this.form).checked = true
   }
   async search (str: string): Promise<void> {
     logger.log('search', str)

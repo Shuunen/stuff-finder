@@ -87,7 +87,7 @@ input[type="checkbox"] {
   @apply mt-2 cursor-pointer;
 }
 
-a[data-action] {
+a[data-action], button[data-action] {
   @apply font-medium transition-colors border-b-2 border-current whitespace-nowrap hover:text-purple-700;
 }
 

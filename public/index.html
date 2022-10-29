@@ -79,8 +79,10 @@
       <label>Category <select name=category>{{ categories }}</select></label>
       <label>Price <input name=price type=number step=1 pattern="\d+" /></label>
       <div class="flex gap-4">
-        <label>Printed ?<input type=checkbox name="ref-printed" /></label>
-        <a class="self-start cursor-pointer" data-action="app-modal--print-one--open" data-payload="{{ id }}">Print</a>
+        <label>Printed ?<input type=checkbox name="ref-printed" /></label> <!-- TODO use a visual switch/toggle -->
+        <button disabled class="self-end" data-action="app-modal--print-one--open" data-payload="">
+          Print this item
+        </button>
       </div>
     </app-form>
   </template>
