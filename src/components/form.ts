@@ -98,7 +98,7 @@ class AppForm extends HTMLElement {
       if (input) this.error = `Field "${input.name}" is invalid. ${input.validationMessage}`
     }
     if (this.inline) this.els.footer?.classList.toggle('hidden', !(this.dataChanged && isValid))
-    this.setAttribute('valid', String(isValid))
+    this.dataset['valid'] = String(isValid)
   }
   setInputValue (input: HTMLInputElement, value: AppFormDataValue): void {
     if (input.name === 'photo') this.setPhoto(input, value)

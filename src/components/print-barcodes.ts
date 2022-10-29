@@ -30,7 +30,7 @@ window.customElements.define('app-print-barcodes', class extends HTMLElement {
     const forms = find.all<HTMLFormElement>('.app-list app-form', this.modal)
     forms.forEach(form => {
       // check valid form related checkbox
-      const formValid = form.getAttribute('valid') === 'true'
+      const formValid = form.dataset['valid'] === 'true'
       if (!formValid) return
       const element = find.one('#' + form.name)
       if (element instanceof HTMLInputElement) element.checked = true
