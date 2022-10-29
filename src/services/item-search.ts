@@ -47,6 +47,7 @@ class ItemSearch {
     const input = find.one<HTMLInputElement>('app-form[name="search-item"] input')
     input.value = str
     this.setupItemForm()
+    this.setDefaults()
     this.search(str)
   }
   setupItemForm (): void {
@@ -62,6 +63,10 @@ class ItemSearch {
   }
   setPrinted (): void {
     find.one<HTMLInputElement>('.app-modal.visible input[name="ref-printed"]').checked = true
+  }
+  setDefaults (): void {
+    const defaultStatus: Item['status'] = 'acheté'
+    find.one<HTMLSelectElement>('.app-modal.visible select[name="status"]').value = defaultStatus
   }
   async search (str: string): Promise<void> {
     logger.log('search', str)
