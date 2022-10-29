@@ -70,8 +70,8 @@
       <label>Name<input required name=name type=text minlength=3 maxlength=50 autofocus /></label>
       <label>Brand<input name=brand type=text /></label>
       <label>Details<input name=details type=text /></label>
-      <label>Reference<input name=reference type=text minlength=7 maxlength=20 /></label>
-      <label>Barcode<input name=barcode type=text /></label>
+      <label>Reference<input name=reference type=text minlength=7 maxlength=20 required /></label>
+      <label>Barcode<input name=barcode type=text required /></label>
       <label>Status<select name=status>{{ statuses }}</select></label>
       <label>Location <select name=location>{{ locations }}</select></label>
       <label>Box <select name=box>{{ boxes }}</select></label>

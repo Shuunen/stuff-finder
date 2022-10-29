@@ -1,4 +1,5 @@
 import { capitalize, div, dom, emit, on, storage } from 'shuutils'
+import type { AppForm } from '../components/form'
 import { EMPTY_APP_SETTINGS } from '../constants'
 import { find, get, logger } from '../utils'
 
@@ -11,14 +12,28 @@ class ItemSearch {
   }
   constructor () {
     on('app-modal--add-item--open', (element: HTMLElement) => this.onModalOpen(element))
-    on('app-form--edit-item--change', this.setPrintData.bind(this))
+    on<FormEditFormData>('app-form--edit-item--change', this.onEditItemFormChange.bind(this))
     on('app-modal--print-one--open', this.setPrinted.bind(this))
     on<AppSearchItemEvent>('app-search-item', data => this.search(String(data['input'])))
   }
-  setPrintData (data: Item): void {
-    const printTrigger = find.one<HTMLButtonElement>('.app-modal.visible [data-action="app-modal--print-one--open"]')
-    printTrigger.disabled = !this.formValid
-    if (!this.formValid) return logger.log('form not valid, not setting print data')
+  onEditItemFormChange (data: FormEditFormData): void {
+    logger.log('onEditItemFormChange', data)
+    this.setPrintData(data)
+    this.onlyRequireReferenceOrBarcode(data)
+  }
+  onlyRequireReferenceOrBarcode (data: FormEditFormData): void {
+    const modal = find.one('.app-modal--edit-item.visible')
+    const reference = find.one<HTMLInputElement>('input[name="reference"]', modal)
+    const barcode = find.one<HTMLInputElement>('input[name="barcode"]', modal)
+    barcode.required = !(data.reference.length > 0 && reference.checkValidity())
+    reference.required = !(data.barcode.length > 0 && barcode.checkValidity())
+    find.one<AppForm>('app-form', modal).validateSync()
+  }
+  setPrintData (data: FormEditFormData): void {
+    const modal = find.one('.app-modal--edit-item.visible')
+    const printTrigger = find.one<HTMLButtonElement>('[data-action="app-modal--print-one--open"]', modal)
+    printTrigger.disabled = data.formValid === false
+    if (data.formValid === false) return logger.log('form not valid, not setting print data')
     logger.log('setPrintDataSync for item', data)
     const printInputData: PrintOneInputData = { name: data.name, brand: data.brand, details: data.details, reference: data.reference, barcode: data.barcode, box: data.box, drawer: data.drawer, location: data.location }
     printTrigger.dataset['payload'] = JSON.stringify(printInputData)
