@@ -2,7 +2,7 @@ import { copy, debounce, div, dom, emit, h2, objectSum, on, p } from 'shuutils'
 import { DEFAULT_IMAGE } from '../constants'
 import { button, find, logger, valuesToOptions } from '../utils'
 
-class AppForm extends HTMLElement {
+export class AppForm extends HTMLElement {
   _id = ''
   els: {
     error?: HTMLParagraphElement,
@@ -11,8 +11,8 @@ class AppForm extends HTMLElement {
     footer?: HTMLDivElement,
     save?: HTMLButtonElement
   } = {}
-  initialData: AppFormData = {}
-  emittedData: AppFormData = {}
+  initialData: AppFormData = { formValid: false }
+  emittedData: AppFormData = { formValid: false }
   validate = debounce(this.validateSync.bind(this), 200)
   emitChange = debounce(this.emitChangeSync.bind(this), 200)
   get name (): string { return this.getAttribute('name') ?? 'unknown' }
@@ -23,13 +23,14 @@ class AppForm extends HTMLElement {
   get onSaveEventName (): string { return this.getAttribute('on-save') || `${this._id}--save` }
   get inputs (): HTMLInputElement[] { return [...this.els.form?.elements as unknown as HTMLInputElement[]] }
   get data (): AppFormData {
-    const data: AppFormData = {}
+    const data: AppFormData = { formValid: false }
     this.inputs.forEach(input => {
       let value: AppFormDataValue = input.value
       if (input.type === 'checkbox') value = input.checked
       else if (input.type === 'number') value = Number.parseFloat(value)
       data[input.name] = value
     })
+    data.formValid = this.els.form?.checkValidity() ?? false
     return data
   }
   set data (data) {
@@ -83,22 +84,23 @@ class AppForm extends HTMLElement {
     if (objectSum(this.emittedData) === objectSum(this.data)) return
     this.emittedData = copy(this.data)
     logger.log('emitting :', `${this._id}--change`, this.data)
-    emit(`${this._id}--change`, this.data)
+    emit<AppFormData>(`${this._id}--change`, this.data)
   }
   validateSync (): void {
-    const isValid = this.els.form?.checkValidity()
+    const isValid = this.els.form?.checkValidity() ?? false
+    this.data.formValid = isValid
     logger.log(`form is ${isValid ? 'valid' : 'invalid'}`)
     this.error = ''
-    if (isValid) {
+    if (isValid)
       this.els.save?.removeAttribute('disabled')
-      this.emitChange()
-    } else {
+    else {
       this.els.save?.setAttribute('disabled', String(true))
       const input = this.inputs.find(input => input.validationMessage.length > 0)
       if (input) this.error = `Field "${input.name}" is invalid. ${input.validationMessage}`
     }
     if (this.inline) this.els.footer?.classList.toggle('hidden', !(this.dataChanged && isValid))
     this.dataset['valid'] = String(isValid)
+    this.emitChange()
   }
   setInputValue (input: HTMLInputElement, value: AppFormDataValue): void {
     if (input.name === 'photo') this.setPhoto(input, value)
