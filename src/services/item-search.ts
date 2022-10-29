@@ -7,9 +7,6 @@ class ItemSearch {
   str = 'plop'
   form = dom('form')
   wrap = ''
-  get formValid (): boolean {
-    return this.form.dataset['valid'] === 'true'
-  }
   constructor () {
     on('app-modal--add-item--open', (element: HTMLElement) => this.onModalOpen(element))
     on<FormEditFormData>('app-form--edit-item--change', this.onEditItemFormChange.bind(this))
@@ -64,8 +61,7 @@ class ItemSearch {
     this.form = form as HTMLFormElement
   }
   setPrinted (): void {
-    if (!this.formValid) return logger.log('form not valid, not setting item as printed')
-    find.one<HTMLInputElement>('input[name="ref-printed"]', this.form).checked = true
+    find.one<HTMLInputElement>('.app-modal.visible input[name="ref-printed"]').checked = true
   }
   async search (str: string): Promise<void> {
     logger.log('search', str)
