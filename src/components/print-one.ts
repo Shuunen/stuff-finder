@@ -36,6 +36,7 @@ window.customElements.define('app-print-one', class extends HTMLElement {
     on('app-modal--print-one--close', this.onClose.bind(this))
     on<PrintOneInputData>('app-modal--print-one--open', this.preview.bind(this))
     on<PrintOneFormData>('app-form--print-one--change', this.onFormChange.bind(this))
+    on<PrintOneFormData>('app-form--print-one--ready', this.onFormChange.bind(this))
     on<PrintOneSubmitEvent>('do-print-one', this.doPrintOne.bind(this))
   }
 })

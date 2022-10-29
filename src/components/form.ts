@@ -79,6 +79,7 @@ class AppForm extends HTMLElement {
     this.remove()
   }
   emitChangeSync (): void {
+    if (!this.els.form?.['checkVisibility']()) return logger.log('form is not visible, not emitting change')
     if (objectSum(this.emittedData) === objectSum(this.data)) return
     this.emittedData = copy(this.data)
     logger.log('emitting :', `${this._id}--change`, this.data)
