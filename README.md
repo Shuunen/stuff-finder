@@ -14,8 +14,9 @@
 - [ ] nicer colorful identity ([something like this ?](https://www.iconfinder.com/icons/44859/cube_icon))
 - [ ] BrowserMultiFormatReader is responsible for 245KB of the 320KB js build, maybe let user choose qr or [barcode](https://zxing-js.github.io/library/examples/barcode-camera/) to import only 2 specific readers instead of the fat "multi", and import on the fly
 - [ ] find real SpeechRecognition typings (avoid native.d.ts)
-- [ ] display various suggestions for some fields when adding an item
 - [ ] type every events, enforce emit<> & on<>
+- [ ] add close confirmation on unsaved add item form modal
+- [ ] detect user in/activity to refresh data
 
 ## Build sizes
 
