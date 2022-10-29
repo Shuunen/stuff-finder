@@ -18,19 +18,18 @@ class ItemSearch {
   }
   onEditItemFormChange (data: FormEditFormData): void {
     logger.log('onEditItemFormChange', data)
-    this.setPrintData(data)
-    this.onlyRequireReferenceOrBarcode(data)
+    const modal = find.one('.app-modal--edit-item.visible, .app-modal--add-item.visible')
+    this.setPrintData(data, modal)
+    this.onlyRequireReferenceOrBarcode(data, modal)
   }
-  onlyRequireReferenceOrBarcode (data: FormEditFormData): void {
-    const modal = find.one('.app-modal--edit-item.visible')
+  onlyRequireReferenceOrBarcode (data: FormEditFormData, modal: Element): void {
     const reference = find.one<HTMLInputElement>('input[name="reference"]', modal)
     const barcode = find.one<HTMLInputElement>('input[name="barcode"]', modal)
     barcode.required = !(data.reference.length > 0 && reference.checkValidity())
     reference.required = !(data.barcode.length > 0 && barcode.checkValidity())
     find.one<AppForm>('app-form', modal).validateSync()
   }
-  setPrintData (data: FormEditFormData): void {
-    const modal = find.one('.app-modal--edit-item.visible')
+  setPrintData (data: FormEditFormData, modal: Element): void {
     const printTrigger = find.one<HTMLButtonElement>('[data-action="app-modal--print-one--open"]', modal)
     printTrigger.disabled = data.formValid === false
     if (data.formValid === false) return logger.log('form not valid, not setting print data')
