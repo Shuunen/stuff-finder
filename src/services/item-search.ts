@@ -18,23 +18,24 @@ class ItemSearch {
   }
   onEditItemFormChange (data: FormEditFormData): void {
     logger.log('onEditItemFormChange', data)
-    const modal = find.one('.app-modal--edit-item.visible, .app-modal--add-item.visible')
-    this.setPrintData(data, modal)
-    this.onlyRequireReferenceOrBarcode(data, modal)
+    const form = find.one<AppForm>(`app-form[data-id="${data.id}"]`)
+    this.setPrintData(data, form)
+    this.onlyRequireReferenceOrBarcode(data, form)
   }
-  onlyRequireReferenceOrBarcode (data: FormEditFormData, modal: Element): void {
-    const reference = find.one<HTMLInputElement>('input[name="reference"]', modal)
-    const barcode = find.one<HTMLInputElement>('input[name="barcode"]', modal)
+  onlyRequireReferenceOrBarcode (data: FormEditFormData, form: AppForm): void {
+    const reference = find.one<HTMLInputElement>('input[name="reference"]', form)
+    const barcode = find.oneOrNone<HTMLInputElement>('input[name="barcode"]', form)
+    if (!barcode) return
     barcode.required = !(data.reference.length > 0 && reference.checkValidity())
     reference.required = !(data.barcode.length > 0 && barcode.checkValidity())
-    find.one<AppForm>('app-form', modal).validateSync()
+    form.validateSync()
   }
-  setPrintData (data: FormEditFormData, modal: Element): void {
-    const printTrigger = find.one<HTMLButtonElement>('[data-action="app-modal--print-one--open"]', modal)
+  setPrintData (data: FormEditFormData, form: AppForm): void {
+    const printTrigger = find.one<HTMLButtonElement>(`[data-id="${data.id}"][data-action="app-modal--print-one--open"]`, form)
     printTrigger.disabled = data.formValid === false
     if (data.formValid === false) return logger.log('form not valid, not setting print data')
-    logger.log('setPrintDataSync for item', data)
-    const printInputData: PrintOneInputData = { name: data.name, brand: data.brand, details: data.details, reference: data.reference, barcode: data.barcode, box: data.box, drawer: data.drawer, location: data.location }
+    logger.log('setPrintDataSync for item', data, printTrigger)
+    const printInputData: PrintInputData = { id: data.id, name: data.name, brand: data.brand, details: data.details, reference: data.reference, barcode: data.barcode, box: data.box, drawer: data.drawer, location: data.location }
     printTrigger.dataset['payload'] = JSON.stringify(printInputData)
   }
   async getWrapApiKey (): Promise<string> {
@@ -64,8 +65,10 @@ class ItemSearch {
     content.append(form)
     this.form = form as HTMLFormElement
   }
-  setPrinted (): void {
-    find.one<HTMLInputElement>('.app-modal.visible input[name="ref-printed"]').checked = true
+  setPrinted (data: PrintInputData): void {
+    const form = find.one<AppForm>(`app-form[data-id="${data.id}"]`)
+    find.one<HTMLInputElement>('input[name="ref-printed"]', form).checked = true
+    form.validateSync()
   }
   setDefaults (): void {
     const defaultStatus: Item['status'] = 'acheté'

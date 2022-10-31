@@ -95,12 +95,6 @@ class App {
     return true
   }
 
-  async getBarcodesToPrint (): Promise<void> {
-    this.isLoading(true)
-    const barcodes = this.items.filter(index => index['ref-printed'] === false && index.status === 'acheté')
-    emit<BarcodesToPrintEvent>('barcodes-to-print', barcodes)
-  }
-
   async fetchApi (offset?: string): Promise<AirtableResponse> {
     const sortByUpdatedFirst = '&sort%5B0%5D%5Bfield%5D=updated-on&sort%5B0%5D%5Bdirection%5D=desc'
     const url = this.apiUrl + (offset ? `&offset=${offset}` : '') + sortByUpdatedFirst

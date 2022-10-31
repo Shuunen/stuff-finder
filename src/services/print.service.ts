@@ -1,3 +1,10 @@
+/* c8 ignore next */
+
+/**
+ * Generate a name from an item
+ * @param input
+ * @returns {string} the generated name
+ */
 export const inputToPrintText = (input: PrintInputData): string => [input.name, input.brand, input.details].join(' ').replace(/\s{2,}/g, ' ').trim()
 
 export const inputToPrintCode = (input: PrintInputData): string => input.reference.trim() || input.barcode.trim()

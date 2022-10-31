@@ -21,6 +21,7 @@ export class AppForm extends HTMLElement {
   get cancelLabel (): string { return this.getAttribute('cancel-label') || 'Cancel' }
   override get title (): string { return this.getAttribute('title') === 'false' ? '' : (this.getAttribute('title') || '') }
   get inline (): boolean { return this.getAttribute('inline') === 'true' }
+  get hideActionsOnSubmit (): boolean { return this.hasAttribute('hide-actions-on-submit') }
   get onCloseEventName (): string { return this.getAttribute('on-close') || `${this._id}--close` }
   get onSaveEventName (): string { return this.getAttribute('on-save') || `${this._id}--save` }
   get inputs (): HTMLInputElement[] { return [...this.els.form?.elements as unknown as HTMLInputElement[]] }
@@ -73,7 +74,7 @@ export class AppForm extends HTMLElement {
   }
   onSave (): void {
     emit<FormOnSaveEvent>(this.onSaveEventName, this.data)
-    // this.els.footer?.classList.add('hidden') // not sure if needed
+    if (this.hideActionsOnSubmit) this.els.footer?.classList.add('hidden')
   }
   destroy (): void {
     this.els.form?.remove()

@@ -20,3 +20,21 @@ export const EMPTY_APP_SETTINGS: AppSettings = {
   view: '',
   wrap: '',
 }
+
+export const EMPTY_ITEM: Item = {
+  'id': '',
+  'name': '',
+  'brand': '',
+  'details': '',
+  'reference': '',
+  'barcode': '',
+  'photo': [],
+  'status': '',
+  'ref-printed': false,
+  'category': '',
+  'box': '',
+  'drawer': '',
+  'location': '',
+  'price': 0,
+  'updated-on': '',
+}

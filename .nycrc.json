@@ -9,6 +9,7 @@
   "lines": 90,
   "reporter": [
     "text",
+    "html",
     "lcovonly"
   ],
   "statements": 90
