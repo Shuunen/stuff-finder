@@ -17,6 +17,8 @@
 - [ ] type every events, enforce emit<> & on<>
 - [ ] add close confirmation on unsaved add item form modal
 - [ ] detect user in/activity to refresh data
+- [ ] do not close modal & refresh app when add item failed, all typed content is lost
+- [ ] show given/thrown items with a different color/display, also they're no more in box/room
 
 ## Build sizes
 
