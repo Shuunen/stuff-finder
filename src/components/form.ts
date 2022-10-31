@@ -1,4 +1,4 @@
-import { copy, debounce, div, dom, emit, h2, objectSum, on, p } from 'shuutils'
+import { copy, debounce, div, dom, emit, h2, objectSum, on, p, sleep } from 'shuutils'
 import { DEFAULT_IMAGE } from '../constants'
 import { button, find, logger, valuesToOptions } from '../utils'
 
@@ -13,6 +13,7 @@ export class AppForm extends HTMLElement {
   } = {}
   initialData: AppFormData = { formValid: false }
   emittedData: AppFormData = { formValid: false }
+  warmUp = true
   validate = debounce(this.validateSync.bind(this), 200)
   emitChange = debounce(this.emitChangeSync.bind(this), 200)
   get allowSubmit (): boolean { return this.hasAttribute('allow-submit') }
@@ -37,11 +38,14 @@ export class AppForm extends HTMLElement {
     return data
   }
   set data (data) {
+    logger.log('setting form data', data)
     Object.entries(data).forEach(entry => {
       const [key, value = ''] = entry
       const input = this.inputs.find(input => (input.name === key))
       if (input) this.setInputValue(input, value)
     })
+    if (this.warmUp) this.initialData = copy(this.data)
+    logger.log(this.warmUp ? 'warming up, overwriting initial data' : 'NOT warming up, NOT overwriting initial data', { initialData: this.initialData })
     this.validateSync()
   }
   get dataChanged (): boolean {
@@ -64,8 +68,8 @@ export class AppForm extends HTMLElement {
     if (this.inline) row.classList.add('hidden')
     else row.append(this.createClose())
     const save = button(this.saveLabel, 'save ml-4')
+    save.disabled = true
     save.addEventListener('click', () => this.onSave())
-    save.setAttribute('disabled', String(true))
     this.els.form?.addEventListener('keyup', () => this.validate())
     this.els.form?.addEventListener('change', () => this.validateSync())
     row.append(save)
@@ -94,12 +98,14 @@ export class AppForm extends HTMLElement {
     this.data.formValid = isValid
     logger.log(`form is ${isValid ? 'valid' : 'invalid'}`)
     this.error = ''
-    if (isValid)
-      this.els.save?.removeAttribute('disabled')
-    else {
+    if (!isValid) {
       this.els.save?.setAttribute('disabled', String(true))
       const input = this.inputs.find(input => input.validationMessage.length > 0)
       if (input) this.error = `Field "${input.name}" is invalid. ${input.validationMessage}`
+    } else if (this.dataChanged) {
+      logger.log('form is valid and changed, reactivating save button', this.els.save)
+      logger.log('here', { befor: this.initialData, after: this.data })
+      this.els.save?.removeAttribute('disabled')
     }
     if (this.inline) this.els.footer?.classList.toggle('hidden', !(this.dataChanged && isValid))
     this.dataset['valid'] = String(isValid)
@@ -107,7 +113,7 @@ export class AppForm extends HTMLElement {
   }
   setInputValue (input: HTMLInputElement, value: AppFormDataValue): void {
     if (input.name === 'photo') this.setPhoto(input, value)
-    else if (input.type === 'checkbox') setTimeout(() => { input.checked = String(value) === 'true' }, 100) // need to be async ¯\_(ツ)_/¯
+    else if (input.type === 'checkbox') input.checked = String(value) === 'true' // setTimeout(() => { input.checked = String(value) === 'true' }, 100) // need to be async ¯\_(ツ)_/¯
     else input.value = value as string
   }
   setPhoto (input: HTMLInputElement, data: string | boolean | number | string[]): void {
@@ -162,9 +168,11 @@ export class AppForm extends HTMLElement {
       event.preventDefault()
       if (this.allowSubmit) this.onSave()
     })
+    logger.log('form connected, setting initial data to', copy(this.data))
     this.initialData = this.data
     this.validateSync()
     emit<AppFormReadyEvent>(`${this._id}--ready`, this.data)
+    sleep(100).then(() => (this.warmUp = false))
   }
 }
 
