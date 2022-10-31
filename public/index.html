@@ -104,7 +104,7 @@
   <app-edit-item></app-edit-item>
 
   <app-modal name="settings" data-title="Settings" class="hidden">
-    <app-form name="settings" class="md:grid-cols-1">
+    <app-form name="settings" class="md:grid-cols-1" on-close="app-modal--settings--close">
       <label>
         <a href="https://airtable.com/api" target="_blank" rel="noreferrer">Airtable api base</a>
         <input name="base" type="text" placeholder="your api base" pattern="^app\w{14}$" required autofocus multi-paste>
