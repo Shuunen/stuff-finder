@@ -193,14 +193,15 @@ class App {
     const response = await this.pushItemRemotely(data)
     logger.log('onEditItem response', response)
     this.isLoading(false)
-    if (response.error) logger.showError(response.error.message)
-    else {
-      const item = this.airtableRecordToItem(response)
-      await this.pushItemLocally(item)
+    if (response.error) {
+      logger.showError(response.error.message)
+      return false
     }
-    if (data.id) return emit('app-modal--edit-item--close')
-    emit('app-modal--add-item--close')
-    emit('app-modal--search-results--close')
+    const item = this.airtableRecordToItem(response)
+    await this.pushItemLocally(item)
+    emit<AppModalEditItemCloseEvent>('app-modal--edit-item--close')
+    emit<AppModalAddItemCloseEvent>('app-modal--add-item--close')
+    emit<AppModalSearchResultsCloseEvent>('app-modal--search-results--close')
     document.location.search = ''
     return true
   }
