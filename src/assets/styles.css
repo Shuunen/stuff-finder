@@ -30,13 +30,17 @@ app-form:not([inline=true]) form {
   @apply grid;
 }
 
+app-form:not([inline=true]) input[type="checkbox"] {
+  @apply mt-2;
+}
+
 app-form[inline=true] form,
 app-form[inline=true] form label {
-  @apply flex flex-col sm:flex-row;
+  @apply flex flex-col sm:flex-row items-center;
 }
 
 app-form[inline=true] form label {
-  @apply gap-5;
+  @apply gap-2;
 }
 
 app-form[name="search-item"] {
@@ -84,7 +88,7 @@ form select:invalid, form input:invalid {
 }
 
 input[type="checkbox"] {
-  @apply mt-2 cursor-pointer;
+  @apply cursor-pointer;
 }
 
 a[data-action], button[data-action] {
