@@ -1,5 +1,5 @@
 import Fuse from 'fuse.js'
-import { emit, fillTemplate, on, pickOne, storage } from 'shuutils'
+import { emit, fillTemplate, on, pickOne, sanitize, storage } from 'shuutils'
 import './assets/styles.min.css'
 import './components'
 import { EMPTY_APP_SETTINGS, EMPTY_COMMON_LISTS } from './constants'
@@ -135,9 +135,16 @@ class App {
   async initFuse (): Promise<void> {
     if (!await this.readCommonLists()) return
     // https://fusejs.io/
-    const options = {
+    const options: Fuse.IFuseOptions<Item> = {
       distance: 200, // see the tip at https://fusejs.io/concepts/scoring-theory.html#scoring-theory
       threshold: 0.35, // 0 is perfect match
+      ignoreLocation: true,
+      getFn: (object, path) => {
+        const value = Fuse.config.getFn(object, path)
+        if (Array.isArray(value)) return value.map(element => sanitize(element))
+        if (typeof value === 'string') return sanitize(value)
+        return value
+      },
       keys: [{
         name: 'name',
         weight: 4,
@@ -160,7 +167,7 @@ class App {
     const input = event.str.trim()
     this.lastSearchOrigin = event.origin
     const result = this.items.find(item => (item.reference === input || item.barcode === input))
-    const results = result ? [result] : this.fuse.search(input).map(item => item.item)
+    const results = result ? [result] : this.fuse.search(sanitize(input)).map(item => item.item)
     const title = `${results.length === 0 ? 'No result found' : (results.length === 1 ? 'One result found' : `Found ${results.length} results`)} for “${input}”`
     const data: SearchResultEvent = { title, results, byReference: Boolean(result), input, scrollTop: Boolean(event.scrollTop) }
     emit<SearchResultEvent>('search-results', data)
