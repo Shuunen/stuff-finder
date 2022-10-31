@@ -6,10 +6,10 @@ window.customElements.define('app-settings-trigger', class extends HTMLElement {
   connectedCallback (): void {
     on<AppSettingsTriggerAnimateEvent>('app-settings-trigger--animate', active => {
       this.wrapper.classList.toggle('animate-bounce', active)
-      if (active) emit('app-modal--settings--open')
+      if (active) emit<AppModalSettingsOpenEvent>('app-modal--settings--open')
     })
     this.wrapper.title = 'Open settings'
-    this.wrapper.addEventListener('click', () => emit('app-modal--settings--open'))
+    this.wrapper.addEventListener('click', () => emit<AppModalSettingsOpenEvent>('app-modal--settings--open'))
     if (!this.parentNode) throw new Error('no parentNode found for app-settings-trigger')
     this.parentNode.replaceChild(this.wrapper, this)
   }

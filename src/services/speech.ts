@@ -7,7 +7,7 @@ class AppSpeech {
   recognitionSucceed = false
   constructor () {
     this.initRecognition()
-    on('app-speech--start', () => this.onStart())
+    on<AppSpeechStartEvent>('app-speech--start', this.onStart.bind(this))
   }
   initRecognition (): void {
     const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition
@@ -54,8 +54,8 @@ class AppSpeech {
   }
   setStatus (status: AppStatus): void {
     emit<AppStatusEvent>('app-status', status)
-    if (status === 'listening' && !this.isMobile) emit('app-sound--info')
-    else if (status === 'failed') emit('app-sound--error')
+    if (status === 'listening' && !this.isMobile) emit<AppSoundInfoEvent>('app-sound--info')
+    else if (status === 'failed') emit<AppSoundErrorEvent>('app-sound--error')
   }
 }
 

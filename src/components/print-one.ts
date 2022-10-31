@@ -5,9 +5,9 @@ import { find, logger } from '../utils'
 window.customElements.define('app-print-one', class extends HTMLElement {
   data: PrintData | undefined
   previewElement = div('')
-  size: PrintSize | undefined
+  size: PrintFormDataSize | undefined
 
-  async preview (input?: PrintOneInputData): Promise<void> {
+  async preview (input?: PrintInputData): Promise<void> {
     logger.log('preview in', this.size)
     if (!this.data) this.data = input === undefined ? undefined : inputToPrintData(input)
     if (!this.data) return logger.showError('no data or input to print')
@@ -30,7 +30,7 @@ window.customElements.define('app-print-one', class extends HTMLElement {
     logger.log(`qr code size has been reduced, it was too big (${height}px > ${maxHeight}px)`)
     wc.setAttribute('modulesize', '2')
   }
-  onFormChange (form: PrintOneFormData): void {
+  onFormChange (form: PrintFormData): void {
     logger.log('print one form change', form)
     this.size = form.size
     if (this.data) this.preview()
@@ -47,11 +47,11 @@ window.customElements.define('app-print-one', class extends HTMLElement {
     await sleep(100)
     this.previewElement = find.one<HTMLDivElement>('.app-print-one--preview')
     if (customElements.get('qr-code') === undefined) require('webcomponent-qr-code')
-    on<PrintOneInputData>('print-one', this.preview.bind(this))
-    on('app-modal--print-one--close', this.onClose.bind(this))
-    on<PrintOneInputData>('app-modal--print-one--open', this.preview.bind(this))
-    on<PrintOneFormData>('app-form--print-one--change', this.onFormChange.bind(this))
-    on<PrintOneFormData>('app-form--print-one--ready', this.onFormChange.bind(this))
-    on<PrintOneSubmitEvent>('do-print-one', this.doPrintOne.bind(this))
+    on<AppFormPrintOneChangeEvent>('app-form--print-one--change', this.onFormChange.bind(this))
+    on<AppFormPrintOneReadyEvent>('app-form--print-one--ready', this.onFormChange.bind(this))
+    on<AppModalPrintOneCloseEvent>('app-modal--print-one--close', this.onClose.bind(this))
+    on<AppModalPrintOneOpenEvent>('app-modal--print-one--open', this.preview.bind(this))
+    on<DoPrintOneEvent>('do-print-one', this.doPrintOne.bind(this))
+    on<PrintOneEvent>('print-one', this.preview.bind(this))
   }
 })

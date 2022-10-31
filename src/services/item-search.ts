@@ -8,10 +8,13 @@ class ItemSearch {
   form = dom('form')
   wrap = ''
   constructor () {
-    on('app-modal--add-item--open', (element: HTMLElement) => this.onModalOpen(element))
-    on<FormEditFormData>('app-form--edit-item--change', this.onEditItemFormChange.bind(this))
-    on('app-modal--print-one--open', this.setPrinted.bind(this))
-    on<AppSearchItemEvent>('app-search-item', data => this.search(String(data['input'])))
+    on<AppFormEditItemChangeEvent>('app-form--edit-item--change', this.onEditItemFormChange.bind(this))
+    on<AppModalAddItemOpenEvent>('app-modal--add-item--open', this.onModalOpen.bind(this))
+    on<AppModalPrintOneOpenEvent>('app-modal--print-one--open', this.setPrinted.bind(this))
+    on<AppSearchItemEvent>('app-search-item', this.onSearchItem.bind(this))
+  }
+  onSearchItem (data: AppFormData): void {
+    this.search(String(data['input']))
   }
   onEditItemFormChange (data: FormEditFormData): void {
     logger.log('onEditItemFormChange', data)

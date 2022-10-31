@@ -74,8 +74,8 @@ window.customElements.define('app-search-button', class extends HTMLElement {
       emit<SearchStartEvent>('search-start', { str: this.search.value, origin: 'type' })
       this.search.value = ''
     })
-    this.speech.addEventListener('click', () => emit('app-speech--start'))
-    this.scan.addEventListener('click', () => emit('app-scan-code--start'))
+    this.speech.addEventListener('click', () => emit<AppSpeechStartEvent>('app-speech--start'))
+    this.scan.addEventListener('click', () => emit<AppScanCodeStartEvent>('app-scan-code--start'))
     return row
   }
   connectedCallback (): void {
@@ -85,8 +85,8 @@ window.customElements.define('app-search-button', class extends HTMLElement {
     if (!this.parentNode) throw new Error('no parentNode for app-search-button')
     this.parentNode?.replaceChild(this.wrapper, this)
     this.handleFocusLessTyping()
-    on<AppStatusEvent>('app-status', status => this.onStatus(status))
-    on('items-ready', () => {
+    on<AppStatusEvent>('app-status', this.onStatus.bind(this))
+    on<ItemsReadyEvent>('items-ready', () => {
       inputs.classList.remove('pointer-events-none')
       inputs.classList.remove('opacity-50')
     })

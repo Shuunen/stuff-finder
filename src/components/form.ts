@@ -55,7 +55,7 @@ export class AppForm extends HTMLElement {
   createClose (): HTMLButtonElement {
     const element = button(this.cancelLabel, 'close', true)
     logger.log('form cancel will emit close event :', this.onCloseEventName, element)
-    element.addEventListener('click', () => emit(this.onCloseEventName))
+    element.addEventListener('click', () => emit<AppFormCloseEvent>(this.onCloseEventName))
     return element
   }
   createFooter (): HTMLDivElement {
@@ -86,7 +86,7 @@ export class AppForm extends HTMLElement {
     if (objectSum(this.emittedData) === objectSum(this.data)) return
     this.emittedData = copy(this.data)
     logger.log('emitting :', `${this._id}--change`, this.data)
-    emit<AppFormData>(`${this._id}--change`, this.data)
+    emit<AppFormChangeEvent>(`${this._id}--change`, this.data)
   }
   validateSync (): void {
     const isValid = this.els.form?.checkValidity() ?? false
@@ -144,7 +144,7 @@ export class AppForm extends HTMLElement {
     this._id = `app-form--${this.name}`
     on<FormIdSetEvent>(`${this._id}--set`, data => { this.data = data })
     on<FormIdErrorEvent>(`${this._id}--error`, message => { this.error = message })
-    on<FormIdSuggestionsEvent>(`${this._id}--suggestions`, suggestions => this.addSuggestions(suggestions))
+    on<FormIdSuggestionsEvent>(`${this._id}--suggestions`, this.addSuggestions.bind(this))
     this.els.form = dom('form', this.className, this.innerHTML)
     this.removeAttribute('class')
     this.innerHTML = ''
@@ -163,7 +163,7 @@ export class AppForm extends HTMLElement {
     })
     this.initialData = this.data
     this.validateSync()
-    emit(`${this._id}--ready`, this.data)
+    emit<AppFormReadyEvent>(`${this._id}--ready`, this.data)
   }
 }
 

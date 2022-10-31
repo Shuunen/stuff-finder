@@ -10,7 +10,7 @@ const itemA = {
   box: ' box ',
   drawer: '2',
   location: 'location',
-} as PrintOneInputData
+} as PrintInputData
 
 check('itemToPrintText A', inputToPrintText(itemA), 'name brand details')
 check('itemToPrintText B', inputToPrintText({ ...itemA, name: '  ' }), 'brand details')
@@ -22,13 +22,13 @@ check('itemToPrintBarcode C', inputToPrintQrCodeVisual({ ...itemA, barcode: '  '
 check('itemToPrintBarcode D', inputToPrintQrCodeVisual({ ...itemA, reference: '' }), '<qr-code data="barcode" margin=0 modulesize=3></qr-code>')
 check('itemToPrintBarcode E', inputToPrintQrCodeVisual({ ...itemA, barcode: '' }), '<qr-code data="reference" margin=0 modulesize=3></qr-code>')
 
-check('itemToPrintLocation A', itemToPrintLocation({ box: 'A', drawer: '4' } as PrintOneInputData), 'A4')
-check('itemToPrintLocation B', itemToPrintLocation({ box: 'A', drawer: '' } as PrintOneInputData), 'A')
-check('itemToPrintLocation C', itemToPrintLocation({ box: '', drawer: '4' } as PrintOneInputData), '')
-check('itemToPrintLocation D', itemToPrintLocation({ box: '', drawer: '' } as PrintOneInputData), '')
-check('itemToPrintLocation E', itemToPrintLocation({ box: 'A', drawer: '4', location: 'Salon' } as PrintOneInputData), 'A4')
-check('itemToPrintLocation F', itemToPrintLocation({ box: 'A', drawer: '', location: 'Salon' } as PrintOneInputData), 'A')
-check('itemToPrintLocation G', itemToPrintLocation({ box: '', drawer: '4', location: 'Salon' } as PrintOneInputData), 'Salon')
+check('itemToPrintLocation A', itemToPrintLocation({ box: 'A', drawer: '4' } as PrintInputData), 'A4')
+check('itemToPrintLocation B', itemToPrintLocation({ box: 'A', drawer: '' } as PrintInputData), 'A')
+check('itemToPrintLocation C', itemToPrintLocation({ box: '', drawer: '4' } as PrintInputData), '')
+check('itemToPrintLocation D', itemToPrintLocation({ box: '', drawer: '' } as PrintInputData), '')
+check('itemToPrintLocation E', itemToPrintLocation({ box: 'A', drawer: '4', location: 'Salon' } as PrintInputData), 'A4')
+check('itemToPrintLocation F', itemToPrintLocation({ box: 'A', drawer: '', location: 'Salon' } as PrintInputData), 'A')
+check('itemToPrintLocation G', itemToPrintLocation({ box: '', drawer: '4', location: 'Salon' } as PrintInputData), 'Salon')
 check('itemToPrintLocation H', itemToPrintLocation(itemA), 'B2')
 
 check('itemToPrintData A', inputToPrintData(itemA), { text: 'name brand details', qrCodeVisual: '<qr-code data="reference" margin=0 modulesize=3></qr-code>', qrCodeValue: 'reference', location: 'B2' })

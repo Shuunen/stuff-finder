@@ -10,11 +10,11 @@ window.customElements.define('app-edit-item', class extends HTMLElement {
     const data = { photo, ...item }
     this.modal.innerHTML = fillTemplate(template.innerHTML, data)
     emit<AppFormEditItemSetEvent>('app-form--edit-item--set', item)
-    emit('app-modal--edit-item--open')
+    emit<AppModalEditItemOpenEvent>('app-modal--edit-item--open')
   }
   async connectedCallback (): Promise<void> {
     await sleep(100)
     this.modal = find.one<HTMLElement>('.app-modal--edit-item .content')
-    on('edit-item', (item: Item) => this.edit(item))
+    on<EditItemEvent>('edit-item', this.edit.bind(this))
   }
 })

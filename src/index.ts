@@ -16,11 +16,10 @@ class App {
   constructor () {
     logger.log('app start')
     storage.prefix = '@shuunen/stuff-finder_'
-    on<AppFormSettingsSaveEvent>('app-form--settings--save', settings => this.onSettingsSave(settings))
-    on<AppFormEditItemSaveEvent>('app-form--edit-item--save', item => this.onEditItem(item))
-    on('get-barcodes-to-print', () => this.getBarcodesToPrint())
-    on<SearchStartEvent>('search-start', event => this.onSearchStart(event))
-    on('search-retry', () => this.onSearchRetry())
+    on<AppFormSettingsSaveEvent>('app-form--settings--save', this.onSettingsSave.bind(this))
+    on<AppFormEditItemSaveEvent>('app-form--edit-item--save', this.onEditItem.bind(this))
+    on<SearchStartEvent>('search-start', this.onSearchStart.bind(this))
+    on<SearchRetryEvent>('search-retry', this.onSearchRetry.bind(this))
     this.checkExistingSettings()
     this.showTitle()
     this.handleActions()
@@ -30,7 +29,7 @@ class App {
     const settings = storage.get<AppSettings>('app-settings', EMPTY_APP_SETTINGS)
     if (!settings.base) return this.settingsActionRequired(true)
     this.onSettingsSave(settings)
-    on('app-form--settings--ready', () => emit<AppFormSettingsSetEvent>('app-form--settings--set', settings))
+    on<AppFormSettingsReadyEvent>('app-form--settings--ready', () => emit<AppFormSettingsSetEvent>('app-form--settings--set', settings))
   }
 
   coolAscii (): string | undefined {
@@ -46,8 +45,8 @@ class App {
     const itemsLoaded = await this.loadItems()
     if (!itemsLoaded) return this.settingsActionRequired(true, 'failed to use api settings')
     this.settingsActionRequired(false)
-    emit('app-modal--settings--close')
-    if (this.items.length > 0) emit('items-ready')
+    emit<AppModalSettingsCloseEvent>('app-modal--settings--close')
+    if (this.items.length > 0) emit<ItemsReadyEvent>('items-ready')
     storage.set('app-settings', settings)
   }
 
@@ -169,15 +168,15 @@ class App {
     const result = this.items.find(item => (item.reference === input || item.barcode === input))
     const results = result ? [result] : this.fuse.search(sanitize(input)).map(item => item.item)
     const title = `${results.length === 0 ? 'No result found' : (results.length === 1 ? 'One result found' : `Found ${results.length} results`)} for “${input}”`
-    const data: SearchResultEvent = { title, results, byReference: Boolean(result), input, scrollTop: Boolean(event.scrollTop) }
-    emit<SearchResultEvent>('search-results', data)
+    const data: SearchResultsEvent = { title, results, byReference: Boolean(result), input, scrollTop: Boolean(event.scrollTop) }
+    emit<SearchResultsEvent>('search-results', data)
   }
 
   onSearchRetry (): boolean | void {
     logger.log('retry and this.lastSearchOrigin', this.lastSearchOrigin)
     if (this.lastSearchOrigin === 'type') return find.one<HTMLInputElement>('#input-type').focus()
-    if (this.lastSearchOrigin === 'scan') return emit('app-scan-code--start')
-    if (this.lastSearchOrigin === 'speech') return emit('app-speech--start')
+    if (this.lastSearchOrigin === 'scan') return emit<AppScanCodeStartEvent>('app-scan-code--start')
+    if (this.lastSearchOrigin === 'speech') return emit<AppSpeechStartEvent>('app-speech--start')
     logger.showError('un-handled search retry case')
   }
 
@@ -252,7 +251,7 @@ class App {
       if (payload && payload[0] === '{') payload = JSON.parse(payload)
       if (payload) logger.log('payload :', payload)
       event.stopPropagation()
-      emit(action, payload ?? target)
+      emit<AppActionEvent>(action, payload ?? target)
     })
   }
 

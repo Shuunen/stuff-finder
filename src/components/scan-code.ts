@@ -10,13 +10,13 @@ window.customElements.define('app-scan-code', class extends HTMLElement {
 
   onResult (code: string): void {
     logger.log('found qr or barcode :', code)
-    emit('app-modal--scan-code--close')
-    emit('app-sound--success')
+    emit<AppModalScanCodeCloseEvent>('app-modal--scan-code--close')
+    emit<AppSoundSuccessEvent>('app-sound--success')
     emit<SearchStartEvent>('search-start', { str: code, origin: 'scan' })
   }
   async scanCode (): Promise<void> {
     logger.log('user wants to scan something')
-    emit('app-modal--scan-code--open')
+    emit<AppModalScanCodeOpenEvent>('app-modal--scan-code--open')
     if (this.reader === undefined) await this.setupReader()
     if (this.reader === undefined) throw new Error('failed to setup reader')
     this.reader.decodeFromVideoDevice(this.deviceId, this.video, (result, error) => {
@@ -51,8 +51,8 @@ window.customElements.define('app-scan-code', class extends HTMLElement {
     this.reader.reset()
   }
   async connectedCallback (): Promise<void> {
-    on('app-scan-code--start', () => this.scanCode())
-    on('app-modal--scan-code--close', () => this.stopReader())
+    on<AppScanCodeStartEvent>('app-scan-code--start', this.scanCode.bind(this))
+    on<AppModalScanCodeCloseEvent>('app-modal--scan-code--close', this.stopReader.bind(this))
     await this.setupModal()
   }
 })

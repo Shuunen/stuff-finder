@@ -8,7 +8,7 @@ window.customElements.define('app-search-results', class extends HTMLElement {
   list = div('')
   input = ''
   results: Item[] = []
-  async onResults (event: SearchResultEvent): Promise<void> {
+  async onResults (event: SearchResultsEvent): Promise<void> {
     this.header.textContent = event.title
     this.results = event.results
     this.input = event.input
@@ -22,7 +22,7 @@ window.customElements.define('app-search-results', class extends HTMLElement {
     if (this.list.parentElement) find.oneOrNone('.app-add-item', this.list.parentElement)?.remove()
     const content = `Do you want to <a href="#" data-action="app-modal--add-item--open" data-input="${event.input}">add a new item</a> ?`
     this.list.parentElement?.append(text('app-add-item border-t pt-3 text-center', content))
-    emit('app-modal--search-results--open')
+    emit<AppModalSearchResultsOpenEvent>('app-modal--search-results--open')
     await sleep(300)
     if (event.scrollTop) this.list.firstElementChild?.scrollIntoView()
   }
@@ -38,9 +38,9 @@ window.customElements.define('app-search-results', class extends HTMLElement {
     emit<SearchStartEvent>('search-start', data)
   }
   connectedCallback (): void {
-    on('search-results', (event: SearchResultEvent) => this.onResults(event))
-    on<SelectResultEvent>('select-result', (id) => this.onSelect(id))
-    on('app-modal--edit-item--close', () => this.updateResults()) // TODO avoid refreshing every time
+    on<SearchResultsEvent>('search-results', this.onResults.bind(this))
+    on<SelectResultEvent>('select-result', this.onSelect.bind(this))
+    // on<AppModalEditItemCloseEvent>('app-modal--edit-item--close', this.updateResults.bind(this)) // TODO avoid refreshing every time
     this.template = find.one('template#search-results-list-item').innerHTML
     const modal = find.one<HTMLDivElement>('.app-modal--search-results')
     this.header = find.one<HTMLHeadingElement>('.app-header', modal)

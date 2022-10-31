@@ -2,7 +2,7 @@ import { emit, on, sleep } from 'shuutils'
 
 class UrlService {
   constructor () {
-    on('items-ready', () => this.check())
+    on<ItemsReadyEvent>('items-ready', this.check.bind(this))
   }
   async check (): Promise<void> {
     await sleep(100) // needed

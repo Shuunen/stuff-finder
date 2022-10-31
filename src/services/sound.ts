@@ -3,9 +3,9 @@ import { on, sleep } from 'shuutils'
 class AppSound {
   audioContext: AudioContext | undefined
   constructor () {
-    on('app-sound--info', () => this.onInfo())
-    on('app-sound--error', () => this.onError())
-    on('app-sound--success', () => this.onSuccess())
+    on<AppSoundInfoEvent>('app-sound--info', this.onInfo.bind(this))
+    on<AppSoundErrorEvent>('app-sound--error', this.onError.bind(this))
+    on<AppSoundSuccessEvent>('app-sound--success', this.onSuccess.bind(this))
   }
   onInfo (): void {
     this.playTone(400, 0.7)

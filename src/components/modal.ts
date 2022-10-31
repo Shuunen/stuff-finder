@@ -23,17 +23,23 @@ window.customElements.define('app-modal', class extends HTMLElement {
     if (active) fadeIn(this.backdrop)
     else fadeOut(this.backdrop)
   }
+  show (): void {
+    this.toggle(true)
+  }
+  hide (): void {
+    this.toggle(false)
+  }
   connectedCallback (): void {
     const id = `app-modal--${this.getAttribute('name')}`
-    on(`${id}--open`, () => this.toggle(true))
-    on(`${id}--close`, () => this.toggle(false))
-    on('app-modal--close', () => this.toggle(false))
+    on<AppModalOpenEvent>(`${id}--open`, this.show.bind(this))
+    on<AppModalCloseEvent>(`${id}--close`, this.hide.bind(this))
+    on<AppModalCloseEvent>('app-modal--close', this.hide.bind(this))
     this.backdrop.dataset['action'] = `${id}--close`
     this.backdrop.className = this.getAttribute('name') + ' ' + this.backdrop.className
     this.modal = this.createModal(id)
     this.backdrop.append(this.modal)
     if (!this.parentNode) throw new Error('no parentNode for app-modal')
     this.parentNode.replaceChild(this.backdrop, this)
-    emit(`${id}--ready`)
+    emit<AppModalReadyEvent>(`${id}--ready`)
   }
 })
