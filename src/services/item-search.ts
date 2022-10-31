@@ -58,8 +58,10 @@ class ItemSearch {
     const modal = find.one('.app-modal--add-item')
     find.oneOrNone('app-form[name="edit-item"]', modal)?.remove()
     const template = find.one<HTMLTemplateElement>('template#edit-item')
-    const form = div('container', template.innerHTML).firstElementChild
+    const form = div('container', template.innerHTML).firstElementChild as HTMLElement
     if (!form) return logger.showError('no form found')
+    form.dataset['id'] = ''
+    find.one<HTMLButtonElement>('[data-action="app-modal--print-one--open"]', form).dataset['id'] = ''
     form.setAttribute('on-close', 'app-modal--add-item--close')
     const content = find.one('.content', modal)
     content.append(form)
