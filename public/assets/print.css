@@ -15,6 +15,7 @@ body {
   z-index: 100;
 }
 
+app-toaster,
 body > header,
 body > div:not(.print-one),
 .app-modal--print-one > *:not(.app-print-one--preview),
