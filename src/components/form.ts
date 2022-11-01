@@ -23,6 +23,7 @@ export class AppForm extends HTMLElement {
   override get title (): string { return this.getAttribute('title') === 'false' ? '' : (this.getAttribute('title') || '') }
   get inline (): boolean { return this.getAttribute('inline') === 'true' }
   get hideActionsOnSubmit (): boolean { return this.hasAttribute('hide-actions-on-submit') }
+  get keepSaveActive (): boolean { return this.hasAttribute('keep-save-active') }
   get onCloseEventName (): string { return this.getAttribute('on-close') || `${this._id}--close` }
   get onSaveEventName (): string { return this.getAttribute('on-save') || `${this._id}--save` }
   get inputs (): HTMLInputElement[] { return [...this.els.form?.elements as unknown as HTMLInputElement[]] }
@@ -67,13 +68,7 @@ export class AppForm extends HTMLElement {
     const row = div('app-footer mt-4 flex justify-center')
     if (this.inline) row.classList.add('hidden')
     else row.append(this.createClose())
-    const save = button(this.saveLabel, 'save ml-4')
-    save.disabled = true
-    save.addEventListener('click', () => this.onSave())
-    this.els.form?.addEventListener('keyup', () => this.validate())
-    this.els.form?.addEventListener('change', () => this.validateSync())
-    row.append(save)
-    this.els.save = save
+    if (!this.keepSaveActive) this.els.save.disabled = true
     return row
   }
   onSave (): void {
@@ -99,13 +94,13 @@ export class AppForm extends HTMLElement {
     logger.log(`form is ${isValid ? 'valid' : 'invalid'}`)
     this.error = ''
     if (!isValid) {
-      this.els.save?.setAttribute('disabled', String(true))
+      this.els.save.disabled = true
       const input = this.inputs.find(input => input.validationMessage.length > 0)
       if (input) this.error = `Field "${input.name}" is invalid. ${input.validationMessage}`
-    } else if (this.dataChanged) {
+    } else if (this.dataChanged && !this.keepSaveActive) {
       logger.log('form is valid and changed, reactivating save button', this.els.save)
       logger.log('here', { befor: this.initialData, after: this.data })
-      this.els.save?.removeAttribute('disabled')
+      this.els.save.disabled = false
     }
     if (this.inline) this.els.footer?.classList.toggle('hidden', !(this.dataChanged && isValid))
     this.dataset['valid'] = String(isValid)

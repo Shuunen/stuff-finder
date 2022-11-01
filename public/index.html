@@ -203,7 +203,8 @@
 
   <app-modal name="print-one" data-title="Print item reference" class="hidden">
     <div class="app-print-one--preview mx-auto mb-4"></div>
-    <app-form name="print-one" cancel-label="Close" save-label="Print" on-save="do-print-one" on-close="app-modal--print-one--close" class="mb-4">
+    <app-form name="print-one" cancel-label="Close" keep-save-active save-label="Print" on-save="do-print-one" on-close="app-modal--print-one--close"
+      class="mb-4">
       <label>
         Print size ?
         <select name="size">
