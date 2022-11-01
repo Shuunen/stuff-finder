@@ -3,22 +3,23 @@ import { logger } from '../utils'
 
 class AppSpeech {
   isMobile = typeof window.orientation !== 'undefined'
-  recognition: any // eslint-disable-line @typescript-eslint/no-explicit-any
+  recognition!: SpeechRecognition
   recognitionSucceed = false
   constructor () {
     this.initRecognition()
     on<AppSpeechStartEvent>('app-speech--start', this.onStart.bind(this))
   }
   initRecognition (): void {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition
     const recognition = new Recognition()
     recognition.lang = navigator.language
     recognition.interimResults = false
     recognition.maxAlternatives = 1
-    recognition.onresult = (event: RecognitionResultEvent): void => {
-      const results = event.results[event.results.length - 1]
-      if (!results) throw new Error('no recognition results found')
-      const result = results[0]
+    recognition.onresult = (event: SpeechRecognitionEvent): void => {
+      logger.log('recognition results', event.results)
+      const result = event.results.item(event.resultIndex)[0]
+      logger.log('recognition result', result)
       if (!result) throw new Error('no recognition first result found')
       this.onSuccess(result.transcript, result.confidence)
     }
@@ -34,7 +35,7 @@ class AppSpeech {
   }
   onSuccess (sentence: string, confidence: number): void {
     this.recognitionSucceed = true
-    logger.log('confidence : ' + confidence)
+    logger.log('confidence', confidence)
     emit<SearchStartEvent>('search-start', { str: sentence, origin: 'speech' })
   }
   async onEnd (): Promise<void> {
