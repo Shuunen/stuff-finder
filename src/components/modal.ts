@@ -1,5 +1,5 @@
 import { div, emit, h2, link, on, tw } from 'shuutils'
-import { fadeIn, fadeOut } from '../utils'
+import { fadeIn, fadeOut, find } from '../utils'
 
 window.customElements.define('app-modal', class extends HTMLElement {
   active = false
@@ -23,8 +23,10 @@ window.customElements.define('app-modal', class extends HTMLElement {
     this.modal.classList.toggle('visible', active)
     this.modal.classList.toggle('hidden', !active)
     this.backdrop.classList.toggle('pointer-events-none', !active)
-    if (active) void fadeIn(this.backdrop)
-    else void fadeOut(this.backdrop)
+    if (!active) return void fadeOut(this.backdrop)
+    void fadeIn(this.backdrop)
+    const scrollable = find.oneOrNone('.overflow-auto, .overflow-y', this.modal)
+    if (scrollable) scrollable.scrollTop = 0
   }
   show (): void {
     this.toggle(true)
