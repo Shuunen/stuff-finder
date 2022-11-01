@@ -19,9 +19,9 @@ window.customElements.define('app-scan-code', class extends HTMLElement {
     emit<AppModalScanCodeOpenEvent>('app-modal--scan-code--open')
     if (this.reader === undefined) await this.setupReader()
     if (this.reader === undefined) throw new Error('failed to setup reader')
-    this.reader.decodeFromVideoDevice(this.deviceId, this.video, (result, error) => {
+    await this.reader.decodeFromVideoDevice(this.deviceId, this.video, (result, error) => {
       if (error && !(error instanceof NotFoundException)) return logger.showError(error.message, error)
-      if (result) this.onResult(result.getText())
+      this.onResult(result.getText())
     })
   }
   async setupModal (): Promise<void> {
@@ -39,7 +39,7 @@ window.customElements.define('app-scan-code', class extends HTMLElement {
     this.reader = new BrowserMultiFormatReader()
     const sources = await this.reader.listVideoInputDevices()
     logger.log('video sources found :', sources)
-    const source = (sources.find(s => s.label.includes('back')) || sources[0])
+    const source = (sources.find(s => s.label.includes('back')) ?? sources[0])
     sources.forEach(s => emit<AppToasterShowEvent>('app-toaster--show', { message: `${s.label} [${s.kind}]`, type: 'info', delay: 5000 }))
     if (!source) throw new Error('no source found for setupReader')
     this.deviceId = source.deviceId

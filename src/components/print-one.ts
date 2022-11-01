@@ -5,7 +5,7 @@ import { find, logger } from '../utils'
 window.customElements.define('app-print-one', class extends HTMLElement {
   data: PrintData | undefined
   previewElement = div('')
-  size: PrintFormDataSize | undefined
+  size: PrintFormDataSize = '40x20'
 
   async preview (input?: PrintInputData): Promise<void> {
     logger.log('preview in', this.size)
@@ -33,7 +33,7 @@ window.customElements.define('app-print-one', class extends HTMLElement {
   onFormChange (form: PrintFormData): void {
     logger.log('print one form change', form)
     this.size = form.size
-    if (this.data) this.preview()
+    if (this.data) void this.preview()
   }
   doPrintOne (): void {
     logger.log('do print one', this.data)

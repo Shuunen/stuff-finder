@@ -16,10 +16,9 @@ export const inputToPrintQrCodeVisual = (input: PrintInputData): string => {
 }
 
 export const itemToPrintLocation = (input: PrintInputData): string => {
-  if (!input.box) return input.location ?? ''
-  /* c8 ignore next */
   const box = (input.box.trim()[0] ?? '').toUpperCase()
-  const drawer = (input.drawer?.[0] || '').toUpperCase()
+  if (box.length === 0) return input.location
+  const drawer = (input.drawer[0] ?? '').toUpperCase()
   return `${box}${drawer}`.trim()
 }
 

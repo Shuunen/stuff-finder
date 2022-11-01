@@ -12,7 +12,7 @@ export const button = (content: string, classes = '', secondary = false): HTMLBu
 const request = async <T> (method: 'patch' | 'post' | 'get', url: string, data?: Record<string, unknown>): Promise<T> => {
   const options: RequestInit = { headers: JSON_HEADERS, method }
   if (data) options.body = JSON.stringify(data)
-  return fetch(url, options).then(response => response.json()).catch(error => logger.showError(error.message))
+  return fetch(url, options).then(response => response.json()).catch(error => logger.showError((error as Error).message)) as Promise<T>
 }
 
 export const patch = async (url: string, data: Record<string, unknown>): Promise<AirtableRecord> => request('patch', url, data)
@@ -79,4 +79,9 @@ export const fadeOut = async (element: HTMLElement, destroy = false): Promise<vo
 
 export const valuesToOptions = (array: string[], selected?: string): string => {
   return array.map(value => `<option value="${value}" ${selected === value ? 'selected' : ''}>${value}</option>`).join('')
+}
+
+export const isVisible = (element: HTMLElement): boolean => {
+  const { top, bottom, width, height } = element.getBoundingClientRect()
+  return width > 0 && height > 0 && top >= 0 && bottom <= window.innerHeight
 }

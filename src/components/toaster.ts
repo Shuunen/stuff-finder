@@ -8,13 +8,14 @@ window.customElements.define('app-toaster', class extends HTMLElement {
     const toast = p(`app-toast app-hide bg-gradient-to-tr ${custom} mt-2 rounded px-4 py-1 text-center font-mono text-white shadow`, message)
     if (type === 'success') toast.innerHTML += '✔️'
     this.append(toast)
-    fadeIn(toast)
-    toast.addEventListener('click', () => fadeOut(toast, true))
+    await fadeIn(toast)
+    toast.addEventListener('click', () => void fadeOut(toast, true))
     if (type === 'error') return
     await sleep(delay)
-    fadeOut(toast, true)
+    await fadeOut(toast, true)
   }
   connectedCallback (): void {
+    // eslint-disable-next-line unicorn/no-keyword-prefix
     this.className = tw('absolute bottom-5 z-50')
     on<AppToasterShowEvent>('app-toaster--show', this.showToast.bind(this))
   }

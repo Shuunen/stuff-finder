@@ -4,24 +4,36 @@
     "es6": true,
     "node": true
   },
-  "extends": [
-    "eslint:recommended",
-    "plugin:tailwindcss/recommended",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:unicorn/recommended"
-  ],
   "overrides": [
     {
+      "extends": [
+        "plugin:tailwindcss/recommended"
+      ],
       "files": [
         "*.html"
       ],
       "parser": "@angular-eslint/template-parser"
     },
     {
+      "extends": [
+        "eslint:recommended",
+        "plugin:tailwindcss/recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:@typescript-eslint/recommended-requiring-type-checking",
+        "plugin:@typescript-eslint/strict",
+        "plugin:unicorn/all"
+      ],
       "files": [
         "*.ts"
       ],
       "parser": "@typescript-eslint/parser",
+      "parserOptions": {
+        "ecmaVersion": "latest",
+        "project": [
+          "./tsconfig.json"
+        ],
+        "sourceType": "module"
+      },
       "rules": {
         "@typescript-eslint/brace-style": [
           "error",
@@ -30,6 +42,7 @@
             "allowSingleLine": true
           }
         ],
+        "@typescript-eslint/consistent-type-definitions": "off",
         "@typescript-eslint/explicit-function-return-type": "error",
         "@typescript-eslint/no-unused-vars": [
           "error",
@@ -108,11 +121,6 @@
         ]
       }
     }
-  ],
-  "plugins": [
-    "@typescript-eslint",
-    "tailwindcss",
-    "unicorn"
   ],
   "settings": {
     "tailwindcss": {

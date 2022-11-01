@@ -14,7 +14,7 @@ class ItemSearch {
     on<AppSearchItemEvent>('app-search-item', this.onSearchItem.bind(this))
   }
   onSearchItem (data: AppFormData): void {
-    this.search(String(data['input']))
+    void this.search(String(data['input']))
   }
   onEditItemFormChange (data: FormEditFormData): void {
     logger.log('onEditItemFormChange', data)
@@ -32,13 +32,13 @@ class ItemSearch {
   }
   setPrintData (data: FormEditFormData, form: AppForm): void {
     const printTrigger = find.one<HTMLButtonElement>(`[data-id="${data.id}"][data-action="app-modal--print-one--open"]`, form)
-    printTrigger.disabled = data.formValid === false
-    if (data.formValid === false) return logger.log('form not valid, not setting print data')
+    printTrigger.disabled = !data.formValid
+    if (!data.formValid) return logger.log('form not valid, not setting print data')
     logger.log('setPrintDataSync for item', data, printTrigger)
     const printInputData: PrintInputData = { id: data.id, name: data.name, brand: data.brand, details: data.details, reference: data.reference, barcode: data.barcode, box: data.box, drawer: data.drawer, location: data.location }
     printTrigger.dataset['payload'] = JSON.stringify(printInputData)
   }
-  async getWrapApiKey (): Promise<string> {
+  getWrapApiKey (): string {
     if (this.wrap.length > 0) return this.wrap
     const settings = storage.get<AppSettings>('app-settings', EMPTY_APP_SETTINGS)
     this.wrap = (!settings.wrap || settings.wrap.length === 0) ? '' : settings.wrap
@@ -52,14 +52,13 @@ class ItemSearch {
     input.value = str
     this.setupItemForm()
     this.setDefaults()
-    this.search(str)
+    void this.search(str)
   }
   setupItemForm (): void {
     const modal = find.one('.app-modal--add-item')
     find.oneOrNone('app-form[name="edit-item"]', modal)?.remove()
     const template = find.one<HTMLTemplateElement>('template#edit-item')
     const form = div('container', template.innerHTML).firstElementChild as HTMLElement
-    if (!form) return logger.showError('no form found')
     form.dataset['id'] = ''
     find.one<HTMLButtonElement>('[data-action="app-modal--print-one--open"]', form).dataset['id'] = ''
     form.setAttribute('on-close', 'app-modal--add-item--close')
@@ -86,7 +85,7 @@ class ItemSearch {
     if (str.length > 0) emit<AppFormEditItemSuggestionsEvent>('app-form--edit-item--suggestions', await this.getSuggestions(str))
     emit<AppLoaderToggleEvent>('app-loader--toggle', false)
   }
-  priceParse (price: string | number): string {
+  priceParse (price?: string | number): string {
     if (price === undefined) return ''
     if (typeof price === 'string') return Math.round(Number.parseFloat(price)).toString()
     return Math.round(price).toString()
@@ -99,17 +98,18 @@ class ItemSearch {
     await this.addSuggestionsFromCampo(suggestions, str)
     for (const key in suggestions) {
       const k = key as keyof Item
+      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
       if (suggestions[k].length === 0) delete suggestions[k] // clear empty fields
       else suggestions[k] = suggestions[k].filter((value, index, array) => array.indexOf(value) === index) // remove duplicates
     }
-    const clean: Array<keyof Item> = ['name', 'details']
-    clean.forEach((key) => { suggestions[key] = (suggestions[key] || []).map(suggestion => capitalize(suggestion, true)) })
+    const clean: (keyof Item)[] = ['name', 'details']
+    clean.forEach((key) => { suggestions[key] = suggestions[key].map(suggestion => capitalize(suggestion, true)) })
     logger.log('final suggestions', suggestions)
     return suggestions
   }
   async addSuggestionsFromWrap<T> (endpoint: string): Promise<T> {
-    const wrapApiKey = await this.getWrapApiKey()
-    if (wrapApiKey === '') return <T>{}
+    const wrapApiKey = this.getWrapApiKey()
+    if (wrapApiKey === '') return {} as T
     return get<T>(`https://wrapapi.com/use/jojo/${endpoint}&wrapAPIKey=${wrapApiKey}`)
   }
   async addSuggestionsFromDeyes (suggestions: ItemSuggestions, code: string): Promise<void> {

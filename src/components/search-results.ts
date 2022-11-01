@@ -1,5 +1,5 @@
 import { div, emit, fillTemplate, h1, on, readableTimeAgo, sleep, text } from 'shuutils'
-import { DEFAULT_IMAGE } from '../constants'
+import { DEFAULT_IMAGE, EMPTY_ITEM } from '../constants'
 import { find, logger } from '../utils'
 
 window.customElements.define('app-search-results', class extends HTMLElement {
@@ -13,9 +13,9 @@ window.customElements.define('app-search-results', class extends HTMLElement {
     this.results = event.results
     this.input = event.input
     this.list.innerHTML = event.results.map(result => {
-      const visual = result.photo === undefined ? DEFAULT_IMAGE : result.photo[0].url
+      const visual = result.photo?.[0]?.url ?? DEFAULT_IMAGE
       const updated = readableTimeAgo((new Date(result['updated-on'])))
-      const data = { barcode: '', brand: '', box: '', drawer: '', ...result, visual, updated }
+      const data = { ...Object.assign({}, EMPTY_ITEM, result), visual, updated }
       return fillTemplate(this.template, data)
     }).join('')
     if (event.results.length === 0) this.list.innerHTML = '<p class="text-center py-4"><span class="text-4xl opacity-50">¯\\_(ツ)_/¯</span><br><br>No results found.</p>'

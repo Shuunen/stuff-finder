@@ -7,13 +7,12 @@ window.customElements.define('app-print-barcodes', class extends HTMLElement {
   modal = div('')
   trigger = this.createTrigger()
 
-  async openModal (): Promise<void> {
+  openModal (): void {
     this.modal = find.one<HTMLDivElement>('.app-modal--prepare-barcodes')
     const listElement = find.one('.app-list', this.modal)
     const item = find.one('template#barcodes-list-item')
     const template = item.innerHTML
     const lists = storage.get<CommonLists>('lists', EMPTY_COMMON_LISTS)
-    if (!lists.boxes) throw new Error('failed to get lists')
     logger.log('got lists', lists)
     listElement.innerHTML = this.items
       .map(item => fillTemplate(template, { ...Object.assign({}, EMPTY_ITEM, item), boxes: valuesToOptions(lists.boxes, item.box), drawers: valuesToOptions(lists.drawers, item.drawer) }))
@@ -32,7 +31,7 @@ window.customElements.define('app-print-barcodes', class extends HTMLElement {
     const items = storage.get<Item[]>('items', [])
     if (items.length === 0) return logger.showError('no items found in storage')
     logger.log(`found ${items.length} items in storage`)
-    const printable = items.filter(item => item['ref-printed'] !== true && item.status === 'acheté')
+    const printable = items.filter(item => !item['ref-printed'] && item.status === 'acheté')
     logger.log(`found ${printable.length} printable items`)
     this.items = printable
     this.openModal()

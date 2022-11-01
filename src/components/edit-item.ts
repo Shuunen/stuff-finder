@@ -6,7 +6,7 @@ window.customElements.define('app-edit-item', class extends HTMLElement {
   edit (item: Item): void {
     logger.log('edit', item)
     const template = find.one('template#edit-item')
-    const photo = item.photo && item.photo[0]?.url || ''
+    const photo = item.photo?.[0]?.url ?? ''
     const data = { photo, ...item }
     this.modal.innerHTML = fillTemplate(template.innerHTML, data)
     emit<AppFormEditItemSetEvent>('app-form--edit-item--set', item)

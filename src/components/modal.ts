@@ -5,6 +5,9 @@ window.customElements.define('app-modal', class extends HTMLElement {
   active = false
   backdrop = div('app-backdrop app-hide pointer-events-none fixed top-0 left-0 z-20 flex h-full w-full flex-col items-center justify-center bg-black/50 align-middle')
   modal = div('app-modal')
+  get name (): string {
+    return this.getAttribute('name') ?? 'no-name-provided'
+  }
   createModal (id: string): HTMLDivElement {
     const modal = div(`app-modal ${id} relative z-50 m-4 flex w-full flex-col overflow-hidden rounded bg-white p-4 shadow-md md:w-auto ${this.className}`, this.innerHTML)
     const close = link(tw('app-close absolute !border-b-0 top-2 right-5 font-mono text-4xl opacity-50 md:text-2xl'), 'x', '#')
@@ -20,8 +23,8 @@ window.customElements.define('app-modal', class extends HTMLElement {
     this.modal.classList.toggle('visible', active)
     this.modal.classList.toggle('hidden', !active)
     this.backdrop.classList.toggle('pointer-events-none', !active)
-    if (active) fadeIn(this.backdrop)
-    else fadeOut(this.backdrop)
+    if (active) void fadeIn(this.backdrop)
+    else void fadeOut(this.backdrop)
   }
   show (): void {
     this.toggle(true)
@@ -30,12 +33,13 @@ window.customElements.define('app-modal', class extends HTMLElement {
     this.toggle(false)
   }
   connectedCallback (): void {
-    const id = `app-modal--${this.getAttribute('name')}`
+    const id = `app-modal--${this.name}`
     on<AppModalOpenEvent>(`${id}--open`, this.show.bind(this))
     on<AppModalCloseEvent>(`${id}--close`, this.hide.bind(this))
     on<AppModalCloseEvent>('app-modal--close', this.hide.bind(this))
     this.backdrop.dataset['action'] = `${id}--close`
-    this.backdrop.className = this.getAttribute('name') + ' ' + this.backdrop.className
+    // eslint-disable-next-line unicorn/no-keyword-prefix
+    this.backdrop.className = this.name + ' ' + this.backdrop.className
     this.modal = this.createModal(id)
     this.backdrop.append(this.modal)
     if (!this.parentNode) throw new Error('no parentNode for app-modal')

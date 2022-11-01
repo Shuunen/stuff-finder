@@ -25,14 +25,14 @@ class App {
     this.handleActions()
   }
 
-  async checkExistingSettings (): Promise<void> {
+  checkExistingSettings (): void {
     const settings = storage.get<AppSettings>('app-settings', EMPTY_APP_SETTINGS)
     if (!settings.base) return this.settingsActionRequired(true)
-    this.onSettingsSave(settings)
+    void this.onSettingsSave(settings)
     on<AppFormSettingsReadyEvent>('app-form--settings--ready', () => emit<AppFormSettingsSetEvent>('app-form--settings--set', settings))
   }
 
-  coolAscii (): string | undefined {
+  coolAscii (): string {
     return pickOne(['( ＾◡＾)', '♥‿♥', '八(＾□＾*)', '(◡ ‿ ◡ ✿)', '(=^ェ^=)', 'ʕ •ᴥ•ʔ', '(*°∀°)', '\\(-ㅂ-)/', 'ლ(╹◡╹ლ)', 'ლ(o◡oლ)', '＼(＾O＾)／'])
   }
 
@@ -67,7 +67,7 @@ class App {
     const cachedItems = storage.get<Item[]>('items', [])
     if (cachedItems.length === 0) logger.showLog('no cached items found')
     let response = await this.fetchApi()
-    if (!response || response.error) {
+    if (response.error) {
       this.isLoading(false)
       emit<AppToasterShowEvent>('app-toaster--show', { message: 'airtable fetch failed', type: 'error' })
       return false
@@ -82,7 +82,7 @@ class App {
     if (cachedItems.some(item => (item.id === remote.id && item['updated-on'] === remote['updated-on']))) {
       this.items = cachedItems
       logger.showLog(`${this.items.length} item(s) cached and no updates from Airtable`)
-      await this.initFuse()
+      this.initFuse()
       return true
     }
     let offset = response.offset
@@ -91,7 +91,7 @@ class App {
       offset = response.offset
       records = [...records, ...response.records]
     }
-    await this.parseApiRecords(records)
+    this.parseApiRecords(records)
     return true
   }
 
@@ -99,10 +99,10 @@ class App {
     const sortByUpdatedFirst = '&sort%5B0%5D%5Bfield%5D=updated-on&sort%5B0%5D%5Bdirection%5D=desc'
     const url = this.apiUrl + (offset ? `&offset=${offset}` : '') + sortByUpdatedFirst
     if (!url.startsWith('https://api.airtable.com/v0/')) throw new Error('invalid api url')
-    return fetch(url).then(response => response.json())
+    return fetch(url).then(response => response.json()) as Promise<AirtableResponse>
   }
 
-  async parseApiRecords (records: AirtableRecord[]): Promise<void> {
+  parseApiRecords (records: AirtableRecord[]): void {
     // this.showLog('parsing api records :', records )
     const boxes: string[] = []
     const locations: string[] = []
@@ -110,7 +110,7 @@ class App {
     const categories: string[] = []
     const drawers = ['', '1', '2', '3', '4', '5', '6', '7']
     records.forEach(record => {
-      const location = record.fields.location ?? ''
+      const location = record.fields.location
       const box = record.fields.box || ''
       const status = record.fields.status || 'acheté'
       const category = record.fields.category || ''
@@ -125,16 +125,16 @@ class App {
     return this.initFuse()
   }
 
-  async initFuse (): Promise<void> {
-    if (!await this.readCommonLists()) return
+  initFuse (): void {
+    if (!this.readCommonLists()) return
     // https://fusejs.io/
     const options: Fuse.IFuseOptions<Item> = {
       distance: 200, // see the tip at https://fusejs.io/concepts/scoring-theory.html#scoring-theory
       threshold: 0.35, // 0 is perfect match
       ignoreLocation: true,
-      getFn: (object, path) => {
+      getFn: (object: Item, path: string | string[]) => {
         const value = Fuse.config.getFn(object, path)
-        if (Array.isArray(value)) return value.map(element => sanitize(element))
+        if (Array.isArray(value)) return value.map((element: string) => sanitize(element))
         if (typeof value === 'string') return sanitize(value)
         return value
       },
@@ -166,12 +166,13 @@ class App {
     emit<SearchResultsEvent>('search-results', data)
   }
 
-  onSearchRetry (): boolean | void {
+  onSearchRetry (): boolean {
     logger.log('retry and this.lastSearchOrigin', this.lastSearchOrigin)
-    if (this.lastSearchOrigin === 'type') return find.one<HTMLInputElement>('#input-type').focus()
+    if (this.lastSearchOrigin === 'type') return Boolean(find.one<HTMLInputElement>('#input-type').focus())
     if (this.lastSearchOrigin === 'scan') return emit<AppScanCodeStartEvent>('app-scan-code--start')
     if (this.lastSearchOrigin === 'speech') return emit<AppSpeechStartEvent>('app-speech--start')
     logger.showError('un-handled search retry case')
+    return false
   }
 
   airtableRecordToItem (record: AirtableRecord): Item {
@@ -191,7 +192,7 @@ class App {
       return false
     }
     const item = this.airtableRecordToItem(response)
-    await this.pushItemLocally(item)
+    this.pushItemLocally(item)
     emit<AppModalEditItemCloseEvent>('app-modal--edit-item--close')
     emit<AppModalAddItemCloseEvent>('app-modal--add-item--close')
     emit<AppModalSearchResultsCloseEvent>('app-modal--search-results--close')
@@ -211,10 +212,11 @@ class App {
     if (item.id) {
       const existing = this.items.find(existing => existing.id === item.id)
       if (!existing) throw new Error('existing item not found locally')
-      const fields = Object.keys(data.fields) as Array<keyof Item>
+      const fields = Object.keys(data.fields) as (keyof Item)[]
       fields.forEach((field) => {
         const samePhoto = field === 'photo' && existing.photo && existing.photo[0]?.url === (data.fields.photo as ItemPhoto[])[0]?.url
         const sameValue = existing[field] === data.fields[field]
+        // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
         if (samePhoto || sameValue) delete data.fields[field]
       })
     }
@@ -224,7 +226,7 @@ class App {
     return patch(url, data)
   }
 
-  async pushItemLocally (itemTouched: Item): Promise<void> {
+  pushItemLocally (itemTouched: Item): void {
     logger.log('pushing item locally', itemTouched)
     const index = this.items.findIndex(item => item.id === itemTouched.id)
     if (index >= 0) this.items[index] = itemTouched // update existing item
@@ -237,12 +239,12 @@ class App {
     document.addEventListener('click', (event) => {
       if (!(event.target instanceof HTMLElement)) return
       const { target } = event
-      if (!target || !target.dataset) return
-      let { action, payload } = target.dataset
+      let action = target.dataset['action']
+      let payload = target.dataset['payload'] as string | object | undefined
       if (!action) return
       action = action.trim()
       logger.log('action clicked :', action)
-      if (payload && payload[0] === '{') payload = JSON.parse(payload)
+      if (typeof payload === 'string' && payload.startsWith('{')) payload = JSON.parse(payload) as object
       if (payload) logger.log('payload :', payload)
       event.stopPropagation()
       emit<AppActionEvent>(action, payload ?? target)
@@ -251,23 +253,16 @@ class App {
 
   saveCommonLists (lists: CommonLists): void {
     logger.log('saving common lists :', lists)
-    const names = Object.keys(lists) as Array<keyof CommonLists>
+    const names = Object.keys(lists) as (keyof CommonLists)[]
     names.forEach((name) => {
-      lists[name] = ['', ...lists[name].sort(Intl.Collator().compare)]
+      lists[name] = ['', ...lists[name].sort((a, b) => Intl.Collator().compare(a, b))]
     })
     storage.set('lists', lists)
   }
 
-  async readCommonLists (): Promise<boolean> {
+  readCommonLists (): boolean {
     if (this.commonListsLoaded) return true
     const lists = storage.get<CommonLists>('lists', EMPTY_COMMON_LISTS)
-    if (!lists.boxes) {
-      logger.error('no lists found, clearing cached items to fetch fresh data and set lists')
-      await storage.clear('items')
-      this.items = []
-      logger.showError('please restart the app to set lists') // TODO ???
-      return false
-    }
     logger.log('common lists found', lists)
     const template = find.one('template#edit-item')
     const data: Record<keyof CommonLists, string> = {

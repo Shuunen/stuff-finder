@@ -26,6 +26,10 @@ form {
   @apply gap-3 pr-2;
 }
 
+app-form {
+  @apply overflow-auto;
+}
+
 app-form:not([inline=true]) form {
   @apply grid;
 }
