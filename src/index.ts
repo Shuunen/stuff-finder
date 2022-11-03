@@ -2,7 +2,7 @@ import Fuse from 'fuse.js'
 import { emit, fillTemplate, on, pickOne, sanitize, storage } from 'shuutils'
 import './assets/styles.min.css'
 import './components'
-import { EMPTY_APP_SETTINGS, EMPTY_COMMON_LISTS } from './constants'
+import { EMPTY_APP_SETTINGS, EMPTY_COMMON_LISTS, EMPTY_ITEM } from './constants'
 import './services'
 import { find, logger, patch, post, valuesToOptions } from './utils'
 
@@ -110,14 +110,14 @@ class App {
     const categories: string[] = []
     const drawers = ['', '1', '2', '3', '4', '5', '6', '7']
     records.forEach(record => {
-      const location = record.fields.location
-      const box = record.fields.box || ''
-      const status = record.fields.status || 'acheté'
-      const category = record.fields.category || ''
+      const location = record.fields.location ?? ''
       if (location.length > 0 && !locations.includes(location)) locations.push(location)
+      const box = record.fields.box ?? ''
       if (box.length > 0 && !boxes.includes(box)) boxes.push(box)
-      if (category.length > 0 && !categories.includes(category)) categories.push(category)
+      const status = record.fields.status ?? 'acheté'
       if (!statuses.includes(status)) statuses.push(status)
+      const category = record.fields.category ?? ''
+      if (category.length > 0 && !categories.includes(category)) categories.push(category)
     })
     this.saveCommonLists({ boxes, locations, statuses, categories, drawers })
     this.items = records.map(record => this.airtableRecordToItem(record))
@@ -177,8 +177,9 @@ class App {
 
   airtableRecordToItem (record: AirtableRecord): Item {
     return {
-      id: record.id,
+      ...EMPTY_ITEM,
       ...record.fields,
+      id: record.id,
     }
   }
 
