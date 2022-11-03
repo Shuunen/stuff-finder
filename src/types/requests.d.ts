@@ -60,7 +60,7 @@ interface AirtableError {
 
 interface AirtableRecord {
   id: string
-  fields: Partial<Omit<Item, 'id'>> & { 'updated-on': string }
+  fields: Partial<Omit<Item, ItemField.id>>
   error?: AirtableError
 }
 

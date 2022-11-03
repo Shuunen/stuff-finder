@@ -1,5 +1,7 @@
 export const JSON_HEADERS = {
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   'Accept': 'application/json',
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   'Content-Type': 'application/json',
 }
 
@@ -22,19 +24,19 @@ export const EMPTY_APP_SETTINGS: AppSettings = {
 }
 
 export const EMPTY_ITEM: Item = {
-  'id': '',
-  'name': '',
-  'brand': '',
-  'details': '',
-  'reference': '',
-  'barcode': '',
-  'photo': [],
-  'status': '',
-  'ref-printed': false,
-  'category': '',
-  'box': '',
-  'drawer': '',
-  'location': '',
-  'price': 0,
-  'updated-on': '',
+  [ItemField.barcode]: '',
+  [ItemField.box]: '',
+  [ItemField.brand]: '',
+  [ItemField.category]: '',
+  [ItemField.details]: '',
+  [ItemField.drawer]: '',
+  [ItemField.id]: '',
+  [ItemField.location]: '',
+  [ItemField.name]: '',
+  [ItemField.photo]: [],
+  [ItemField.price]: 0,
+  [ItemField.reference]: '',
+  [ItemField.referencePrinted]: false,
+  [ItemField.status]: ItemStatus.acheté,
+  [ItemField.updatedOn]: '',
 }

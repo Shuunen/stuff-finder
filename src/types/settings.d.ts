@@ -1,4 +1,4 @@
-interface AppSettings extends Record<string, unknown>{
+interface AppSettings extends Record<string, unknown> {
   base: string
   key: string
   table: string

@@ -2,18 +2,38 @@ import { div, dom, emit, image, on, p, pickOne, tw } from 'shuutils'
 import { button, logger } from '../utils'
 
 window.customElements.define('app-search-button', class extends HTMLElement {
-  search = dom('input', tw('app-search-button h-10 w-full max-w-xs rounded-md border-2 border-purple-500 px-2 text-lg shadow-md hover:shadow-lg md:text-base'))
-  scan = button('Scan it', tw('app-search-button'))
-  speech = button('Speech', tw('app-search-button'))
-  hint = p('mt-8 rounded-md p-4 text-center text-lg shadow backdrop-brightness-150 backdrop-opacity-30 md:text-base')
-  wrapper = div('app-search-button')
 
-  onStatus (status: AppStatus): void {
+  private search = dom('input', tw('app-search-button h-10 w-full max-w-xs rounded-md border-2 border-purple-500 px-2 text-lg shadow-md hover:shadow-lg md:text-base'))
+
+  private readonly scan = button('Scan it', tw('app-search-button'))
+
+  private speech = button('Speech', tw('app-search-button'))
+
+  private hint = p('mt-8 rounded-md p-4 text-center text-lg shadow backdrop-brightness-150 backdrop-opacity-30 md:text-base')
+
+  private readonly wrapper = div('app-search-button')
+
+  public connectedCallback (): void {
+    const inputs = this.createInputs()
+    this.wrapper.append(inputs)
+    this.wrapper.append(this.hint)
+    if (!this.parentNode) throw new Error('no parentNode for app-search-button')
+    this.parentNode.replaceChild(this.wrapper, this)
+    this.handleFocusLessTyping()
+    on<AppStatusEvent>('app-status', this.onStatus.bind(this))
+    on<ItemsReadyEvent>('items-ready', () => {
+      inputs.classList.remove('pointer-events-none')
+      inputs.classList.remove('opacity-50')
+    })
+  }
+
+  private onStatus (status: AppStatus): void {
     const { speech, hint } = this.getSpeechAndHint(status)
     this.speech.textContent = speech
     this.hint.textContent = hint
   }
-  getSpeechAndHint (status: AppStatus): { speech: string, hint: string } {
+
+  private getSpeechAndHint (status: AppStatus): { speech: string; hint: string } {
     if (status === 'listening') {
       this.speech.style.pointerEvents = 'none'
       return {
@@ -43,17 +63,20 @@ window.customElements.define('app-search-button', class extends HTMLElement {
     logger.showError('un-expected status :', status)
     return { speech: pickOne(['Retry', 'Try again']), hint: 'An un-expected case happen' }
   }
-  handleFocusLessTyping (): void {
-    document.body.addEventListener('keydown', event => this.onKeyDown(event))
+
+  private handleFocusLessTyping (): void {
+    document.body.addEventListener('keydown', event => { this.onKeyDown(event) })
   }
-  onKeyDown (event: KeyboardEvent): void {
+
+  private onKeyDown (event: KeyboardEvent): void {
     const filter = /^[\s\w-]$/i // this filter let user use special keys like CTRL without interfering
     if (!(event.target instanceof HTMLInputElement)) return
     if (event.target.tagName.toLowerCase() !== 'body' || !filter.test(event.key)) return
     logger.log('redirecting user input char :', event.key, 'to search input')
     this.search.focus()
   }
-  createInputs (): HTMLDivElement {
+
+  private createInputs (): HTMLDivElement {
     const row = div('pointer-events-none grid justify-center gap-4 px-4 opacity-50 transition-opacity sm:grid-cols-3')
     const colA = div('grid gap-2')
     colA.append(this.scan)
@@ -77,18 +100,5 @@ window.customElements.define('app-search-button', class extends HTMLElement {
     this.speech.addEventListener('click', () => emit<AppSpeechStartEvent>('app-speech--start'))
     this.scan.addEventListener('click', () => emit<AppScanCodeStartEvent>('app-scan-code--start'))
     return row
-  }
-  connectedCallback (): void {
-    const inputs = this.createInputs()
-    this.wrapper.append(inputs)
-    this.wrapper.append(this.hint)
-    if (!this.parentNode) throw new Error('no parentNode for app-search-button')
-    this.parentNode.replaceChild(this.wrapper, this)
-    this.handleFocusLessTyping()
-    on<AppStatusEvent>('app-status', this.onStatus.bind(this))
-    on<ItemsReadyEvent>('items-ready', () => {
-      inputs.classList.remove('pointer-events-none')
-      inputs.classList.remove('opacity-50')
-    })
   }
 })

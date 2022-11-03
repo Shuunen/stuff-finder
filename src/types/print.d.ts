@@ -5,8 +5,11 @@ interface PrintData {
   text: string
 }
 
-type PrintFormData = { size: PrintFormDataSize } & AppFormData
+type PrintFormData = AppFormData & { size: PrintFormDataSize }
 
-type PrintFormDataSize = '40x30' | '40x20'
+const enum PrintFormDataSize {
+  rect40x20 = '40x20',
+  rect40x30 = '40x30',
+}
 
-type PrintInputData = Omit<Item, 'category' | 'photo' | 'price' | 'ref-printed' | 'status' | 'updated-on'>
+type PrintInputData = Omit<Item, ItemField.category | ItemField.photo | ItemField.price | ItemField.referencePrinted | ItemField.status | ItemField.updatedOn>

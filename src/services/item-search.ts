@@ -1,28 +1,49 @@
-import { capitalize, div, dom, emit, on, storage } from 'shuutils'
+import { capitalize, copy, div, emit, on, storage } from 'shuutils'
 import type { AppForm } from '../components/form'
 import { EMPTY_APP_SETTINGS } from '../constants'
 import { find, get, logger } from '../utils'
 
+const EMPTY_ITEM_SUGGESTIONS: ItemSuggestions = {
+  [ItemField.name]: [],
+  [ItemField.brand]: [],
+  [ItemField.details]: [],
+  [ItemField.reference]: [],
+  [ItemField.barcode]: [],
+  [ItemField.category]: [],
+  [ItemField.location]: [],
+  [ItemField.box]: [],
+  [ItemField.drawer]: [],
+  [ItemField.status]: [ItemStatus.acheté],
+  [ItemField.price]: [],
+  [ItemField.photo]: [],
+  [ItemField.referencePrinted]: ['true'],
+  [ItemField.updatedOn]: [],
+  [ItemField.id]: [],
+}
+
 class ItemSearch {
-  str = 'plop'
-  form = dom('form')
-  wrap = ''
-  constructor () {
+
+  private wrap = ''
+
+  public constructor () {
     on<AppFormEditItemChangeEvent>('app-form--edit-item--change', this.onEditItemFormChange.bind(this))
     on<AppModalAddItemOpenEvent>('app-modal--add-item--open', this.onModalOpen.bind(this))
     on<AppModalPrintOneOpenEvent>('app-modal--print-one--open', this.setPrinted.bind(this))
     on<AppSearchItemEvent>('app-search-item', this.onSearchItem.bind(this))
   }
-  onSearchItem (data: AppFormData): void {
+
+  private onSearchItem (data: AppFormData): void {
     void this.search(String(data['input']))
   }
-  onEditItemFormChange (data: FormEditFormData): void {
+
+  private onEditItemFormChange (data: FormEditFormData): void {
     logger.log('onEditItemFormChange', data)
     const form = find.one<AppForm>(`app-form[data-id="${data.id}"]`)
     this.setPrintData(data, form)
     this.onlyRequireReferenceOrBarcode(data, form)
   }
-  onlyRequireReferenceOrBarcode (data: FormEditFormData, form: AppForm): void {
+
+  private onlyRequireReferenceOrBarcode (data: FormEditFormData, form: AppForm): void {
     const reference = find.one<HTMLInputElement>('input[name="reference"]', form)
     const barcode = find.oneOrNone<HTMLInputElement>('input[name="barcode"]', form)
     if (!barcode) return
@@ -30,23 +51,26 @@ class ItemSearch {
     reference.required = !(data.barcode.length > 0 && barcode.checkValidity())
     form.validateSync()
   }
-  setPrintData (data: FormEditFormData, form: AppForm): void {
+
+  private setPrintData (data: FormEditFormData, form: AppForm): void {
     const printTrigger = find.one<HTMLButtonElement>(`[data-id="${data.id}"][data-action="app-modal--print-one--open"]`, form)
     printTrigger.disabled = !data.formValid
-    if (!data.formValid) return logger.log('form not valid, not setting print data')
+    if (!data.formValid) { logger.log('form not valid, not setting print data'); return }
     logger.log('setPrintDataSync for item', data, printTrigger)
     const printInputData: PrintInputData = { id: data.id, name: data.name, brand: data.brand, details: data.details, reference: data.reference, barcode: data.barcode, box: data.box, drawer: data.drawer, location: data.location }
     printTrigger.dataset['payload'] = JSON.stringify(printInputData)
   }
-  getWrapApiKey (): string {
+
+  private getWrapApiKey (): string {
     if (this.wrap.length > 0) return this.wrap
     const settings = storage.get<AppSettings>('app-settings', EMPTY_APP_SETTINGS)
-    this.wrap = (!settings.wrap || settings.wrap.length === 0) ? '' : settings.wrap
+    this.wrap = !settings.wrap || settings.wrap.length === 0 ? '' : settings.wrap
     if (this.wrap === '') logger.showLog('no wrap api key available in settings stored')
     return this.wrap
   }
-  onModalOpen (element?: HTMLElement): void {
-    const str = element ? (element.dataset['input'] ?? '') : ''
+
+  private onModalOpen (element?: HTMLElement): void {
+    const str = element ? element.dataset['input'] ?? '' : ''
     if (str.length === 0) logger.log('no search input found')
     const input = find.one<HTMLInputElement>('app-form[name="search-item"] input')
     input.value = str
@@ -54,44 +78,49 @@ class ItemSearch {
     this.setDefaults()
     void this.search(str)
   }
-  setupItemForm (): void {
+
+  private setupItemForm (): void {
     const modal = find.one('.app-modal--add-item')
     find.oneOrNone('app-form[name="edit-item"]', modal)?.remove()
     const template = find.one<HTMLTemplateElement>('template#edit-item')
     const form = div('container', template.innerHTML).firstElementChild as HTMLElement
-    form.dataset['id'] = ''
-    find.one<HTMLButtonElement>('[data-action="app-modal--print-one--open"]', form).dataset['id'] = ''
+    form.dataset[ItemField.id] = ''
+    find.one<HTMLButtonElement>('[data-action="app-modal--print-one--open"]', form).dataset[ItemField.id] = ''
     form.setAttribute('on-close', 'app-modal--add-item--close')
     const content = find.one('.content', modal)
     content.append(form)
-    this.form = form as HTMLFormElement
   }
-  setPrinted (data: PrintInputData): void {
+
+  private setPrinted (data: PrintInputData): void {
     const form = find.one<AppForm>(`app-form[data-id="${data.id}"]`)
     find.one<HTMLInputElement>('input[name="ref-printed"]', form).checked = true
     form.validateSync()
   }
-  setDefaults (): void {
-    const defaultStatus: Item['status'] = 'acheté'
-    find.one<HTMLSelectElement>('.app-modal.visible select[name="status"]').value = defaultStatus
+
+  private setDefaults (): void {
+    find.one<HTMLSelectElement>('.app-modal.visible select[name="status"]').value = ItemStatus.acheté
   }
-  async search (str: string): Promise<void> {
+
+  private async search (str: string): Promise<void> {
     logger.log('search', str)
     emit<AppLoaderToggleEvent>('app-loader--toggle', true)
     const items = storage.get<Item[]>('items', [])
-    const result = items.find(item => (item.reference === str || item.barcode === str))
+    const result = items.find(item => item.reference === str || item.barcode === str)
     const appError = find.one('app-form[name="search-item"] .app-error')
-    appError.textContent = (result && str.length > 0) ? 'ITEM ALREADY EXISTS ! You might not want to add it... again.' : ''
+    appError.textContent = result && str.length > 0 ? 'ITEM ALREADY EXISTS ! You might not want to add it... again.' : ''
     if (str.length > 0) emit<AppFormEditItemSuggestionsEvent>('app-form--edit-item--suggestions', await this.getSuggestions(str))
     emit<AppLoaderToggleEvent>('app-loader--toggle', false)
   }
-  priceParse (price?: string | number): string {
+
+  private priceParse (price?: number | string): string {
     if (price === undefined) return ''
     if (typeof price === 'string') return Math.round(Number.parseFloat(price)).toString()
     return Math.round(price).toString()
   }
-  async getSuggestions (str: string): Promise<ItemSuggestions> {
-    const suggestions: ItemSuggestions = { 'name': [], 'brand': [], 'details': [], 'reference': [], 'barcode': [], 'photo': [], 'status': ['acheté'], 'ref-printed': ['true'], 'category': [], 'box': [], 'drawer': [], 'id': [], 'location': [], 'price': [], 'updated-on': [] }
+
+  private async getSuggestions (str: string): Promise<ItemSuggestions> {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    const suggestions = copy(EMPTY_ITEM_SUGGESTIONS)
     await this.addSuggestionsFromDeyes(suggestions, str)
     await this.addSuggestionsFromAliEx(suggestions, str)
     await this.addSuggestionsFromAmzn(suggestions, str)
@@ -102,17 +131,19 @@ class ItemSearch {
       if (suggestions[k].length === 0) delete suggestions[k] // clear empty fields
       else suggestions[k] = suggestions[k].filter((value, index, array) => array.indexOf(value) === index) // remove duplicates
     }
-    const clean: (keyof Item)[] = ['name', 'details']
+    const clean: ItemField[] = [ItemField.name, ItemField.details]
     clean.forEach((key) => { suggestions[key] = suggestions[key].map(suggestion => capitalize(suggestion, true)) })
     logger.log('final suggestions', suggestions)
     return suggestions
   }
-  async addSuggestionsFromWrap<T> (endpoint: string): Promise<T> {
+
+  private async addSuggestionsFromWrap<T> (endpoint: string): Promise<T> {
     const wrapApiKey = this.getWrapApiKey()
     if (wrapApiKey === '') return {} as T
     return get<T>(`https://wrapapi.com/use/jojo/${endpoint}&wrapAPIKey=${wrapApiKey}`)
   }
-  async addSuggestionsFromDeyes (suggestions: ItemSuggestions, code: string): Promise<void> {
+
+  private async addSuggestionsFromDeyes (suggestions: ItemSuggestions, code: string): Promise<void> {
     const response = await this.addSuggestionsFromWrap<WrapApiDeyesResponse>(`deyes/json/0.0.2?code=${code}`)
     const data = response.data
     if (!response.success) return
@@ -120,11 +151,13 @@ class ItemSearch {
     suggestions.name.push(data.name)
     suggestions.brand.push(data.brand.name)
     suggestions.details.push(data.description)
-    if (data.image[0]) suggestions.photo.push(data.image[0])
+    const image = data.image[0]
+    if (image !== undefined) suggestions.photo.push(image)
     suggestions.price.push(this.priceParse(data.offers.price))
     suggestions.reference.push(data.gtin13)
   }
-  async addSuggestionsFromAmzn (suggestions: ItemSuggestions, str: string): Promise<void> {
+
+  private async addSuggestionsFromAmzn (suggestions: ItemSuggestions, str: string): Promise<void> {
     const response = await this.addSuggestionsFromWrap<WrapApiAmznResponse>(`amzn/search/0.0.3?keywords=${str}`)
     if (!response.success) return
     const data = response.data
@@ -132,12 +165,13 @@ class ItemSearch {
     data.items.splice(0, 5).forEach(item => {
       suggestions.details.push(item.title)
       suggestions.photo.push(item.photo)
-      if (item.price) suggestions.price.push(this.priceParse(item.price))
-      const asin = item.url.match(/\/dp\/(\w+)/) // get the asin from url
-      if (asin?.[1]) suggestions.reference.push(asin[1])
+      if (item.price !== undefined) suggestions.price.push(this.priceParse(item.price))
+      const asin = /\/dp\/(\w+)/.exec(item.url)?.[1] // get the asin from url
+      if (asin !== undefined) suggestions.reference.push(asin)
     })
   }
-  async addSuggestionsFromAliEx (suggestions: ItemSuggestions, str: string): Promise<void> {
+
+  private async addSuggestionsFromAliEx (suggestions: ItemSuggestions, str: string): Promise<void> {
     const response = await this.addSuggestionsFromWrap<WrapApiAliExResponse>(`aliex/search/0.0.1?str=${str}`)
     if (!response.success) return
     const data = response.data
@@ -149,7 +183,8 @@ class ItemSearch {
       suggestions.reference.push(item.reference)
     })
   }
-  async addSuggestionsFromCampo (suggestions: ItemSuggestions, str: string): Promise<void> {
+
+  private async addSuggestionsFromCampo (suggestions: ItemSuggestions, str: string): Promise<void> {
     const response = await this.addSuggestionsFromWrap<WrapApiCampoResponse>(`alcampo/search/0.0.3?str=${str}`)
     if (!response.success) return
     const data = response.data
@@ -158,7 +193,7 @@ class ItemSearch {
       suggestions.brand.push(item.brand)
       suggestions.name.push(item.title)
       suggestions.photo.push(item.photo)
-      if (item.price) suggestions.price.push(this.priceParse(item.price))
+      if (item.price !== undefined) suggestions.price.push(this.priceParse(item.price))
       suggestions.reference.push(item.uuid)
     })
   }

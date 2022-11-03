@@ -1,26 +1,32 @@
 import { on, sleep } from 'shuutils'
 
 class AppSound {
-  audioContext: AudioContext | undefined
-  constructor () {
+
+  private audioContext: AudioContext | undefined
+
+  public constructor () {
     on<AppSoundInfoEvent>('app-sound--info', this.onInfo.bind(this))
     on<AppSoundErrorEvent>('app-sound--error', this.onError.bind(this))
     on<AppSoundSuccessEvent>('app-sound--success', this.onSuccess.bind(this))
   }
-  onInfo (): void {
+
+  private onInfo (): void {
     this.playTone(400, 0.7)
   }
-  async onError (): Promise<void> {
+
+  private async onError (): Promise<void> {
     this.playTone(200, 0.4)
     await sleep(100)
     this.playTone(100, 0.7)
   }
-  async onSuccess (): Promise<void> {
+
+  private async onSuccess (): Promise<void> {
     this.playTone(600, 0.4)
     await sleep(100)
     this.playTone(800, 0.7)
   }
-  playTone (frequency = 400, seconds = 1): void {
+
+  private playTone (frequency = 400, seconds = 1): void {
     if (!this.audioContext) this.audioContext = new window.AudioContext({ latencyHint: 'interactive' })
     const o = this.audioContext.createOscillator()
     const g = this.audioContext.createGain()

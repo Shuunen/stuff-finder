@@ -3,18 +3,31 @@ import { DEFAULT_IMAGE, EMPTY_ITEM } from '../constants'
 import { find, logger } from '../utils'
 
 window.customElements.define('app-search-results', class extends HTMLElement {
-  template = ''
-  header = h1('')
-  list = div('')
-  input = ''
-  results: Item[] = []
-  async onResults (event: SearchResultsEvent): Promise<void> {
+
+  private template = ''
+
+  private header = h1('')
+
+  private list = div('')
+
+  private results: Item[] = []
+
+  public connectedCallback (): void {
+    on<SearchResultsEvent>('search-results', this.onResults.bind(this))
+    on<SelectResultEvent>('select-result', this.onSelect.bind(this))
+    // on<AppModalEditItemCloseEvent>('app-modal--edit-item--close', this.updateResults.bind(this)) // TODO avoid refreshing every time
+    this.template = find.one('template#search-results-list-item').innerHTML
+    const modal = find.one<HTMLDivElement>('.app-modal--search-results')
+    this.header = find.one<HTMLHeadingElement>('.app-header', modal)
+    this.list = find.one<HTMLDivElement>('.app-list.app-results', modal)
+  }
+
+  private async onResults (event: SearchResultsEvent): Promise<void> {
     this.header.textContent = event.title
     this.results = event.results
-    this.input = event.input
     this.list.innerHTML = event.results.map(result => {
       const visual = result.photo?.[0]?.url ?? DEFAULT_IMAGE
-      const updated = readableTimeAgo((new Date(result['updated-on'])))
+      const updated = readableTimeAgo(new Date(result[ItemField.updatedOn]))
       const data = { ...Object.assign({}, EMPTY_ITEM, result), visual, updated }
       return fillTemplate(this.template, data)
     }).join('')
@@ -26,24 +39,17 @@ window.customElements.define('app-search-results', class extends HTMLElement {
     await sleep(300)
     if (event.scrollTop) this.list.firstElementChild?.scrollIntoView()
   }
-  onSelect (id: string): void {
-    const item = this.results.find(item => item.id === id)
-    if (!item) return logger.showError('failed to find item with this id : ' + id)
+
+  private onSelect (id: string): void {
+    const item = this.results.find(anItem => anItem.id === id)
+    if (!item) { logger.showError('failed to find item with this id : ' + id); return }
     emit<EditItemEvent>('edit-item', item)
   }
-  updateResults (): void {
-    logger.showLog('update search results...')
-    const origin: SearchOrigin = 'search-results'
-    const data = { str: this.input, origin, scrollTop: false }
-    emit<SearchStartEvent>('search-start', data)
-  }
-  connectedCallback (): void {
-    on<SearchResultsEvent>('search-results', this.onResults.bind(this))
-    on<SelectResultEvent>('select-result', this.onSelect.bind(this))
-    // on<AppModalEditItemCloseEvent>('app-modal--edit-item--close', this.updateResults.bind(this)) // TODO avoid refreshing every time
-    this.template = find.one('template#search-results-list-item').innerHTML
-    const modal = find.one<HTMLDivElement>('.app-modal--search-results')
-    this.header = find.one<HTMLHeadingElement>('.app-header', modal)
-    this.list = find.one<HTMLDivElement>('.app-list.app-results', modal)
-  }
+
+  // private updateResults (): void {
+  //   logger.showLog('update search results...')
+  //   const origin: SearchOrigin = 'search-results'
+  //   const data = { str: this.input, origin, scrollTop: false }
+  //   emit<SearchStartEvent>('search-start', data)
+  // }
 })

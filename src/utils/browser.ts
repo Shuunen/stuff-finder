@@ -9,10 +9,25 @@ export const button = (content: string, classes = '', secondary = false): HTMLBu
   return button_
 }
 
-const request = async <T> (method: 'patch' | 'post' | 'get', url: string, data?: Record<string, unknown>): Promise<T> => {
+/* eslint-disable no-console */
+export const logger = {
+  error: (message: string, ...data: readonly unknown[]): void => { console.error(message, ...data) },
+  showError: (message: string, ...data: readonly unknown[]): void => {
+    console.error(message, ...data)
+    emit<AppToasterShowEvent>('app-toaster--show', { type: 'error', message })
+  },
+  log: (message: string, ...data: readonly unknown[]): void => { console.log(message, ...data) },
+  showLog: (message: string, ...data: readonly unknown[]): void => {
+    console.log(message, ...data)
+    emit<AppToasterShowEvent>('app-toaster--show', { type: 'info', message })
+  },
+}
+/* eslint-enable no-console */
+
+const request = async <T> (method: 'get' | 'patch' | 'post', url: string, data?: Record<string, unknown>): Promise<T> => {
   const options: RequestInit = { headers: JSON_HEADERS, method }
   if (data) options.body = JSON.stringify(data)
-  return fetch(url, options).then(response => response.json()).catch(error => logger.showError((error as Error).message)) as Promise<T>
+  return fetch(url, options).then(async (response: Response) => response.json()).catch(error => { logger.showError((error as Error).message) }) as Promise<T>
 }
 
 export const patch = async (url: string, data: Record<string, unknown>): Promise<AirtableRecord> => request('patch', url, data)
@@ -22,46 +37,31 @@ export const post = async (url: string, data: Record<string, unknown>): Promise<
 export const get = async <T> (url: string): Promise<T> => {
   const uuid = urlToUuid(url)
   const cached = storage.get<T>(uuid, undefined, sessionStorage)
-  if (cached) return cached
+  if (cached !== undefined) return cached
   const response = await request<T>('get', url)
   storage.set(uuid, response, sessionStorage)
   return response
 }
 
-/* eslint-disable no-console */
-export const logger = {
-  error: (message: string, ...data: unknown[]): void => console.error(message, ...data),
-  showError: (message: string, ...data: unknown[]): void => {
-    console.error(message, ...data)
-    emit<AppToasterShowEvent>('app-toaster--show', { type: 'error', message })
-  },
-  log: (message: string, ...data: unknown[]): void => console.log(message, ...data),
-  showLog: (message: string, ...data: unknown[]): void => {
-    console.log(message, ...data)
-    emit<AppToasterShowEvent>('app-toaster--show', { type: 'info', message })
-  },
-}
-/* eslint-enable no-console */
-
 /* eslint-disable no-restricted-properties, unicorn/prefer-spread */
 export const find = {
-  one: <T extends Element = Element> (selector: string, context: Element | Document = document): T => {
+  one: <T extends Element = Element> (selector: string, context: Document | Element = document): T => {
     const element = context.querySelector<T>(selector)
     if (!element) throw new Error(`no element found for selector "${selector}"`)
     return element
   },
-  oneOrNone: <T extends Element = Element> (selector: string, context: Element | Document = document): T | null => context.querySelector<T>(selector),
-  all: <T extends Element = Element> (selector: string, context: Element | Document = document): T[] => {
+  oneOrNone: <T extends Element = Element> (selector: string, context: Document | Element = document): T | null => context.querySelector<T>(selector),
+  all: <T extends Element = Element> (selector: string, context: Document | Element = document): T[] => {
     const elements = context.querySelectorAll<T>(selector)
     if (elements.length === 0) throw new Error(`no elements found for selector "${selector}"`)
     return Array.from(elements)
   },
-  allOrNone: <T extends Element = Element> (selector: string, context: Element | Document = document): T[] => Array.from(context.querySelectorAll<T>(selector)),
+  allOrNone: <T extends Element = Element> (selector: string, context: Document | Element = document): T[] => Array.from(context.querySelectorAll<T>(selector)),
 }
 /* eslint-enable no-restricted-properties, unicorn/prefer-spread */
 
 export const fadeIn = async (element: HTMLElement): Promise<void> => {
-  if (!element.classList.contains('app-hide')) return logger.error('please add "app-hide" class before mounting dom element and then call fade-in')
+  if (!element.classList.contains('app-hide')) { logger.error('please add "app-hide" class before mounting dom element and then call fade-in'); return }
   element.classList.remove('hidden')
   await sleep(10)
   element.style.opacity = '1'
@@ -77,7 +77,7 @@ export const fadeOut = async (element: HTMLElement, destroy = false): Promise<vo
   element.remove()
 }
 
-export const valuesToOptions = (array: string[], selected?: string): string => {
+export const valuesToOptions = (array: readonly string[], selected?: string): string => {
   return array.map(value => `<option value="${value}" ${selected === value ? 'selected' : ''}>${value}</option>`).join('')
 }
 

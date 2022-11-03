@@ -2,17 +2,22 @@ import { emit, on, sleep } from 'shuutils'
 import { logger } from '../utils'
 
 class AppSpeech {
-  isMobile = typeof window.orientation !== 'undefined'
-  recognition!: SpeechRecognition
-  recognitionSucceed = false
-  constructor () {
+
+  private readonly isMobile = typeof window.orientation !== 'undefined'
+
+  private recognition!: SpeechRecognition
+
+  private recognitionSucceed = false
+
+  public constructor () {
     this.initRecognition()
     on<AppSpeechStartEvent>('app-speech--start', this.onStart.bind(this))
   }
-  initRecognition (): void {
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition
-    const recognition = new Recognition()
+
+  private initRecognition (): void {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition, @typescript-eslint/strict-boolean-expressions
+    const availableSpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
+    const recognition = new availableSpeechRecognition()
     recognition.lang = navigator.language
     recognition.interimResults = false
     recognition.maxAlternatives = 1
@@ -23,22 +28,25 @@ class AppSpeech {
       if (!result) throw new Error('no recognition first result found')
       this.onSuccess(result.transcript, result.confidence)
     }
-    recognition.onspeechend = (): Promise<void> => this.onEnd()
-    recognition.onnomatch = (): void => this.onFail()
-    recognition.addEventListener('error', (event: RecognitionErrorEvent) => this.onError(event.error))
+    recognition.onspeechend = async (): Promise<void> => this.onEnd()
+    recognition.onnomatch = (): void => { this.onFail() }
+    recognition.addEventListener('error', (event: RecognitionErrorEvent) => { this.onError(event.error) })
     this.recognition = recognition
   }
-  onStart (): void {
+
+  private onStart (): void {
     this.recognition.start()
     this.recognitionSucceed = false
     this.setStatus('listening')
   }
-  onSuccess (sentence: string, confidence: number): void {
+
+  private onSuccess (sentence: string, confidence: number): void {
     this.recognitionSucceed = true
     logger.log('confidence', confidence)
     emit<SearchStartEvent>('search-start', { str: sentence, origin: 'speech' })
   }
-  async onEnd (): Promise<void> {
+
+  private async onEnd (): Promise<void> {
     this.recognition.stop()
     // this delay the test on recognitionSucceed because onEnd is triggered just before onSuccess
     // this lead recognitionSucceed to be still false by default at this moment and this next line conclude that recognition has failed
@@ -46,14 +54,17 @@ class AppSpeech {
     await sleep(200)
     this.setStatus(this.recognitionSucceed ? 'ready' : 'failed')
   }
-  onError (reason: string): void {
+
+  private onError (reason: string): void {
     logger.showError('error occurred in recognition : ' + reason)
     this.onFail()
   }
-  onFail (): void {
+
+  private onFail (): void {
     this.setStatus('failed')
   }
-  setStatus (status: AppStatus): void {
+
+  private setStatus (status: AppStatus): void {
     emit<AppStatusEvent>('app-status', status)
     if (status === 'listening' && !this.isMobile) emit<AppSoundInfoEvent>('app-sound--info')
     else if (status === 'failed') emit<AppSoundErrorEvent>('app-sound--error')

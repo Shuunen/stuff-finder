@@ -4,12 +4,11 @@ const svg = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24
 const icon = div('h-24 w-24 animate-spin opacity-50', svg)
 
 window.customElements.define('app-loader', class extends HTMLElement {
-  backdrop = div('app-loader fixed top-0 left-0 z-50 flex h-full w-full items-center justify-center bg-white/50')
-  connectedCallback (): void {
-    this.backdrop.append(icon)
-    const toggle = debounce((active: boolean) => this.backdrop.classList.toggle('hidden', !active), 100)
-    on<AppLoaderToggleEvent>('app-loader--toggle', active => toggle(active))
+  public connectedCallback (): void {
+    const backdrop = div('app-loader fixed top-0 left-0 z-50 flex h-full w-full items-center justify-center bg-white/50', icon)
+    const toggle = debounce((active: boolean) => backdrop.classList.toggle('hidden', !active), 100)
+    on<AppLoaderToggleEvent>('app-loader--toggle', async active => toggle(active))
     if (!this.parentNode) throw new Error('no parentNode for app-loader')
-    this.parentNode.replaceChild(this.backdrop, this)
+    this.parentNode.replaceChild(backdrop, this)
   }
 })

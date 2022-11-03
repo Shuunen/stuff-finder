@@ -13,28 +13,55 @@ interface ItemPhoto {
   url: string
   width: number
   thumbnails: {
-    small: ItemThumbnail,
-    large: ItemThumbnail,
+    small: ItemThumbnail
+    large: ItemThumbnail
     full: ItemThumbnail
   }
 }
 
+const enum ItemStatus {
+  acheté = 'acheté',
+  défectueux = 'défectueux',
+  donné = 'donné',
+  jeté = 'jeté',
+  renvoyé = 'renvoyé',
+  vendu = 'vendu',
+}
+
+const enum ItemField {
+  barcode = 'barcode',
+  box = 'box',
+  brand = 'brand',
+  category = 'category',
+  details = 'details',
+  drawer = 'drawer',
+  id = 'id',
+  location = 'location',
+  name = 'name',
+  photo = 'photo',
+  price = 'price',
+  reference = 'reference',
+  referencePrinted = 'ref-printed',
+  status = 'status',
+  updatedOn = 'updated-on',
+}
+
 interface Item {
-  'barcode': string
-  'box': string
-  'brand': string
-  'category': string
-  'details': string
-  'drawer': string
-  'id': string
-  'location': string
-  'name': string
-  'price'?: number
-  'photo'?: ItemPhoto[]
-  'reference': string
-  'ref-printed': boolean
-  'status': string
-  'updated-on': string
+  [ItemField.barcode]: string
+  [ItemField.box]: string
+  [ItemField.brand]: string
+  [ItemField.category]: string
+  [ItemField.details]: string
+  [ItemField.drawer]: string
+  [ItemField.id]: string
+  [ItemField.location]: string
+  [ItemField.name]: string
+  [ItemField.price]?: number
+  [ItemField.photo]?: ItemPhoto[]
+  [ItemField.reference]: string
+  [ItemField.referencePrinted]: boolean
+  [ItemField.status]: ItemStatus
+  [ItemField.updatedOn]: string
 }
 
 type ItemSuggestions = Record<keyof Item, string[]>

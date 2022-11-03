@@ -1,10 +1,11 @@
 import { emit, on, sleep } from 'shuutils'
 
 class UrlService {
-  constructor () {
+  public constructor () {
     on<ItemsReadyEvent>('items-ready', this.check.bind(this))
   }
-  async check (): Promise<void> {
+
+  private async check (): Promise<void> {
     await sleep(100) // needed
     const parameters = new URLSearchParams(window.location.search)
     parameters.forEach((value, key) => {
@@ -12,7 +13,8 @@ class UrlService {
       else if (key === 'add') this.openAddItemModal(value)
     })
   }
-  openAddItemModal (input: string): void {
+
+  private openAddItemModal (input: string): void {
     const link = document.createElement('a')
     link.dataset['input'] = input
     emit<AppModalAddItemOpenEvent>('app-modal--add-item--open', link)

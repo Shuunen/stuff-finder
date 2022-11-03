@@ -1,2 +1,2 @@
 declare module '@camwiegert/typical'
-type TypicalArguments = (string | number)[]
+type TypicalArguments = (number | string)[]
