@@ -82,7 +82,13 @@ export const valuesToOptions = (array: readonly string[], selected?: string): st
   return array.map(value => `<option value="${value}" ${selected === value ? 'selected' : ''}>${value}</option>`).join('')
 }
 
-export const isVisible = (element: HTMLElement): boolean => {
+export const isVisible = (element: Element | HTMLElement | undefined): boolean => {
+  if (!element) {
+    logger.error('element is undefined, so it is not visible')
+    return false
+  }
   const { top, bottom, width, height } = element.getBoundingClientRect()
-  return width > 0 && height > 0 && top >= 0 && bottom <= window.innerHeight
+  const visible = width > 0 && height > 0 && top >= 0 && bottom <= window.innerHeight
+  // logger.log(`element is ${visible ? '' : 'not '}visible`, element)
+  return visible
 }
