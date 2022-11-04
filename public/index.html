@@ -70,7 +70,7 @@
       <label>Name<input required name=name type=text minlength=3 maxlength=50 autofocus /></label>
       <label>Brand<input name=brand type=text /></label>
       <label>Details<input name=details type=text /></label>
-      <label>Reference<input name=reference type=text minlength=7 maxlength=20 required /></label>
+      <label>Reference<input name=reference type=text minlength=5 maxlength=20 required /></label>
       <label>Barcode<input name=barcode type=text required /></label>
       <label>Status<select name=status>{{ statuses }}</select></label>
       <label>Location <select name=location>{{ locations }}</select></label>
@@ -180,7 +180,7 @@
         <input name=name type=text placeholder=Name required minlength=3 maxlength=50 autofocus value="{{ name }}">
         <input name=details type=text placeholder=Details value="{{ details }}">
         <input name=brand type=text placeholder=Brand value="{{ brand }}">
-        <input name=reference type=text placeholder=Reference required minlength=7 maxlength=20 value="{{ reference }}">
+        <input name=reference type=text placeholder=Reference required minlength=5 maxlength=20 value="{{ reference }}">
         <select name=box>{{ boxes }}</select>
         <select name=drawer>{{ drawers }}</select>
         <label>Printed ?<input type=checkbox name="ref-printed" /></label> <!-- TODO use a visual switch/toggle -->
