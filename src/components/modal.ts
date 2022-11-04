@@ -1,4 +1,5 @@
 import { div, emit, h2, link, on, tw } from 'shuutils'
+import type { AppModalCloseEvent, AppModalOpenEvent, AppModalReadyEvent } from '../types'
 import { fadeIn, fadeOut, find } from '../utils'
 
 window.customElements.define('app-modal', class extends HTMLElement {

@@ -1,3 +1,6 @@
+import type { AppSettings, CommonLists, Item, ItemSuggestions } from './types'
+import { ItemField, ItemStatus } from './types'
+
 export const JSON_HEADERS = {
   // eslint-disable-next-line @typescript-eslint/naming-convention
   'Accept': 'application/json',
@@ -39,4 +42,22 @@ export const EMPTY_ITEM: Item = {
   [ItemField.referencePrinted]: false,
   [ItemField.status]: ItemStatus.acheté,
   [ItemField.updatedOn]: '',
+}
+
+export const EMPTY_ITEM_SUGGESTIONS: ItemSuggestions = {
+  [ItemField.name]: [],
+  [ItemField.brand]: [],
+  [ItemField.details]: [],
+  [ItemField.reference]: [],
+  [ItemField.barcode]: [],
+  [ItemField.category]: [],
+  [ItemField.location]: [],
+  [ItemField.box]: [],
+  [ItemField.drawer]: [],
+  [ItemField.status]: [ItemStatus.acheté],
+  [ItemField.price]: [],
+  [ItemField.photo]: [],
+  [ItemField.referencePrinted]: ['true'],
+  [ItemField.updatedOn]: [],
+  [ItemField.id]: [],
 }

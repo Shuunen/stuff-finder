@@ -1,5 +1,6 @@
 import { check, checksRun } from 'shuutils'
 import { inputToPrintData, inputToPrintQrCodeVisual, inputToPrintText, itemToPrintLocation } from '../src/services/print.service'
+import type { PrintInputData } from '../src/types'
 
 const itemA: PrintInputData = {
   id: '1234567',

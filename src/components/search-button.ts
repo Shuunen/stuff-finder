@@ -1,4 +1,5 @@
 import { div, dom, emit, image, on, p, pickOne, tw } from 'shuutils'
+import type { AppScanCodeStartEvent, AppSpeechStartEvent, AppStatus, AppStatusEvent, ItemsReadyEvent, SearchStartEvent } from '../types'
 import { button, logger } from '../utils'
 
 window.customElements.define('app-search-button', class extends HTMLElement {

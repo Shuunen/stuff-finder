@@ -1,4 +1,5 @@
 import { on, sleep } from 'shuutils'
+import type { AppSoundErrorEvent, AppSoundInfoEvent, AppSoundSuccessEvent } from '../types'
 
 class AppSound {
 

@@ -1,4 +1,5 @@
 import { emit, on, sleep } from 'shuutils'
+import type { AppModalAddItemOpenEvent, ItemsReadyEvent, SearchStartEvent } from '../types'
 
 class UrlService {
   public constructor () {

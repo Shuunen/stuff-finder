@@ -1,25 +1,9 @@
 import { capitalize, copy, div, emit, on, storage } from 'shuutils'
 import type { AppForm } from '../components/form'
-import { EMPTY_APP_SETTINGS } from '../constants'
+import { EMPTY_APP_SETTINGS, EMPTY_ITEM_SUGGESTIONS } from '../constants'
+import type { AppFormData, AppFormEditItemChangeEvent, AppFormEditItemSuggestionsEvent, AppLoaderToggleEvent, AppModalAddItemOpenEvent, AppModalPrintOneOpenEvent, AppSearchItemEvent, AppSettings, FormEditFormData, Item, ItemSuggestions, PrintInputData, WrapApiAliExResponse, WrapApiAmznResponse, WrapApiCampoResponse, WrapApiDeyesResponse } from '../types'
+import { ItemField, ItemStatus } from '../types'
 import { find, get, logger } from '../utils'
-
-const EMPTY_ITEM_SUGGESTIONS: ItemSuggestions = {
-  [ItemField.name]: [],
-  [ItemField.brand]: [],
-  [ItemField.details]: [],
-  [ItemField.reference]: [],
-  [ItemField.barcode]: [],
-  [ItemField.category]: [],
-  [ItemField.location]: [],
-  [ItemField.box]: [],
-  [ItemField.drawer]: [],
-  [ItemField.status]: [ItemStatus.acheté],
-  [ItemField.price]: [],
-  [ItemField.photo]: [],
-  [ItemField.referencePrinted]: ['true'],
-  [ItemField.updatedOn]: [],
-  [ItemField.id]: [],
-}
 
 class ItemSearch {
 

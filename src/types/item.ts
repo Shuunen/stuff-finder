@@ -1,10 +1,10 @@
-interface ItemThumbnail {
+export interface ItemThumbnail {
   url: string
   width: number
   height: number
 }
 
-interface ItemPhoto {
+export interface ItemPhoto {
   filename: string
   height: number
   id: string
@@ -19,7 +19,7 @@ interface ItemPhoto {
   }
 }
 
-const enum ItemStatus {
+export const enum ItemStatus {
   acheté = 'acheté',
   défectueux = 'défectueux',
   donné = 'donné',
@@ -28,7 +28,7 @@ const enum ItemStatus {
   vendu = 'vendu',
 }
 
-const enum ItemField {
+export const enum ItemField {
   barcode = 'barcode',
   box = 'box',
   brand = 'brand',
@@ -46,7 +46,7 @@ const enum ItemField {
   updatedOn = 'updated-on',
 }
 
-interface Item {
+export interface Item {
   [ItemField.barcode]: string
   [ItemField.box]: string
   [ItemField.brand]: string
@@ -64,9 +64,9 @@ interface Item {
   [ItemField.updatedOn]: string
 }
 
-type ItemSuggestions = Record<keyof Item, string[]>
+export type ItemSuggestions = Record<keyof Item, string[]>
 
-interface CommonLists {
+export interface CommonLists {
   boxes: string[]
   locations: string[]
   statuses: string[]

@@ -1,8 +1,11 @@
 import { div, fillTemplate, on, sleep } from 'shuutils'
 import { inputToPrintData } from '../services/print.service'
+import type { AppFormPrintOneChangeEvent, AppFormPrintOneReadyEvent, AppModalPrintOneCloseEvent, AppModalPrintOneOpenEvent, DoPrintOneEvent, PrintData, PrintFormData, PrintInputData, PrintOneEvent } from '../types'
+import { PrintFormDataSize } from '../types'
 import { find, logger } from '../utils'
 
 window.customElements.define('app-print-one', class extends HTMLElement {
+
   private data: PrintData | undefined
 
   private previewElement = div('')

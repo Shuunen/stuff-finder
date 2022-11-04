@@ -1,5 +1,6 @@
 import { dom, emit, sleep, storage, tw } from 'shuutils'
 import { JSON_HEADERS } from '../constants'
+import type { AirtableRecord, AppToasterShowEvent } from '../types'
 import { urlToUuid } from './url'
 
 export const button = (content: string, classes = '', secondary = false): HTMLButtonElement => {

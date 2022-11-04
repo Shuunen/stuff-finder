@@ -1,5 +1,7 @@
 import { div, emit, fillTemplate, on, storage, tw } from 'shuutils'
 import { EMPTY_COMMON_LISTS, EMPTY_ITEM } from '../constants'
+import type { AppLoaderToggleEvent, AppModalPrepareBarcodesOpenEvent, CommonLists, Item, ItemsReadyEvent } from '../types'
+import { ItemField, ItemStatus } from '../types'
 import { find, logger, valuesToOptions } from '../utils'
 
 window.customElements.define('app-print-barcodes', class extends HTMLElement {

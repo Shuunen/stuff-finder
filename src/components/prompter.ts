@@ -1,5 +1,6 @@
 import { type } from '@camwiegert/typical'
 import { div, h1, on } from 'shuutils'
+import type { AppPrompterTypeEvent } from '../types'
 
 window.customElements.define('app-prompter', class extends HTMLElement {
   public connectedCallback (): void {

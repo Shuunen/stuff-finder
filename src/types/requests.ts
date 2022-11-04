@@ -1,10 +1,11 @@
+import type { Item, ItemField } from './item'
 
-interface WrapApiResponse {
+export interface WrapApiResponse {
   messages: string[]
   success: boolean
 }
 
-interface WrapApiDeyesResponse extends WrapApiResponse {
+export interface WrapApiDeyesResponse extends WrapApiResponse {
   data: {
     brand: { name: string }
     name: string
@@ -15,7 +16,7 @@ interface WrapApiDeyesResponse extends WrapApiResponse {
   }
 }
 
-interface WrapApiAmznResponse extends WrapApiResponse {
+export interface WrapApiAmznResponse extends WrapApiResponse {
   data: {
     items: {
       title: string
@@ -26,7 +27,7 @@ interface WrapApiAmznResponse extends WrapApiResponse {
   }
 }
 
-interface WrapApiCampoResponse extends WrapApiResponse {
+export interface WrapApiCampoResponse extends WrapApiResponse {
   data: {
     items: {
       brand: string
@@ -40,7 +41,7 @@ interface WrapApiCampoResponse extends WrapApiResponse {
   }
 }
 
-interface WrapApiAliExResponse extends WrapApiResponse {
+export interface WrapApiAliExResponse extends WrapApiResponse {
   data: {
     items: {
       title: string
@@ -53,18 +54,18 @@ interface WrapApiAliExResponse extends WrapApiResponse {
   }
 }
 
-interface AirtableError {
+export interface AirtableError {
   message: string
   type: string
 }
 
-interface AirtableRecord {
+export interface AirtableRecord {
   id: string
   fields: Partial<Omit<Item, ItemField.id>>
   error?: AirtableError
 }
 
-interface AirtableResponse {
+export interface AirtableResponse {
   records: AirtableRecord[]
   error?: AirtableError
   offset?: string

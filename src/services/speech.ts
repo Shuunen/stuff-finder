@@ -1,4 +1,5 @@
 import { emit, on, sleep } from 'shuutils'
+import type { AppSoundErrorEvent, AppSoundInfoEvent, AppSpeechStartEvent, AppStatus, AppStatusEvent, RecognitionErrorEvent, SearchStartEvent } from '../types'
 import { logger } from '../utils'
 
 class AppSpeech {
