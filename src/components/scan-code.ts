@@ -32,6 +32,8 @@ window.customElements.define('app-scan-code', class extends HTMLElement {
     if (this.reader === undefined) throw new Error('failed to setup reader')
     await this.reader.decodeFromVideoDevice(this.deviceId, this.video, (result, error) => {
       if (error && !(error instanceof NotFoundException)) { logger.showError(error.message, error); return }
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+      if (result === null) return
       this.onResult(result.getText())
     })
   }
