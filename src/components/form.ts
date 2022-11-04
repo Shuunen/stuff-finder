@@ -56,6 +56,7 @@ export class AppForm extends HTMLElement {
       data[input.name] = value
     })
     data.formValid = this.els.form.checkValidity()
+    // logger.log('actual form data', data)
     return data
   }
 
@@ -68,7 +69,7 @@ export class AppForm extends HTMLElement {
     })
     if (this.warmUp) this.initialData = copy(this.data)
     logger.log(this.warmUp ? 'warming up, overwriting initial data' : 'NOT warming up, NOT overwriting initial data', { initialData: this.initialData })
-    this.validateSync()
+    this.validateBecause('set-data')
   }
 
   public connectedCallback (): void {
@@ -89,14 +90,19 @@ export class AppForm extends HTMLElement {
       event.preventDefault()
       if (this.allowSubmit) this.onSave()
     })
-    logger.log('form connected, setting initial data to', copy(this.data))
+    logger.log(`form ${this.name} connected, setting initial data to`, copy(this.data))
     this.initialData = this.data
-    this.validateSync()
+    this.validateBecause('connected-callback')
     emit<AppFormReadyEvent>(`${this._id}--ready`, this.data)
     void sleep(100).then(() => this.warmUp = false)
   }
 
-  public validateSync (): boolean {
+  public validateBecause (reason: string): void {
+    logger.log('validating because :', reason)
+    void this.validate()
+  }
+
+  private validateSync (): void {
     const isValid = this.els.form.checkValidity()
     this.data.formValid = isValid
     const dataChanged = objectSum(this.initialData) !== objectSum(this.data)
@@ -107,14 +113,13 @@ export class AppForm extends HTMLElement {
       const input = this.inputs.find(inputElement => inputElement.validationMessage.length > 0)
       if (input) this.setError(`Field "${input.name}" is invalid. ${input.validationMessage}`)
     } else if (dataChanged && !this.keepSaveActive) {
-      logger.log('form is valid and changed, reactivating save button', this.els.save)
+      logger.log(`form ${this.name} is valid and changed, reactivating save button`, this.els.save)
       logger.log('before and after', { bfr: this.initialData, aft: this.data })
       this.els.save.disabled = false
     }
     if (this.inline) this.els.footer.classList.toggle('hidden', !dataChanged && isValid)
     this.dataset['valid'] = String(isValid)
     void this.emitChange()
-    return isValid
   }
 
   private clearError (): void {
@@ -128,7 +133,7 @@ export class AppForm extends HTMLElement {
 
   private createClose (): HTMLButtonElement {
     const element = button(this.cancelLabel, 'close', true)
-    logger.log('form cancel will emit close event :', this.onCloseEventName, element)
+    logger.log(`form ${this.name} cancel will emit close event :`, this.onCloseEventName)
     element.addEventListener('click', () => emit<AppFormCloseEvent>(this.onCloseEventName))
     return element
   }
@@ -139,9 +144,8 @@ export class AppForm extends HTMLElement {
     else row.append(this.createClose())
     if (!this.keepSaveActive) this.els.save.disabled = true
     this.els.save.addEventListener('click', this.onSave.bind(this))
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    this.els.form.addEventListener('keyup', this.validate.bind(this))
-    this.els.form.addEventListener('change', this.validateSync.bind(this))
+    this.els.form.addEventListener('keyup', () => { this.validateBecause('keyup') })
+    this.els.form.addEventListener('change', () => { this.validateBecause('change') })
     row.append(this.els.save)
     return row
   }
@@ -151,13 +155,13 @@ export class AppForm extends HTMLElement {
     if (this.hideActionsOnSubmit) this.els.footer.classList.add('hidden')
   }
 
-
   private emitChangeSync (): void {
-    if (!isVisible(this.els.form)) { logger.log('form is not visible, not emitting change'); return }
+    const element = find.oneOrNone('input:not([type="hidden"]), select, textarea', this.els.form) ?? undefined
+    if (!isVisible(element)) { logger.log(`form ${this.name} is not visible, not emitting change`); return }
     if (objectSum(this.emittedData) === objectSum(this.data)) return
     this.emittedData = copy(this.data)
-    logger.log('emitting :', `${this._id}--change`, this.data)
-    emit<AppFormChangeEvent>(`${this._id}--change`, this.data)
+    logger.log('emitting :', `${this._id}--change`)
+    emit<AppFormChangeEvent>(`${this._id}--change`, this.emittedData)
   }
 
   private setInputValue (input: HTMLInputElement, value: AppFormDataValue): void {
@@ -167,6 +171,7 @@ export class AppForm extends HTMLElement {
   }
 
   private setPhoto (input: HTMLInputElement, data: string[] | boolean | number | string): void {
+    logger.log('setting photo', { input, data })
     if (['boolean', 'number'].includes(typeof data)) { logger.showError('photo data must be a string or array'); return }
     let url = ''
     if (typeof data === 'string') url = data

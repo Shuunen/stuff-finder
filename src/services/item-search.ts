@@ -1,7 +1,7 @@
 import { capitalize, copy, div, emit, on, storage } from 'shuutils'
 import type { AppForm } from '../components/form'
 import { EMPTY_APP_SETTINGS, EMPTY_ITEM_SUGGESTIONS } from '../constants'
-import type { AppFormData, AppFormEditItemChangeEvent, AppFormEditItemSuggestionsEvent, AppLoaderToggleEvent, AppModalAddItemOpenEvent, AppModalPrintOneOpenEvent, AppSearchItemEvent, AppSettings, FormEditFormData, Item, ItemSuggestions, PrintInputData, WrapApiAliExResponse, WrapApiAmznResponse, WrapApiCampoResponse, WrapApiDeyesResponse } from '../types'
+import type { AppFormData, AppFormEditItemChangeEvent, AppFormEditItemSetEvent, AppFormEditItemSuggestionsEvent, AppLoaderToggleEvent, AppModalAddItemOpenEvent, AppModalPrintOneOpenEvent, AppSearchItemEvent, AppSettings, FormEditFormData, Item, ItemSuggestions, PrintInputData, WrapApiAliExResponse, WrapApiAmznResponse, WrapApiCampoResponse, WrapApiDeyesResponse } from '../types'
 import { ItemField, ItemStatus } from '../types'
 import { find, get, logger } from '../utils'
 
@@ -46,9 +46,12 @@ class ItemSearch {
     const reference = find.one<HTMLInputElement>('input[name="reference"]', form)
     const barcode = find.oneOrNone<HTMLInputElement>('input[name="barcode"]', form)
     if (!barcode) return
+    const barcodeBefore = barcode.required
     barcode.required = !(data.reference.length > 0 && reference.checkValidity())
+    const referenceBefore = reference.required
     reference.required = !(data.barcode.length > 0 && barcode.checkValidity())
-    form.validateSync()
+    if (barcodeBefore === barcode.required && referenceBefore === reference.required) { logger.log('barcode and reference required state unchanged'); return }
+    form.validateBecause('reference-or-barcode-required-changed')
   }
 
   private setPrintData (data: FormEditFormData, form: AppForm): void {
@@ -93,7 +96,7 @@ class ItemSearch {
   private setPrinted (data: PrintInputData): void {
     const form = find.one<AppForm>(`app-form[data-id="${data.id}"]`)
     find.one<HTMLInputElement>('input[name="ref-printed"]', form).checked = true
-    form.validateSync()
+    form.validateBecause('ref-printed-changed')
   }
 
   private setDefaults (): void {
