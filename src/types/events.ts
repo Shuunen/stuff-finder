@@ -1,4 +1,4 @@
-import type { Item } from './item'
+import type { Item, ItemField } from './item'
 import type { PrintFormData, PrintInputData } from './print'
 import type { AppSettings } from './settings'
 
@@ -6,10 +6,10 @@ export type AppActionEvent = HTMLElement | object | string
 export type AppFormChangeEvent = AppFormData
 export type AppFormCloseEvent = undefined
 export type AppFormData = Record<string, AppFormDataValue> & { formValid: boolean }
-export type AppFormDataValue = string[] | boolean | number | string
+export type AppFormDataValue = boolean | number | string
 export type AppFormEditItemChangeEvent = FormEditFormData
 export type AppFormEditItemSaveEvent = Item
-export type AppFormEditItemSetEvent = Item
+export type AppFormEditItemSetEvent = Partial<FormEditFormData>
 export type AppFormEditItemSuggestionsEvent = FormSuggestions
 export type AppFormPrintOneChangeEvent = PrintFormData
 export type AppFormPrintOneReadyEvent = PrintFormData
@@ -49,7 +49,8 @@ export type AppToasterShowEvent = { type: 'error' | 'info' | 'success'; message:
 export type BarcodesToPrintEvent = Item[]
 export type DoPrintOneEvent = PrintInputData
 export type EditItemEvent = Item
-export type FormEditFormData = AppFormData & Item
+export type EditItemPhotoEvent = string
+export type FormEditFormData = AppFormData & Omit<Item, ItemField.photo> & { photo: string }
 export type FormIdErrorEvent = string
 export type FormIdSetEvent = AppFormData
 export type FormIdSuggestionsEvent = FormSuggestions

@@ -16,9 +16,9 @@ window.customElements.define('app-edit-item', class extends HTMLElement {
     logger.log('edit', item)
     const template = find.one('template#edit-item')
     const photo = item.photo?.[0]?.url ?? ''
-    const data = { photo, ...item }
+    const data = { ...item, photo }
     this.modal.innerHTML = fillTemplate(template.innerHTML, data)
-    emit<AppFormEditItemSetEvent>('app-form--edit-item--set', item)
+    emit<AppFormEditItemSetEvent>('app-form--edit-item--set', data)
     emit<AppModalEditItemOpenEvent>('app-modal--edit-item--open')
   }
 })
