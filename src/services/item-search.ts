@@ -23,8 +23,23 @@ class ItemSearch {
   private onEditItemFormChange (data: FormEditFormData): void {
     logger.log('onEditItemFormChange', data)
     const form = find.one<AppForm>(`app-form[data-id="${data.id}"]`)
+    this.tryToReducePhotoSize(data)
     this.setPrintData(data, form)
     this.onlyRequireReferenceOrBarcode(data, form)
+  }
+
+  private tryToReducePhotoSize (data: FormEditFormData): void {
+    const url = data.photo
+    if (url.length === 0) return
+    let finalUrl = url
+    if (url.includes('amazon.com')) {
+      if (url.includes('SL400')) return
+      // https://m.media-amazon.com/images/I/61UCb+zjYkL._AC_SL1500_.jpg
+      finalUrl = url.replace(/_SL\d+_/, '_SL400_')
+      if (finalUrl === url) logger.error('failed to reduce amazon photo url :', url)
+      else logger.log('reduced amazon photo size')
+    } else logger.log('no photo size reduction method set for url :', url)
+    emit<AppFormEditItemSetEvent>('app-form--edit-item--set', { photo: finalUrl })
   }
 
   private onlyRequireReferenceOrBarcode (data: FormEditFormData, form: AppForm): void {
