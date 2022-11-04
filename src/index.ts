@@ -221,9 +221,11 @@ class App {
     const fields: Partial<Record<ItemField, unknown>> = {}
     const data = { fields }
     fieldsToUpdate.forEach(field => {
-      if (item[field] !== undefined && field === ItemField.photo) data.fields[field] = [{ url: item[field] }]
-      else if ([ItemField.name, ItemField.brand, ItemField.details, ItemField.reference, ItemField.barcode].includes(field)) data.fields[field] = item[field]
-      else if (item[field] !== undefined || typeof item[field] === 'boolean') data.fields[field] = item[field]
+      const value = item[field]
+      if (value === undefined || value === '') return
+      if (field === ItemField.photo && Array.isArray(value) && value.length > 0) data.fields[field] = [{ url: value }]
+      else if ([ItemField.name, ItemField.brand, ItemField.details, ItemField.reference, ItemField.barcode].includes(field)) data.fields[field] = value
+      else if (typeof value === 'boolean') data.fields[field] = value
     })
     if (item.id) {
       const existing = this.items.find(existingItem => existingItem.id === item.id)
