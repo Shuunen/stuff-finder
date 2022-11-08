@@ -14,3 +14,10 @@ export const getAsin = (url: string): string | undefined => {
   const match = regex.exec(check) ?? []
   return match[1]
 }
+
+export const normalizePhotoUrl = (url: string): string => {
+  // in: https://m.media-amazon.com/images/I/41eTyK5fGVL._SY90_.jpg or https://m.media-amazon.com/images/I/41eTyK5fGVL._AC_SL1500_.jpg
+  // out: https://m.media-amazon.com/images/I/41eTyK5fGVL._SL500_.jpg
+  const finalUrl = url.replace(/(._AC_SL\d+_.jpg|._SY\d+_.jpg)/, '._SL500_.jpg')
+  return finalUrl
+}

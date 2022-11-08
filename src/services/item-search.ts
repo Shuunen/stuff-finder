@@ -4,7 +4,7 @@ import { EMPTY_APP_SETTINGS, EMPTY_ITEM_SUGGESTIONS } from '../constants'
 import type { AppFormData, AppFormEditItemChangeEvent, AppFormEditItemSetEvent, AppFormEditItemSuggestionsEvent, AppLoaderToggleEvent, AppModalAddItemOpenEvent, AppModalPrintOneOpenEvent, AppSearchItemEvent, AppSettings, FormEditFormData, Item, ItemSuggestions, PrintInputData, WrapApiAliExResponse, WrapApiAngboResponse, WrapApiCampoResponse, WrapApiDeyesResponse } from '../types'
 import { ItemField, ItemStatus } from '../types'
 import { find, get, logger } from '../utils'
-import { getAsin } from '../utils/url'
+import { getAsin, normalizePhotoUrl } from '../utils/url'
 
 class ItemSearch {
 
@@ -32,14 +32,9 @@ class ItemSearch {
   private tryToReducePhotoSize (data: FormEditFormData): void {
     const url = data.photo
     if (url.length === 0) return
-    let finalUrl = url
-    if (url.includes('amazon.com')) {
-      if (url.includes('SL400')) return
-      // https://m.media-amazon.com/images/I/61UCb+zjYkL._AC_SL1500_.jpg
-      finalUrl = url.replace(/_SL\d+_/, '_SL400_')
-      if (finalUrl === url) logger.error('failed to reduce amazon photo url :', url)
-      else logger.log('reduced amazon photo size')
-    } else logger.log('no photo size reduction method set for url :', url)
+    const finalUrl = normalizePhotoUrl(url)
+    if (finalUrl === url) { logger.log('photo url unchanged'); return }
+    logger.log('photo url changed', url, finalUrl)
     emit<AppFormEditItemSetEvent>('app-form--edit-item--set', { photo: finalUrl })
   }
 
