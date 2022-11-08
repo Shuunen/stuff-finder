@@ -57,7 +57,7 @@ export const EMPTY_ITEM_SUGGESTIONS: ItemSuggestions = {
   [ItemField.status]: [ItemStatus.acheté],
   [ItemField.price]: [],
   [ItemField.photo]: [],
-  [ItemField.referencePrinted]: ['true'],
+  [ItemField.referencePrinted]: [],
   [ItemField.updatedOn]: [],
   [ItemField.id]: [],
 }
