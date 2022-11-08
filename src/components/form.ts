@@ -156,9 +156,8 @@ export class AppForm extends HTMLElement {
   }
 
   private emitChangeSync (): void {
-    const element = find.oneOrNone('input:not([type="hidden"]), select, textarea', this.els.form) ?? undefined
-    if (!isVisible(element)) { logger.log(`form ${this.name} is not visible, not emitting change`); return }
-    if (objectSum(this.emittedData) === objectSum(this.data)) return
+    if (!isVisible(this.els.form)) { logger.log(`form ${this.name} is not visible, not emitting change`); return }
+    if (objectSum(this.emittedData) === objectSum(this.data)) { logger.log(`form ${this.name} data has not changed, not emitting change`); return }
     this.emittedData = copy(this.data)
     logger.log('emitting :', `${this._id}--change`)
     emit<AppFormChangeEvent>(`${this._id}--change`, this.emittedData)
@@ -201,6 +200,7 @@ export class AppForm extends HTMLElement {
       input.after(select)
       select.addEventListener('change', () => { this.setInputValue(input, select.value) })
     })
+    this.validateBecause('added-suggestions')
   }
 
 }
