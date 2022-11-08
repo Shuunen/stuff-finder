@@ -56,8 +56,8 @@ export interface Item {
   [ItemField.id]: string
   [ItemField.location]: string
   [ItemField.name]: string
-  [ItemField.price]?: number
   [ItemField.photo]?: ItemPhoto[]
+  [ItemField.price]?: number
   [ItemField.reference]: string
   [ItemField.referencePrinted]: boolean
   [ItemField.status]: ItemStatus
