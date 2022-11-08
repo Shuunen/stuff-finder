@@ -63,7 +63,7 @@
     "mark": "unique-mark public/index.html",
     "postversion": "git push && git push --tags",
     "preversion": "npm run ci",
-    "serve": "servor public --reload --browse",
+    "serve": "servor public --reload",
     "start": "npm run dev",
     "test": "c8 uvu -r tsm -r jsdom-global/register tests",
     "test:watch": "watchlist src tests -eager -- npm test"
