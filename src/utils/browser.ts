@@ -87,8 +87,8 @@ export const isVisible = (element: Element | HTMLElement | undefined): boolean =
     logger.error('element is undefined, so it is not visible')
     return false
   }
-  const { top, bottom, width, height } = element.getBoundingClientRect()
-  const visible = width > 0 && height > 0 && top >= 0 && bottom <= window.innerHeight
+  const { top, width, height, left } = element.getBoundingClientRect()
+  const visible = width > 0 && height > 0 && top >= 0 && left >= 0
   // logger.log(`element is ${visible ? '' : 'not '}visible`, element)
   return visible
 }
