@@ -16,14 +16,13 @@ export interface WrapApiDeyesResponse extends WrapApiResponse {
   }
 }
 
-export interface WrapApiAmznResponse extends WrapApiResponse {
+export interface WrapApiAngboResponse extends WrapApiResponse {
   data: {
-    items: {
-      title: string
-      price?: number
-      url: string
-      photo: string
-    }[]
+    asin: string
+    title: string
+    price?: number
+    url: string
+    photo: string
   }
 }
 

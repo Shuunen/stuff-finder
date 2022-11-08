@@ -1,9 +1,10 @@
 import { capitalize, copy, div, emit, on, storage } from 'shuutils'
 import type { AppForm } from '../components/form'
 import { EMPTY_APP_SETTINGS, EMPTY_ITEM_SUGGESTIONS } from '../constants'
-import type { AppFormData, AppFormEditItemChangeEvent, AppFormEditItemSetEvent, AppFormEditItemSuggestionsEvent, AppLoaderToggleEvent, AppModalAddItemOpenEvent, AppModalPrintOneOpenEvent, AppSearchItemEvent, AppSettings, FormEditFormData, Item, ItemSuggestions, PrintInputData, WrapApiAliExResponse, WrapApiAmznResponse, WrapApiCampoResponse, WrapApiDeyesResponse } from '../types'
+import type { AppFormData, AppFormEditItemChangeEvent, AppFormEditItemSetEvent, AppFormEditItemSuggestionsEvent, AppLoaderToggleEvent, AppModalAddItemOpenEvent, AppModalPrintOneOpenEvent, AppSearchItemEvent, AppSettings, FormEditFormData, Item, ItemSuggestions, PrintInputData, WrapApiAliExResponse, WrapApiAngboResponse, WrapApiCampoResponse, WrapApiDeyesResponse } from '../types'
 import { ItemField, ItemStatus } from '../types'
 import { find, get, logger } from '../utils'
+import { getAsin } from '../utils/url'
 
 class ItemSearch {
 
@@ -120,21 +121,25 @@ class ItemSearch {
     return Math.round(price).toString()
   }
 
-  private async getSuggestions (str: string): Promise<ItemSuggestions> {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    const suggestions = copy(EMPTY_ITEM_SUGGESTIONS)
-    await this.addSuggestionsFromDeyes(suggestions, str)
-    await this.addSuggestionsFromAliEx(suggestions, str)
-    await this.addSuggestionsFromAmzn(suggestions, str)
-    await this.addSuggestionsFromCampo(suggestions, str)
+  private async getSuggestions (str: string): Promise<Partial<ItemSuggestions>> {
+    const asin = getAsin(str)
+    const suggestionsBase = copy(EMPTY_ITEM_SUGGESTIONS)
+    if (asin !== undefined) await this.addSuggestionsFromAngbo(suggestionsBase, asin)
+    if (suggestionsBase.name.length === 0) await this.addSuggestionsFromDeyes(suggestionsBase, str)
+    if (suggestionsBase.name.length === 0) await this.addSuggestionsFromAliEx(suggestionsBase, str)
+    await this.addSuggestionsFromCampo(suggestionsBase, str)
+    const suggestions: Partial<ItemSuggestions> = suggestionsBase
     for (const key in suggestions) {
       const k = key as keyof Item
       // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-      if (suggestions[k].length === 0) delete suggestions[k] // clear empty fields
-      else suggestions[k] = suggestions[k].filter((value, index, array) => array.indexOf(value) === index) // remove duplicates
+      if (suggestions[k]?.length === 0) delete suggestions[k] // clear empty fields
+      else suggestions[k] = suggestions[k]?.filter((value, index, array) => array.indexOf(value) === index) // remove duplicates
     }
     const clean: ItemField[] = [ItemField.name, ItemField.details]
-    clean.forEach((key) => { suggestions[key] = suggestions[key].map(suggestion => capitalize(suggestion, true)) })
+    clean.forEach((key) => {
+      if (suggestions[key] === undefined) return
+      suggestions[key] = suggestions[key]?.map(suggestion => capitalize(suggestion, true))
+    })
     logger.log('final suggestions', suggestions)
     return suggestions
   }
@@ -159,18 +164,15 @@ class ItemSearch {
     suggestions.reference.push(data.gtin13)
   }
 
-  private async addSuggestionsFromAmzn (suggestions: ItemSuggestions, str: string): Promise<void> {
-    const response = await this.addSuggestionsFromWrap<WrapApiAmznResponse>(`amzn/search/0.0.3?keywords=${str}`)
+  private async addSuggestionsFromAngbo (suggestions: ItemSuggestions, str: string): Promise<void> {
+    const response = await this.addSuggestionsFromWrap<WrapApiAngboResponse>(`angbo/search/0.0.3?id=${str}`)
     if (!response.success) return
     const data = response.data
-    logger.log('amazon data', data)
-    data.items.splice(0, 5).forEach(item => {
-      suggestions.details.push(item.title)
-      suggestions.photo.push(item.photo)
-      if (item.price !== undefined) suggestions.price.push(this.priceParse(item.price))
-      const asin = /\/dp\/(\w+)/.exec(item.url)?.[1] // get the asin from url
-      if (asin !== undefined) suggestions.reference.push(asin)
-    })
+    logger.log('angbo data', data)
+    suggestions.name.push(data.title)
+    suggestions.photo.push(data.photo)
+    suggestions.price.push(this.priceParse(data.price))
+    suggestions.reference.push(data.asin)
   }
 
   private async addSuggestionsFromAliEx (suggestions: ItemSuggestions, str: string): Promise<void> {
