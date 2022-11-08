@@ -1,10 +1,10 @@
 import Fuse from 'fuse.js'
-import { emit, fillTemplate, on, pickOne, sanitize, storage } from 'shuutils'
+import { copy, emit, fillTemplate, on, pickOne, sanitize, storage } from 'shuutils'
 import './assets/styles.min.css'
 import './components'
 import { EMPTY_APP_SETTINGS, EMPTY_COMMON_LISTS, EMPTY_ITEM } from './constants'
 import './services'
-import type { AirtableRecord, AirtableResponse, AppActionEvent, AppFormEditItemSaveEvent, AppFormSettingsErrorEvent, AppFormSettingsReadyEvent, AppFormSettingsSaveEvent, AppFormSettingsSetEvent, AppLoaderToggleEvent, AppModalAddItemCloseEvent, AppModalEditItemCloseEvent, AppModalSearchResultsCloseEvent, AppModalSettingsCloseEvent, AppPrompterTypeEvent, AppScanCodeStartEvent, AppSettings, AppSettingsTriggerAnimateEvent, AppSpeechStartEvent, AppStatusEvent, AppToasterShowEvent, CommonLists, Item, ItemPhoto, ItemsReadyEvent, SearchOrigin, SearchResultsEvent, SearchRetryEvent, SearchStartEvent } from './types'
+import type { AirtableRecord, AirtableResponse, AppActionEvent, AppFormEditItemSaveEvent, AppFormSettingsErrorEvent, AppFormSettingsReadyEvent, AppFormSettingsSaveEvent, AppFormSettingsSetEvent, AppLoaderToggleEvent, AppModalAddItemCloseEvent, AppModalEditItemCloseEvent, AppModalSearchResultsCloseEvent, AppModalSettingsCloseEvent, AppPrompterTypeEvent, AppScanCodeStartEvent, AppSettings, AppSettingsTriggerAnimateEvent, AppSpeechStartEvent, AppStatusEvent, AppToasterShowEvent, CommonLists, FormEditFormData, Item, ItemPhoto, ItemsReadyEvent, SearchOrigin, SearchResultsEvent, SearchRetryEvent, SearchStartEvent } from './types'
 import { ItemField, ItemStatus } from './types'
 import { find, logger, patch, post, valuesToOptions } from './utils'
 
@@ -198,15 +198,14 @@ class App {
     }
   }
 
-  private async onEditItem (data: Item): Promise<boolean> {
+  private async onEditItem (data: FormEditFormData): Promise<boolean> {
+    const fields = this.getItemFieldsToPush(data)
+    if (Object.keys(fields).length === 0) { logger.showLog('no changes to push'); return false }
     this.isLoading(true)
-    const response = await this.pushItemRemotely(data)
+    const response = await this.pushItemRemotely(fields, data.id)
     logger.log('onEditItem response', response)
     this.isLoading(false)
-    if (response.error) {
-      logger.showError(response.error.message)
-      return false
-    }
+    if (response.error) { logger.showError(response.error.message); return false }
     const item = this.airtableRecordToItem(response)
     this.pushItemLocally(item)
     emit<AppModalEditItemCloseEvent>('app-modal--edit-item--close')
@@ -216,31 +215,42 @@ class App {
     return true
   }
 
-  private async pushItemRemotely (item: Item): Promise<AirtableRecord> {
-    const fieldsToUpdate: ItemField[] = [ItemField.name, ItemField.brand, ItemField.price, ItemField.status, ItemField.photo, ItemField.category, ItemField.details, ItemField.box, ItemField.drawer, ItemField.location, ItemField.reference, ItemField.barcode, ItemField.referencePrinted]
-    const fields: Partial<Record<ItemField, unknown>> = {}
-    const data = { fields }
-    fieldsToUpdate.forEach(field => {
-      const value = item[field]
-      if (value === undefined || value === '') return
-      if (field === ItemField.photo && Array.isArray(value) && value.length > 0) data.fields[field] = [{ url: value }]
-      else if ([ItemField.name, ItemField.brand, ItemField.details, ItemField.reference, ItemField.barcode].includes(field)) data.fields[field] = value
-      else if (typeof value === 'boolean') data.fields[field] = value
-    })
-    if (item.id) {
-      const existing = this.items.find(existingItem => existingItem.id === item.id)
+  private getItemFieldsToPush (data: FormEditFormData): AirtableRecord['fields'] {
+    const fields: AirtableRecord['fields'] = {}
+    if (data.barcode.length > 0) fields.barcode = data.barcode
+    if (data.box.length > 0) fields.box = data.box
+    if (data.brand.length > 0) fields.brand = data.brand
+    if (data.category.length > 0) fields.category = data.category
+    if (data.details.length > 0) fields.details = data.details
+    if (data.drawer.length > 0) fields.drawer = data.drawer
+    if (data.location.length > 0) fields.location = data.location
+    if (data.name.length > 0) fields.name = data.name
+    if (data.photo) fields.photo = [{ url: data.photo } as ItemPhoto] // we don't need the whole object
+    if (data.price !== undefined) fields.price = data.price
+    if (data.reference.length > 0) fields.reference = data.reference
+    if (data.status.length > 0) fields.status = data.status
+    fields['ref-printed'] = data['ref-printed']
+    logger.log('fields before clean', copy(fields))
+    if (data.id) {
+      const existing = this.items.find(existingItem => existingItem.id === data.id)
       if (!existing) throw new Error('existing item not found locally')
-      const dataFields = Object.keys(data.fields) as ItemField[]
+      const dataFields = Object.keys(fields) as ItemField[]
       dataFields.forEach((field) => {
-        const samePhoto = field === ItemField.photo && existing.photo && existing.photo[0]?.url === (data.fields.photo as ItemPhoto[])[0]?.url
-        const sameValue = existing[field] === data.fields[field]
+        if (field === ItemField.id) return
+        const samePhoto = (field === ItemField.photo && existing.photo && existing.photo[0]?.url === fields.photo?.[0]?.url) ?? false
+        const sameValue = existing[field] === fields[field]
         // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-        if (samePhoto !== undefined || sameValue) delete data.fields[field]
+        if (samePhoto || sameValue) delete fields[field]
       })
+      logger.log('fields after clean', copy(fields))
     }
-    if (Object.keys(data.fields).length === 0) throw new Error('nothing to post or patch... ?')
-    if (!item.id) return post(this.apiUrl, data)
-    const url = this.apiUrl.replace('?', `/${item.id}?`)
+    return fields
+  }
+
+  private async pushItemRemotely (fields: AirtableRecord['fields'], id: Item['id']): Promise<AirtableRecord> {
+    const data = { fields }
+    if (id === '') return post(this.apiUrl, data)
+    const url = this.apiUrl.replace('?', `/${id}?`)
     return patch(url, data)
   }
 
