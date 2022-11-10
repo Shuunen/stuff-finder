@@ -4,7 +4,7 @@ import './assets/styles.min.css'
 import './components'
 import { EMPTY_APP_SETTINGS, EMPTY_COMMON_LISTS, EMPTY_ITEM } from './constants'
 import './services'
-import type { AirtableRecord, AirtableResponse, AppActionEvent, AppFormEditItemSaveEvent, AppFormSettingsErrorEvent, AppFormSettingsReadyEvent, AppFormSettingsSaveEvent, AppFormSettingsSetEvent, AppLoaderToggleEvent, AppModalAddItemCloseEvent, AppModalEditItemCloseEvent, AppModalSearchResultsCloseEvent, AppModalSettingsCloseEvent, AppPrompterTypeEvent, AppScanCodeStartEvent, AppSettings, AppSettingsTriggerAnimateEvent, AppSpeechStartEvent, AppStatusEvent, AppToasterShowEvent, CommonLists, FormEditFormData, Item, ItemPhoto, ItemsReadyEvent, SearchOrigin, SearchResultsEvent, SearchRetryEvent, SearchStartEvent } from './types'
+import type { AirtableRecord, AirtableResponse, AppActionEvent, AppClearCacheEvent, AppClearCredentialsEvent, AppFormEditItemSaveEvent, AppFormSettingsErrorEvent, AppFormSettingsReadyEvent, AppFormSettingsSaveEvent, AppFormSettingsSetEvent, AppLoaderToggleEvent, AppModalAddItemCloseEvent, AppModalEditItemCloseEvent, AppModalSearchResultsCloseEvent, AppModalSettingsCloseEvent, AppPrompterTypeEvent, AppScanCodeStartEvent, AppSettings, AppSettingsTriggerAnimateEvent, AppSpeechStartEvent, AppStatusEvent, AppToasterShowEvent, CommonLists, FormEditFormData, Item, ItemPhoto, ItemsReadyEvent, SearchOrigin, SearchResultsEvent, SearchRetryEvent, SearchStartEvent } from './types'
 import { ItemField, ItemStatus } from './types'
 import { find, logger, patch, post, valuesToOptions } from './utils'
 
@@ -27,9 +27,22 @@ class App {
     on<AppFormEditItemSaveEvent>('app-form--edit-item--save', this.onEditItem.bind(this))
     on<SearchStartEvent>('search-start', this.onSearchStart.bind(this))
     on<SearchRetryEvent>('search-retry', this.onSearchRetry.bind(this))
+    on<AppClearCacheEvent>('app-clear-cache', this.onClearCache.bind(this))
+    on<AppClearCredentialsEvent>('app-clear-credentials', this.onClearCredentials.bind(this))
     this.checkExistingSettings()
     this.showTitle()
     this.handleActions()
+  }
+
+  private onClearCredentials (): void {
+    logger.log('clearing credentials...')
+    storage.clear('app-settings')
+  }
+
+  private onClearCache (): void {
+    logger.log('clearing cached items...')
+    storage.clear('items')
+    document.location.reload()
   }
 
   private checkExistingSettings (): void {

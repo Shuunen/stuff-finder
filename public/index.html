@@ -126,7 +126,7 @@
         <input name="wrap" type="text" pattern="\w{32}" placeholder="your wrap api key" maxlength="32">
       </label>
 
-      <details class="mt-2">
+      <details>
         <summary>What this app do with my credentials ?</summary>
         <small>
           <ul class="mb-2 list-inside list-disc">
@@ -146,6 +146,16 @@
           Wrap api is a great & <strong>free</strong> service to fetch data, it ease the process to add products to your Airtable database.<br />
           For exemple, <u>give him the EAN code of your product, he will fetch the name and image</u>.<br />
           Check their <a href="https://wrapapi.com" target="_blank" rel="noreferrer">website</a> to register your free account.
+        </small>
+      </details>
+
+      <details>
+        <summary>Advanced features</summary>
+        <small>
+          <div class="flex gap-4">
+            <button data-action="app-clear-cache">Clear cache</button>
+            <button data-action="app-clear-credentials">Clear credentials</button>
+          </div>
         </small>
       </details>
 
