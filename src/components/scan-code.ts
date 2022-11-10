@@ -1,7 +1,7 @@
 import { BrowserMultiFormatReader } from '@zxing/library/es2015/browser/BrowserMultiFormatReader'
 import NotFoundException from '@zxing/library/es2015/core/NotFoundException'
 import { dom, emit, on, sleep, tw } from 'shuutils'
-import type { AppModalScanCodeCloseEvent, AppModalScanCodeOpenEvent, AppScanCodeStartEvent, AppSoundSuccessEvent, AppToasterShowEvent, SearchStartEvent } from '../types'
+import type { AppModalScanCodeCloseEvent, AppModalScanCodeOpenEvent, AppScanCodeStartEvent, AppSoundSuccessEvent, SearchStartEvent } from '../types'
 import { find, logger } from '../utils'
 
 window.customElements.define('app-scan-code', class extends HTMLElement {
@@ -55,7 +55,6 @@ window.customElements.define('app-scan-code', class extends HTMLElement {
     const sources = await this.reader.listVideoInputDevices()
     logger.log('video sources found :', sources)
     const source = sources.find(s => s.label.includes('back')) ?? sources[0]
-    sources.forEach(s => emit<AppToasterShowEvent>('app-toaster--show', { message: `${s.label} [${s.kind}]`, type: 'info', delay: 5000 }))
     if (!source) throw new Error('no source found for setupReader')
     this.deviceId = source.deviceId
   }

@@ -92,19 +92,19 @@ class App {
     let response = await this.fetchApi()
     if (response.error) {
       this.isLoading(false)
-      emit<AppToasterShowEvent>('app-toaster--show', { message: 'airtable fetch failed', type: 'error' })
+      logger.showError(`airtable fetch failed with error : ${response.error.message}`)
       return false
     }
     let records = response.records
     if (!records[0] || records.length === 0) {
       this.isLoading(false)
-      emit<AppToasterShowEvent>('app-toaster--show', { message: 'airtable returned no item', type: 'error' })
+      logger.showError('airtable fetch returned no records')
       return false
     }
     const remote = this.airtableRecordToItem(records[0])
     if (cachedItems.some(item => item.id === remote.id && item[ItemField.updatedOn] === remote[ItemField.updatedOn])) {
       this.items = cachedItems
-      logger.showLog(`${this.items.length} item(s) cached and no updates from Airtable`)
+      logger.showLog('no updates from Airtable, cache seems up to date')
       this.initFuse()
       return true
     }
