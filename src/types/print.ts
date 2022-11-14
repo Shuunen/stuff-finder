@@ -1,5 +1,5 @@
 import type { AppFormData } from './events'
-import type { Item, ItemField } from './item'
+import type { Item } from './item'
 
 export interface PrintData {
   location: string
@@ -15,4 +15,4 @@ export const enum PrintFormDataSize {
   rect40x30 = '40x30',
 }
 
-export type PrintInputData = Omit<Item, ItemField.category | ItemField.photo | ItemField.price | ItemField.referencePrinted | ItemField.status | ItemField.updatedOn>
+export type PrintInputData = Partial<Item>

@@ -236,21 +236,21 @@ class App {
 
   private getItemFieldsToPush (data: FormEditFormData): AirtableRecord['fields'] {
     const fields: AirtableRecord['fields'] = {}
-    if (data.barcode.length > 0) fields.barcode = data.barcode
-    if (data.box.length > 0) fields.box = data.box
-    if (data.brand.length > 0) fields.brand = data.brand
-    if (data.category.length > 0) fields.category = data.category
-    if (data.details.length > 0) fields.details = data.details
-    if (data.drawer.length > 0) fields.drawer = data.drawer
-    if (data.location.length > 0) fields.location = data.location
-    if (data.name.length > 0) fields.name = data.name
-    if (data.photo) fields.photo = [{ url: data.photo } as ItemPhoto] // we don't need the whole object
+    if (data.barcode !== undefined && data.barcode.length > 0) fields.barcode = data.barcode
+    if (data.box !== undefined && data.box.length > 0) fields.box = data.box
+    if (data.brand !== undefined && data.brand.length > 0) fields.brand = data.brand
+    if (data.category !== undefined && data.category.length > 0) fields.category = data.category
+    if (data.details !== undefined && data.details.length > 0) fields.details = data.details
+    if (data.drawer !== undefined && data.drawer.length > 0) fields.drawer = data.drawer
+    if (data.location !== undefined && data.location.length > 0) fields.location = data.location
+    if (data.name !== undefined && data.name.length > 0) fields.name = data.name
+    if (data.photo !== undefined) fields.photo = [{ url: data.photo } as ItemPhoto] // we don't need the whole object
     if (data.price !== undefined) fields.price = data.price
-    if (data.reference.length > 0) fields.reference = data.reference
-    if (data.status.length > 0) fields.status = data.status
-    fields['ref-printed'] = data['ref-printed']
+    if (data.reference !== undefined && data.reference.length > 0) fields.reference = data.reference
+    if (data.status !== undefined && data.status.length > 0) fields.status = data.status
+    fields[ItemField.referencePrinted] = data[ItemField.referencePrinted] ?? false
     logger.log('fields before clean', copy(fields))
-    if (data.id) {
+    if (data.id !== undefined && data.id.length > 0) {
       const existing = this.items.find(existingItem => existingItem.id === data.id)
       if (!existing) throw new Error('existing item not found locally')
       const dataFields = Object.keys(fields) as ItemField[]
@@ -266,7 +266,8 @@ class App {
     return fields
   }
 
-  private async pushItemRemotely (fields: AirtableRecord['fields'], id: Item['id']): Promise<AirtableRecord> {
+  private async pushItemRemotely (fields: AirtableRecord['fields'], id?: Item['id']): Promise<AirtableRecord> {
+    if (id === undefined) throw new Error('cannot push item remotely without id')
     const data = { fields }
     if (id === '') return post(this.apiUrl, data)
     const url = this.apiUrl.replace('?', `/${id}?`)

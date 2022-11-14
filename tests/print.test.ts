@@ -14,6 +14,17 @@ const itemA: PrintInputData = {
   location: 'location',
 }
 
+const itemB: PrintInputData = {
+  id: '1234567',
+  name: 'name',
+  brand: 'brand',
+  details: 'details',
+  reference: 'reference  ',
+  barcode: '  barcode',
+  box: ' ',
+  drawer: '',
+}
+
 check('itemToPrintText A', inputToPrintText(itemA), 'name brand details')
 check('itemToPrintText B', inputToPrintText({ ...itemA, name: '  ' }), 'brand details')
 check('itemToPrintText C', inputToPrintText({ ...itemA, brand: '  ' }), 'name details')
@@ -33,6 +44,7 @@ check('itemToPrintLocation F', itemToPrintLocation({ ...itemA, box: 'A', drawer:
 check('itemToPrintLocation G', itemToPrintLocation({ ...itemA, box: '', drawer: '4', location: 'Salon' }), 'Salon')
 check('itemToPrintLocation H', itemToPrintLocation(itemA), 'B2')
 check('itemToPrintLocation I', itemToPrintLocation({ ...itemA, box: '', drawer: '', location: '' }), '')
+check('itemToPrintLocation J', itemToPrintLocation(itemB), '')
 
 check('itemToPrintData A', inputToPrintData(itemA), { text: 'name brand details', qrCodeVisual: '<qr-code data="reference" margin=0 modulesize=3></qr-code>', qrCodeValue: 'reference', location: 'B2' })
 

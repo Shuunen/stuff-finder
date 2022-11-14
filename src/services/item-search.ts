@@ -1,6 +1,6 @@
 import { capitalize, copy, div, emit, on, storage } from 'shuutils'
 import type { AppForm } from '../components/form'
-import { EMPTY_APP_SETTINGS, EMPTY_ITEM_SUGGESTIONS } from '../constants'
+import { EMPTY_APP_SETTINGS, EMPTY_ITEM, EMPTY_ITEM_SUGGESTIONS } from '../constants'
 import type { AppFormData, AppFormEditItemChangeEvent, AppFormEditItemSetEvent, AppFormEditItemSuggestionsEvent, AppLoaderToggleEvent, AppModalAddItemOpenEvent, AppModalPrintOneOpenEvent, AppSearchItemEvent, AppSettings, FormEditFormData, Item, ItemSuggestions, PrintInputData, WrapApiAliExResponse, WrapApiAngboResponse, WrapApiCampoResponse, WrapApiDeyesResponse } from '../types'
 import { ItemField, ItemStatus } from '../types'
 import { find, get, logger } from '../utils'
@@ -23,7 +23,7 @@ class ItemSearch {
 
   private onEditItemFormChange (data: FormEditFormData): void {
     logger.log('onEditItemFormChange', data)
-    const form = find.one<AppForm>(`app-form[data-id="${data.id}"]`)
+    const form = find.one<AppForm>(`app-form[data-id="${data.id ?? ''}"]`)
     this.tryToReducePhotoSize(data)
     this.setPrintData(data, form)
     this.onlyRequireReferenceOrBarcode(data, form)
@@ -31,7 +31,7 @@ class ItemSearch {
 
   private tryToReducePhotoSize (data: FormEditFormData): void {
     const url = data.photo
-    if (url.length === 0) return
+    if (url === undefined || url.length === 0) return
     const finalUrl = normalizePhotoUrl(url)
     if (finalUrl === url) { logger.log('photo url unchanged'); return }
     logger.log('photo url changed', url, finalUrl)
@@ -43,19 +43,19 @@ class ItemSearch {
     const barcode = find.oneOrNone<HTMLInputElement>('input[name="barcode"]', form)
     if (!barcode) return
     const barcodeBefore = barcode.required
-    barcode.required = !(data.reference.length > 0 && reference.checkValidity())
+    barcode.required = !(data.reference !== undefined && data.reference.length > 0 && reference.checkValidity())
     const referenceBefore = reference.required
-    reference.required = !(data.barcode.length > 0 && barcode.checkValidity())
+    reference.required = !(data.barcode !== undefined && data.barcode.length > 0 && barcode.checkValidity())
     if (barcodeBefore === barcode.required && referenceBefore === reference.required) { logger.log('barcode and reference required state unchanged'); return }
     form.validateBecause('reference-or-barcode-required-changed')
   }
 
   private setPrintData (data: FormEditFormData, form: AppForm): void {
-    const printTrigger = find.one<HTMLButtonElement>(`[data-id="${data.id}"][data-action="app-modal--print-one--open"]`, form)
+    const printTrigger = find.one<HTMLButtonElement>(`[data-id="${data.id ?? ''}"][data-action="app-modal--print-one--open"]`, form)
     printTrigger.disabled = !data.formValid
     if (!data.formValid) { logger.log('form not valid, not setting print data'); return }
     logger.log('setPrintDataSync for item', data, printTrigger)
-    const printInputData: PrintInputData = { id: data.id, name: data.name, brand: data.brand, details: data.details, reference: data.reference, barcode: data.barcode, box: data.box, drawer: data.drawer, location: data.location }
+    const printInputData: PrintInputData = Object.assign({}, EMPTY_ITEM, { id: data.id, name: data.name, brand: data.brand, details: data.details, reference: data.reference, barcode: data.barcode, box: data.box, drawer: data.drawer, location: data.location })
     printTrigger.dataset['payload'] = JSON.stringify(printInputData)
   }
 
@@ -90,7 +90,7 @@ class ItemSearch {
   }
 
   private setPrinted (data: PrintInputData): void {
-    const form = find.one<AppForm>(`app-form[data-id="${data.id}"]`)
+    const form = find.one<AppForm>(`app-form[data-id="${data.id ?? ''}"]`)
     find.one<HTMLInputElement>('input[name="ref-printed"]', form).checked = true
     form.validateBecause('ref-printed-changed')
   }

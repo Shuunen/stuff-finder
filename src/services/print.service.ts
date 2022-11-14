@@ -8,7 +8,7 @@ import type { PrintData, PrintInputData } from '../types'
  */
 export const inputToPrintText = (input: PrintInputData): string => [input.name, input.brand, input.details].join(' ').replace(/\s{2,}/g, ' ').trim()
 
-export const inputToPrintCode = (input: PrintInputData): string => input.reference.trim() || input.barcode.trim()
+export const inputToPrintCode = (input: PrintInputData): string => input.reference?.trim() ?? input.barcode?.trim() ?? ''
 
 export const inputToPrintQrCodeVisual = (input: PrintInputData): string => {
   const code = inputToPrintCode(input)
@@ -17,9 +17,9 @@ export const inputToPrintQrCodeVisual = (input: PrintInputData): string => {
 }
 
 export const itemToPrintLocation = (input: PrintInputData): string => {
-  const box = (input.box.trim()[0] ?? '').toUpperCase()
-  if (box.length === 0) return input.location
-  const drawer = (input.drawer[0] ?? '').toUpperCase()
+  const box = (input.box?.trim()[0] ?? '').toUpperCase()
+  if (box.length === 0) return input.location ?? ''
+  const drawer = (input.drawer?.[0] ?? '').toUpperCase()
   return `${box}${drawer}`.trim()
 }
 
