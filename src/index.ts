@@ -230,7 +230,7 @@ class App {
     emit<AppModalEditItemCloseEvent>('app-modal--edit-item--close')
     emit<AppModalAddItemCloseEvent>('app-modal--add-item--close')
     emit<AppModalSearchResultsCloseEvent>('app-modal--search-results--close')
-    document.location.search = ''
+    document.location.hash = ''
     return true
   }
 

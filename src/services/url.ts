@@ -8,7 +8,7 @@ class UrlService {
 
   private async check (): Promise<void> {
     await sleep(100) // needed
-    const parameters = new URLSearchParams(window.location.search)
+    const parameters = new URLSearchParams(window.location.search) // TODO : use hash instead
     parameters.forEach((value, key) => {
       if (key === 'search') emit<SearchStartEvent>('search-start', { str: value, origin: 'url' })
       else if (key === 'add') this.openAddItemModal(value)

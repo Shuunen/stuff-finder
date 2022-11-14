@@ -17,6 +17,7 @@
 - [ ] add close confirmation on unsaved add item form modal
 - [ ] detect user in/activity to refresh data
 - [ ] show given/thrown items with a different color/display, also they're no more in box/room
+- [ ] use hash instead of search params in url service
 
 ## Build sizes
 
