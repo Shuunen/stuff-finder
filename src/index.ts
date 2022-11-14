@@ -69,7 +69,6 @@ class App {
     }
     this.settingsActionRequired(false)
     emit<AppModalSettingsCloseEvent>('app-modal--settings--close')
-    if (this.items.length > 0) emit<ItemsReadyEvent>('items-ready')
     storage.set('app-settings', settings)
   }
 
@@ -183,6 +182,7 @@ class App {
     }
     this.fuse = new Fuse(this.items, options)
     storage.set('items', this.items)
+    if (this.items.length > 0) emit<ItemsReadyEvent>('items-ready')
   }
 
   private onSearchStart (event: SearchStartEvent): void {
