@@ -1,5 +1,5 @@
 import { check, checksRun } from 'shuutils'
-import { inputToPrintData, inputToPrintQrCodeVisual, inputToPrintText, itemToPrintLocation } from '../src/services/print.service'
+import { inputToPrintCode, inputToPrintData, inputToPrintQrCodeVisual, inputToPrintText, itemToPrintLocation } from '../src/services/print.service'
 import type { PrintInputData } from '../src/types'
 
 const itemA: PrintInputData = {
@@ -19,7 +19,6 @@ const itemB: PrintInputData = {
   name: 'name',
   brand: 'brand',
   details: 'details',
-  reference: 'reference  ',
   barcode: '  barcode',
   box: ' ',
   drawer: '',
@@ -28,6 +27,12 @@ const itemB: PrintInputData = {
 check('itemToPrintText A', inputToPrintText(itemA), 'name brand details')
 check('itemToPrintText B', inputToPrintText({ ...itemA, name: '  ' }), 'brand details')
 check('itemToPrintText C', inputToPrintText({ ...itemA, brand: '  ' }), 'name details')
+
+check('inputToPrintCode A', inputToPrintCode(itemA), 'reference')
+check('inputToPrintCode B', inputToPrintCode({ ...itemA, reference: '  ' }), 'barcode')
+check('inputToPrintCode C', inputToPrintCode({ ...itemA, reference: '  ', barcode: '  ' }), '')
+check('inputToPrintCode D', inputToPrintCode(itemB), 'barcode')
+check('inputToPrintCode E', inputToPrintCode({}), '')
 
 check('itemToPrintBarcode A', inputToPrintQrCodeVisual(itemA), '<qr-code data="reference" margin=0 modulesize=3></qr-code>')
 check('itemToPrintBarcode B', inputToPrintQrCodeVisual({ ...itemA, reference: '  ', barcode: '' }), '<div class="bg-red-700 text-white">No reference or barcode</div>')

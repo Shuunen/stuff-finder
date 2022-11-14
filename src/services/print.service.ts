@@ -8,11 +8,17 @@ import type { PrintData, PrintInputData } from '../types'
  */
 export const inputToPrintText = (input: PrintInputData): string => [input.name, input.brand, input.details].join(' ').replace(/\s{2,}/g, ' ').trim()
 
-export const inputToPrintCode = (input: PrintInputData): string => input.reference?.trim() ?? input.barcode?.trim() ?? ''
+export const inputToPrintCode = (input: PrintInputData): string => {
+  const reference = input.reference?.trim() ?? ''
+  if (reference.length > 0) return reference
+  const barcode = input.barcode?.trim() ?? ''
+  if (barcode.length > 0) return barcode
+  return ''
+}
 
 export const inputToPrintQrCodeVisual = (input: PrintInputData): string => {
   const code = inputToPrintCode(input)
-  if (!code) return '<div class="bg-red-700 text-white">No reference or barcode</div>'
+  if (code === '') return '<div class="bg-red-700 text-white">No reference or barcode</div>'
   return `<qr-code data="${code}" margin=0 modulesize=3></qr-code>`
 }
 
