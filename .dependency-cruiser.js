@@ -4,7 +4,7 @@ module.exports = {
     /* rules from the 'recommended' preset: */
     {
       name: 'no-circular',
-      severity: 'warn',
+      severity: 'error',
       comment:
         'This dependency is part of a circular relationship. You might want to revise ' +
         'your solution (i.e. use dependency inversion, make sure the modules have a single responsibility) ',
@@ -22,7 +22,7 @@ module.exports = {
         "add an exception for it in your dependency-cruiser configuration. By default " +
         "this rule does not scrutinize dot-files (e.g. .eslintrc.js), TypeScript declaration " +
         "files (.d.ts), tsconfig.json and some of the babel and webpack configs.",
-      severity: 'warn',
+      severity: 'error',
       from: {
         orphan: true,
         pathNot: [
