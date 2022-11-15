@@ -7,7 +7,7 @@
     "@zxing/library": "0.19",
     "fuse.js": "6.6",
     "shuutils": "6.3",
-    "webcomponent-qr-code": "1.0"
+    "webcomponent-qr-code": "1.1"
   },
   "description": "Sorting things is pointless if you can't find them afterwards",
   "devDependencies": {
