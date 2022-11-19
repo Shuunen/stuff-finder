@@ -21,7 +21,7 @@
     "c8": "7",
     "dependency-cruiser": "latest",
     "esbuild": "0.15",
-    "eslint": "8.27",
+    "eslint": "8.28",
     "eslint-plugin-html": "7",
     "eslint-plugin-tailwindcss": "3",
     "eslint-plugin-unicorn": "44",
