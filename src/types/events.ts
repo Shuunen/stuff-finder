@@ -20,6 +20,7 @@ export type AppFormSettingsErrorEvent = string
 export type AppFormSettingsReadyEvent = undefined
 export type AppFormSettingsSaveEvent = AppSettings
 export type AppFormSettingsSetEvent = AppSettings
+export type AppImgLoadingErrorEvent = undefined
 export type AppLoaderToggleEvent = boolean
 export type AppModalAddItemCloseEvent = undefined
 export type AppModalAddItemOpenEvent = HTMLElement

@@ -4,13 +4,15 @@ import './assets/styles.min.css'
 import './components'
 import { EMPTY_APP_SETTINGS, EMPTY_COMMON_LISTS, EMPTY_ITEM } from './constants'
 import './services'
-import type { AirtableRecord, AirtableResponse, AppActionEvent, AppClearCacheEvent, AppClearCredentialsEvent, AppFormEditItemSaveEvent, AppFormSettingsErrorEvent, AppFormSettingsReadyEvent, AppFormSettingsSaveEvent, AppFormSettingsSetEvent, AppLoaderToggleEvent, AppModalAddItemCloseEvent, AppModalEditItemCloseEvent, AppModalSearchResultsCloseEvent, AppModalSettingsCloseEvent, AppPrompterTypeEvent, AppScanCodeStartEvent, AppSettings, AppSettingsTriggerAnimateEvent, AppSpeechStartEvent, AppStatusEvent, CommonLists, FormEditFormData, Item, ItemPhoto, ItemsReadyEvent, SearchOrigin, SearchResultsEvent, SearchRetryEvent, SearchStartEvent } from './types'
+import type { AirtableRecord, AirtableResponse, AppActionEvent, AppClearCacheEvent, AppClearCredentialsEvent, AppFormEditItemSaveEvent, AppFormSettingsErrorEvent, AppFormSettingsReadyEvent, AppFormSettingsSaveEvent, AppFormSettingsSetEvent, AppImgLoadingErrorEvent, AppLoaderToggleEvent, AppModalAddItemCloseEvent, AppModalEditItemCloseEvent, AppModalSearchResultsCloseEvent, AppModalSettingsCloseEvent, AppPrompterTypeEvent, AppScanCodeStartEvent, AppSettings, AppSettingsTriggerAnimateEvent, AppSpeechStartEvent, AppStatusEvent, CommonLists, FormEditFormData, Item, ItemPhoto, ItemsReadyEvent, SearchOrigin, SearchResultsEvent, SearchRetryEvent, SearchStartEvent } from './types'
 import { ItemField, ItemStatus } from './types'
 import { find, logger, patch, post, valuesToOptions } from './utils'
 
 class App {
 
   private apiUrl = ''
+
+  private lastSearch = ''
 
   private lastSearchOrigin: SearchOrigin = 'default'
 
@@ -29,6 +31,7 @@ class App {
     on<SearchRetryEvent>('search-retry', this.onSearchRetry.bind(this))
     on<AppClearCacheEvent>('app-clear-cache', this.onClearCache.bind(this))
     on<AppClearCredentialsEvent>('app-clear-credentials', this.onClearCredentials.bind(this))
+    on<AppImgLoadingErrorEvent>('app--img-loading-error', this.onImgLoadingError.bind(this))
     this.checkExistingSettings()
     this.showTitle()
     this.handleActions()
@@ -43,6 +46,14 @@ class App {
     logger.log('clearing cached items...')
     storage.clear('items')
     document.location.reload()
+  }
+
+  private async onImgLoadingError (): Promise<void> {
+    logger.log('search result image loading error, clearing cached items...')
+    storage.clear('items')
+    await this.loadItems()
+    logger.log('redo last search')
+    this.searchItems(this.lastSearch)
   }
 
   private checkExistingSettings (): void {
@@ -187,13 +198,18 @@ class App {
 
   private onSearchStart (event: SearchStartEvent): void {
     const input = event.str.trim()
+    this.lastSearch = input
     this.lastSearchOrigin = event.origin
+    this.searchItems(input, event.scrollTop)
+  }
+
+  private searchItems (input: string, scrollTop = false): void {
     const result = this.items.find(item => item.reference === input || item.barcode === input)
     const results = result ? [result] : this.fuse.search(sanitize(input)).map(item => item.item)
     let title = 'No results found'
     if (results.length > 0) title = results.length === 1 ? 'One result found' : `${results.length} results found`
     title += ` for “${input}”`
-    const data: SearchResultsEvent = { title, results, byReference: Boolean(result), input, scrollTop: Boolean(event.scrollTop) }
+    const data: SearchResultsEvent = { title, results, byReference: Boolean(result), input, scrollTop }
     emit<SearchResultsEvent>('search-results', data)
   }
 
