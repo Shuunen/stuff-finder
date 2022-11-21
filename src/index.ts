@@ -1,5 +1,5 @@
 import Fuse from 'fuse.js'
-import { copy, emit, fillTemplate, on, pickOne, sanitize, storage } from 'shuutils'
+import { copy, debounce, emit, fillTemplate, on, pickOne, sanitize, storage } from 'shuutils'
 import './assets/styles.min.css'
 import './components'
 import { EMPTY_APP_SETTINGS, EMPTY_COMMON_LISTS, EMPTY_ITEM } from './constants'
@@ -21,6 +21,8 @@ class App {
   private fuse!: Fuse<Item>
 
   private commonListsLoaded = false
+
+  private readonly onImgLoadingError = debounce(this.onImgLoadingErrorSync.bind(this), 200)
 
   public constructor () {
     logger.log('app start')
@@ -48,7 +50,7 @@ class App {
     document.location.reload()
   }
 
-  private async onImgLoadingError (): Promise<void> {
+  private async onImgLoadingErrorSync (): Promise<void> {
     logger.log('search result image loading error, clearing cached items...')
     storage.clear('items')
     await this.loadItems()
