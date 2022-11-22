@@ -7,7 +7,6 @@ coverage
 dist
 meta.json
 node_modules
-pnpm-lock.yaml
 public/*.css
 public/*.js
 public/*.map
