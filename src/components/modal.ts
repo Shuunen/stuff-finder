@@ -31,7 +31,7 @@ window.customElements.define('app-modal', class extends HTMLElement {
 
   private createModal (id: string): HTMLDivElement {
     const modal = div(`app-modal ${id} relative z-50 m-4 flex w-full flex-col overflow-hidden rounded bg-white p-4 shadow-md md:w-auto ${this.className}`, this.innerHTML)
-    const close = link(tw('app-close absolute !border-b-0 top-2 right-5 font-mono text-4xl opacity-50 md:text-2xl'), 'x', '#')
+    const close = link(tw('app-close absolute top-2 right-5 !border-b-0 font-mono text-4xl opacity-50 md:text-2xl'), 'x', '#')
     modal.append(close)
     const title = this.dataset['title']
     if (title !== undefined) modal.prepend(h2('app-header mx-20 mb-4 text-center text-2xl leading-7 text-purple-700', title))

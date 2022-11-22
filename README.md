@@ -18,6 +18,7 @@
 - [ ] detect user in/activity to refresh data
 - [ ] show given/thrown items with a different color/display, also they're no more in box/room
 - [ ] use hash instead of search params in url service
+- [ ] @typescript-eslint/eslint-plugin is locked to 5.43 cause 5.44 trigger "@typescript-eslint/keyword-spacing" error "at ImportDeclaration[importKind=type]"
 
 ## Build sizes
 
