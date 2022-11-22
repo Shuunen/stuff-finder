@@ -4,7 +4,8 @@ import { logger } from '../utils'
 
 class AppSpeech {
 
-  private readonly isMobile = typeof window.orientation !== 'undefined'
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+  private readonly isMobile = window.orientation !== undefined
 
   private recognition!: SpeechRecognition
 

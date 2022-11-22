@@ -9,7 +9,7 @@
     "forceConsistentCasingInFileNames": true,
     "importsNotUsedAsValues": "error",
     "lib": [
-      "ES2017",
+      "ES2021",
       "DOM"
     ],
     "moduleResolution": "Node",
@@ -26,7 +26,7 @@
     "skipLibCheck": true,
     "strict": true,
     "strictNullChecks": true,
-    "target": "ES2020"
+    "target": "ES2021"
   },
   "include": [
     "src",
