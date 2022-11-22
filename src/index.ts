@@ -56,6 +56,7 @@ class App {
     await this.loadItems()
     logger.log('redo last search')
     this.searchItems(this.lastSearch)
+    this.isLoading(false)
   }
 
   private checkExistingSettings (): void {
