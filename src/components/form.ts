@@ -1,4 +1,4 @@
-import { copy, debounce, div, dom, emit, h2, objectSum, on, p, sleep } from 'shuutils'
+import { clone, debounce, div, dom, emit, h2, objectSum, on, sleep, text } from 'shuutils'
 import { DEFAULT_IMAGE } from '../constants'
 import type { AppFormChangeEvent, AppFormCloseEvent, AppFormData, AppFormDataValue, AppFormReadyEvent, FormIdErrorEvent, FormIdSetEvent, FormIdSuggestionsEvent, FormOnSaveEvent, FormSuggestions, ItemPhoto } from '../types'
 import { ItemField } from '../types'
@@ -8,8 +8,8 @@ export class AppForm extends HTMLElement {
 
   private _id = ''
 
-  private els = {
-    error: p(''),
+  private readonly els = {
+    error: text(''),
     header: h2('app-header mt-2 mb-4 text-center text-2xl text-purple-700', this.dataset['title']),
     form: dom('form'),
     footer: div(''),
@@ -67,7 +67,7 @@ export class AppForm extends HTMLElement {
       const input = this.inputs.find(inputElement => inputElement.name === key)
       if (input) this.setInputValue(input, value)
     })
-    if (this.warmUp) this.initialData = copy(this.data)
+    if (this.warmUp) this.initialData = clone(this.data)
     logger.log(this.warmUp ? 'warming up, overwriting initial data' : 'NOT warming up, NOT overwriting initial data', { initialData: this.initialData })
     this.validateBecause('set-data')
   }
@@ -81,7 +81,7 @@ export class AppForm extends HTMLElement {
     this.removeAttribute('class')
     this.innerHTML = ''
     this.append(this.els.form)
-    this.els.error = p('app-error text-center')
+    this.els.error = text('app-error text-center')
     this.els.form.parentElement?.append(this.els.error)
     if (!this.inline && (this.dataset['title']?.length ?? 0) > 0) this.parentElement?.prepend(this.els.header)
     this.els.footer = this.createFooter()
@@ -90,7 +90,7 @@ export class AppForm extends HTMLElement {
       event.preventDefault()
       if (this.allowSubmit) this.onSave()
     })
-    logger.log(`form ${this.name} connected, setting initial data to`, copy(this.data))
+    logger.log(`form ${this.name} connected, setting initial data to`, clone(this.data))
     this.initialData = this.data
     this.validateBecause('connected-callback')
     emit<AppFormReadyEvent>(`${this._id}--ready`, this.data)
@@ -158,7 +158,7 @@ export class AppForm extends HTMLElement {
   private emitChangeSync (): void {
     if (!isVisible(this.els.form)) { logger.log(`form ${this.name} is not visible, not emitting change`); return }
     if (objectSum(this.emittedData) === objectSum(this.data)) { logger.log(`form ${this.name} data has not changed, not emitting change`); return }
-    this.emittedData = copy(this.data)
+    this.emittedData = clone(this.data)
     logger.log('emitting :', `${this._id}--change`)
     emit<AppFormChangeEvent>(`${this._id}--change`, this.emittedData)
   }

@@ -1,16 +1,16 @@
-import { div, dom, emit, image, on, p, pickOne, tw } from 'shuutils'
+import { div, dom, emit, image, on, pickOne, text, tw } from 'shuutils'
 import type { AppScanCodeStartEvent, AppSpeechStartEvent, AppStatus, AppStatusEvent, ItemsReadyEvent, SearchStartEvent } from '../types'
 import { button, logger } from '../utils'
 
 window.customElements.define('app-search-button', class extends HTMLElement {
 
-  private search = dom('input', tw('app-search-button h-10 w-full max-w-xs rounded-md border-2 border-purple-500 px-2 text-lg shadow-md hover:shadow-lg md:text-base'))
+  private readonly search = dom('input', tw('app-search-button h-10 w-full max-w-xs rounded-md border-2 border-purple-500 px-2 text-lg shadow-md hover:shadow-lg md:text-base'))
 
   private readonly scan = button('Scan it', tw('app-search-button'))
 
-  private speech = button('Speech', tw('app-search-button'))
+  private readonly speech = button('Speech', tw('app-search-button'))
 
-  private hint = p('mt-8 rounded-md p-4 text-center text-lg shadow backdrop-brightness-150 backdrop-opacity-30 md:text-base')
+  private readonly hint = text('mt-8 rounded-md p-4 text-center text-lg shadow backdrop-brightness-150 backdrop-opacity-30 md:text-base')
 
   private readonly wrapper = div('app-search-button')
 

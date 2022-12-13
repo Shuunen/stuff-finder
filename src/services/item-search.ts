@@ -1,4 +1,4 @@
-import { capitalize, copy, div, emit, on, storage } from 'shuutils'
+import { capitalize, clone, div, emit, on, storage } from 'shuutils'
 import type { AppForm } from '../components/form'
 import { EMPTY_APP_SETTINGS, EMPTY_ITEM, EMPTY_ITEM_SUGGESTIONS } from '../constants'
 import type { AppFormData, AppFormEditItemChangeEvent, AppFormEditItemSetEvent, AppFormEditItemSuggestionsEvent, AppLoaderToggleEvent, AppModalAddItemOpenEvent, AppModalPrintOneOpenEvent, AppSearchItemEvent, AppSettings, FormEditFormData, Item, ItemSuggestions, PrintInputData, WrapApiAliExResponse, WrapApiAngboResponse, WrapApiCampoResponse, WrapApiDeyesResponse } from '../types'
@@ -118,7 +118,7 @@ class ItemSearch {
 
   private async getSuggestions (str: string): Promise<Partial<ItemSuggestions>> {
     const asin = getAsin(str)
-    const suggestionsBase = copy(EMPTY_ITEM_SUGGESTIONS)
+    const suggestionsBase = clone(EMPTY_ITEM_SUGGESTIONS)
     if (asin !== undefined) await this.addSuggestionsFromAngbo(suggestionsBase, asin)
     if (suggestionsBase.name.length === 0) await this.addSuggestionsFromDeyes(suggestionsBase, str)
     if (suggestionsBase.name.length === 0) await this.addSuggestionsFromAliEx(suggestionsBase, str)

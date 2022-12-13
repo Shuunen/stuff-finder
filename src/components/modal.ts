@@ -6,7 +6,7 @@ window.customElements.define('app-modal', class extends HTMLElement {
 
   private active = false
 
-  private backdrop = div('app-backdrop app-hide pointer-events-none fixed top-0 left-0 z-20 flex h-full w-full flex-col items-center justify-center bg-black/50 align-middle')
+  private readonly backdrop = div('app-backdrop app-hide pointer-events-none fixed top-0 left-0 z-20 flex h-full w-full flex-col items-center justify-center bg-black/50 align-middle')
 
   private modal = div('app-modal')
 

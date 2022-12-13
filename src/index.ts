@@ -1,5 +1,5 @@
 import Fuse from 'fuse.js'
-import { copy, debounce, emit, fillTemplate, on, pickOne, sanitize, storage } from 'shuutils'
+import { clone, debounce, emit, fillTemplate, on, pickOne, sanitize, storage } from 'shuutils'
 import './assets/styles.min.css'
 import './components'
 import { EMPTY_APP_SETTINGS, EMPTY_COMMON_LISTS, EMPTY_ITEM } from './constants'
@@ -268,7 +268,7 @@ class App {
     if (data.reference !== undefined && data.reference.length > 0) fields.reference = data.reference
     if (data.status !== undefined && data.status.length > 0) fields.status = data.status
     fields[ItemField.referencePrinted] = data[ItemField.referencePrinted] ?? false
-    logger.log('fields before clean', copy(fields))
+    logger.log('fields before clean', clone(fields))
     if (data.id !== undefined && data.id.length > 0) {
       const existing = this.items.find(existingItem => existingItem.id === data.id)
       if (!existing) throw new Error('existing item not found locally')
@@ -280,7 +280,7 @@ class App {
         // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
         if (samePhoto || sameValue) delete fields[field]
       })
-      logger.log('fields after clean', copy(fields))
+      logger.log('fields after clean', clone(fields))
     }
     return fields
   }
