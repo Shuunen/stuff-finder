@@ -25,21 +25,21 @@ export const logger = {
 }
 /* eslint-enable no-console */
 
-const request = async <T> (method: 'get' | 'patch' | 'post', url: string, data?: Record<string, unknown>): Promise<T> => {
+const request = async <T> (method: 'GET' | 'PATCH' | 'POST', url: string, data?: Record<string, unknown>): Promise<T> => {
   const options: RequestInit = { headers: JSON_HEADERS, method }
   if (data) options.body = JSON.stringify(data)
   return fetch(url, options).then(async (response: Response) => response.json()).catch(error => { logger.showError((error as Error).message) }) as Promise<T>
 }
 
-export const patch = async (url: string, data: Record<string, unknown>): Promise<AirtableRecord> => request('patch', url, data)
+export const patch = async (url: string, data: Record<string, unknown>): Promise<AirtableRecord> => request('PATCH', url, data)
 
-export const post = async (url: string, data: Record<string, unknown>): Promise<AirtableRecord> => request('post', url, data)
+export const post = async (url: string, data: Record<string, unknown>): Promise<AirtableRecord> => request('POST', url, data)
 
 export const get = async <T> (url: string): Promise<T> => {
   const uuid = urlToUuid(url)
   const cached = storage.get<T>(uuid, undefined, sessionStorage)
   if (cached !== undefined) return cached
-  const response = await request<T>('get', url)
+  const response = await request<T>('GET', url)
   storage.set(uuid, response, sessionStorage)
   return response
 }
