@@ -24,7 +24,7 @@ specifiers:
   postcss: '8'
   repo-check: '1.29'
   servor: '4'
-  shuutils: '6.3'
+  shuutils: '7.0'
   tailwindcss: '3'
   tsm: '2'
   typescript: '4.9'
@@ -36,7 +36,7 @@ dependencies:
   '@camwiegert/typical': 0.1.1
   '@zxing/library': 0.19.1
   fuse.js: 6.6.2
-  shuutils: 6.3.0
+  shuutils: 7.0.0
   webcomponent-qr-code: 1.1.0
 
 devDependencies:
@@ -2646,8 +2646,8 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
-  /shuutils/6.3.0:
-    resolution: {integrity: sha512-cQa5okCxkfnWBzWY64Zu88XJ4xO6AJyR5YjIZGu/knIu2qyE9WAtd20LlcrY+WBqXzE5VAeekYmiUKtCLO/4MA==}
+  /shuutils/7.0.0:
+    resolution: {integrity: sha512-9D9NmlO5cASNSPP0CLeFd7BNW9pV4q9qN50xgp0PLmTfDZEQI22zpIunLT3KFJ8K+2C4zlPJn7FWG3Xtg6RtwA==}
     hasBin: true
     dependencies:
       tiny-glob: 0.2.9
