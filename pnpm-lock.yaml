@@ -24,7 +24,7 @@ specifiers:
   postcss: '8'
   repo-check: '1.29'
   servor: '4'
-  shuutils: '7.0'
+  shuutils: '7.1'
   tailwindcss: '3'
   tsm: '2'
   typescript: '4.9'
@@ -36,7 +36,7 @@ dependencies:
   '@camwiegert/typical': 0.1.1
   '@zxing/library': 0.19.1
   fuse.js: 6.6.2
-  shuutils: 7.0.0
+  shuutils: 7.1.0
   webcomponent-qr-code: 1.1.0
 
 devDependencies:
@@ -48,7 +48,7 @@ devDependencies:
   '@typescript-eslint/parser': 5.47.0_lzzuuodtsqwxnvqeq4g4likcqa
   autoprefixer: 10.4.13_postcss@8.4.20
   c8: 7.12.0
-  dependency-cruiser: 12.1.1
+  dependency-cruiser: 12.2.0
   esbuild: 0.16.4
   eslint: 8.30.0
   eslint-plugin-html: 7.1.0
@@ -980,8 +980,8 @@ packages:
     engines: {node: '>=0.4.0'}
     dev: true
 
-  /dependency-cruiser/12.1.1:
-    resolution: {integrity: sha512-NWDTbotDtnZfghU6r9mpz+7REuxxmN13af40sncGzOZqv0UDNiIa/T0ETHfoHP3I0MpoCdosOy8GHX72YKrfjA==}
+  /dependency-cruiser/12.2.0:
+    resolution: {integrity: sha512-mZziPju+n7gK2tMe+TAsQdje1LFFk2MvjtdYo0nrbDJzaEDKrz3yAZMUBQseZ8mkZmqogbriLDx3naY29RSgvQ==}
     engines: {node: ^14||^16||>=18}
     hasBin: true
     dependencies:
@@ -999,7 +999,7 @@ packages:
       glob: 7.2.0
       handlebars: 4.7.7
       indent-string: 4.0.0
-      interpret: 2.2.0
+      interpret: 3.1.1
       is-installed-globally: 0.4.0
       json5: 2.2.2
       lodash: 4.17.21
@@ -1882,9 +1882,9 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  /interpret/2.2.0:
-    resolution: {integrity: sha512-Ju0Bz/cEia55xDwUWEa8+olFpCiQoypjnQySseKtmjNrnps3P+xfpUmGr90T7yjlVJmOtybRvPXhKMbHr+fWnw==}
-    engines: {node: '>= 0.10'}
+  /interpret/3.1.1:
+    resolution: {integrity: sha512-6xwYfHbajpoF0xLW+iwLkhwgvLoZDfjYfoFNu8ftMoXINzwuymNLd9u/KmwtdT2GbR+/Cz66otEGEVVUHX9QLQ==}
+    engines: {node: '>=10.13.0'}
     dev: true
 
   /is-arrayish/0.2.1:
@@ -2666,8 +2666,8 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
-  /shuutils/7.0.0:
-    resolution: {integrity: sha512-9D9NmlO5cASNSPP0CLeFd7BNW9pV4q9qN50xgp0PLmTfDZEQI22zpIunLT3KFJ8K+2C4zlPJn7FWG3Xtg6RtwA==}
+  /shuutils/7.1.0:
+    resolution: {integrity: sha512-CYsVwn8EggWsF+oYIbB480zahvowxR8rTHHpKPogMKa/VyJ4Hjj7+Wbw1HsCHvLtY3yGKLuINwOSbbTNdPOLMg==}
     hasBin: true
     dependencies:
       tiny-glob: 0.2.9
