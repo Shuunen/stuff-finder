@@ -18,7 +18,7 @@ specifiers:
   eslint-plugin-tailwindcss: '3'
   eslint-plugin-unicorn: '45'
   fuse.js: '6.6'
-  jsdom: '20'
+  jsdom: '21'
   jsdom-global: '3'
   npm-parallel: '2'
   postcss: '8'
@@ -54,8 +54,8 @@ devDependencies:
   eslint-plugin-html: 7.1.0
   eslint-plugin-tailwindcss: 3.7.1
   eslint-plugin-unicorn: 45.0.2_eslint@8.31.0
-  jsdom: 20.0.3
-  jsdom-global: 3.0.2_jsdom@20.0.3
+  jsdom: 21.0.0
+  jsdom-global: 3.0.2_jsdom@21.0.0
   npm-parallel: 2.0.1
   postcss: 8.4.20
   repo-check: 1.29.0
@@ -1991,16 +1991,16 @@ packages:
       argparse: 2.0.1
     dev: true
 
-  /jsdom-global/3.0.2_jsdom@20.0.3:
+  /jsdom-global/3.0.2_jsdom@21.0.0:
     resolution: {integrity: sha512-t1KMcBkz/pT5JrvcJbpUR2u/w1kO9jXctaaGJ0vZDzwFnIvGWw9IDSRciT83kIs8Bnw4qpOl8bQK08V01YgMPg==}
     peerDependencies:
       jsdom: '>=10.0.0'
     dependencies:
-      jsdom: 20.0.3
+      jsdom: 21.0.0
     dev: true
 
-  /jsdom/20.0.3:
-    resolution: {integrity: sha512-SYhBvTh89tTfCD/CRdSOm13mOBa42iTaTyfyEWBdKcGdPxPtLFBXuHR8XHb33YNYaP+lLbmSvBTsnoesCNJEsQ==}
+  /jsdom/21.0.0:
+    resolution: {integrity: sha512-AIw+3ZakSUtDYvhwPwWHiZsUi3zHugpMEKlNPaurviseYoBqo0zBd3zqoUi3LPCNtPFlEP8FiW9MqCZdjb2IYA==}
     engines: {node: '>=14'}
     peerDependencies:
       canvas: ^2.5.0
