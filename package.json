@@ -20,7 +20,7 @@
     "autoprefixer": "10",
     "c8": "7",
     "dependency-cruiser": "latest",
-    "esbuild": "0.16",
+    "esbuild": "0.17",
     "eslint": "8.31",
     "eslint-plugin-html": "7",
     "eslint-plugin-tailwindcss": "3",
