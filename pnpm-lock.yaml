@@ -22,7 +22,7 @@ specifiers:
   jsdom-global: '3'
   npm-parallel: '2'
   postcss: '8'
-  repo-check: '1.29'
+  repo-check: '1.30'
   servor: '4'
   shuutils: '7.2'
   tailwindcss: '3'
@@ -48,7 +48,7 @@ devDependencies:
   '@typescript-eslint/parser': 5.50.0_zkdaqh7it7uc4cvz2haft7rc6u
   autoprefixer: 10.4.13_postcss@8.4.20
   c8: 7.12.0
-  dependency-cruiser: 12.7.0
+  dependency-cruiser: 12.7.1
   esbuild: 0.17.0
   eslint: 8.33.0
   eslint-plugin-html: 7.1.0
@@ -58,7 +58,7 @@ devDependencies:
   jsdom-global: 3.0.2_jsdom@21.0.0
   npm-parallel: 2.0.1
   postcss: 8.4.20
-  repo-check: 1.29.0
+  repo-check: 1.30.1
   servor: 4.0.2
   tailwindcss: 3.2.4_postcss@8.4.20
   tsm: 2.3.0
@@ -987,8 +987,8 @@ packages:
     engines: {node: '>=0.4.0'}
     dev: true
 
-  /dependency-cruiser/12.7.0:
-    resolution: {integrity: sha512-5oq4nhJ2h/bRM8LgB+UfEUEmDtpdBVfuc9bEvkd7w9HaMfbRdcthU0Ek2NOrVNpU1Eiu6U5Y8q1CsDJqD/yO1g==}
+  /dependency-cruiser/12.7.1:
+    resolution: {integrity: sha512-JBdqgpj/ydp9C1j8OBNM46EbQMyn9JIzORDLtFzPU7cVGeAZNnFqWX3pRyqBVjmUBX26cMIuXL/UdeI8pS9SfQ==}
     engines: {node: ^14||^16||>=18}
     hasBin: true
     dependencies:
@@ -1743,7 +1743,6 @@ packages:
 
   /globalyzer/0.1.0:
     resolution: {integrity: sha512-40oNTM9UfG6aBmuKxk/giHn5nQ8RVz/SS4Ir6zgzOv9/qC3kKZ9v4etGTcJbEl/NyVQH7FGU7d+X1egr57Md2Q==}
-    dev: false
 
   /globby/11.1.0:
     resolution: {integrity: sha512-jhIXaOzy1sb8IyocaruWSn1TjmnBVs8Ayhcy83rmxNJ8q2uWKCAj3CnJY+KpGSXCueAPc0i05kVvVKtP1t9S3g==}
@@ -1759,7 +1758,6 @@ packages:
 
   /globrex/0.1.2:
     resolution: {integrity: sha512-uHJgbwAMwNFf5mLst7IWLNg14x1CkeqglJb/K3doi4dw6q2IvAAmM/Y81kevy83wP+Sst+nutFTYOGg3d1lsxg==}
-    dev: false
 
   /graceful-fs/4.2.10:
     resolution: {integrity: sha512-9ByhssR2fPVsNZj478qUUbKfmL0+t5BDVyjShtyZZLiK7ZDAArFFfopyOTj0M05wE2tJPisA4iTnnXl2YoPvOA==}
@@ -2558,9 +2556,12 @@ packages:
       jsesc: 0.5.0
     dev: true
 
-  /repo-check/1.29.0:
-    resolution: {integrity: sha512-byp4NWqqR5R/0mLOSPxcHiXmj5kW+MVGasvLJNWEmqNT1yuV7t5AJ0jen+rQ4Ah5s+aglP3eupgY812rB9uVpA==}
+  /repo-check/1.30.1:
+    resolution: {integrity: sha512-x/kNdIMH6oUn72AdRFAcWK6Pax6DgA9l0C0rhBXnrDz8cgWGEna35bBst5YrUU+8rjHou8sroTtftLIkGAbX/w==}
     hasBin: true
+    dependencies:
+      arg: 5.0.2
+      shuutils: 7.2.0
     dev: true
 
   /require-directory/2.1.1:
@@ -2680,7 +2681,6 @@ packages:
     dependencies:
       tiny-glob: 0.2.9
       uvu: 0.5.6
-    dev: false
 
   /signal-exit/3.0.7:
     resolution: {integrity: sha512-wnD2ZE+l+SPC/uoS0vXeE9L1+0wuaMqKlfz9AMUo38JsyLSBWSFcHR1Rri62LZc12vLr1gb3jl7iwQhgwpAbGQ==}
@@ -2845,7 +2845,6 @@ packages:
     dependencies:
       globalyzer: 0.1.0
       globrex: 0.1.2
-    dev: false
 
   /to-regex-range/5.0.1:
     resolution: {integrity: sha512-65P7iz6X5yEr1cwcgvQxbbIw7Uk3gOy5dIdtZ4rDveLqhrdJP+Li/Hx6tyK0NEb+2GCyneCMJiGqrADCSNk8sQ==}

@@ -29,7 +29,7 @@
     "jsdom-global": "3",
     "npm-parallel": "2",
     "postcss": "8",
-    "repo-check": "1.29",
+    "repo-check": "1.30",
     "servor": "4",
     "tailwindcss": "3",
     "tsm": "2",
