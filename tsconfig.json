@@ -17,7 +17,7 @@
     "noImplicitAny": true,
     "noImplicitOverride": true,
     "noImplicitReturns": true,
-    "noPropertyAccessFromIndexSignature": true,
+    "noPropertyAccessFromIndexSignature": false,
     "noUncheckedIndexedAccess": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
@@ -26,7 +26,11 @@
     "skipLibCheck": true,
     "strict": true,
     "strictNullChecks": true,
-    "target": "ES2021"
+    "target": "ES2021",
+    "types": [
+      "node/globals",
+      "dom-speech-recognition"
+    ]
   },
   "include": [
     "src",

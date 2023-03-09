@@ -54,22 +54,22 @@
     "url": "https://github.com/Shuunen/stuff-finder.git"
   },
   "scripts": {
-    "build": "npm run build:css && npm run build:js -- --minify",
+    "build": "npm run build:css && npm run build:js -- --minify && echo build success",
     "build:css": "tailwindcss -i src/assets/styles.css -o src/assets/styles.min.css --minify",
     "build:js": "esbuild src/index.ts --outdir=public --bundle",
-    "check": "repo-check",
-    "ci": "npm run build && npm run lint && npm run check && npm run test",
+    "check": "repo-check && echo check success",
+    "ci": "npm run build && npm run lint && npm run check && npm run test && echo ci success",
     "dev": "parallel dev:css dev:js serve",
     "dev:css": "npm run build:css -- --watch",
     "dev:js": "npm run build:js -- --watch",
     "lint": "tsc --noEmit && eslint --cache --fix --ignore-path .gitignore --ext .js,.ts,.html . && depcruise src --config && echo lint success",
     "lint:watch": "watchlist src tests -eager -- npm run lint",
-    "mark": "unique-mark public/index.html",
+    "mark": "unique-mark public/index.html && echo mark success",
     "postversion": "git push && git push --tags",
     "preversion": "npm run ci",
     "serve": "servor public --reload",
     "start": "npm run dev",
-    "test": "c8 uvu -r tsm -r jsdom-global/register tests",
+    "test": "c8 uvu -r tsm -r jsdom-global/register tests && echo test success",
     "test:watch": "watchlist src tests -eager -- npm test"
   },
   "version": "0.4.0"
