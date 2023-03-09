@@ -7,7 +7,7 @@
 [![Scrutinizer Score](https://scrutinizer-ci.com/g/Shuunen/stuff-finder/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Shuunen/stuff-finder)
 [![Website](https://img.shields.io/website/https/shuunen-goals.netlify.app.svg)](https://stuff-finder.netlify.app)
 
-> Sorting things is pointless if you can't find them afterwards :D
+![banner](docs/banner.svg)
 
 ## Todo
 
