@@ -142,3 +142,8 @@ app-form[name="search-item"] img[src^="http"] + div > a.clear {
 .app-barcode .app-location {
   @apply bg-blue-400;
 }
+
+.result-status:not(.result-status--acheté) {
+  @apply grayscale opacity-70;
+  transform: skewX(-1deg) scaleX(0.99);
+}

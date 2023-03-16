@@ -34,13 +34,13 @@
   <app-settings-trigger></app-settings-trigger>
   <app-add-item-trigger></app-add-item-trigger>
 
-  <app-modal name="search-results" data-title="Search results" class="hidden px-2 md:max-h-96">
+  <app-modal name="search-results" data-title="Search results" class="hidden px-2 md:max-h-[max(30rem,50vh)]">
     <div class="app-list app-results overflow-auto"></div>
   </app-modal>
 
   <template id="search-results-list-item">
     <div
-      class="mx-auto mb-4 grid cursor-pointer items-center gap-4 rounded-md p-2 text-center transition-colors hover:bg-purple-50 sm:max-w-xl sm:grid-cols-3 sm:text-left"
+      class="mx-auto mb-4 grid cursor-pointer items-center gap-4 rounded-md p-2 text-center transition-colors hover:bg-purple-50 sm:max-w-xl sm:grid-cols-3 sm:text-left result-status result-status--{{ status }}"
       id="{{ id }}" data-action="select-result" data-payload="{{ id }}">
       <img onerror="window.dispatchEvent(new CustomEvent('app--img-loading-error'))"
         class="pointer-events-none mx-auto h-24 w-24 rounded-full bg-white object-contain sm:h-36 sm:w-36" async src="{{ visual }}"
@@ -50,6 +50,7 @@
         <p>{{ category }}, {{ details }}</p>
         <p class="hidden sm:block">Reference : {{ reference }} {{ barcode }}</p>
         <p class="hidden sm:block">Updated {{ updated }}</p>
+        <p class="hidden sm:block">Status : {{ status }}</p>
         <p>Location : <strong class="mr-1">{{ location }}</strong><strong>{{ box }} {{ drawer }}</strong></p>
       </div>
     </div>

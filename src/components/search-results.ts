@@ -29,24 +29,29 @@ window.customElements.define('app-search-results', class extends HTMLElement {
     emit<EditItemEvent>('edit-item', item)
   }
 
+  private renderResult (item: Item) {
+    const visual = item.photo?.[0]?.url ?? defaultImage
+    const updated = readableTimeAgo(new Date(item[ItemField.UpdatedOn]))
+    const data = { ...emptyItem, ...item, visual, updated }
+    return fillTemplate(this.template, data)
+  }
+
+  private appendAddItem (input: string) {
+    if (this.list.parentElement) find.oneOrNone('.app-add-item', this.list.parentElement)?.remove()
+    const content = `Do you want to <a href="#" data-action="app-modal--add-item--open" data-input="${input}">add a new item</a> ?`
+    this.list.parentElement?.append(text('app-add-item border-t pt-3 text-center', content))
+  }
+
   private async onResults (event: SearchResultsEvent) {
+    logger.debug('onResults', event)
     this.header.textContent = event.title
     this.results = event.results
-    // eslint-disable-next-line no-unsanitized/property
-    this.list.innerHTML = event.results.map(result => {
-      const visual = result.photo?.[0]?.url ?? defaultImage
-      const updated = readableTimeAgo(new Date(result[ItemField.UpdatedOn]))
-      const data = { ...emptyItem, ...result, visual, updated }
-      return fillTemplate(this.template, data)
-    }).join('')
+    this.list.innerHTML = event.results.map(result => this.renderResult(result)).join('') // eslint-disable-line no-unsanitized/property
     if (event.results.length === 0) this.list.innerHTML = '<p class="text-center py-4"><span class="text-4xl opacity-50">¯\\_(ツ)_/¯</span><br><br>No results found.</p>'
-    if (this.list.parentElement) find.oneOrNone('.app-add-item', this.list.parentElement)?.remove()
-    const content = `Do you want to <a href="#" data-action="app-modal--add-item--open" data-input="${event.input}">add a new item</a> ?`
-    this.list.parentElement?.append(text('app-add-item border-t pt-3 text-center', content))
+    this.appendAddItem(event.input)
     emit<AppModalSearchResultsOpenEvent>('app-modal--search-results--open')
     await sleep(delays.large)
     if (event.willScrollTop) this.list.firstElementChild?.scrollIntoView()
   }
 
-  
 })

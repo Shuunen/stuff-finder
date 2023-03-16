@@ -162,6 +162,7 @@ class App {
 
   private onSearchStart (event: SearchStartEvent) {
     const input = event.str.trim()
+    logger.debug('onSearchStart', input)
     this.lastSearch = input
     this.lastSearchOrigin = event.origin
     this.searchItems(input, event.willScrollTop)

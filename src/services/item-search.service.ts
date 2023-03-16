@@ -19,6 +19,7 @@ class ItemSearch {
   }
 
   private onSearchItem (data: AppFormData) {
+    logger.info('onSearchItem', data)
     void this.search(String(data.input))
   }
 
