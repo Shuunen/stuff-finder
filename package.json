@@ -11,18 +11,15 @@
   },
   "description": "Sorting things is pointless if you can't find them afterwards",
   "devDependencies": {
-    "@angular-eslint/template-parser": "15",
     "@tailwindcss/forms": "0.5",
     "@types/dom-speech-recognition": "0",
     "@types/node": "18",
-    "@typescript-eslint/eslint-plugin": "5.55",
-    "@typescript-eslint/parser": "5.55",
+    "@vitest/coverage-c8": "0.29",
     "autoprefixer": "10",
-    "c8": "7",
     "dependency-cruiser": "latest",
     "esbuild": "0.17",
     "eslint": "8.36",
-    "eslint-plugin-html": "7",
+    "eslint-config-hardcore": "33",
     "eslint-plugin-tailwindcss": "3",
     "eslint-plugin-unicorn": "46",
     "jsdom": "21",
@@ -32,9 +29,8 @@
     "repo-check": "1.30",
     "servor": "4",
     "tailwindcss": "3",
-    "tsm": "2",
     "typescript": "4.9",
-    "uvu": "0",
+    "vitest": "0.29",
     "watchlist": "0"
   },
   "files": [
@@ -69,8 +65,8 @@
     "preversion": "npm run ci",
     "serve": "servor public --reload",
     "start": "npm run dev",
-    "test": "c8 uvu -r tsm -r jsdom-global/register tests && echo test success",
-    "test:watch": "watchlist src tests -eager -- npm test"
+    "test": "npm run test:watch -- --run && echo test success",
+    "test:watch": "vitest --coverage"
   },
   "version": "0.4.0"
 }

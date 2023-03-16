@@ -7,10 +7,10 @@ window.customElements.define('app-settings-trigger', class extends HTMLElement {
 
   private readonly wrapper = div('app-settings-trigger absolute top-5 right-5 h-10 w-10 cursor-pointer text-purple-400 transition-colors hover:text-purple-600', this.icon)
 
-  public connectedCallback (): void {
-    on<AppSettingsTriggerAnimateEvent>('app-settings-trigger--animate', active => {
-      this.wrapper.classList.toggle('animate-bounce', active)
-      if (active) emit<AppModalSettingsOpenEvent>('app-modal--settings--open')
+  public connectedCallback () {
+    on<AppSettingsTriggerAnimateEvent>('app-settings-trigger--animate', isActive => {
+      this.wrapper.classList.toggle('animate-bounce', isActive)
+      if (isActive) emit<AppModalSettingsOpenEvent>('app-modal--settings--open')
     })
     this.wrapper.title = 'Open settings'
     this.wrapper.addEventListener('click', () => emit<AppModalSettingsOpenEvent>('app-modal--settings--open'))

@@ -42,7 +42,8 @@
     <div
       class="mx-auto mb-4 grid cursor-pointer items-center gap-4 rounded-md p-2 text-center transition-colors hover:bg-purple-50 sm:max-w-xl sm:grid-cols-3 sm:text-left"
       id="{{ id }}" data-action="select-result" data-payload="{{ id }}">
-      <img onerror="window.dispatchEvent(new CustomEvent('app--img-loading-error'))" class="pointer-events-none mx-auto h-24 w-24 rounded-full bg-white object-contain sm:h-36 sm:w-36" async src="{{ visual }}"
+      <img onerror="window.dispatchEvent(new CustomEvent('app--img-loading-error'))"
+        class="pointer-events-none mx-auto h-24 w-24 rounded-full bg-white object-contain sm:h-36 sm:w-36" async src="{{ visual }}"
         alt="{{ name }} visual" />
       <div class="pointer-events-none flex flex-col sm:col-span-2">
         <h3 class="font-medium text-purple-900">{{ name }} {{ brand }}</h3>
@@ -59,7 +60,7 @@
     <app-form name="edit-item" data-id="{{ id }}" class="items-center sm:grid-cols-2 sm:gap-4 md:grid-cols-4" on-close="app-modal--edit-item--close">
       <input type=hidden name=id />
       <div class="mb-6 max-h-72 sm:row-span-4 sm:mb-0 md:row-span-5">
-        <img class="mx-auto w-3/4" src="assets/no-visual.svg" />
+        <img class="mx-auto w-3/4" src="assets/no-visual.svg" alt="no visual" />
         <div class="relative mt-3 mb-6 flex flex-col justify-evenly">
           <input type=text name=photo
             onchange="window.dispatchEvent(new CustomEvent('app-form--edit-item--set', { detail: { photo: this.value } }))" />
@@ -79,8 +80,8 @@
       <label>Category <select name=category>{{ categories }}</select></label>
       <label>Price <input name=price type=number step=1 pattern="\d+" /></label>
       <div class="flex gap-4">
-        <label>Printed ?<input type=checkbox name="ref-printed" /></label> <!-- TODO use a visual switch/toggle -->
-        <button disabled class="self-end" data-id="{{ id }}" data-action="app-modal--print-one--open" data-payload="">
+        <label>Printed ?<input type=checkbox name="ref-printed" /></label>
+        <button type="button" disabled class="self-end" data-id="{{ id }}" data-action="app-modal--print-one--open" data-payload="">
           Print this item
         </button>
       </div>
@@ -153,8 +154,8 @@
         <summary>Advanced features</summary>
         <small>
           <div class="flex gap-4">
-            <button data-action="app-clear-cache">Clear cache</button>
-            <button data-action="app-clear-credentials">Clear credentials</button>
+            <button type="button" data-action="app-clear-cache">Clear cache</button>
+            <button type="button" data-action="app-clear-credentials">Clear credentials</button>
           </div>
         </small>
       </details>
@@ -162,7 +163,8 @@
       <details>
         <summary>About this app</summary>
         <small>
-          This is an open source project from <a href="https://github.com/Shuunen" target="_blank" data-action="see-profile">Shuunen</a>.<br />You can
+          This is an open source project from <a href="https://github.com/Shuunen" target="_blank" data-action="see-profile"
+            rel="noreferrer">Shuunen</a>.<br />You can
           check the
           source code on the <a href="https://github.com/Shuunen/stuff-finder" target="_blank" data-action="see-project" rel="noreferrer">Github
             project page</a>.
@@ -193,8 +195,8 @@
         <input name=reference type=text placeholder=Reference required minlength=5 maxlength=20 value="{{ reference }}">
         <select name=box>{{ boxes }}</select>
         <select name=drawer>{{ drawers }}</select>
-        <label>Printed ?<input type=checkbox name="ref-printed" /></label> <!-- TODO use a visual switch/toggle -->
-        <button disabled data-id="{{ id }}" data-action="app-modal--print-one--open" data-payload="">
+        <label>Printed ?<input type=checkbox name="ref-printed" /></label>
+        <button type="button" disabled data-id="{{ id }}" data-action="app-modal--print-one--open" data-payload="">
           Print
         </button>
       </app-form>
@@ -226,6 +228,7 @@
   </app-modal>
 
   <template id="print-one--40x30">
+    <!-- eslint-disable-next-line @html-eslint/no-inline-styles -->
     <div class="app-print-one app-barcode" style="width:145px; height: 110px; aspect-ratio: 4/3;">
       <div class="app-qr-code-visual">{{ qrCodeVisual }}</div>
       <div class="app-col">
@@ -236,6 +239,7 @@
   </template>
 
   <template id="print-one--40x20">
+    <!-- eslint-disable-next-line @html-eslint/no-inline-styles -->
     <div class="app-print-one app-barcode" style="width:145px; height: 72px; aspect-ratio: 4/2;">
       <div class="app-qr-code-visual">{{ qrCodeVisual }}</div>
       <div class="app-col">

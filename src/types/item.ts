@@ -20,56 +20,48 @@ export interface ItemPhoto {
 }
 
 export const enum ItemStatus {
-  acheté = 'acheté',
-  défectueux = 'défectueux',
-  donné = 'donné',
-  jeté = 'jeté',
-  renvoyé = 'renvoyé',
-  vendu = 'vendu',
+  Acheté = 'acheté',
+  Défectueux = 'défectueux',
+  Donné = 'donné',
+  Jeté = 'jeté',
+  Renvoyé = 'renvoyé',
+  Vendu = 'vendu',
 }
 
 export const enum ItemField {
-  barcode = 'barcode',
-  box = 'box',
-  brand = 'brand',
-  category = 'category',
-  details = 'details',
-  drawer = 'drawer',
-  id = 'id',
-  location = 'location',
-  name = 'name',
-  photo = 'photo',
-  price = 'price',
-  reference = 'reference',
-  referencePrinted = 'ref-printed',
-  status = 'status',
-  updatedOn = 'updated-on',
+  Barcode = 'barcode',
+  Box = 'box',
+  Brand = 'brand',
+  Category = 'category',
+  Details = 'details',
+  Drawer = 'drawer',
+  Id = 'id',
+  Location = 'location', // eslint-disable-line @typescript-eslint/no-shadow
+  Name = 'name',
+  Photo = 'photo',
+  Price = 'price',
+  Reference = 'reference',
+  ReferencePrinted = 'ref-printed',
+  Status = 'status',
+  UpdatedOn = 'updated-on',
 }
 
 export interface Item {
-  [ItemField.barcode]: string
-  [ItemField.box]: string
-  [ItemField.brand]: string
-  [ItemField.category]: string
-  [ItemField.details]: string
-  [ItemField.drawer]: string
-  [ItemField.id]: string
-  [ItemField.location]: string
-  [ItemField.name]: string
-  [ItemField.photo]?: ItemPhoto[]
-  [ItemField.price]?: number
-  [ItemField.reference]: string
-  [ItemField.referencePrinted]: boolean
-  [ItemField.status]: ItemStatus
-  [ItemField.updatedOn]: string
+  [ItemField.Barcode]: string
+  [ItemField.Box]: string
+  [ItemField.Brand]: string
+  [ItemField.Category]: string
+  [ItemField.Details]: string
+  [ItemField.Drawer]: string
+  [ItemField.Id]: string
+  [ItemField.Location]: string
+  [ItemField.Name]: string
+  [ItemField.Photo]?: ItemPhoto[]
+  [ItemField.Price]?: number
+  [ItemField.Reference]: string
+  [ItemField.ReferencePrinted]: boolean
+  [ItemField.Status]: ItemStatus
+  [ItemField.UpdatedOn]: string
 }
 
 export type ItemSuggestions = Record<keyof Item, string[]>
-
-export interface CommonLists {
-  boxes: string[]
-  locations: string[]
-  statuses: string[]
-  drawers: string[]
-  categories: string[]
-}

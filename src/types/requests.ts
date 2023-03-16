@@ -2,6 +2,7 @@ import type { Item, ItemField } from './item'
 
 export interface WrapApiResponse {
   messages: string[]
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   success: boolean
 }
 
@@ -60,7 +61,7 @@ export interface AirtableError {
 
 export interface AirtableRecord {
   id: string
-  fields: Partial<Omit<Item, ItemField.id>>
+  fields: Partial<Omit<Item, ItemField.Id>>
   error?: AirtableError
 }
 

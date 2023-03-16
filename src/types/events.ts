@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-use-before-define */
 import type { Item, ItemField } from './item'
 import type { PrintFormData, PrintInputData } from './print'
 import type { AppSettings } from './settings'
@@ -7,7 +8,7 @@ export type AppClearCacheEvent = undefined
 export type AppClearCredentialsEvent = undefined
 export type AppFormChangeEvent = AppFormData
 export type AppFormCloseEvent = undefined
-export type AppFormData = Record<string, AppFormDataValue> & { formValid: boolean }
+export type AppFormData = Record<string, AppFormDataValue> & { hasValidForm: boolean }
 export type AppFormDataValue = boolean | number | string
 export type AppFormEditItemChangeEvent = FormEditFormData
 export type AppFormEditItemSaveEvent = FormEditFormData
@@ -53,7 +54,7 @@ export type BarcodesToPrintEvent = Item[]
 export type DoPrintOneEvent = PrintInputData
 export type EditItemEvent = Item
 export type EditItemPhotoEvent = string
-export type FormEditFormData = AppFormData & Partial<Omit<Item, ItemField.photo> & { photo: string }>
+export type FormEditFormData = AppFormData & Partial<Omit<Item, ItemField.Photo> & { photo: string }>
 export type FormIdErrorEvent = string
 export type FormIdSetEvent = AppFormData
 export type FormIdSuggestionsEvent = FormSuggestions
@@ -65,7 +66,7 @@ export type RecognitionErrorEvent = { error: string }
 export type RecognitionResult = { confidence: number; transcript: string }
 export type RecognitionResultEvent = { results: RecognitionResult[][] }
 export type SearchOrigin = 'default' | 'scan' | 'search-results' | 'speech' | 'type' | 'url'
-export type SearchResultsEvent = { byReference: boolean; input: string; results: Item[]; scrollTop: boolean; title: string }
+export type SearchResultsEvent = { isReference: boolean; input: string; results: Item[]; willScrollTop: boolean; title: string }
 export type SearchRetryEvent = undefined
-export type SearchStartEvent = { origin: SearchOrigin; scrollTop?: boolean; str: string }
+export type SearchStartEvent = { origin: SearchOrigin; willScrollTop?: boolean; str: string }
 export type SelectResultEvent = string // the id of the selected item

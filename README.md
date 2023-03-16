@@ -18,6 +18,7 @@
 - [ ] detect user in/activity to refresh data
 - [ ] show given/thrown items with a different color/display, also they're no more in box/room
 - [ ] use hash instead of search params in url service
+- [ ] use a visual switch/toggle instead of input type=checkbox name="ref-printed"
 - [ ] @typescript-eslint/eslint-plugin is locked to 5.43 cause 5.44 trigger "@typescript-eslint/keyword-spacing" error "at ImportDeclaration[importKind=type]"
 
 ## Build sizes
@@ -50,5 +51,4 @@ Check build stats in details by adding `--metafile=meta.json` to the esbuild com
 - [Shuutils](https://github.com/Shuunen/shuutils) : collection of pure JS utils
 - [SvgOmg](https://jakearchibald.github.io/svgomg/) : great tool to reduce svg image size
 - [TailwindCss](https://tailwindcss.com) : awesome lib to produce maintainable style
-- [UvU](https://github.com/lukeed/uvu) : extremely fast and lightweight test runner for Node.js and the browser
 - [Watchlist](https://github.com/lukeed/watchlist) : recursively watch a list of directories & run a command on any file system

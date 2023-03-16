@@ -8,11 +8,11 @@ export interface PrintData {
   text: string
 }
 
-export type PrintFormData = AppFormData & { size: PrintFormDataSize }
-
 export const enum PrintFormDataSize {
-  rect40x20 = '40x20',
-  rect40x30 = '40x30',
+  Rect40x20 = '40x20',
+  Rect40x30 = '40x30',
 }
+
+export type PrintFormData = AppFormData & { size: PrintFormDataSize }
 
 export type PrintInputData = Partial<Item>

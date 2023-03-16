@@ -1,6 +1,38 @@
 import { div, dom, emit, image, on, pickOne, text, tw } from 'shuutils'
 import type { AppScanCodeStartEvent, AppSpeechStartEvent, AppStatus, AppStatusEvent, ItemsReadyEvent, SearchStartEvent } from '../types'
-import { button, logger } from '../utils'
+import { button } from '../utils/browser.utils'
+import { logger } from '../utils/logger.utils'
+
+const knownSpeechAndHints: Record<AppStatus, { speech: string; hint: string }> = {
+  'listening': {
+    speech: pickOne(['👂 Listening to you', '👂 Give it to me', '👂 Tell me']),
+    hint: 'Say keywords about what you\'re looking for (ex. "tablet", "biking gloves")',
+  },
+  'ready': {
+    speech: pickOne(['Say it', 'Speech']),
+    hint: 'Search is ready for you sir, just type your search, scan or say something.',
+  },
+  'settings-required': { // eslint-disable-line @typescript-eslint/naming-convention
+    speech: 'Settings',
+    hint: 'You need to configure this app to use it, please use the bouncing setting gear.',
+  },
+  'failed': {
+    speech: pickOne(['Retry', 'Try again']),
+    hint: 'Speech recognition has fail, just press the button to try again or use another method.',
+  },
+  'loading': {
+    speech: 'Loading',
+    hint: 'Loading...',
+  },
+  'unexpected-error': { // eslint-disable-line @typescript-eslint/naming-convention
+    speech: 'Unexpected error',
+    hint: 'An unexpected error has occurred, please try again later.',
+  },
+}
+
+const speechAndHints: Record<string, { speech: string; hint: string }> = {
+  ...knownSpeechAndHints,
+}
 
 window.customElements.define('app-search-button', class extends HTMLElement {
 
@@ -14,7 +46,7 @@ window.customElements.define('app-search-button', class extends HTMLElement {
 
   private readonly wrapper = div('app-search-button')
 
-  public connectedCallback (): void {
+  public connectedCallback () {
     const inputs = this.createInputs()
     this.wrapper.append(inputs)
     this.wrapper.append(this.hint)
@@ -28,56 +60,32 @@ window.customElements.define('app-search-button', class extends HTMLElement {
     })
   }
 
-  private onStatus (status: AppStatus): void {
+  private onStatus (status: AppStatus) {
     const { speech, hint } = this.getSpeechAndHint(status)
     this.speech.textContent = speech
     this.hint.textContent = hint
   }
 
-  private getSpeechAndHint (status: AppStatus): { speech: string; hint: string } {
-    if (status === 'listening') {
-      this.speech.style.pointerEvents = 'none'
-      return {
-        speech: pickOne(['👂 Listening to you', '👂 Give it to me', '👂 Tell me']),
-        hint: 'Say keywords about what you\'re looking for (ex. "tablet", "biking gloves")',
-      }
-    }
-    if (status === 'ready') {
-      this.speech.style.pointerEvents = 'auto'
-      return {
-        speech: pickOne(['Say it', 'Speech']),
-        hint: 'Search is ready for you sir, just type your search, scan or say something.',
-      }
-    }
-    if (status === 'settings-required') return {
-      speech: 'Settings',
-      hint: 'You need to configure this app to use it, please use the bouncing setting gear.',
-    }
-    if (status === 'failed') return {
-      speech: pickOne(['Retry', 'Try again']),
-      hint: 'Speech recognition has fail, just press the button to try again or use another method.',
-    }
-    if (status === 'loading') return {
-      speech: 'Loading',
-      hint: 'Loading...',
-    }
-    logger.showError('un-expected status :', status)
-    return { speech: pickOne(['Retry', 'Try again']), hint: 'An un-expected case happen' }
+  private getSpeechAndHint (status: string) {
+    if (status === 'listening') this.speech.style.pointerEvents = 'none'
+    if (status === 'ready') this.speech.style.pointerEvents = 'auto'
+    return speechAndHints[status] ?? knownSpeechAndHints['unexpected-error']
   }
 
-  private handleFocusLessTyping (): void {
+  private handleFocusLessTyping () {
     document.body.addEventListener('keydown', event => { this.onKeyDown(event) })
   }
 
-  private onKeyDown (event: KeyboardEvent): void {
-    const filter = /^[\s\w-]$/i // this filter let user use special keys like CTRL without interfering
+  private onKeyDown (event: KeyboardEvent) {
+    const filter = /^[\s\w-]$/u // this filter let user use special keys like CTRL without interfering
     if (!(event.target instanceof HTMLInputElement)) return
     if (event.target.tagName.toLowerCase() !== 'body' || !filter.test(event.key)) return
-    logger.log('redirecting user input char :', event.key, 'to search input')
+    logger.info('redirecting user input char :', event.key, 'to search input')
     this.search.focus()
   }
 
-  private createInputs (): HTMLDivElement {
+  // eslint-disable-next-line max-statements
+  private createInputs () {
     const row = div('pointer-events-none grid justify-center gap-4 px-4 opacity-50 transition-opacity sm:grid-cols-3')
     const colA = div('grid gap-2')
     colA.append(this.scan)

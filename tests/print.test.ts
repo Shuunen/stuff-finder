@@ -1,6 +1,6 @@
-import { check, checksRun } from 'shuutils'
-import { inputToPrintCode, inputToPrintData, inputToPrintQrCodeVisual, inputToPrintText, itemToPrintLocation } from '../src/services/print.service'
+import { expect, it } from 'vitest'
 import type { PrintInputData } from '../src/types'
+import { inputToPrintCode, inputToPrintData, inputToPrintQrCodeVisual, inputToPrintText, itemToPrintLocation } from '../src/utils/print.utils'
 
 const itemA: PrintInputData = {
   id: '1234567',
@@ -24,33 +24,32 @@ const itemB: PrintInputData = {
   drawer: '',
 }
 
-check('itemToPrintText A', inputToPrintText(itemA), 'name brand details')
-check('itemToPrintText B', inputToPrintText({ ...itemA, name: '  ' }), 'brand details')
-check('itemToPrintText C', inputToPrintText({ ...itemA, brand: '  ' }), 'name details')
+it('itemToPrintText A', () => { expect(inputToPrintText(itemA)).toEqual('name brand details') })
+it('itemToPrintText B', () => { expect(inputToPrintText({ ...itemA, name: '  ' })).toEqual('brand details') })
+it('itemToPrintText C', () => { expect(inputToPrintText({ ...itemA, brand: '  ' })).toEqual('name details') })
 
-check('inputToPrintCode A', inputToPrintCode(itemA), 'reference')
-check('inputToPrintCode B', inputToPrintCode({ ...itemA, reference: '  ' }), 'barcode')
-check('inputToPrintCode C', inputToPrintCode({ ...itemA, reference: '  ', barcode: '  ' }), '')
-check('inputToPrintCode D', inputToPrintCode(itemB), 'barcode')
-check('inputToPrintCode E', inputToPrintCode({}), '')
+it('inputToPrintCode A', () => { expect(inputToPrintCode(itemA)).toEqual('reference') })
+it('inputToPrintCode B', () => { expect(inputToPrintCode({ ...itemA, reference: '  ' })).toEqual('barcode') })
+it('inputToPrintCode C', () => { expect(inputToPrintCode({ ...itemA, reference: '  ', barcode: '  ' })).toEqual('') })
+it('inputToPrintCode D', () => { expect(inputToPrintCode(itemB)).toEqual('barcode') })
+it('inputToPrintCode E', () => { expect(inputToPrintCode({})).toEqual('') })
 
-check('itemToPrintBarcode A', inputToPrintQrCodeVisual(itemA), '<qr-code data="reference" margin=0 modulesize=3></qr-code>')
-check('itemToPrintBarcode B', inputToPrintQrCodeVisual({ ...itemA, reference: '  ', barcode: '' }), '<div class="bg-red-700 text-white">No reference or barcode</div>')
-check('itemToPrintBarcode C', inputToPrintQrCodeVisual({ ...itemA, barcode: '  ', reference: '' }), '<div class="bg-red-700 text-white">No reference or barcode</div>')
-check('itemToPrintBarcode D', inputToPrintQrCodeVisual({ ...itemA, reference: '' }), '<qr-code data="barcode" margin=0 modulesize=3></qr-code>')
-check('itemToPrintBarcode E', inputToPrintQrCodeVisual({ ...itemA, barcode: '' }), '<qr-code data="reference" margin=0 modulesize=3></qr-code>')
+it('itemToPrintBarcode A', () => { expect(inputToPrintQrCodeVisual(itemA)).toEqual('<qr-code data="reference" margin=0 modulesize=3></qr-code>') })
+it('itemToPrintBarcode B', () => { expect(inputToPrintQrCodeVisual({ ...itemA, reference: '  ', barcode: '' })).toEqual('<div class="bg-red-700 text-white">No reference or barcode</div>') })
+it('itemToPrintBarcode C', () => { expect(inputToPrintQrCodeVisual({ ...itemA, barcode: '  ', reference: '' })).toEqual('<div class="bg-red-700 text-white">No reference or barcode</div>') })
+it('itemToPrintBarcode D', () => { expect(inputToPrintQrCodeVisual({ ...itemA, reference: '' })).toEqual('<qr-code data="barcode" margin=0 modulesize=3></qr-code>') })
+it('itemToPrintBarcode E', () => { expect(inputToPrintQrCodeVisual({ ...itemA, barcode: '' })).toEqual('<qr-code data="reference" margin=0 modulesize=3></qr-code>') })
 
-check('itemToPrintLocation A', itemToPrintLocation({ ...itemA, box: 'A', drawer: '4' }), 'A4')
-check('itemToPrintLocation B', itemToPrintLocation({ ...itemA, box: 'A', drawer: '' }), 'A')
-check('itemToPrintLocation C', itemToPrintLocation({ ...itemA, box: '', drawer: '4' }), 'location')
-check('itemToPrintLocation D', itemToPrintLocation({ ...itemA, box: '', drawer: '' }), 'location')
-check('itemToPrintLocation E', itemToPrintLocation({ ...itemA, box: 'A', drawer: '4', location: 'Salon' }), 'A4')
-check('itemToPrintLocation F', itemToPrintLocation({ ...itemA, box: 'A', drawer: '', location: 'Salon' }), 'A')
-check('itemToPrintLocation G', itemToPrintLocation({ ...itemA, box: '', drawer: '4', location: 'Salon' }), 'Salon')
-check('itemToPrintLocation H', itemToPrintLocation(itemA), 'B2')
-check('itemToPrintLocation I', itemToPrintLocation({ ...itemA, box: '', drawer: '', location: '' }), '')
-check('itemToPrintLocation J', itemToPrintLocation(itemB), '')
+it('itemToPrintLocation A', () => { expect(itemToPrintLocation({ ...itemA, box: 'A', drawer: '4' })).toEqual('A4') })
+it('itemToPrintLocation B', () => { expect(itemToPrintLocation({ ...itemA, box: 'A', drawer: '' })).toEqual('A') })
+it('itemToPrintLocation C', () => { expect(itemToPrintLocation({ ...itemA, box: '', drawer: '4' })).toEqual('location') })
+it('itemToPrintLocation D', () => { expect(itemToPrintLocation({ ...itemA, box: '', drawer: '' })).toEqual('location') })
+it('itemToPrintLocation E', () => { expect(itemToPrintLocation({ ...itemA, box: 'A', drawer: '4', location: 'Salon' })).toEqual('A4') })
+it('itemToPrintLocation F', () => { expect(itemToPrintLocation({ ...itemA, box: 'A', drawer: '', location: 'Salon' })).toEqual('A') })
+it('itemToPrintLocation G', () => { expect(itemToPrintLocation({ ...itemA, box: '', drawer: '4', location: 'Salon' })).toEqual('Salon') })
+it('itemToPrintLocation H', () => { expect(itemToPrintLocation(itemA)).toEqual('B2') })
+it('itemToPrintLocation I', () => { expect(itemToPrintLocation({ ...itemA, box: '', drawer: '', location: '' })).toEqual('') })
+it('itemToPrintLocation J', () => { expect(itemToPrintLocation(itemB)).toEqual('') })
 
-check('itemToPrintData A', inputToPrintData(itemA), { text: 'name brand details', qrCodeVisual: '<qr-code data="reference" margin=0 modulesize=3></qr-code>', qrCodeValue: 'reference', location: 'B2' })
+it('itemToPrintData A', () => { expect(inputToPrintData(itemA)).toEqual({ text: 'name brand details', qrCodeVisual: '<qr-code data="reference" margin=0 modulesize=3></qr-code>', qrCodeValue: 'reference', location: 'B2' }) })
 
-checksRun()

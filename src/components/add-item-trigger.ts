@@ -6,14 +6,14 @@ window.customElements.define('app-add-item-trigger', class extends HTMLElement {
 
   private readonly icon = div('app-add-item absolute top-5 right-32 -mt-0.5 mr-2 hidden h-11 w-11 cursor-pointer text-purple-400 opacity-80 transition-colors hover:text-purple-600 hover:opacity-100', this.svg)
 
-  public connectedCallback (): void {
+  public connectedCallback () {
     on<ItemsReadyEvent>('items-ready', this.showIcon.bind(this))
     if (!this.parentNode) throw new Error('no parentNode for app-add-item-trigger')
     this.parentNode.replaceChild(this.icon, this)
     this.icon.addEventListener('click', () => emit<AppModalAddItemOpenEvent>('app-modal--add-item--open'))
   }
 
-  private showIcon (): void {
+  private showIcon () {
     this.icon.classList.remove('hidden')
   }
 })
