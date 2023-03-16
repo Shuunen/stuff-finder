@@ -1,8 +1,9 @@
 import { div, fillTemplate, on, sleep } from 'shuutils'
-import { inputToPrintData } from '../services/print.service'
-import type { AppFormPrintOneChangeEvent, AppFormPrintOneReadyEvent, AppModalPrintOneCloseEvent, AppModalPrintOneOpenEvent, DoPrintOneEvent, PrintData, PrintFormData, PrintInputData, PrintOneEvent } from '../types'
-import { PrintFormDataSize } from '../types'
-import { find, logger } from '../utils'
+import { delays } from '../constants'
+import { PrintFormDataSize, type AppFormPrintOneChangeEvent, type AppFormPrintOneReadyEvent, type AppModalPrintOneCloseEvent, type AppModalPrintOneOpenEvent, type DoPrintOneEvent, type PrintData, type PrintFormData, type PrintInputData, type PrintOneEvent } from '../types'
+import { find } from '../utils/browser.utils'
+import { logger } from '../utils/logger.utils'
+import { inputToPrintData } from '../utils/print.utils'
 
 window.customElements.define('app-print-one', class extends HTMLElement {
 
@@ -10,12 +11,28 @@ window.customElements.define('app-print-one', class extends HTMLElement {
 
   private previewElement = div('')
 
-  private size = PrintFormDataSize.rect40x20
+  private size = PrintFormDataSize.Rect40x20
 
-  public async connectedCallback (): Promise<void> {
-    await sleep(100)
+  private onFormChange (form: PrintFormData) {
+    logger.info('print one form change', form)
+    this.size = form.size
+    if (this.data) void this.preview()
+  }
+
+  private doPrintOne () {
+    logger.info('do print one', this.data)
+    window.print()
+  }
+
+  private onClose () {
+    logger.info('print one modal closed')
+    this.data = undefined
+  }
+
+  public async connectedCallback () {
+    await sleep(delays.small)
     this.previewElement = find.one<HTMLDivElement>('.app-print-one--preview')
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    // eslint-disable-next-line @typescript-eslint/no-require-imports, putout/putout
     if (customElements.get('qr-code') === undefined) require('webcomponent-qr-code')
     on<AppFormPrintOneChangeEvent>('app-form--print-one--change', this.onFormChange.bind(this))
     on<AppFormPrintOneReadyEvent>('app-form--print-one--ready', this.onFormChange.bind(this))
@@ -25,44 +42,37 @@ window.customElements.define('app-print-one', class extends HTMLElement {
     on<PrintOneEvent>('print-one', this.preview.bind(this))
   }
 
-  private async preview (input?: PrintInputData): Promise<void> {
-    logger.log('preview in', this.size)
+  private async preview (input?: PrintInputData) {
+    logger.info('preview in', this.size)
     if (!this.data) this.data = input === undefined ? undefined : inputToPrintData(input)
     if (!this.data) { logger.showError('no data or input to print'); return }
     const template = find.one(`template#print-one--${this.size}`)
-    this.previewElement.innerHTML = fillTemplate(template.innerHTML + '<div class="font-mono mt-4">QR Code value : {{ qrCodeValue }}</div>', { ...this.data })
+    // eslint-disable-next-line no-unsanitized/property
+    this.previewElement.innerHTML = fillTemplate(`${template.innerHTML}<div class="font-mono mt-4">QR Code value : {{ qrCodeValue }}</div>`, { ...this.data })
     await this.adjustQrCode()
     this.doPrintOne()
   }
 
-  private async adjustQrCode (): Promise<void> {
+  // eslint-disable-next-line max-statements
+  private async adjustQrCode () {
     // sometimes some qr code are too big and need to be resized to fit the barcode
     const preview = find.one('.app-barcode', this.previewElement)
-    const maxHeight = preview.scrollHeight - 5
-    await sleep(200)
+    const margin = 5
+    const maxHeight = preview.scrollHeight - margin
+    await sleep(delays.medium)
     const wc = find.one<HTMLElement>('qr-code', this.previewElement)
     // reducing the module size do the trick & reduce their display size
     if (!wc.shadowRoot) { logger.showError('no shadowRoot for qr-code custom element', wc); return }
     if (!wc.shadowRoot.firstElementChild) { logger.showError('no firstElementChild for qr-code custom element shadowRoot', wc.shadowRoot); return }
     const height = wc.shadowRoot.firstElementChild.scrollHeight
-    if (height <= maxHeight) { logger.log(`qr code size is ok (${height}px <= ${maxHeight}px)`); return }
-    logger.log(`qr code size has been reduced, it was too big (${height}px > ${maxHeight}px)`)
+    if (height <= maxHeight) { logger.info(`qr code size is ok (${height}px <= ${maxHeight}px)`); return }
+    logger.info(`qr code size has been reduced, it was too big (${height}px > ${maxHeight}px)`)
     wc.setAttribute('modulesize', '2')
   }
 
-  private onFormChange (form: PrintFormData): void {
-    logger.log('print one form change', form)
-    this.size = form.size
-    if (this.data) void this.preview()
-  }
 
-  private doPrintOne (): void {
-    logger.log('do print one', this.data)
-    window.print()
-  }
 
-  private onClose (): void {
-    logger.log('print one modal closed')
-    this.data = undefined
-  }
+
+
+
 })

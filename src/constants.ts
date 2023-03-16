@@ -1,24 +1,21 @@
-import type { AppSettings, CommonLists, Item, ItemSuggestions } from './types'
 import { ItemField, ItemStatus } from './types'
 
-export const JSON_HEADERS = {
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  'Accept': 'application/json',
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  'Content-Type': 'application/json',
+export const jsonHeaders = {
+  'Accept': 'application/json', // eslint-disable-line @typescript-eslint/naming-convention
+  'Content-Type': 'application/json', // eslint-disable-line @typescript-eslint/naming-convention
 }
 
-export const DEFAULT_IMAGE = 'assets/no-visual.svg'
+export const defaultImage = 'assets/no-visual.svg'
 
-export const EMPTY_COMMON_LISTS: CommonLists = {
+export const emptyCommonLists = {
   boxes: [],
   drawers: [],
   locations: [],
   statuses: [],
   categories: [],
-}
+} as const
 
-export const EMPTY_APP_SETTINGS: AppSettings = {
+export const emptyAppSettings = {
   base: '',
   key: '',
   table: '',
@@ -26,38 +23,44 @@ export const EMPTY_APP_SETTINGS: AppSettings = {
   wrap: '',
 }
 
-export const EMPTY_ITEM: Item = {
-  [ItemField.barcode]: '',
-  [ItemField.box]: '',
-  [ItemField.brand]: '',
-  [ItemField.category]: '',
-  [ItemField.details]: '',
-  [ItemField.drawer]: '',
-  [ItemField.id]: '',
-  [ItemField.location]: '',
-  [ItemField.name]: '',
-  [ItemField.photo]: [],
-  [ItemField.price]: 0,
-  [ItemField.reference]: '',
-  [ItemField.referencePrinted]: false,
-  [ItemField.status]: ItemStatus.acheté,
-  [ItemField.updatedOn]: '',
+export const emptyItem = {
+  [ItemField.Barcode]: '',
+  [ItemField.Box]: '',
+  [ItemField.Brand]: '',
+  [ItemField.Category]: '',
+  [ItemField.Details]: '',
+  [ItemField.Drawer]: '',
+  [ItemField.Id]: '',
+  [ItemField.Location]: '',
+  [ItemField.Name]: '',
+  [ItemField.Photo]: [],
+  [ItemField.Price]: 0,
+  [ItemField.Reference]: '',
+  [ItemField.ReferencePrinted]: false,
+  [ItemField.Status]: ItemStatus.Acheté,
+  [ItemField.UpdatedOn]: '',
 }
 
-export const EMPTY_ITEM_SUGGESTIONS: ItemSuggestions = {
-  [ItemField.name]: [],
-  [ItemField.brand]: [],
-  [ItemField.details]: [],
-  [ItemField.reference]: [],
-  [ItemField.barcode]: [],
-  [ItemField.category]: [],
-  [ItemField.location]: [],
-  [ItemField.box]: [],
-  [ItemField.drawer]: [],
-  [ItemField.status]: [ItemStatus.acheté],
-  [ItemField.price]: [],
-  [ItemField.photo]: [],
-  [ItemField.referencePrinted]: [],
-  [ItemField.updatedOn]: [],
-  [ItemField.id]: [],
+export const emptyItemSuggestions = {
+  [ItemField.Name]: [],
+  [ItemField.Brand]: [],
+  [ItemField.Details]: [],
+  [ItemField.Reference]: [],
+  [ItemField.Barcode]: [],
+  [ItemField.Category]: [],
+  [ItemField.Location]: [],
+  [ItemField.Box]: [],
+  [ItemField.Drawer]: [],
+  [ItemField.Status]: [ItemStatus.Acheté],
+  [ItemField.Price]: [],
+  [ItemField.Photo]: [],
+  [ItemField.ReferencePrinted]: [],
+  [ItemField.UpdatedOn]: [],
+  [ItemField.Id]: [],
 }
+
+export const delays = {
+  small: 100,
+  medium: 200,
+  large: 300,
+} as const
