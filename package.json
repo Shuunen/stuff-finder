@@ -22,8 +22,6 @@
     "eslint-config-hardcore": "35",
     "eslint-plugin-tailwindcss": "3",
     "eslint-plugin-unicorn": "46",
-    "jsdom": "21",
-    "jsdom-global": "3",
     "npm-parallel": "2",
     "postcss": "8",
     "repo-check": "1.30",
