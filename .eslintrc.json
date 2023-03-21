@@ -46,6 +46,7 @@
       "error",
       2
     ],
+    "@typescript-eslint/lines-around-comment": "off",
     "@typescript-eslint/member-delimiter-style": [
       "error",
       {
