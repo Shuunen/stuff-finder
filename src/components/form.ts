@@ -9,7 +9,7 @@ export class AppForm extends HTMLElement {
 
   private readonly els = {
     error: text(''),
-    header: h2('app-header mt-2 mb-4 text-center text-2xl text-purple-700', this.dataset.title),
+    header: h2('app-header mb-4 mt-2 text-center text-2xl text-purple-700', this.dataset.title),
     form: dom('form'),
     footer: div(''),
     save: button(this.saveLabel, 'save ml-4'),
@@ -142,6 +142,7 @@ export class AppForm extends HTMLElement {
 
   private setInputValue (input: HTMLInputElement, value: AppFormDataValue) {
     /* eslint-disable no-param-reassign */
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison
     if (input.name === ItemField.Photo) this.setPhoto(input, value)
     else if (input.type === 'checkbox') input.checked = String(value) === 'true'
     else input.value = String(value)
