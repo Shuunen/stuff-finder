@@ -1,9 +1,8 @@
 # Stuff Finder
 
 [![GitHub license](https://img.shields.io/github/license/shuunen/stuff-finder.svg?color=informational)](https://github.com/Shuunen/stuff-finder/blob/master/LICENSE)
-
+[![Code Climate maintainability](https://img.shields.io/codeclimate/maintainability/Shuunen/stuff-finder?style=flat)](https://codeclimate.com/github/Shuunen/stuff-finder)
 [![David](https://img.shields.io/david/shuunen/stuff-finder.svg)](https://david-dm.org/shuunen/stuff-finder)
-[![LGTM Grade](https://img.shields.io/lgtm/grade/javascript/github/Shuunen/stuff-finder.svg)](https://lgtm.com/projects/g/Shuunen/stuff-finder)
 [![Scrutinizer Score](https://scrutinizer-ci.com/g/Shuunen/stuff-finder/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Shuunen/stuff-finder)
 [![Website](https://img.shields.io/website/https/shuunen-goals.netlify.app.svg)](https://stuff-finder.netlify.app)
 
@@ -32,6 +31,8 @@ Check build stats in details by adding `--metafile=meta.json` to the esbuild com
 
 ## Thanks
 
+- [Vitest](https://github.com/vitest-dev/vitest) : super fast vite-native testing framework
+- [Dependency-cruiser](https://github.com/sverweij/dependency-cruiser) : handy tool to validate and visualize dependencies
 - [Add icon](https://www.iconfinder.com/icons/1814113/add_more_plus_icon) by Alexander Madyankin & Roman Shamin
 - [Box icon](https://www.iconfinder.com/icons/2123914/app_box_essential_ui_icon) by Just Icon
 - [C8](https://github.com/bcoe/c8) : simple & effective cli for code coverage
