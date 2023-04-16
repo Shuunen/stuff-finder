@@ -15,15 +15,16 @@ import './components/search-button'
 import './components/search-results'
 import './components/settings-trigger'
 import './components/toaster'
-import { delays, emptyAppSettings, emptyCommonLists, emptyItem } from './constants'
+import { delays, emptyAppSettings, emptyCommonLists, type CommonLists } from './constants'
 import './services/item-search.service'
 import './services/sound.service'
 import './services/speech.service'
 import './services/url.service'
-import { ItemField, ItemStatus, type AirtableRecord, type AirtableResponse, type AppActionEvent, type AppClearCacheEvent, type AppClearCredentialsEvent, type AppFormEditItemSaveEvent, type AppFormSettingsErrorEvent, type AppFormSettingsReadyEvent, type AppFormSettingsSaveEvent, type AppFormSettingsSetEvent, type AppImgLoadingErrorEvent, type AppLoaderToggleEvent, type AppModalAddItemCloseEvent, type AppModalEditItemCloseEvent, type AppModalSearchResultsCloseEvent, type AppModalSettingsCloseEvent, type AppPrompterTypeEvent, type AppScanCodeStartEvent, type AppSettings, type AppSettingsTriggerAnimateEvent, type AppSpeechStartEvent, type AppStatusEvent, type FormEditFormData, type Item, type ItemPhoto, type ItemsReadyEvent, type SearchOrigin, type SearchResultsEvent, type SearchRetryEvent, type SearchStartEvent } from './types'
+import { ItemField, type AirtableRecord, type AirtableResponse, type AppActionEvent, type AppClearCacheEvent, type AppClearCredentialsEvent, type AppFormEditItemSaveEvent, type AppFormSettingsErrorEvent, type AppFormSettingsReadyEvent, type AppFormSettingsSaveEvent, type AppFormSettingsSetEvent, type AppImgLoadingErrorEvent, type AppLoaderToggleEvent, type AppModalAddItemCloseEvent, type AppModalEditItemCloseEvent, type AppModalSearchResultsCloseEvent, type AppModalSettingsCloseEvent, type AppPrompterTypeEvent, type AppScanCodeStartEvent, type AppSettings, type AppSettingsTriggerAnimateEvent, type AppSpeechStartEvent, type AppStatusEvent, type FormEditFormData, type Item, type ItemPhoto, type ItemsReadyEvent, type SearchOrigin, type SearchResultsEvent, type SearchRetryEvent, type SearchStartEvent } from './types'
 import { find, get, patch, post, valuesToOptions } from './utils/browser.utils'
+import { airtableRecordToItem, getCommonListsFromItems } from './utils/item.utils'
 import { logger } from './utils/logger.utils'
-import { getObjectOrSelf, sortListsEntries } from './utils/objects.utils'
+import { getObjectOrSelf } from './utils/objects.utils'
 import './utils/print.utils'
 
 class App {
@@ -100,7 +101,7 @@ class App {
   }
 
   private initFuse () {
-    if (!this.readCommonLists()) return
+    if (!this.readCommonLists()) throw new Error('common lists not loaded')
     // https://fusejs.io/
     const options: Fuse.IFuseOptions<Item> = {
       distance: 200, // see the tip at https://fusejs.io/concepts/scoring-theory.html#scoring-theory
@@ -131,31 +132,8 @@ class App {
     if (this.items.length > 0) emit<ItemsReadyEvent>('items-ready')
   }
 
-  private augmentCommonLists (inoutLists: Record<string, string[]>, records: AirtableRecord[]) {
-    const lists = clone(inoutLists)
-    // eslint-disable-next-line complexity, sonarjs/cognitive-complexity
-    records.forEach(record => {
-      const location = record.fields.location ?? '' // eslint-disable-line @typescript-eslint/no-shadow
-      if (location.length > 0 && lists.locations?.includes(location) === false) lists.locations.push(location)
-      const box = record.fields.box ?? ''
-      if (box.length > 0 && lists.boxes?.includes(box) === false) lists.boxes.push(box)
-      const status = record.fields.status ?? ItemStatus.Acheté
-      if (lists.statuses?.includes(status) === false) lists.statuses.push(status)
-      const category = record.fields.category ?? ''
-      if (category.length > 0 && lists.categories?.includes(category) === false) lists.categories.push(category)
-    })
-    return lists
-  }
-
   private parseApiRecords (records: AirtableRecord[]) {
-    const boxes: string[] = []
-    const locations: string[] = []
-    const statuses = [ItemStatus.Acheté, ItemStatus.Vendu, ItemStatus.Donné, ItemStatus.Renvoyé, ItemStatus.Défectueux, ItemStatus.Jeté]
-    const categories: string[] = []
-    const drawers = ['', '1', '2', '3', '4', '5', '6', '7']
-    this.augmentCommonLists({ boxes, locations, statuses, categories, drawers }, records)
-    this.saveCommonLists({ boxes, locations, statuses, categories, drawers })
-    this.items = records.map(record => this.airtableRecordToItem(record))
+    this.items = records.map(record => airtableRecordToItem(record))
     logger.showLog(`${this.items.length} item(s) loaded ${this.coolAscii()}`)
     this.initFuse()
   }
@@ -188,14 +166,6 @@ class App {
     if (this.lastSearchOrigin === 'speech') return emit<AppSpeechStartEvent>('app-speech--start')
     logger.showError('un-handled search retry case')
     return false
-  }
-
-  private airtableRecordToItem (record: AirtableRecord) {
-    return {
-      ...emptyItem,
-      ...record.fields,
-      id: record.id,
-    }
   }
 
   // eslint-disable-next-line max-statements, complexity, sonarjs/cognitive-complexity
@@ -254,16 +224,12 @@ class App {
     emit<AppActionEvent>(action, getObjectOrSelf(payload) ?? target)
   }
 
-  private saveCommonLists (lists: Record<string, string[]>) {
-    const sortedList = sortListsEntries(lists)
-    logger.info('saving common lists :', sortedList)
-    storage.set('lists', sortedList)
+  private saveCommonLists (lists: CommonLists) {
+    logger.info('saving common lists :', lists)
+    storage.set('lists', lists)
   }
 
-  private readCommonLists () {
-    if (this.hasCommonListsLoaded) return true
-    const lists = storage.get<typeof emptyCommonLists>('lists', emptyCommonLists)
-    logger.info('common lists found', lists)
+  private fillEditItemTemplate (lists: CommonLists) {
     const template = find.one('template#edit-item')
     const data: Record<keyof typeof lists, string> = {
       boxes: valuesToOptions(lists.boxes),
@@ -274,6 +240,17 @@ class App {
     }
     // eslint-disable-next-line no-unsanitized/property
     template.innerHTML = fillTemplate(template.innerHTML, data)
+  }
+
+  private readCommonLists () {
+    if (this.hasCommonListsLoaded) return true
+    let lists = storage.get<typeof emptyCommonLists>('lists', emptyCommonLists)
+    if (lists.boxes.length === 1) {
+      lists = getCommonListsFromItems(this.items)
+      this.saveCommonLists(lists)
+    }
+    logger.info('common lists found', lists)
+    this.fillEditItemTemplate(lists)
     this.hasCommonListsLoaded = true
     return true
   }
@@ -328,7 +305,7 @@ class App {
       logger.showError('airtable fetch returned no records')
       return false
     }
-    const remote = this.airtableRecordToItem(records[0])
+    const remote = airtableRecordToItem(records[0])
     if (cachedItems.some(item => item.id === remote.id && item[ItemField.UpdatedOn] === remote[ItemField.UpdatedOn])) {
       this.items = cachedItems
       logger.showLog('no updates from Airtable, cache seems up to date')
@@ -363,7 +340,7 @@ class App {
     logger.info('onEditItem response', response)
     this.isLoading(false)
     if (response.error) { logger.showError(response.error.message); return false }
-    const item = this.airtableRecordToItem(response)
+    const item = airtableRecordToItem(response)
     this.pushItemLocally(item)
     this.closeModals()
     document.location.hash = ''

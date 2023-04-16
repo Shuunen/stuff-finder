@@ -1,0 +1,60 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`airtableRecordToItem A 1`] = `
+{
+  "barcode": "",
+  "box": "box A",
+  "brand": "",
+  "category": "category A",
+  "details": "",
+  "drawer": "",
+  "id": "rec123",
+  "location": "location A",
+  "name": "item A",
+  "photo": [],
+  "price": 0,
+  "ref-printed": false,
+  "reference": "",
+  "status": "acheté",
+  "updated-on": "",
+}
+`;
+
+exports[`getCommonListsFromItems A 1`] = `
+{
+  "boxes": [
+    "",
+    "box B",
+  ],
+  "categories": [
+    "",
+    "category B",
+  ],
+  "drawers": [
+    "",
+    "",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+  ],
+  "locations": [
+    "",
+    "location A",
+    "location B",
+  ],
+  "statuses": [
+    "",
+    "acheté",
+    "défectueux",
+    "donné",
+    "jeté",
+    "new surprise status",
+    "renvoyé",
+    "vendu",
+  ],
+}
+`;

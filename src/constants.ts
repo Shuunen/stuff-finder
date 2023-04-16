@@ -7,13 +7,21 @@ export const jsonHeaders = {
 
 export const defaultImage = 'assets/no-visual.svg'
 
-export const emptyCommonLists = {
+export interface CommonLists {
+  boxes: string[]
+  drawers: string[]
+  locations: string[]
+  statuses: string[]
+  categories: string[]
+}
+
+export const emptyCommonLists: CommonLists = {
   boxes: [],
-  drawers: [],
+  drawers: ['', '1', '2', '3', '4', '5', '6', '7'],
   locations: [],
-  statuses: [],
+  statuses: [ItemStatus.Acheté, ItemStatus.Vendu, ItemStatus.Donné, ItemStatus.Renvoyé, ItemStatus.Défectueux, ItemStatus.Jeté],
   categories: [],
-} as const
+}
 
 export const emptyAppSettings = {
   base: '',
