@@ -2,7 +2,7 @@ import { ItemField, ItemStatus } from './types'
 
 export const jsonHeaders = {
   'Accept': 'application/json', // eslint-disable-line @typescript-eslint/naming-convention
-  'Content-Type': 'application/json', // eslint-disable-line @typescript-eslint/naming-convention
+  'Content-Type': 'application/json',
 }
 
 export const defaultImage = 'assets/no-visual.svg'

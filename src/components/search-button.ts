@@ -12,7 +12,7 @@ const knownSpeechAndHints: Record<AppStatus, { speech: string; hint: string }> =
     speech: pickOne(['Say it', 'Speech']),
     hint: 'Search is ready for you sir, just type your search, scan or say something.',
   },
-  'settings-required': { // eslint-disable-line @typescript-eslint/naming-convention
+  'settings-required': {
     speech: 'Settings',
     hint: 'You need to configure this app to use it, please use the bouncing setting gear.',
   },
@@ -24,7 +24,7 @@ const knownSpeechAndHints: Record<AppStatus, { speech: string; hint: string }> =
     speech: 'Loading',
     hint: 'Loading...',
   },
-  'unexpected-error': { // eslint-disable-line @typescript-eslint/naming-convention
+  'unexpected-error': {
     speech: 'Unexpected error',
     hint: 'An unexpected error has occurred, please try again later.',
   },

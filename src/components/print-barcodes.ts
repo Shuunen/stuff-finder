@@ -35,7 +35,7 @@ window.customElements.define('app-print-barcodes', class extends HTMLElement {
 
   private createTrigger () {
     const icon = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><defs/><path fill="currentColor" fill-rule="evenodd" d="M8 4h8v2H8V4zm10 2h4v12h-4v4H6v-4H2V6h4V2h12v4zm2 10h-2v-2H6v2H4V8h16v8zM8 16h8v4H8v-4zm0-6H6v2h2v-2z" clip-rule="evenodd"/></svg>'
-    const wrapper = div(tw('app-prepare-barcodes-trigger absolute top-5 right-20 hidden h-10 w-10 cursor-pointer text-purple-400 transition-colors hover:text-purple-600'), icon)
+    const wrapper = div(tw('app-prepare-barcodes-trigger absolute right-20 top-5 hidden h-10 w-10 cursor-pointer text-purple-400 transition-colors hover:text-purple-600'), icon)
     wrapper.title = 'Open print barcodes'
     wrapper.addEventListener('click', this.findItemsToPrint.bind(this))
     return wrapper

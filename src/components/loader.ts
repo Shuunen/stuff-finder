@@ -7,7 +7,7 @@ const icon = div('h-24 w-24 animate-spin opacity-50', svg)
 
 window.customElements.define('app-loader', class extends HTMLElement {
   public connectedCallback () {
-    const backdrop = div('app-loader fixed top-0 left-0 z-50 flex h-full w-full items-center justify-center bg-white/50', icon)
+    const backdrop = div('app-loader fixed left-0 top-0 z-50 flex h-full w-full items-center justify-center bg-white/50', icon)
     const toggle = debounce((isActive: boolean) => backdrop.classList.toggle('hidden', !isActive), delays.small)
     on<AppLoaderToggleEvent>('app-loader--toggle', async isActive => { await toggle(isActive) })
     if (!this.parentNode) throw new Error('no parentNode for app-loader')
