@@ -4,7 +4,7 @@
   "bugs": "https://github.com/Shuunen/stuff-finder/issues",
   "dependencies": {
     "@camwiegert/typical": "0.1",
-    "@zxing/library": "0.19",
+    "@zxing/library": "0.20",
     "fuse.js": "6.6",
     "shuutils": "7.2",
     "webcomponent-qr-code": "1.1"
