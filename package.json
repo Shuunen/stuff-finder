@@ -17,7 +17,7 @@
     "@vitest/coverage-c8": "0.31",
     "autoprefixer": "10",
     "dependency-cruiser": "latest",
-    "esbuild": "0.17",
+    "esbuild": "0.18",
     "eslint": "8.41",
     "eslint-config-hardcore": "36",
     "eslint-plugin-tailwindcss": "3",
