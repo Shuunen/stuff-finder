@@ -1,4 +1,4 @@
-import { dom, Nb, sleep, storage, tw } from 'shuutils'
+import { dom, sleep, storage, tw } from 'shuutils'
 import { delays, jsonHeaders } from '../constants'
 import { logger } from './logger.utils'
 import { urlToUuid } from './url.utils'
@@ -62,7 +62,7 @@ export const find = {
 export async function fadeIn (element: HTMLElement) {
   if (!element.classList.contains('app-hide')) { logger.error('please add "app-hide" class before mounting dom element and then call fade-in'); return }
   element.classList.remove('hidden')
-  await sleep(Nb.Ten)
+  await sleep(10) // eslint-disable-line @typescript-eslint/no-magic-numbers
   element.style.opacity = '1' // eslint-disable-line no-param-reassign
 }
 
