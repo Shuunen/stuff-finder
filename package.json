@@ -59,7 +59,7 @@
     "lint:watch": "watchlist src tests -eager -- pnpm lint",
     "mark": "unique-mark public/index.html && echo mark success",
     "postversion": "git push && git push --tags",
-    "preversion": "pnpm ci",
+    "preversion": "pnpm check",
     "serve": "servor public --reload",
     "start": "pnpm dev",
     "test": "pnpm test:watch --run && echo test success",
