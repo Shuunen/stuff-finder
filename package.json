@@ -65,5 +65,5 @@
     "test": "pnpm test:watch --run && echo test success",
     "test:watch": "vitest --coverage"
   },
-  "version": "0.4.0"
+  "version": "0.5.0"
 }
