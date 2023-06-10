@@ -26,6 +26,7 @@
 - 0.1.0 : 3KB html + 9KB css + 435KB js
 - 0.2.0 : 8KB html + 20KB css + 305KB js
 - 0.4.0 : 12KB html + 22KB css + 320KB js
+- 0.5.0 : 12KB html + 22KB css + 330KB js
 
 Check build stats in details by adding `--metafile=meta.json` to the esbuild command and use a tool like [Bundle Buddy](https://bundle-buddy.com/)
 
