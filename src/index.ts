@@ -245,7 +245,7 @@ class App {
   private readCommonLists () {
     if (this.hasCommonListsLoaded) return true
     let lists = storage.get<typeof emptyCommonLists>('lists', emptyCommonLists)
-    if (lists.boxes.length === 1) {
+    if (lists.boxes.length <= 1) {
       lists = getCommonListsFromItems(this.items)
       this.saveCommonLists(lists)
     }
