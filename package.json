@@ -18,7 +18,7 @@
     "autoprefixer": "10",
     "dependency-cruiser": "latest",
     "esbuild": "0.18",
-    "eslint": "8.42",
+    "eslint": "8.43",
     "eslint-config-hardcore": "36",
     "eslint-plugin-tailwindcss": "3",
     "eslint-plugin-unicorn": "47",
