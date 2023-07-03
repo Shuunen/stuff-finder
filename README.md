@@ -32,11 +32,9 @@ Check build stats in details by adding `--metafile=meta.json` to the esbuild com
 
 ## Thanks
 
-- [Vitest](https://github.com/vitest-dev/vitest) : super fast vite-native testing framework
-- [Dependency-cruiser](https://github.com/sverweij/dependency-cruiser) : handy tool to validate and visualize dependencies
 - [Add icon](https://www.iconfinder.com/icons/1814113/add_more_plus_icon) by Alexander Madyankin & Roman Shamin
 - [Box icon](https://www.iconfinder.com/icons/2123914/app_box_essential_ui_icon) by Just Icon
-- [C8](https://github.com/bcoe/c8) : simple & effective cli for code coverage
+- [Dependency-cruiser](https://github.com/sverweij/dependency-cruiser) : handy tool to validate and visualize dependencies
 - [Esbuild](https://github.com/evanw/esbuild) : an extremely fast JavaScript bundler and minifier
 - [Eslint](https://eslint.org) : super tool to find & fix problems
 - [Eye icon](https://www.iconfinder.com/icons/5925640/eye_no_view_icon) by IconPai
@@ -53,4 +51,5 @@ Check build stats in details by adding `--metafile=meta.json` to the esbuild com
 - [Shuutils](https://github.com/Shuunen/shuutils) : collection of pure JS utils
 - [SvgOmg](https://jakearchibald.github.io/svgomg/) : great tool to reduce svg image size
 - [TailwindCss](https://tailwindcss.com) : awesome lib to produce maintainable style
+- [Vitest](https://github.com/vitest-dev/vitest) : super fast vite-native testing framework
 - [Watchlist](https://github.com/lukeed/watchlist) : recursively watch a list of directories & run a command on any file system

@@ -14,9 +14,16 @@ export function getAsin (url: string) {
   return regex.exec(check)?.groups?.asin
 }
 
-export function normalizePhotoUrl (url: string) {
-  // in: https://m.media-amazon.com/images/I/41eTyK5fGVL._SY90_.jpg or https://m.media-amazon.com/images/I/41eTyK5fGVL._AC_SL1500_.jpg
-  // out: https://m.media-amazon.com/images/I/41eTyK5fGVL._SL500_.jpg
-  return url.replace(/._AC_SL\d+_.jpg|._SY\d+_.jpg/u, '._SL500_.jpg')
+/**
+ * Normalize a photo url to a standard given size
+ * @param url the url to normalize
+ * @param size the size to normalize to
+ * @returns the normalized url
+ */
+export function normalizePhotoUrl (url: string, size = 500) {
+  return url
+    .replace(/._AC.+\.jpg|._S[XY]\d+_.jpg/u, `._SL${size}_.jpg`) // Amazon
+    .replace(/\/w\/\d+\//u, `/w/${size}/`) // KwCdn Temu
+    .replace(/\bf=\d+x\d+/u, `f=${size}x${size}`) // Decathlon
 }
 
