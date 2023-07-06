@@ -14,7 +14,7 @@
     "@tailwindcss/forms": "0.5",
     "@types/dom-speech-recognition": "0",
     "@types/node": "18",
-    "@vitest/coverage-v8": "0.32",
+    "@vitest/coverage-v8": "0.33",
     "autoprefixer": "10",
     "dependency-cruiser": "latest",
     "esbuild": "0.18",
@@ -28,7 +28,7 @@
     "servor": "4",
     "tailwindcss": "3",
     "typescript": "5.1",
-    "vitest": "0.32",
+    "vitest": "0.33",
     "watchlist": "0"
   },
   "files": [
