@@ -109,6 +109,7 @@ module.exports = {
       from: {},
       to: {
         couldNotResolve: true,
+        pathNot: 'shuutils',
       },
     },
     {
