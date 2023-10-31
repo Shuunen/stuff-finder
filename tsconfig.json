@@ -29,7 +29,8 @@
     "types": [
       "node/globals",
       "dom-speech-recognition"
-    ]
+    ],
+    "verbatimModuleSyntax": true
   },
   "include": [
     "src",

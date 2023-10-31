@@ -2,7 +2,6 @@
 
 [![GitHub license](https://img.shields.io/github/license/shuunen/stuff-finder.svg?color=informational)](https://github.com/Shuunen/stuff-finder/blob/master/LICENSE)
 [![Code Climate maintainability](https://img.shields.io/codeclimate/maintainability/Shuunen/stuff-finder?style=flat)](https://codeclimate.com/github/Shuunen/stuff-finder)
-[![David](https://img.shields.io/david/shuunen/stuff-finder.svg)](https://david-dm.org/shuunen/stuff-finder)
 [![Scrutinizer Score](https://scrutinizer-ci.com/g/Shuunen/stuff-finder/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Shuunen/stuff-finder)
 [![Website](https://img.shields.io/website/https/shuunen-goals.netlify.app.svg)](https://stuff-finder.netlify.app)
 
@@ -18,7 +17,6 @@
 - [ ] show given/thrown items with a different color/display, also they're no more in box/room
 - [ ] use hash instead of search params in url service
 - [ ] use a visual switch/toggle instead of input type=checkbox name="ref-printed"
-- [ ] @typescript-eslint/eslint-plugin is locked to 5.43 cause 5.44 trigger "@typescript-eslint/keyword-spacing" error "at ImportDeclaration[importKind=type]"
 
 ## Build sizes
 
@@ -51,5 +49,6 @@ Check build stats in details by adding `--metafile=meta.json` to the esbuild com
 - [Shuutils](https://github.com/Shuunen/shuutils) : collection of pure JS utils
 - [SvgOmg](https://jakearchibald.github.io/svgomg/) : great tool to reduce svg image size
 - [TailwindCss](https://tailwindcss.com) : awesome lib to produce maintainable style
+- [V8](https://github.com/demurgos/v8-coverage) : simple & effective cli for code coverage
 - [Vitest](https://github.com/vitest-dev/vitest) : super fast vite-native testing framework
 - [Watchlist](https://github.com/lukeed/watchlist) : recursively watch a list of directories & run a command on any file system
