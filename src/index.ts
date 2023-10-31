@@ -1,5 +1,5 @@
 /* eslint-disable max-lines */
-import Fuse from 'fuse.js'
+import Fuse, { type IFuseOptions } from 'fuse.js'
 import { clone, debounce, emit, fillTemplate, on, pickOne, sanitize, storage } from 'shuutils'
 import './assets/styles.min.css'
 import './components/add-item-trigger'
@@ -103,7 +103,7 @@ class App {
   private initFuse () {
     if (!this.readCommonLists()) throw new Error('common lists not loaded')
     // https://fusejs.io/
-    const options: Fuse.IFuseOptions<Item> = {
+    const options: IFuseOptions<Item> = {
       distance: 200, // see the tip at https://fusejs.io/concepts/scoring-theory.html#scoring-theory
       threshold: 0.35, // 0 is perfect match
       ignoreLocation: true, // eslint-disable-line @typescript-eslint/naming-convention

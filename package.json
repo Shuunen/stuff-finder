@@ -5,7 +5,7 @@
   "dependencies": {
     "@camwiegert/typical": "0.1",
     "@zxing/library": "0.20",
-    "fuse.js": "6.6",
+    "fuse.js": "7.0",
     "shuutils": "7.3",
     "webcomponent-qr-code": "1.2"
   },
