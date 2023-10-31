@@ -138,7 +138,8 @@ class ItemSearch {
     const wrapApiKey = this.getWrapApiKey()
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     if (wrapApiKey === '') return {} as ResponseType
-    return await get<ResponseType>(`https://wrapapi.com/use/jojo/${endpoint}&wrapAPIKey=${wrapApiKey}`)
+    // disable cache for wrap-api because it's taking too much space in the browser
+    return await get<ResponseType>(`https://wrapapi.com/use/jojo/${endpoint}&wrapAPIKey=${wrapApiKey}`, false)
   }
 
   private async addSuggestionsFromDeyes (suggestions: ItemSuggestions, code: string) {
