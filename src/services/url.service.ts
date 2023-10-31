@@ -18,7 +18,7 @@ class UrlService {
     await sleep(delays.small) // needed
     const parameters = new URLSearchParams(window.location.search)
     parameters.forEach((value, key) => {
-      if (key === 'search') emit<SearchStartEvent>('search-start', { str: value, origin: 'url' })
+      if (key === 'search') emit<SearchStartEvent>('search-start', { origin: 'url', str: value })
       else if (key === 'add') this.openAddItemModal(value)
       else logger.info(`unknown parameter key "${key}" with value "${value}"`)
     })

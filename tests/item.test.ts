@@ -3,13 +3,13 @@ import { ItemStatus, type AirtableRecord, type Item } from '../src/types'
 import { airtableRecordToItem, getCommonListsFromItems } from '../src/utils/item.utils'
 
 const recordA: AirtableRecord = {
-  id: 'rec123',
   fields: {
-    name: 'item A',
-    location: 'location A',
     box: 'box A',
     category: 'category A',
+    location: 'location A',
+    name: 'item A',
   },
+  id: 'rec123',
 }
 
 it('airtableRecordToItem A', () => {
@@ -17,17 +17,17 @@ it('airtableRecordToItem A', () => {
 })
 
 const itemBase: Item = {
-  'id': 'rec234',
-  'box': 'box B',
-  'category': 'category B',
   'barcode': 'barcode B',
+  'box': 'box B',
   'brand': 'brand B',
+  'category': 'category B',
   'details': 'details B',
-  'location': 'location B',
   'drawer': 'drawer B',
+  'id': 'rec234',
+  'location': 'location B',
   'name': 'name B',
-  'reference': 'reference B',
   'ref-printed': false,
+  'reference': 'reference B',
   'status': ItemStatus.Acheté,
   'updated-on': '2021-08-01T00:00:00.000Z',
 }

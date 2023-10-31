@@ -1,5 +1,5 @@
 /* eslint-disable max-lines */
-import Fuse, { type IFuseOptions } from 'fuse.js'
+import Fuse, { type IFuseOptions } from 'fuse.js' // eslint-disable-line @typescript-eslint/naming-convention
 import { clone, debounce, emit, fillTemplate, on, pickOne, sanitize, storage } from 'shuutils'
 import './assets/styles.min.css'
 import './components/add-item-trigger'
@@ -101,18 +101,18 @@ class App {
   }
 
   private initFuse () {
-    if (!this.readCommonLists()) throw new Error('common lists not loaded')
+    this.readCommonLists()
+    if (!this.hasCommonListsLoaded) throw new Error('common lists not loaded')
     // https://fusejs.io/
     const options: IFuseOptions<Item> = {
       distance: 200, // see the tip at https://fusejs.io/concepts/scoring-theory.html#scoring-theory
-      threshold: 0.35, // 0 is perfect match
-      ignoreLocation: true, // eslint-disable-line @typescript-eslint/naming-convention
       getFn: (object: Item, path: string[] | string) => {
         const value = Fuse.config.getFn(object, path)
         if (Array.isArray(value)) return value.map((element: string) => sanitize(element))
         if (typeof value === 'string') return sanitize(value)
         return value
       },
+      ignoreLocation: true, // eslint-disable-line @typescript-eslint/naming-convention
       keys: [{
         name: ItemField.Name,
         weight: 4,
@@ -126,6 +126,7 @@ class App {
         name: ItemField.Category,
         weight: 1,
       }], // this is not generic ^^"
+      threshold: 0.35, // 0 is perfect match
     }
     this.fuse = new Fuse(this.items, options)
     storage.set('items', this.items)
@@ -152,7 +153,7 @@ class App {
     let title = 'No results found'
     if (results.length > 0) title = results.length === 1 ? 'One result found' : `${results.length} results found`
     title += ` for “${input}”`
-    const data: SearchResultsEvent = { title, results, isReference: Boolean(result), input, willScrollTop }
+    const data: SearchResultsEvent = { input, isReference: Boolean(result), results, title, willScrollTop }
     emit<SearchResultsEvent>('search-results', data)
   }
 
@@ -233,17 +234,17 @@ class App {
     const template = find.one('template#edit-item')
     const data: Record<keyof typeof lists, string> = {
       boxes: valuesToOptions(lists.boxes),
+      categories: valuesToOptions(lists.categories),
+      drawers: valuesToOptions(lists.drawers),
       locations: valuesToOptions(lists.locations),
       statuses: valuesToOptions(lists.statuses),
-      drawers: valuesToOptions(lists.drawers),
-      categories: valuesToOptions(lists.categories),
     }
     // eslint-disable-next-line no-unsanitized/property
     template.innerHTML = fillTemplate(template.innerHTML, data)
   }
 
   private readCommonLists () {
-    if (this.hasCommonListsLoaded) return true
+    if (this.hasCommonListsLoaded) return
     let lists = storage.get<typeof emptyCommonLists>('lists', emptyCommonLists)
     if (lists.boxes.length <= 1) {
       lists = getCommonListsFromItems(this.items)
@@ -252,7 +253,6 @@ class App {
     logger.info('common lists found', lists)
     this.fillEditItemTemplate(lists)
     this.hasCommonListsLoaded = true
-    return true
   }
 
   private closeModals () {
@@ -299,7 +299,7 @@ class App {
       logger.showError(`airtable fetch failed with error : ${response.error.message}`)
       return false
     }
-    let { records, offset } = response
+    let { offset, records } = response
     if (!records[0] || records.length === 0) {
       this.isLoading(false)
       logger.showError('airtable fetch returned no records')
@@ -315,7 +315,7 @@ class App {
     while ((offset?.length ?? 0) > 0) {
       // eslint-disable-next-line no-await-in-loop
       response = await this.fetchApi(offset)
-      // eslint-disable-next-line prefer-destructuring, unicorn/consistent-destructuring
+      // eslint-disable-next-line unicorn/consistent-destructuring, @typescript-eslint/prefer-destructuring
       offset = response.offset
       // eslint-disable-next-line unicorn/consistent-destructuring
       records = [...records, ...response.records]

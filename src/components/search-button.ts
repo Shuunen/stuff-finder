@@ -3,34 +3,34 @@ import type { AppScanCodeStartEvent, AppSpeechStartEvent, AppStatus, AppStatusEv
 import { button } from '../utils/browser.utils'
 import { logger } from '../utils/logger.utils'
 
-const knownSpeechAndHints: Record<AppStatus, { speech: string; hint: string }> = {
-  'listening': {
-    speech: pickOne(['👂 Listening to you', '👂 Give it to me', '👂 Tell me']),
-    hint: 'Say keywords about what you\'re looking for (ex. "tablet", "biking gloves")',
-  },
-  'ready': {
-    speech: pickOne(['Say it', 'Speech']),
-    hint: 'Search is ready for you sir, just type your search, scan or say something.',
-  },
-  'settings-required': {
-    speech: 'Settings',
-    hint: 'You need to configure this app to use it, please use the bouncing setting gear.',
-  },
+const knownSpeechAndHints: Record<AppStatus, { hint: string; speech: string }> = {
   'failed': {
-    speech: pickOne(['Retry', 'Try again']),
     hint: 'Speech recognition has fail, just press the button to try again or use another method.',
+    speech: pickOne(['Retry', 'Try again']),
+  },
+  'listening': {
+    hint: 'Say keywords about what you\'re looking for (ex. "tablet", "biking gloves")',
+    speech: pickOne(['👂 Listening to you', '👂 Give it to me', '👂 Tell me']),
   },
   'loading': {
-    speech: 'Loading',
     hint: 'Loading...',
+    speech: 'Loading',
+  },
+  'ready': {
+    hint: 'Search is ready for you sir, just type your search, scan or say something.',
+    speech: pickOne(['Say it', 'Speech']),
+  },
+  'settings-required': {
+    hint: 'You need to configure this app to use it, please use the bouncing setting gear.',
+    speech: 'Settings',
   },
   'unexpected-error': {
-    speech: 'Unexpected error',
     hint: 'An unexpected error has occurred, please try again later.',
+    speech: 'Unexpected error',
   },
 }
 
-const speechAndHints: Record<string, { speech: string; hint: string }> = {
+const speechAndHints: Record<string, { hint: string; speech: string }> = {
   ...knownSpeechAndHints,
 }
 
@@ -61,7 +61,7 @@ window.customElements.define('app-search-button', class extends HTMLElement {
   }
 
   private onStatus (status: AppStatus) {
-    const { speech, hint } = this.getSpeechAndHint(status)
+    const { hint, speech } = this.getSpeechAndHint(status)
     this.speech.textContent = speech
     this.hint.textContent = hint
   }
@@ -103,7 +103,7 @@ window.customElements.define('app-search-button', class extends HTMLElement {
     this.search.id = 'input-type'
     this.search.placeholder = 'Type it'
     this.search.addEventListener('change', () => {
-      emit<SearchStartEvent>('search-start', { str: this.search.value, origin: 'type' })
+      emit<SearchStartEvent>('search-start', { origin: 'type', str: this.search.value })
       this.search.value = ''
     })
     this.speech.addEventListener('click', () => emit<AppSpeechStartEvent>('app-speech--start'))

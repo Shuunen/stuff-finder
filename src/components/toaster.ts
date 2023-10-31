@@ -11,7 +11,7 @@ window.customElements.define('app-toaster', class extends HTMLElement {
   }
 
   private async showToast (event: AppToasterShowEvent) {
-    const { type = 'info', message = 'no message provided', delay = 3000 } = event
+    const { delay = 3000, message = 'no message provided', type = 'info' } = event
     const custom = tw(type === 'info' ? 'from-purple-400 to-purple-700' : 'from-red-400 to-red-700')
     const toast = text(`app-toast app-hide bg-gradient-to-tr ${custom} mt-2 rounded px-4 py-1 text-center font-mono text-white shadow`, message)
     if (type === 'success') toast.innerHTML += '✔️'

@@ -9,9 +9,9 @@ export class AppForm extends HTMLElement {
 
   private readonly els = {
     error: text(''),
-    header: h2('app-header mb-4 mt-2 text-center text-2xl text-purple-700', this.dataset.title),
-    form: dom('form'),
     footer: div(''),
+    form: dom('form'),
+    header: h2('app-header mb-4 mt-2 text-center text-2xl text-purple-700', this.dataset.title),
     save: button(this.saveLabel, 'save ml-4'),
   }
 
@@ -91,7 +91,7 @@ export class AppForm extends HTMLElement {
       if (input) this.setError(`Field "${input.name}" is invalid. ${input.validationMessage}`)
     } else if (hasChangedData && !this.willKeepSaveActive) {
       logger.info(`form ${this.name} is valid and changed, reactivating save button`, this.els.save)
-      logger.info('before and after', { bfr: this.initialData, aft: this.data })
+      logger.info('before and after', { aft: this.data, bfr: this.initialData })
       this.els.save.disabled = false
     } else logger.info(`form ${this.name} is valid and unchanged, keeping save button disabled`)
     if (this.isInline) this.els.footer.classList.toggle('hidden', !hasChangedData && isValid)
@@ -162,7 +162,7 @@ export class AppForm extends HTMLElement {
   }
 
   private setPhoto (input: HTMLInputElement, data: unknown) {
-    logger.info('setting photo', { input, data })
+    logger.info('setting photo', { data, input })
     if (['boolean', 'number'].includes(typeof data)) { logger.showError('photo data must be a string or array'); return }
     const url = this.getPhotoUrl(data)
     input.value = url // eslint-disable-line no-param-reassign

@@ -47,7 +47,7 @@ class AppSpeech {
   private onSuccess (str: string, confidence: number) {
     this.hasRecognitionSucceed = true
     logger.info('confidence', confidence)
-    emit<SearchStartEvent>('search-start', { str, origin: 'speech' })
+    emit<SearchStartEvent>('search-start', { origin: 'speech', str })
   }
 
   private onError (reason: string) {

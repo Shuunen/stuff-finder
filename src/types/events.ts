@@ -1,3 +1,4 @@
+/* eslint-disable sonar/redundant-type-aliases */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import type { Item, ItemField } from './item'
 import type { PrintFormData, PrintInputData } from './print'
@@ -49,7 +50,7 @@ export type AppSoundSuccessEvent = undefined
 export type AppSpeechStartEvent = undefined
 export type AppStatus = 'failed' | 'listening' | 'loading' | 'ready' | 'settings-required' | 'unexpected-error'
 export type AppStatusEvent = AppStatus
-export type AppToasterShowEvent = { type: 'error' | 'info' | 'success'; message: string; delay?: number }
+export type AppToasterShowEvent = { delay?: number; message: string; type: 'error' | 'info' | 'success' }
 export type BarcodesToPrintEvent = Item[]
 export type DoPrintOneEvent = PrintInputData
 export type EditItemEvent = Item
@@ -66,7 +67,7 @@ export type RecognitionErrorEvent = { error: string }
 export type RecognitionResult = { confidence: number; transcript: string }
 export type RecognitionResultEvent = { results: RecognitionResult[][] }
 export type SearchOrigin = 'default' | 'scan' | 'search-results' | 'speech' | 'type' | 'url'
-export type SearchResultsEvent = { isReference: boolean; input: string; results: Item[]; willScrollTop: boolean; title: string }
+export type SearchResultsEvent = { input: string; isReference: boolean; results: Item[]; title: string; willScrollTop: boolean }
 export type SearchRetryEvent = undefined
-export type SearchStartEvent = { origin: SearchOrigin; willScrollTop?: boolean; str: string }
+export type SearchStartEvent = { origin: SearchOrigin; str: string; willScrollTop?: boolean }
 export type SelectResultEvent = string // the id of the selected item

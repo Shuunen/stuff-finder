@@ -1,7 +1,7 @@
 export interface ItemThumbnail {
+  height: number
   url: string
   width: number
-  height: number
 }
 
 export interface ItemPhoto {
@@ -9,20 +9,20 @@ export interface ItemPhoto {
   height: number
   id: string
   size: number
+  thumbnails: {
+    full: ItemThumbnail
+    large: ItemThumbnail
+    small: ItemThumbnail
+  }
   type: string
   url: string
   width: number
-  thumbnails: {
-    small: ItemThumbnail
-    large: ItemThumbnail
-    full: ItemThumbnail
-  }
 }
 
 export const enum ItemStatus {
   Acheté = 'acheté',
-  Défectueux = 'défectueux',
   Donné = 'donné',
+  Défectueux = 'défectueux',
   Jeté = 'jeté',
   Renvoyé = 'renvoyé',
   Vendu = 'vendu',

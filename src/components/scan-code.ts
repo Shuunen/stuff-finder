@@ -1,5 +1,5 @@
 import { BrowserMultiFormatReader } from '@zxing/library/es2015/browser/BrowserMultiFormatReader'
-import NotFoundException from '@zxing/library/es2015/core/NotFoundException'
+import notFoundException from '@zxing/library/es2015/core/NotFoundException'
 import { dom, emit, on, sleep, tw } from 'shuutils'
 import { delays } from '../constants'
 import type { AppModalScanCodeCloseEvent, AppModalScanCodeOpenEvent, AppScanCodeStartEvent, AppSoundSuccessEvent, SearchStartEvent } from '../types'
@@ -18,7 +18,7 @@ window.customElements.define('app-scan-code', class extends HTMLElement {
     logger.info('found qr or barcode :', code)
     emit<AppModalScanCodeCloseEvent>('app-modal--scan-code--close')
     emit<AppSoundSuccessEvent>('app-sound--success')
-    emit<SearchStartEvent>('search-start', { str: code, origin: 'scan' })
+    emit<SearchStartEvent>('search-start', { origin: 'scan', str: code })
   }
 
   private stopReader () {
@@ -34,17 +34,13 @@ window.customElements.define('app-scan-code', class extends HTMLElement {
     await this.setupModal()
   }
 
-  
-
-  
-
   private async scanCode () {
     logger.info('user wants to scan something')
     emit<AppModalScanCodeOpenEvent>('app-modal--scan-code--open')
     if (this.reader === undefined) await this.setupReader()
     if (this.reader === undefined) throw new Error('failed to setup reader')
     await this.reader.decodeFromVideoDevice(this.deviceId, this.video, (result, error) => {
-      if (error && !(error instanceof NotFoundException)) { logger.showError(error.message, error); return }
+      if (error && !(error instanceof notFoundException)) { logger.showError(error.message, error); return }
       // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       if (result === null) return
       this.onResult(result.getText())
@@ -72,5 +68,4 @@ window.customElements.define('app-scan-code', class extends HTMLElement {
     this.deviceId = source.deviceId
   }
 
-  
 })
