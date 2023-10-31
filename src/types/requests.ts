@@ -9,10 +9,10 @@ export interface WrapApiResponse {
 export interface WrapApiDeyesResponse extends WrapApiResponse {
   data: {
     brand: { name: string }
-    name: string
     description: string
-    image: string[]
     gtin13: string
+    image: string[]
+    name: string
     offers: { price: string }
   }
 }
@@ -20,10 +20,10 @@ export interface WrapApiDeyesResponse extends WrapApiResponse {
 export interface WrapApiAngboResponse extends WrapApiResponse {
   data: {
     asin: string
-    title: string
-    price?: number
-    url: string
     photo: string
+    price?: number
+    title: string
+    url: string
   }
 }
 
@@ -44,12 +44,12 @@ export interface WrapApiCampoResponse extends WrapApiResponse {
 export interface WrapApiAliExResponse extends WrapApiResponse {
   data: {
     items: {
-      title: string
       photo: string
-      reference: string
-      rating: number
       price: number
+      rating: number
+      reference: string
       store: string
+      title: string
     }[]
   }
 }
@@ -60,13 +60,13 @@ export interface AirtableError {
 }
 
 export interface AirtableRecord {
-  id: string
-  fields: Partial<Omit<Item, ItemField.Id>>
   error?: AirtableError
+  fields: Partial<Omit<Item, ItemField.Id>>
+  id: string
 }
 
 export interface AirtableResponse {
-  records: AirtableRecord[]
   error?: AirtableError
   offset?: string
+  records: AirtableRecord[]
 }

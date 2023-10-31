@@ -19,7 +19,7 @@
     "dependency-cruiser": "latest",
     "esbuild": "0.19",
     "eslint": "8.52",
-    "eslint-config-hardcore": "36",
+    "eslint-config-hardcore": "41.3",
     "eslint-plugin-tailwindcss": "3",
     "eslint-plugin-unicorn": "49",
     "npm-parallel": "2",

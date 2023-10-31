@@ -32,7 +32,7 @@ window.customElements.define('app-search-results', class extends HTMLElement {
   private renderResult (item: Item) {
     const visual = item.photo?.[0]?.url ?? defaultImage
     const updated = readableTimeAgo(new Date(item[ItemField.UpdatedOn]))
-    const data = { ...emptyItem, ...item, visual, updated }
+    const data = { ...emptyItem, ...item, updated, visual }
     return fillTemplate(this.template, data)
   }
 

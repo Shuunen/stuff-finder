@@ -6,13 +6,13 @@ class CustomLogger extends Logger {
 
   public showLog (message: string, ...data: readonly unknown[]) {
     this.info(message, ...data)
-    emit<AppToasterShowEvent>('app-toaster--show', { type: 'info', message })
+    emit<AppToasterShowEvent>('app-toaster--show', { message, type: 'info' })
   }
 
   public showError (error: unknown, ...data: readonly unknown[]) {
     const message = error instanceof Error ? error.message : String(error)
     this.error(message, ...data)
-    emit<AppToasterShowEvent>('app-toaster--show', { type: 'error', message })
+    emit<AppToasterShowEvent>('app-toaster--show', { message, type: 'error' })
   }
 
 }

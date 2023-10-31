@@ -44,18 +44,18 @@ export async function get<ResponseType> (url: string, willCacheResponse = true) 
 
 /* eslint-disable no-restricted-properties, unicorn/prefer-spread, etc/no-misused-generics */
 export const find = {
-  one: <Type extends Element = Element> (selector: string, context: Document | Element = document) => {
-    const element = context.querySelector<Type>(selector)
-    if (!element) throw new Error(`no element found for selector "${selector}"`)
-    return element
-  },
-  oneOrNone: <Type extends Element = Element> (selector: string, context: Document | Element = document): Type | null => context.querySelector<Type>(selector),
   all: <Type extends Element = Element> (selector: string, context: Document | Element = document) => {
     const elements = context.querySelectorAll<Type>(selector)
     if (elements.length === 0) throw new Error(`no elements found for selector "${selector}"`)
     return Array.from(elements)
   },
   allOrNone: <Type extends Element = Element> (selector: string, context: Document | Element = document): Type[] => Array.from(context.querySelectorAll<Type>(selector)),
+  one: <Type extends Element = Element> (selector: string, context: Document | Element = document) => {
+    const element = context.querySelector<Type>(selector)
+    if (!element) throw new Error(`no element found for selector "${selector}"`)
+    return element
+  },
+  oneOrNone: <Type extends Element = Element> (selector: string, context: Document | Element = document): Type | null => context.querySelector<Type>(selector),
 }
 /* eslint-enable no-restricted-properties, unicorn/prefer-spread, etc/no-misused-generics */
 
@@ -85,6 +85,6 @@ export function isVisible (element: Element | HTMLElement | undefined) {
     logger.error('element is undefined, so it is not visible')
     return false
   }
-  const { width, height } = element.getBoundingClientRect()
+  const { height, width } = element.getBoundingClientRect()
   return width > 0 || height > 0
 }
