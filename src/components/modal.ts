@@ -31,7 +31,7 @@ window.customElements.define('app-modal', class extends HTMLElement {
   }
 
   private createModal (id: string) {
-    const modal = div(`app-modal ${id} relative z-50 m-4 flex w-full flex-col overflow-hidden rounded bg-white p-4 shadow-md md:w-auto ${this.className}`, this.innerHTML)
+    const modal = div(`app-modal ${id} relative z-50 m-4 flex w-full max-w-7xl flex-col overflow-hidden rounded bg-white p-4 shadow-md md:w-auto ${this.className}`, this.innerHTML)
     // eslint-disable-next-line @typescript-eslint/no-shadow
     const close = link(tw('app-close absolute right-5 top-2 !border-b-0 font-mono text-4xl opacity-50 md:text-2xl'), 'x', '#')
     modal.append(close)
