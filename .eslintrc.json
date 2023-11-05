@@ -16,14 +16,11 @@
   "overrides": [
     {
       "files": [
-        "**/*.js",
-        "**/*.mjs"
+        "**/*.js"
       ],
       "rules": {
-        "@typescript-eslint/ban-ts-comment": "off",
         "import/no-commonjs": "off",
-        "import/unambiguous": "off",
-        "putout/putout": "off"
+        "import/unambiguous": "off"
       }
     }
   ],
@@ -97,7 +94,9 @@
     ],
     "eslint-comments/no-use": "off",
     "etc/no-const-enum": "off",
+    "etc/no-deprecated": "off",
     "etc/no-enum": "off",
+    "etc/no-internal": "off",
     "etc/prefer-interface": "off",
     "ext/lines-between-object-properties": "off",
     "func-names": [
@@ -166,6 +165,7 @@
     ],
     "padding-line-between-statements": "off",
     "prettier/prettier": "off",
+    "putout/putout": "off",
     "quote-props": [
       "error",
       "consistent-as-needed"

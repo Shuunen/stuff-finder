@@ -32,7 +32,7 @@ window.customElements.define('app-print-one', class extends HTMLElement {
   public async connectedCallback () {
     await sleep(delays.small)
     this.previewElement = find.one<HTMLDivElement>('.app-print-one--preview')
-    // eslint-disable-next-line @typescript-eslint/no-require-imports, putout/putout
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     if (customElements.get('qr-code') === undefined) require('webcomponent-qr-code')
     on<AppFormPrintOneChangeEvent>('app-form--print-one--change', this.onFormChange.bind(this))
     on<AppFormPrintOneReadyEvent>('app-form--print-one--ready', this.onFormChange.bind(this))
