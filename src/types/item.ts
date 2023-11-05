@@ -21,8 +21,9 @@ export interface ItemPhoto {
 
 export const enum ItemStatus {
   Acheté = 'acheté',
+  ADonner = 'à donner', // eslint-disable-line @typescript-eslint/naming-convention
+  AVendre = 'à vendre', // eslint-disable-line @typescript-eslint/naming-convention
   Donné = 'donné',
-  Défectueux = 'défectueux',
   Jeté = 'jeté',
   Renvoyé = 'renvoyé',
   Vendu = 'vendu',

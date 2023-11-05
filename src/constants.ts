@@ -20,7 +20,15 @@ export const emptyCommonLists: CommonLists = {
   categories: [],
   drawers: ['', '1', '2', '3', '4', '5', '6', '7'],
   locations: [],
-  statuses: [ItemStatus.Acheté, ItemStatus.Vendu, ItemStatus.Donné, ItemStatus.Renvoyé, ItemStatus.Défectueux, ItemStatus.Jeté],
+  statuses: [
+    ItemStatus.Acheté,
+    ItemStatus.ADonner,
+    ItemStatus.AVendre,
+    ItemStatus.Donné,
+    ItemStatus.Jeté,
+    ItemStatus.Renvoyé,
+    ItemStatus.Vendu,
+  ],
 }
 
 export const emptyAppSettings = {

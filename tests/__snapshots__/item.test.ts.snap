@@ -47,8 +47,9 @@ exports[`getCommonListsFromItems A 1`] = `
   ],
   "statuses": [
     "",
+    "à donner",
+    "à vendre",
     "acheté",
-    "défectueux",
     "donné",
     "jeté",
     "new surprise status",
