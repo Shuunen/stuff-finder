@@ -51,6 +51,7 @@ class App {
     this.showTitle()
   }
 
+  // eslint-disable-next-line max-statements
   private setListeners () {
     on<AppFormSettingsSaveEvent>('app-form--settings--save', this.onSettingsSave.bind(this))
     on<AppFormEditItemSaveEvent>('app-form--edit-item--save', this.onEditItem.bind(this))
@@ -60,6 +61,8 @@ class App {
     on<AppClearCredentialsEvent>('app-clear-credentials', this.onClearCredentials.bind(this))
     on<AppImgLoadingErrorEvent>('app--img-loading-error', this.onImgLoadingError.bind(this))
     on<AppCloneItemEvent>('app-clone-item', this.onCloneItem.bind(this))
+    on<AppFormFieldChangeEvent>('app-form--edit-item--reference--change', this.onIdentifierChange.bind(this))
+    on<AppFormFieldChangeEvent>('app-form--edit-item--barcode--change', this.onIdentifierChange.bind(this))
     document.addEventListener('click', this.onDocumentClick.bind(this))
   }
 
@@ -222,7 +225,7 @@ class App {
     action = action.trim()
     payload = payload?.trim()
     event.stopPropagation()
-    logger.info('action clicked :', action)
+    logger.info('clicked :', { action, payload })
     emit<AppActionEvent>(action, getObjectOrSelf(payload) ?? target)
   }
 
@@ -260,6 +263,20 @@ class App {
     emit<AppModalEditItemCloseEvent>('app-modal--edit-item--close')
     emit<AppModalAddItemCloseEvent>('app-modal--add-item--close')
     emit<AppModalSearchResultsCloseEvent>('app-modal--search-results--close')
+  }
+
+  private async onIdentifierChange (value: AppFormDataValue) {
+    logger.info('onIdentifierChange', value)
+    const id = String(value).trim()
+    if (id.length === 0) return
+    const existing = this.items.find(item => (item.reference === id || item.barcode === id))
+    if (!existing) {
+      logger.debug('good, no existing item found with this barcode/reference')
+      return
+    }
+    logger.error('existing item found with this barcode/reference')
+    await sleep(delays.large)
+    emit<FormIdErrorEvent>('app-form--edit-item--error', `Identifier "${id}" already exists, please choose another one`)
   }
 
   // eslint-disable-next-line max-statements
