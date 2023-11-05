@@ -16,6 +16,7 @@ export type AppFormEditItemChangeEvent = FormEditFormData
 export type AppFormEditItemSaveEvent = FormEditFormData
 export type AppFormEditItemSetEvent = Partial<FormEditFormData>
 export type AppFormEditItemSuggestionsEvent = FormSuggestions
+export type AppFormFieldChangeEvent = AppFormDataValue
 export type AppFormPrintOneChangeEvent = PrintFormData
 export type AppFormPrintOneReadyEvent = PrintFormData
 export type AppFormReadyEvent = AppFormData

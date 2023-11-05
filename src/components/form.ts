@@ -1,7 +1,7 @@
 /* eslint-disable import/exports-last */
-import { clone, debounce, div, dom, emit, h2, objectSum, on, sleep, text } from 'shuutils'
+import { clone, debounce, div, dom, emit, h2, objectSum, on, sleep, text, tw } from 'shuutils'
 import { defaultImage, delays } from '../constants'
-import { ItemField, type AppFormChangeEvent, type AppFormCloseEvent, type AppFormData, type AppFormDataValue, type AppFormReadyEvent, type FormIdErrorEvent, type FormIdSetEvent, type FormIdSuggestionsEvent, type FormOnSaveEvent, type FormSuggestions } from '../types'
+import { ItemField, type AppFormChangeEvent, type AppFormCloseEvent, type AppFormData, type AppFormDataValue, type AppFormFieldChangeEvent, type AppFormReadyEvent, type FormIdErrorEvent, type FormIdSetEvent, type FormIdSuggestionsEvent, type FormOnSaveEvent, type FormSuggestions } from '../types'
 import { button, find, isVisible, valuesToOptions } from '../utils/browser.utils'
 import { logger } from '../utils/logger.utils'
 
@@ -12,7 +12,7 @@ export class AppForm extends HTMLElement {
     footer: div(''),
     form: dom('form'),
     header: h2('app-header mb-4 mt-2 text-center text-2xl text-purple-700', this.dataset.title),
-    save: button(this.saveLabel, 'save ml-4'),
+    save: button(this.saveLabel, tw('app-save ml-4')),
   }
 
   private initialData: AppFormData = { hasValidForm: false }
@@ -24,6 +24,8 @@ export class AppForm extends HTMLElement {
   private readonly validate = debounce(this.validateSync.bind(this), delays.medium)
 
   private readonly emitChange = debounce(this.emitChangeSync.bind(this), delays.medium)
+
+  private readonly emitFieldChange = debounce(this.emitFieldChangeSync.bind(this), delays.medium)
 
   private get data () {
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
@@ -105,7 +107,7 @@ export class AppForm extends HTMLElement {
 
   private setError (message = '') {
     this.els.error.textContent = message
-    return message
+    this.els.save.disabled = true
   }
 
   private createClose () {
@@ -138,6 +140,12 @@ export class AppForm extends HTMLElement {
     this.emittedData = clone(this.data)
     logger.info('emitting :', `${this.id}--change`)
     emit<AppFormChangeEvent>(`${this.id}--change`, this.emittedData)
+  }
+
+  private emitFieldChangeSync (field: string, value: AppFormDataValue) {
+    const name = `${this.id}--${field}--change`
+    logger.debug('input change ! emitting :', name)
+    emit<AppFormFieldChangeEvent>(name, value)
   }
 
   private setInputValue (input: HTMLInputElement, value: AppFormDataValue) {
@@ -190,6 +198,13 @@ export class AppForm extends HTMLElement {
     this.validateBecause('added-suggestions')
   }
 
+  private setChangeEvents () {
+    this.inputs.forEach(input => {
+      input.addEventListener('change', () => { void this.emitFieldChange(input.name, input.value) })
+      input.addEventListener('keyup', () => { void this.emitFieldChange(input.name, input.value) })
+    })
+  }
+
   // eslint-disable-next-line max-statements
   public async connectedCallback () {
     this.id = `app-form--${this.name}`
@@ -212,6 +227,7 @@ export class AppForm extends HTMLElement {
     logger.info(`form ${this.name} connected, setting initial data to`, clone(this.data))
     this.initialData = this.data
     this.validateBecause('connected-callback')
+    this.setChangeEvents()
     emit<AppFormReadyEvent>(`${this.id}--ready`, this.data)
     await sleep(delays.small)
     this.isWarmedUp = false
