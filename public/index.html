@@ -80,11 +80,12 @@
       <label>Drawer <select name=drawer>{{ drawers }}</select></label>
       <label>Category <select name=category>{{ categories }}</select></label>
       <label>Price <input name=price type=number step=1 pattern="\d+" /></label>
-      <div class="flex gap-4">
+      <div class="flex gap-4 flex-wrap lg:flex-nowrap">
         <label>Printed ?<input type=checkbox name="ref-printed" /></label>
         <button type="button" disabled class="self-end" data-id="{{ id }}" data-action="app-modal--print-one--open" data-payload="">
           Print this item
         </button>
+        <a data-action="app-clone-item" data-payload="{{ id }}" class="mx-auto self-end" href="#">Clone this item</a>
       </div>
     </app-form>
   </template>

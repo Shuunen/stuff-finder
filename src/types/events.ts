@@ -7,6 +7,7 @@ import type { AppSettings } from './settings'
 export type AppActionEvent = HTMLElement | object | string
 export type AppClearCacheEvent = undefined
 export type AppClearCredentialsEvent = undefined
+export type AppCloneItemEvent = string
 export type AppFormChangeEvent = AppFormData
 export type AppFormCloseEvent = undefined
 export type AppFormData = Record<string, AppFormDataValue> & { hasValidForm: boolean }

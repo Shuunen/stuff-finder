@@ -1,6 +1,6 @@
 /* eslint-disable max-lines */
 import Fuse, { type IFuseOptions } from 'fuse.js' // eslint-disable-line @typescript-eslint/naming-convention
-import { clone, debounce, emit, fillTemplate, on, pickOne, sanitize, storage } from 'shuutils'
+import { clone, debounce, emit, fillTemplate, on, pickOne, sanitize, sleep, storage } from 'shuutils'
 import './assets/styles.min.css'
 import './components/add-item-trigger'
 import './components/edit-item'
@@ -20,7 +20,7 @@ import './services/item-search.service'
 import './services/sound.service'
 import './services/speech.service'
 import './services/url.service'
-import { ItemField, type AirtableRecord, type AirtableResponse, type AppActionEvent, type AppClearCacheEvent, type AppClearCredentialsEvent, type AppFormEditItemSaveEvent, type AppFormSettingsErrorEvent, type AppFormSettingsReadyEvent, type AppFormSettingsSaveEvent, type AppFormSettingsSetEvent, type AppImgLoadingErrorEvent, type AppLoaderToggleEvent, type AppModalAddItemCloseEvent, type AppModalEditItemCloseEvent, type AppModalSearchResultsCloseEvent, type AppModalSettingsCloseEvent, type AppPrompterTypeEvent, type AppScanCodeStartEvent, type AppSettings, type AppSettingsTriggerAnimateEvent, type AppSpeechStartEvent, type AppStatusEvent, type FormEditFormData, type Item, type ItemPhoto, type ItemsReadyEvent, type SearchOrigin, type SearchResultsEvent, type SearchRetryEvent, type SearchStartEvent } from './types'
+import { ItemField, type AirtableRecord, type AirtableResponse, type AppActionEvent, type AppClearCacheEvent, type AppClearCredentialsEvent, type AppCloneItemEvent, type AppFormDataValue, type AppFormEditItemSaveEvent, type AppFormFieldChangeEvent, type AppFormSettingsErrorEvent, type AppFormSettingsReadyEvent, type AppFormSettingsSaveEvent, type AppFormSettingsSetEvent, type AppImgLoadingErrorEvent, type AppLoaderToggleEvent, type AppModalAddItemCloseEvent, type AppModalEditItemCloseEvent, type AppModalSearchResultsCloseEvent, type AppModalSettingsCloseEvent, type AppPrompterTypeEvent, type AppScanCodeStartEvent, type AppSettings, type AppSettingsTriggerAnimateEvent, type AppSpeechStartEvent, type AppStatusEvent, type FormEditFormData, type FormIdErrorEvent, type Item, type ItemPhoto, type ItemsReadyEvent, type SearchOrigin, type SearchResultsEvent, type SearchRetryEvent, type SearchStartEvent } from './types'
 import { find, get, patch, post, valuesToOptions } from './utils/browser.utils'
 import { airtableRecordToItem, getCommonListsFromItems } from './utils/item.utils'
 import { logger } from './utils/logger.utils'
@@ -59,6 +59,7 @@ class App {
     on<AppClearCacheEvent>('app-clear-cache', this.onClearCache.bind(this))
     on<AppClearCredentialsEvent>('app-clear-credentials', this.onClearCredentials.bind(this))
     on<AppImgLoadingErrorEvent>('app--img-loading-error', this.onImgLoadingError.bind(this))
+    on<AppCloneItemEvent>('app-clone-item', this.onCloneItem.bind(this))
     document.addEventListener('click', this.onDocumentClick.bind(this))
   }
 
@@ -259,6 +260,22 @@ class App {
     emit<AppModalEditItemCloseEvent>('app-modal--edit-item--close')
     emit<AppModalAddItemCloseEvent>('app-modal--add-item--close')
     emit<AppModalSearchResultsCloseEvent>('app-modal--search-results--close')
+  }
+
+  // eslint-disable-next-line max-statements
+  private async onCloneItem (id: string) {
+    logger.info('onCloneItem', id)
+    emit<AppModalEditItemCloseEvent>('app-modal--edit-item--close')
+    const item = this.items.find(one => one.id === id)
+    if (!item) throw new Error('no item found')
+    logger.info('cloning item', item)
+    await sleep(delays.large)
+    emit('edit-item', { ...item, 'barcode': '', 'id': '', 'ref-printed': false, 'reference': '' })
+    const modal = find.one('.app-modal--edit-item')
+    find.one<HTMLHeadingElement>('.app-header', modal).textContent = 'Add item (clone)'
+    find.one<HTMLElement>('[data-action="app-clone-item"]', modal).style.display = 'none'
+    find.one<HTMLButtonElement>('.app-save', modal).textContent = 'Add'
+    logger.info('modal', modal)
   }
 
   private async onImgLoadingErrorSync () {
