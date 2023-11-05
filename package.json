@@ -50,7 +50,7 @@
   "scripts": {
     "build": "pnpm build:css && pnpm build:js --minify && echo build success",
     "build:css": "tailwindcss -i src/assets/styles.css -o src/assets/styles.min.css --minify",
-    "build:js": "esbuild src/index.ts --target=esnext --outdir=public --bundle",
+    "build:js": "esbuild src/index.ts --sourcemap --target=esnext --outdir=public --bundle",
     "check": "pnpm i && repo-check && pnpm build && pnpm lint && pnpm test && echo check success",
     "dev": "parallel dev:css dev:js serve",
     "dev:css": "pnpm build:css --watch",
