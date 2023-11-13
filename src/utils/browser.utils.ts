@@ -42,7 +42,7 @@ export async function get<ResponseType> (url: string, willCacheResponse = true) 
   return response
 }
 
-/* eslint-disable no-restricted-properties, unicorn/prefer-spread, etc/no-misused-generics */
+/* eslint-disable etc/no-misused-generics */
 export const find = {
   all: <Type extends Element = Element> (selector: string, context: Document | Element = document) => {
     const elements = context.querySelectorAll<Type>(selector)
@@ -57,7 +57,7 @@ export const find = {
   },
   oneOrNone: <Type extends Element = Element> (selector: string, context: Document | Element = document): Type | null => context.querySelector<Type>(selector),
 }
-/* eslint-enable no-restricted-properties, unicorn/prefer-spread, etc/no-misused-generics */
+/* eslint-enable etc/no-misused-generics */
 
 export async function fadeIn (element: HTMLElement) {
   if (!element.classList.contains('app-hide')) { logger.error('please add "app-hide" class before mounting dom element and then call fade-in'); return }

@@ -32,8 +32,8 @@ window.customElements.define('app-print-one', class extends HTMLElement {
   public async connectedCallback () {
     await sleep(delays.small)
     this.previewElement = find.one<HTMLDivElement>('.app-print-one--preview')
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    if (customElements.get('qr-code') === undefined) require('webcomponent-qr-code')
+    // @ts-expect-error missing types
+    if (customElements.get('qr-code') === undefined) import('webcomponent-qr-code')
     on<AppFormPrintOneChangeEvent>('app-form--print-one--change', this.onFormChange.bind(this))
     on<AppFormPrintOneReadyEvent>('app-form--print-one--ready', this.onFormChange.bind(this))
     on<AppModalPrintOneCloseEvent>('app-modal--print-one--close', this.onClose.bind(this))

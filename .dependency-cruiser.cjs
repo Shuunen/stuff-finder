@@ -109,7 +109,7 @@ module.exports = {
       severity: 'error',
       to: {
         couldNotResolve: true,
-        pathNot: 'shuutils',
+        pathNot: ['shuutils', 'vite/client'],
       },
     },
     {

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Stuff Finder</title>
+  <meta name="description" content="Sorting things is pointless if you can't find them afterwards :D">
+  <meta name="theme-color" content="#209CEE" />
+  <meta name="unique-mark" content="">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
+  <link rel="manifest" href="assets/site.webmanifest">
+</head>
+
+<body class="flex h-screen flex-col items-center justify-center bg-gradient-to-tr from-purple-200 align-middle">
+
+  <div id="app"></div>
+
+  <template id="search-results-list-item">
+    <div
+      class="mx-auto mb-4 grid cursor-pointer items-center gap-4 rounded-md p-2 text-center transition-colors hover:bg-purple-50 sm:max-w-xl sm:grid-cols-3 sm:text-left result-status result-status--{{ status }}"
+      id="{{ id }}" data-action="select-result" data-payload="{{ id }}">
+      <img onerror="window.dispatchEvent(new CustomEvent('app--img-loading-error'))"
+        class="pointer-events-none mx-auto h-24 w-24 rounded-full bg-white object-contain sm:h-36 sm:w-36" async src="{{ visual }}"
+        alt="{{ name }} visual" />
+      <div class="pointer-events-none flex flex-col sm:col-span-2">
+        <h3 class="font-medium text-purple-900">{{ name }} {{ brand }}</h3>
+        <p>{{ category }}, {{ details }}</p>
+        <p class="hidden sm:block">Reference : {{ reference }} {{ barcode }}</p>
+        <p class="hidden sm:block">Updated {{ updated }}</p>
+        <p class="hidden sm:block">Status : {{ status }}</p>
+        <p>Location : <strong class="mr-1">{{ location }}</strong><strong>{{ box }} {{ drawer }}</strong></p>
+      </div>
+    </div>
+    <div class="mx-auto my-4 h-1 w-1/3 bg-gray-200"></div> <!-- divider -->
+  </template>
+
+  <template id="edit-item">
+    <app-form name="edit-item" data-id="{{ id }}" class="items-center sm:grid-cols-2 sm:gap-4 md:grid-cols-4" close="app-modal--edit-item--close">
+      <input type=hidden name=id />
+      <div class="mb-6 max-h-72 sm:row-span-4 sm:mb-0 md:row-span-5">
+        <img class="mx-auto w-3/4" src="assets/no-visual.svg" alt="no visual" />
+        <div class="relative mt-3 mb-6 flex flex-col justify-evenly">
+          <input type=text name=photo
+            onchange="window.dispatchEvent(new CustomEvent('app-form--edit-item--set', { detail: { photo: this.value } }))" />
+          <a data-action="clear" class="mx-auto mt-2 mb-7"
+            onclick="window.dispatchEvent(new CustomEvent('app-form--edit-item--set', { detail: { photo: '' } }))" href="#">Clear image</a>
+        </div>
+      </div>
+      <label>Name<input required name=name type=text minlength=3 maxlength=50 autofocus /></label>
+      <label>Brand<input name=brand type=text /></label>
+      <label>Details<input name=details type=text /></label>
+      <label>Reference<input name=reference type=text minlength=5 maxlength=20 required /></label>
+      <label>Barcode<input name=barcode type=text required /></label>
+      <label>Status<select name=status>{{ statuses }}</select></label>
+      <label>Location <select name=location>{{ locations }}</select></label>
+      <label>Box <select name=box>{{ boxes }}</select></label>
+      <label>Drawer <select name=drawer>{{ drawers }}</select></label>
+      <label>Category <select name=category>{{ categories }}</select></label>
+      <label>Price <input name=price type=number step=1 pattern="\d+" /></label>
+      <div class="flex gap-4 flex-wrap lg:flex-nowrap">
+        <label>Printed ?<input type=checkbox name="ref-printed" /></label>
+        <button type="button" disabled class="self-end" data-id="{{ id }}" data-action="app-modal--print-one--open" data-payload="">
+          Print this item
+        </button>
+        <a data-action="app-clone-item" data-payload="{{ id }}" class="mx-auto self-end" href="#">Clone this item</a>
+      </div>
+    </app-form>
+  </template>
+
+  <template id="barcodes-list-item">
+    <div class="flex items-center rounded-md p-2 transition-colors hover:bg-purple-100">
+      <app-form name="edit-item" data-id="{{ id }}" inline=true save="app-form--edit-item--save" hide-actions-on-submit>
+        <input type=hidden name=id value="{{ id }}" />
+        <input name=name type=text placeholder=Name required minlength=3 maxlength=50 autofocus value="{{ name }}">
+        <input name=details type=text placeholder=Details value="{{ details }}">
+        <input name=brand type=text placeholder=Brand value="{{ brand }}">
+        <input name=reference type=text placeholder=Reference required minlength=5 maxlength=20 value="{{ reference }}">
+        <select name=box>{{ boxes }}</select>
+        <select name=drawer>{{ drawers }}</select>
+        <label>Printed ?<input type=checkbox name="ref-printed" /></label>
+        <button type="button" disabled data-id="{{ id }}" data-action="app-modal--print-one--open" data-payload="">
+          Print
+        </button>
+      </app-form>
+    </div>
+  </template>
+
+  <template id="print-one--40x30">
+    <!-- eslint-disable-next-line @html-eslint/no-inline-styles -->
+    <div class="app-print-one app-barcode" style="width:145px; height: 110px; aspect-ratio: 4/3;">
+      <div class="app-qr-code-visual">{{ qrCodeVisual }}</div>
+      <div class="app-col">
+        <div class="app-name">{{ text }}</div>
+        <div class="app-location">{{ location }}</div>
+      </div>
+    </div>
+  </template>
+
+  <template id="print-one--40x20">
+    <!-- eslint-disable-next-line @html-eslint/no-inline-styles -->
+    <div class="app-print-one app-barcode" style="width:145px; height: 72px; aspect-ratio: 4/2;">
+      <div class="app-qr-code-visual">{{ qrCodeVisual }}</div>
+      <div class="app-col">
+        <div class="app-name">{{ text }}</div>
+        <div class="app-location">{{ location }}</div>
+      </div>
+    </div>
+  </template>
+
+  <script type="module" src="/src/main.tsx"></script>
+
+</body>
+
+</html>

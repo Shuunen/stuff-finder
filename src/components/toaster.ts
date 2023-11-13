@@ -6,7 +6,7 @@ window.customElements.define('app-toaster', class extends HTMLElement {
 
   public connectedCallback () {
     // eslint-disable-next-line unicorn/no-keyword-prefix
-    this.className = tw('absolute bottom-5 z-50')
+    this.className = tw('absolute bottom-5 left-0 z-50 flex w-full justify-center')
     on<AppToasterShowEvent>('app-toaster--show', this.showToast.bind(this))
   }
 

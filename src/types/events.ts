@@ -1,5 +1,6 @@
 /* eslint-disable sonar/redundant-type-aliases */
 /* eslint-disable @typescript-eslint/no-use-before-define */
+import type { TypicalArguments } from '../shims'
 import type { Item, ItemField } from './item'
 import type { PrintFormData, PrintInputData } from './print'
 import type { AppSettings } from './settings'

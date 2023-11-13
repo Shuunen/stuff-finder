@@ -68,11 +68,11 @@ export class AppForm extends HTMLElement {
 
   private get willKeepSaveActive () { return this.hasAttribute('keep-save-active') }
 
-  private get onCloseEventName () { return this.getAttribute('on-close') ?? `${this.id}--close` }
+  private get onCloseEventName () { return this.getAttribute('close') ?? `${this.id}--close` }
 
-  private get onSaveEventName () { return this.getAttribute('on-save') ?? `${this.id}--save` }
+  private get onSaveEventName () { return this.getAttribute('save') ?? `${this.id}--save` }
 
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions, unicorn/prefer-spread
+  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
   private get inputs () { return Array.from(this.els.form.elements as unknown as HTMLInputElement[]) }
 
   public validateBecause (reason: string) {

@@ -1,0 +1,62 @@
+/*
+ * For all screen & print
+ */
+.app-barcode {
+  @apply flex overflow-hidden items-center pt-1;
+}
+.app-qr-code-visual {
+  @apply mt-1;
+}
+.app-barcode .app-col {
+  @apply overflow-hidden text-center pl-1.5 pt-1;
+}
+.app-barcode .app-name {
+  @apply text-[12px] tracking-[-0.5px] leading-3 overflow-hidden text-ellipsis mt-0 mb-1;
+  -webkit-box-orient: vertical;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  font-family: sans-serif;
+}
+.app-barcode .app-location {
+  @apply text-[19px] tracking-[2px] leading-none font-bold mb-1;
+  font-family: monospace;
+}
+
+/*
+ * For screen only
+ */
+@media screen {
+  .app-barcode {
+    @apply border border-black mx-auto px-1 rounded;
+  }
+  .app-barcode .app-qr-code-visual {
+    @apply bg-green-400;
+  }
+  .app-barcode .app-name {
+    @apply bg-red-400;
+  }
+  .app-barcode .app-location {
+    @apply bg-blue-400;
+  }
+}
+
+/*
+ * For print only
+ */
+@media print {
+  app-toaster,
+  #app > div:not(.print-one),
+  .app-modal--print-one > *:not(.app-print-one--preview),
+  .app-print-one--preview > div:not(.app-barcode) {
+    @apply !hidden;
+  }
+  #app > .print-one {
+    @apply bg-inherit justify-normal align-baseline w-auto;
+  }
+  #app > .print-one > .app-modal {
+    @apply p-0 max-w-none rounded-none shadow-none m-0;
+  }
+  #app > .print-one > .app-modal > .app-print-one--preview {
+    @apply mb-0;
+  }
+}

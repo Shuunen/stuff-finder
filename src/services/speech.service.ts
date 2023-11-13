@@ -26,7 +26,6 @@ class AppSpeech {
     recognition.maxAlternatives = 1
     recognition.onresult = (event: SpeechRecognitionEvent) => {
       logger.info('recognition results', event.results)
-      // eslint-disable-next-line unicorn/prefer-spread
       const [result] = Array.from(event.results.item(event.resultIndex))
       logger.info('recognition result', result)
       if (!result) throw new Error('no recognition first result found')

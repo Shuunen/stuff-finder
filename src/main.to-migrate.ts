@@ -1,31 +1,18 @@
 /* eslint-disable max-lines */
 import Fuse, { type IFuseOptions } from 'fuse.js' // eslint-disable-line @typescript-eslint/naming-convention
-import { clone, debounce, emit, fillTemplate, on, pickOne, sanitize, sleep, storage } from 'shuutils'
-import './assets/styles.min.css'
-import './components/add-item-trigger'
-import './components/edit-item'
-import './components/form'
-import './components/loader'
-import './components/modal'
-import './components/print-barcodes'
-import './components/print-one'
-import './components/prompter'
-import './components/scan-code'
-import './components/search-button'
-import './components/search-results'
-import './components/settings-trigger'
-import './components/toaster'
+import { clone, debounce, emit, fillTemplate, on, sanitize, sleep, storage } from 'shuutils'
+import './components'
 import { delays, emptyAppSettings, emptyCommonLists, type CommonLists } from './constants'
 import './services/item-search.service'
 import './services/sound.service'
 import './services/speech.service'
 import './services/url.service'
-import { ItemField, type AirtableRecord, type AirtableResponse, type AppActionEvent, type AppClearCacheEvent, type AppClearCredentialsEvent, type AppCloneItemEvent, type AppFormDataValue, type AppFormEditItemSaveEvent, type AppFormFieldChangeEvent, type AppFormSettingsErrorEvent, type AppFormSettingsReadyEvent, type AppFormSettingsSaveEvent, type AppFormSettingsSetEvent, type AppImgLoadingErrorEvent, type AppLoaderToggleEvent, type AppModalAddItemCloseEvent, type AppModalEditItemCloseEvent, type AppModalSearchResultsCloseEvent, type AppModalSettingsCloseEvent, type AppPrompterTypeEvent, type AppScanCodeStartEvent, type AppSettings, type AppSettingsTriggerAnimateEvent, type AppSpeechStartEvent, type AppStatusEvent, type FormEditFormData, type FormIdErrorEvent, type Item, type ItemPhoto, type ItemsReadyEvent, type SearchOrigin, type SearchResultsEvent, type SearchRetryEvent, type SearchStartEvent } from './types'
+import { ItemField, type AirtableRecord, type AirtableResponse, type AppActionEvent, type AppClearCacheEvent, type AppClearCredentialsEvent, type AppCloneItemEvent, type AppFormDataValue, type AppFormEditItemSaveEvent, type AppFormFieldChangeEvent, type AppFormSettingsErrorEvent, type AppFormSettingsReadyEvent, type AppFormSettingsSaveEvent, type AppFormSettingsSetEvent, type AppImgLoadingErrorEvent, type AppLoaderToggleEvent, type AppModalAddItemCloseEvent, type AppModalEditItemCloseEvent, type AppModalSearchResultsCloseEvent, type AppModalSettingsCloseEvent, type AppScanCodeStartEvent, type AppSettings, type AppSettingsTriggerAnimateEvent, type AppSpeechStartEvent, type AppStatusEvent, type FormEditFormData, type FormIdErrorEvent, type Item, type ItemPhoto, type ItemsReadyEvent, type SearchOrigin, type SearchResultsEvent, type SearchRetryEvent, type SearchStartEvent } from './types'
 import { find, get, patch, post, valuesToOptions } from './utils/browser.utils'
 import { airtableRecordToItem, getCommonListsFromItems } from './utils/item.utils'
 import { logger } from './utils/logger.utils'
 import { getObjectOrSelf } from './utils/objects.utils'
-import './utils/print.utils'
+import { coolAscii } from './utils/strings.utils'
 
 class App {
 
@@ -48,7 +35,6 @@ class App {
     storage.prefix = '@shuunen/stuff-finder_'
     this.setListeners()
     this.checkExistingSettings()
-    this.showTitle()
   }
 
   // eslint-disable-next-line max-statements
@@ -82,14 +68,6 @@ class App {
     if (!settings.base) { this.settingsActionRequired(true); return }
     void this.onSettingsSave(settings)
     on<AppFormSettingsReadyEvent>('app-form--settings--ready', () => emit<AppFormSettingsSetEvent>('app-form--settings--set', settings))
-  }
-
-  private coolAscii () {
-    return pickOne(['( ＾◡＾)', '♥‿♥', '八(＾□＾*)', '(◡ ‿ ◡ ✿)', '(=^ェ^=)', 'ʕ •ᴥ•ʔ', '(*°∀°)', '\\(-ㅂ-)/', 'ლ(╹◡╹ლ)', 'ლ(o◡oლ)', '＼(＾O＾)／'])
-  }
-
-  private showTitle () {
-    emit<AppPrompterTypeEvent>('app-prompter--type', ['Stuff Finder', delays.large, `Stuff Finder\n${this.coolAscii()}`])
   }
 
   private settingsActionRequired (isActionRequired: boolean, errorMessage = '') {
@@ -139,7 +117,7 @@ class App {
 
   private parseApiRecords (records: AirtableRecord[]) {
     this.items = records.map(record => airtableRecordToItem(record))
-    logger.showLog(`${this.items.length} item(s) loaded ${this.coolAscii()}`)
+    logger.showLog(`${this.items.length} item(s) loaded ${coolAscii()}`)
     this.initFuse()
   }
 

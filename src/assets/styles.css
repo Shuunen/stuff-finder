@@ -127,22 +127,6 @@ app-form[name="search-item"] img[src^="http"] + div > a.clear {
   @apply block;
 }
 
-.app-barcode {
-  @apply border border-black mx-auto px-1 rounded;
-}
-
-.app-barcode .app-qr-code-visual {
-  @apply bg-green-400;
-}
-
-.app-barcode .app-name {
-  @apply bg-red-400;
-}
-
-.app-barcode .app-location {
-  @apply bg-blue-400;
-}
-
 .result-status:not(.result-status--acheté) {
   @apply grayscale opacity-70;
   transform: skewX(-1deg) scaleX(0.99);

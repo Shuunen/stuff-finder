@@ -1,17 +1,25 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
+    "allowImportingTsExtensions": true,
+    "allowJs": true,
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
     "checkJs": true,
     "esModuleInterop": true,
     "exactOptionalPropertyTypes": true,
     "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "jsxImportSource": "preact",
     "lib": [
-      "ES2021",
-      "DOM"
+      "ES2020",
+      "DOM",
+      "DOM.Iterable"
     ],
-    "moduleResolution": "Node",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "noEmit": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitAny": true,
     "noImplicitOverride": true,
@@ -23,19 +31,20 @@
     "outDir": "./dist",
     "resolveJsonModule": true,
     "skipLibCheck": true,
-    "sourceMap": true,
     "strict": true,
     "strictNullChecks": true,
-    "target": "ES2021",
-    "types": [
-      "node/globals",
-      "dom-speech-recognition"
-    ],
+    "target": "ES2020",
+    "useDefineForClassFields": true,
     "verbatimModuleSyntax": true
   },
   "include": [
     "src",
     "tests",
     "*.ts"
+  ],
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
+    }
   ]
 }

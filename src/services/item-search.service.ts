@@ -89,7 +89,7 @@ class ItemSearch {
     const form = div('container', template.innerHTML).firstElementChild as HTMLElement
     form.dataset[ItemField.Id] = ''
     find.one<HTMLButtonElement>('[data-action="app-modal--print-one--open"]', form).dataset[ItemField.Id] = ''
-    form.setAttribute('on-close', 'app-modal--add-item--close')
+    form.setAttribute('close', 'app-modal--add-item--close')
     const content = find.one('.content', modal)
     content.append(form)
   }

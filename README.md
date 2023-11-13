@@ -50,5 +50,6 @@ Check build stats in details by adding `--metafile=meta.json` to the esbuild com
 - [SvgOmg](https://jakearchibald.github.io/svgomg/) : great tool to reduce svg image size
 - [TailwindCss](https://tailwindcss.com) : awesome lib to produce maintainable style
 - [V8](https://github.com/demurgos/v8-coverage) : simple & effective cli for code coverage
+- [Vite](https://github.com/vitejs/vite) : super fast frontend tooling
 - [Vitest](https://github.com/vitest-dev/vitest) : super fast vite-native testing framework
 - [Watchlist](https://github.com/lukeed/watchlist) : recursively watch a list of directories & run a command on any file system

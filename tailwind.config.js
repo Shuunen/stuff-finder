@@ -1,10 +1,16 @@
 /** @type {import('tailwindcss').Config} */
-module.exports = {
-  content: ['public/*.html', 'src/**/*.ts'],
+// eslint-disable-next-line import/no-anonymous-default-export
+export default {
+  content: [
+    './index.html',
+    './src/**/*.{js,ts,jsx,tsx}',
+  ],
   plugins: [
+    // eslint-disable-next-line no-undef
     require('@tailwindcss/forms'),
   ],
   theme: {
     extend: {},
   },
 }
+
