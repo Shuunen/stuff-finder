@@ -24,11 +24,12 @@
 
 ## Build sizes
 
-- 0.1.1 : 4KB html + 9KB css + 320KB js
-- 0.1.0 : 3KB html + 9KB css + 435KB js
-- 0.2.0 : 8KB html + 20KB css + 305KB js
+- 0.1.1 :  4KB html +  9KB css + 320KB js
+- 0.1.0 :  3KB html +  9KB css + 435KB js
+- 0.2.0 :  8KB html + 20KB css + 305KB js
 - 0.4.0 : 12KB html + 22KB css + 320KB js
 - 0.5.0 : 12KB html + 22KB css + 330KB js
+- 1.0.0 :  6KB html + 27KB css + 360KB js (migration to vite & preact with old code)
 
 Check build stats in details by adding `--metafile=meta.json` to the esbuild command and use a tool like [Bundle Buddy](https://bundle-buddy.com/)
 
