@@ -1,5 +1,5 @@
 /* eslint-disable max-lines */
-import Fuse, { type IFuseOptions } from 'fuse.js' // eslint-disable-line @typescript-eslint/naming-convention
+import Fuse, { type IFuseOptions } from 'fuse.js'
 import { clone, debounce, emit, fillTemplate, on, sanitize, sleep, storage } from 'shuutils'
 import './components'
 import { delays, emptyAppSettings, emptyCommonLists, type CommonLists } from './constants'
@@ -327,7 +327,7 @@ class App {
     while ((offset?.length ?? 0) > 0) {
       // eslint-disable-next-line no-await-in-loop
       response = await this.fetchApi(offset)
-      // eslint-disable-next-line unicorn/consistent-destructuring, @typescript-eslint/prefer-destructuring
+      // eslint-disable-next-line unicorn/consistent-destructuring
       offset = response.offset
       // eslint-disable-next-line unicorn/consistent-destructuring
       records = [...records, ...response.records]

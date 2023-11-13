@@ -7,6 +7,10 @@
 
 ![banner](docs/banner.svg)
 
+## Demo
+
+[![logo](public/assets/favicon-16x16.png)](https://stuff-finder.netlify.app) [https://stuff-finder.netlify.app](https://stuff-finder.netlify.app)
+
 ## Todo
 
 - [ ] nicer colorful identity ([something like this ?](https://www.iconfinder.com/icons/44859/cube_icon))
@@ -52,4 +56,3 @@ Check build stats in details by adding `--metafile=meta.json` to the esbuild com
 - [V8](https://github.com/demurgos/v8-coverage) : simple & effective cli for code coverage
 - [Vite](https://github.com/vitejs/vite) : super fast frontend tooling
 - [Vitest](https://github.com/vitest-dev/vitest) : super fast vite-native testing framework
-- [Watchlist](https://github.com/lukeed/watchlist) : recursively watch a list of directories & run a command on any file system

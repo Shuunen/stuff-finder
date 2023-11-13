@@ -97,6 +97,7 @@
         "prefer": "parameter-property"
       }
     ],
+    "@typescript-eslint/prefer-destructuring": "off",
     "@typescript-eslint/prefer-readonly-parameter-types": "off",
     "@typescript-eslint/quotes": [
       "error",
@@ -188,6 +189,7 @@
     ],
     "quotes": "off",
     "react-perf/jsx-no-new-function-as-prop": "off",
+    "regexp/require-unicode-sets-regexp": "off",
     "require-atomic-updates": [
       "error",
       {
