@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/no-autofocus, react/no-unknown-property, react-form-fields/no-only-value-prop */
 
-import { AppAddStuff } from './components/app-add-stuff'
 import { AppPrompter } from './components/app-prompter'
+import { AppSpeedDial } from './components/app-speed-dial'
 
 export function App () {
 
@@ -9,7 +9,7 @@ export function App () {
     <>
       {/* good code */}
       <AppPrompter />
-      <AppAddStuff />
+      <AppSpeedDial />
       {/* old code to migrate */}
       <app-toaster />
       <app-loader />
