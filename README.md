@@ -30,6 +30,7 @@
 - 0.4.0 : 12KB html + 22KB css + 320KB js
 - 0.5.0 : 12KB html + 22KB css + 330KB js
 - 1.0.0 :  6KB html + 27KB css + 360KB js (migration to vite & preact with old code)
+- 1.1.0 :  6KB html + 27KB css + 445KB js (added mui + mui icons)
 
 Check build stats in details by adding `--metafile=meta.json` to the esbuild command and use a tool like [Bundle Buddy](https://bundle-buddy.com/)
 
@@ -43,6 +44,7 @@ Check build stats in details by adding `--metafile=meta.json` to the esbuild com
 - [Favicon.io](https://favicon.io/favicon-generator/?t=SF&ff=Istok+Web&fs=110&fc=#FFF&b=rounded&bc=#08F) : handy favicon generator
 - [Github](https://github.com) : this great, free and evolving platform
 - [Keyboard & mic icons](https://www.iconfinder.com/iconsets/bitsies) by Recep Kütük
+- [MUI](https://mui.com) : a nice material ui lib
 - [Netlify](https://netlify.com) : awesome company that offers hosting for OSS
 - [Repo-checker](https://github.com/Shuunen/repo-checker) : eslint cover /src code and this tool the rest ^^
 - [RIOT Optimizer](https://riot-optimizer.com) : Radical Image Optimization Tool, the best software I found to compress images

@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/no-autofocus, react/no-unknown-property, react-form-fields/no-only-value-prop */
 
+import { AppAddStuff } from './components/app-add-stuff'
 import { AppPrompter } from './components/app-prompter'
 
 export function App () {
@@ -8,6 +9,7 @@ export function App () {
     <>
       {/* good code */}
       <AppPrompter />
+      <AppAddStuff />
       {/* old code to migrate */}
       <app-toaster />
       <app-loader />
@@ -16,7 +18,6 @@ export function App () {
       <app-print-barcodes />
       <app-print-one />
       <app-settings-trigger />
-      <app-add-item-trigger />
       <app-modal class="hidden px-2 md:max-h-[max(30rem,50vh)]" data-title="Search results" name="search-results">
         <div className="app-list app-results overflow-auto" />
       </app-modal>
