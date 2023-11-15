@@ -1,7 +1,10 @@
-import { dom, sleep, storage, tw } from 'shuutils'
+import { BrowserScout, dom, sleep, storage, tw } from 'shuutils'
 import { delays, jsonHeaders } from '../constants'
 import { logger } from './logger.utils'
 import { urlToUuid } from './url.utils'
+
+const scout = new BrowserScout()
+logger.info('browser scout', scout)
 
 // eslint-disable-next-line etc/no-misused-generics
 async function request<ResponseType = unknown> (method: 'GET' | 'PATCH' | 'POST', url: string, data?: Record<string, unknown>) {
@@ -88,3 +91,6 @@ export function isVisible (element: Element | HTMLElement | undefined) {
   const { height, width } = element.getBoundingClientRect()
   return width > 0 || height > 0
 }
+
+export { scout }
+
