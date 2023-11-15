@@ -93,13 +93,9 @@ export function App () {
           <details>
             <summary>About this app</summary>
             <small>
-              This is an open source project from <a data-action="see-profile" href="https://github.com/Shuunen" rel="noreferrer"
-                target="_blank">Shuunen</a>.<br />You can
-              check the
-              source code on the <a data-action="see-project" href="https://github.com/Shuunen/stuff-finder" rel="noreferrer" target="_blank">Github
-                project page</a>.
-              <br />
-              <span id="unique-mark" />
+              This is an open source project from <a data-action="see-profile" href="https://github.com/Shuunen" rel="noreferrer" target="_blank">Shuunen</a>.<br />
+              You can check the source code on the <a data-action="see-project" href="https://github.com/Shuunen/stuff-finder" rel="noreferrer" target="_blank">Github project page</a>.<br />
+              <span id="unique-mark">__unique-mark__</span>
             </small>
           </details>
 
