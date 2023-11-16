@@ -20,6 +20,9 @@ dependencies:
   '@mui/material':
     specifier: '5.14'
     version: 5.14.18(@emotion/react@11.11.1)(@emotion/styled@11.11.0)(react-dom@18.2.0)(react@18.2.0)
+  '@preact/signals':
+    specifier: ^1.2.1
+    version: 1.2.1(preact@10.19.1)
   '@zxing/library':
     specifier: '0.20'
     version: 0.20.0
@@ -1223,6 +1226,19 @@ packages:
       - preact
       - supports-color
     dev: true
+
+  /@preact/signals-core@1.5.0:
+    resolution: {integrity: sha512-U2diO1Z4i1n2IoFgMYmRdHWGObNrcuTRxyNEn7deSq2cru0vj0583HYQZHsAqcs7FE+hQyX3mjIV7LAfHCvy8w==}
+    dev: false
+
+  /@preact/signals@1.2.1(preact@10.19.1):
+    resolution: {integrity: sha512-hRPvp1C2ooDzOHqfnhdpHgoIFDbYFAXLhoid3+jSItuPPD/J0r/UsiWKv/8ZO/oEhjRaP0M5niuRYsWqmY2GEA==}
+    peerDependencies:
+      preact: 10.x
+    dependencies:
+      '@preact/signals-core': 1.5.0
+      preact: 10.19.1
+    dev: false
 
   /@prefresh/babel-plugin@0.5.1:
     resolution: {integrity: sha512-uG3jGEAysxWoyG3XkYfjYHgaySFrSsaEb4GagLzYaxlydbuREtaX+FTxuIidp241RaLl85XoHg9Ej6E4+V1pcg==}

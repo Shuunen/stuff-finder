@@ -1,20 +1,28 @@
-import { useEffect, useRef } from 'preact/hooks'
+import { signal, useSignalEffect } from '@preact/signals'
+import { useRef } from 'preact/hooks'
 // @ts-expect-error missing types
 import { type } from '@camwiegert/typical'
 import { delays } from '../constants'
 import { coolAscii } from '../utils/strings.utils'
 
+const sequence = [
+  'Stuff Finder',
+  delays.medium,
+  `Stuff Finder\n${coolAscii()}`, delays.large * 2, // eslint-disable-line @typescript-eslint/no-magic-numbers
+  `Stuff Finder\n${coolAscii()}`,
+]
+
 export function AppPrompter () {
 
-  const prompter = useRef<HTMLHeadingElement>(null)
+  const prompterReference = useRef<HTMLHeadingElement>(null)
+  const prompter = signal(prompterReference)
 
-  useEffect(() => {
-    if (prompter.current === null) return
-    const sequence = ['Stuff Finder', delays.medium, `Stuff Finder\n${coolAscii()}`, delays.large * 2, `Stuff Finder\n${coolAscii()}`] // eslint-disable-line @typescript-eslint/no-magic-numbers
-    type(prompter.current, ...sequence) // eslint-disable-line @typescript-eslint/no-unsafe-call
+  useSignalEffect(() => {
+    if (prompter.value.current === null) return
+    type(prompter.value.current, ...sequence) // eslint-disable-line @typescript-eslint/no-unsafe-call
   })
 
   return (
-    <h1 className="mb-12 mt-8 h-20 whitespace-pre text-center text-4xl text-purple-700 print:hidden" ref={prompter}>Hey ^^</h1>
+    <h1 className="mb-12 mt-8 h-20 whitespace-pre text-center text-4xl text-purple-700 print:hidden" ref={prompterReference}>Hey ^^</h1>
   )
 }
