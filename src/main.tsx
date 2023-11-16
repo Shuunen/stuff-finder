@@ -1,4 +1,4 @@
-import { ThemeProvider } from '@mui/material'
+import ThemeProvider from '@mui/material/styles/ThemeProvider'
 import { render } from 'preact'
 import { App } from './app.tsx'
 import './assets/barcode.css'

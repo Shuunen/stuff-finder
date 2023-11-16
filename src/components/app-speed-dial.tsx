@@ -1,6 +1,12 @@
 /* eslint-disable react-perf/jsx-no-jsx-as-prop */
-import { Add, Print, Settings } from '@mui/icons-material'
-import { Fade, SpeedDial, SpeedDialAction, SpeedDialIcon, Zoom } from '@mui/material'
+import AddIcon from '@mui/icons-material/Add'
+import PrintIcon from '@mui/icons-material/Print'
+import SettingsIcon from '@mui/icons-material/Settings'
+import Fade from '@mui/material/Fade'
+import SpeedDial from '@mui/material/SpeedDial'
+import SpeedDialAction from '@mui/material/SpeedDialAction'
+import SpeedDialIcon from '@mui/material/SpeedDialIcon'
+import Zoom from '@mui/material/Zoom'
 import { useState } from 'preact/hooks'
 import { emit, on } from 'shuutils'
 import type { AppModalAddItemOpenEvent, AppToasterShowEvent, ItemsReadyEvent } from '../types'
@@ -8,9 +14,9 @@ import { scout } from '../utils/browser.utils'
 import { logger } from '../utils/logger.utils'
 
 const actions = [
-  { handleClick: () => emit<AppModalAddItemOpenEvent>('app-modal--add-item--open'), icon: <Add />, name: 'Add' },
-  { handleClick: () => emit<AppToasterShowEvent>('app-toaster--show', { message: 'Settings clicked', type: 'info' }), icon: <Settings />, name: 'Settings' },
-  { handleClick: () => emit<AppToasterShowEvent>('app-toaster--show', { message: 'Print clicked', type: 'info' }), icon: <Print />, name: 'Print' },
+  { handleClick: () => emit<AppModalAddItemOpenEvent>('app-modal--add-item--open'), icon: <AddIcon />, name: 'Add' },
+  { handleClick: () => emit<AppToasterShowEvent>('app-toaster--show', { message: 'Settings clicked', type: 'info' }), icon: <SettingsIcon />, name: 'Settings' },
+  { handleClick: () => emit<AppToasterShowEvent>('app-toaster--show', { message: 'Print clicked', type: 'info' }), icon: <PrintIcon />, name: 'Print' },
 ]
 
 export function AppSpeedDial () {
