@@ -1,6 +1,7 @@
-import { BrowserScout, dom, sleep, storage, tw } from 'shuutils'
+import { BrowserScout, dom, sleep, tw } from 'shuutils'
 import { delays, jsonHeaders } from '../constants'
 import { logger } from './logger.utils'
+import { storage } from './storage.utils'
 import { urlToUuid } from './url.utils'
 
 const scout = new BrowserScout()

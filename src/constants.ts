@@ -1,4 +1,4 @@
-import { ItemField, ItemStatus } from './types'
+import { ItemField, ItemStatus, type AppCredentials, type Item, type ItemPhoto } from './types'
 
 export const jsonHeaders = {
   'Accept': 'application/json', // eslint-disable-line @typescript-eslint/naming-convention
@@ -31,15 +31,15 @@ export const emptyCommonLists: CommonLists = {
   ],
 }
 
-export const emptyAppSettings = {
+export const emptyCredentials: AppCredentials = {
   base: '',
   key: '',
   table: '',
   view: '',
   wrap: '',
-}
+} satisfies AppCredentials
 
-export const emptyItem = {
+export const emptyItem: Item = {
   [ItemField.Barcode]: '',
   [ItemField.Box]: '',
   [ItemField.Brand]: '',
@@ -55,6 +55,17 @@ export const emptyItem = {
   [ItemField.ReferencePrinted]: false,
   [ItemField.Status]: ItemStatus.Acheté,
   [ItemField.UpdatedOn]: '',
+}
+
+export const emptyItemPhoto: ItemPhoto = {
+  filename: '',
+  height: 0,
+  id: '',
+  size: 0,
+  thumbnails: { full: { height: 0, url: '', width: 0 }, large: { height: 0, url: '', width: 0 }, small: { height: 0, url: '', width: 0 } },
+  type: '',
+  url: '',
+  width: 0,
 }
 
 export const emptyItemSuggestions = {

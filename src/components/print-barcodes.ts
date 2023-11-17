@@ -1,8 +1,9 @@
-import { div, emit, fillTemplate, on, storage, tw } from 'shuutils'
+import { div, emit, fillTemplate, on, tw } from 'shuutils'
 import { emptyCommonLists, emptyItem } from '../constants'
 import { ItemField, ItemStatus, type AppLoaderToggleEvent, type AppModalPrepareBarcodesOpenEvent, type Item, type ItemsReadyEvent } from '../types'
 import { find, valuesToOptions } from '../utils/browser.utils'
 import { logger } from '../utils/logger.utils'
+import { storage } from '../utils/storage.utils'
 
 window.customElements.define('app-print-barcodes', class extends HTMLElement {
 

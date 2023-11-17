@@ -3,7 +3,7 @@
 import type { TypicalArguments } from '../shims'
 import type { Item, ItemField } from './item'
 import type { PrintFormData, PrintInputData } from './print'
-import type { AppSettings } from './settings'
+import type { AppCredentials } from './settings'
 
 export type AppActionEvent = HTMLElement | object | string
 export type AppClearCacheEvent = undefined
@@ -23,8 +23,8 @@ export type AppFormPrintOneReadyEvent = PrintFormData
 export type AppFormReadyEvent = AppFormData
 export type AppFormSettingsErrorEvent = string
 export type AppFormSettingsReadyEvent = undefined
-export type AppFormSettingsSaveEvent = AppSettings
-export type AppFormSettingsSetEvent = AppSettings
+export type AppFormSettingsSaveEvent = AppCredentials
+export type AppFormSettingsSetEvent = AppCredentials
 export type AppImgLoadingErrorEvent = undefined
 export type AppLoaderToggleEvent = boolean
 export type AppModalAddItemCloseEvent = undefined

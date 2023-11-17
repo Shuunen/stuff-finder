@@ -1,17 +1,18 @@
 /* eslint-disable max-lines */
 import Fuse, { type IFuseOptions } from 'fuse.js'
-import { clone, debounce, emit, fillTemplate, on, sanitize, sleep, storage } from 'shuutils'
+import { clone, debounce, emit, fillTemplate, on, sanitize, sleep } from 'shuutils'
 import './components'
-import { delays, emptyAppSettings, emptyCommonLists, type CommonLists } from './constants'
+import { delays, emptyCommonLists, emptyCredentials, type CommonLists } from './constants'
 import './services/item-search.service'
 import './services/sound.service'
 import './services/speech.service'
 import './services/url.service'
-import { ItemField, type AirtableRecord, type AirtableResponse, type AppActionEvent, type AppClearCacheEvent, type AppClearCredentialsEvent, type AppCloneItemEvent, type AppFormDataValue, type AppFormEditItemSaveEvent, type AppFormFieldChangeEvent, type AppFormSettingsErrorEvent, type AppFormSettingsReadyEvent, type AppFormSettingsSaveEvent, type AppFormSettingsSetEvent, type AppImgLoadingErrorEvent, type AppLoaderToggleEvent, type AppModalAddItemCloseEvent, type AppModalEditItemCloseEvent, type AppModalSearchResultsCloseEvent, type AppModalSettingsCloseEvent, type AppScanCodeStartEvent, type AppSettings, type AppSettingsTriggerAnimateEvent, type AppSpeechStartEvent, type AppStatusEvent, type FormEditFormData, type FormIdErrorEvent, type Item, type ItemPhoto, type ItemsReadyEvent, type SearchOrigin, type SearchResultsEvent, type SearchRetryEvent, type SearchStartEvent } from './types'
+import { ItemField, type AirtableRecord, type AirtableResponse, type AppActionEvent, type AppCloneItemEvent, type AppCredentials, type AppFormDataValue, type AppFormEditItemSaveEvent, type AppFormFieldChangeEvent, type AppFormSettingsErrorEvent, type AppFormSettingsReadyEvent, type AppFormSettingsSaveEvent, type AppFormSettingsSetEvent, type AppImgLoadingErrorEvent, type AppLoaderToggleEvent, type AppModalAddItemCloseEvent, type AppModalEditItemCloseEvent, type AppModalSearchResultsCloseEvent, type AppModalSettingsCloseEvent, type AppScanCodeStartEvent, type AppSettingsTriggerAnimateEvent, type AppSpeechStartEvent, type AppStatusEvent, type FormEditFormData, type FormIdErrorEvent, type Item, type ItemPhoto, type ItemsReadyEvent, type SearchOrigin, type SearchResultsEvent, type SearchRetryEvent, type SearchStartEvent } from './types'
 import { find, get, patch, post, valuesToOptions } from './utils/browser.utils'
 import { airtableRecordToItem, getCommonListsFromItems } from './utils/item.utils'
 import { logger } from './utils/logger.utils'
 import { getObjectOrSelf } from './utils/objects.utils'
+import { storage } from './utils/storage.utils'
 import { coolAscii } from './utils/strings.utils'
 
 class App {
@@ -32,19 +33,15 @@ class App {
 
   public constructor () {
     logger.info('app start')
-    storage.prefix = '@shuunen/stuff-finder_'
     this.setListeners()
     this.checkExistingSettings()
   }
 
-  // eslint-disable-next-line max-statements
   private setListeners () {
     on<AppFormSettingsSaveEvent>('app-form--settings--save', this.onSettingsSave.bind(this))
     on<AppFormEditItemSaveEvent>('app-form--edit-item--save', this.onEditItem.bind(this))
     on<SearchStartEvent>('search-start', this.onSearchStart.bind(this))
     on<SearchRetryEvent>('search-retry', this.onSearchRetry.bind(this))
-    on<AppClearCacheEvent>('app-clear-cache', this.onClearCache.bind(this))
-    on<AppClearCredentialsEvent>('app-clear-credentials', this.onClearCredentials.bind(this))
     on<AppImgLoadingErrorEvent>('app--img-loading-error', this.onImgLoadingError.bind(this))
     on<AppCloneItemEvent>('app-clone-item', this.onCloneItem.bind(this))
     on<AppFormFieldChangeEvent>('app-form--edit-item--reference--change', this.onIdentifierChange.bind(this))
@@ -52,19 +49,8 @@ class App {
     document.addEventListener('click', this.onDocumentClick.bind(this))
   }
 
-  private onClearCredentials () {
-    logger.info('clearing credentials...')
-    storage.clear('app-settings')
-  }
-
-  private onClearCache () {
-    logger.info('clearing cached items...')
-    storage.clear('items')
-    document.location.reload()
-  }
-
   private checkExistingSettings () {
-    const settings = storage.get<AppSettings>('app-settings', emptyAppSettings)
+    const settings = storage.get<AppCredentials>('app-settings', emptyCredentials)
     if (!settings.base) { this.settingsActionRequired(true); return }
     void this.onSettingsSave(settings)
     on<AppFormSettingsReadyEvent>('app-form--settings--ready', () => emit<AppFormSettingsSetEvent>('app-form--settings--set', settings))
@@ -282,7 +268,7 @@ class App {
     this.isLoading(false)
   }
 
-  private async onSettingsSave (settings: AppSettings) {
+  private async onSettingsSave (settings: AppCredentials) {
     this.apiUrl = `https://api.airtable.com/v0/${settings.base}/${settings.table}?api_key=${settings.key}&view=${settings.view}`
     const areItemsLoaded = await this.loadItems()
     if (!areItemsLoaded) {

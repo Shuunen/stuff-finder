@@ -179,8 +179,19 @@
     "no-restricted-imports": [
       "error",
       {
-        "message": "Please use import specific components from @mui/material",
-        "name": "@mui/material"
+        "paths": [
+          {
+            "importNames": [
+              "storage"
+            ],
+            "message": "Please import 'storage' from '@/utils/storage.utils' instead.",
+            "name": "shuutils"
+          },
+          {
+            "message": "Please use import specific components from @mui/material",
+            "name": "@mui/material"
+          }
+        ]
       }
     ],
     "object-curly-spacing": [

@@ -1,9 +1,10 @@
-import { clone, div, emit, on, storage } from 'shuutils'
+import { clone, div, emit, on } from 'shuutils'
 import type { AppForm } from '../components/form'
-import { emptyAppSettings, emptyItem, emptyItemSuggestions } from '../constants'
-import { ItemField, ItemStatus, type AppFormData, type AppFormEditItemChangeEvent, type AppFormEditItemSetEvent, type AppFormEditItemSuggestionsEvent, type AppLoaderToggleEvent, type AppModalAddItemOpenEvent, type AppModalPrintOneOpenEvent, type AppSearchItemEvent, type AppSettings, type FormEditFormData, type Item, type ItemSuggestions, type PrintInputData, type WrapApiAliExResponse, type WrapApiAngboResponse, type WrapApiCampoResponse, type WrapApiDeyesResponse } from '../types'
+import { emptyCredentials, emptyItem, emptyItemSuggestions } from '../constants'
+import { ItemField, ItemStatus, type AppCredentials, type AppFormData, type AppFormEditItemChangeEvent, type AppFormEditItemSetEvent, type AppFormEditItemSuggestionsEvent, type AppLoaderToggleEvent, type AppModalAddItemOpenEvent, type AppModalPrintOneOpenEvent, type AppSearchItemEvent, type FormEditFormData, type Item, type ItemSuggestions, type PrintInputData, type WrapApiAliExResponse, type WrapApiAngboResponse, type WrapApiCampoResponse, type WrapApiDeyesResponse } from '../types'
 import { find, get } from '../utils/browser.utils'
 import { logger } from '../utils/logger.utils'
+import { storage } from '../utils/storage.utils'
 import { cleanSuggestions } from '../utils/suggestions.utils'
 import { getAsin, normalizePhotoUrl } from '../utils/url.utils'
 
@@ -65,7 +66,7 @@ class ItemSearch {
 
   private getWrapApiKey () {
     if (this.wrap.length > 0) return this.wrap
-    const settings = storage.get<AppSettings>('app-settings', emptyAppSettings)
+    const settings = storage.get<AppCredentials>('app-settings', emptyCredentials)
     this.wrap = !settings.wrap || settings.wrap.length === 0 ? '' : settings.wrap
     if (this.wrap === '') logger.showLog('no wrap api key available in settings stored')
     return this.wrap
