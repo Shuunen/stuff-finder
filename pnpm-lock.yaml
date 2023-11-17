@@ -32,6 +32,9 @@ dependencies:
   preact:
     specifier: '10.19'
     version: 10.19.3
+  preact-router:
+    specifier: '4.1'
+    version: 4.1.2(preact@10.19.3)
   shuutils:
     specifier: '7.4'
     version: 7.4.0
@@ -7763,6 +7766,14 @@ packages:
       picocolors: 1.0.0
       source-map-js: 1.0.2
     dev: true
+
+  /preact-router@4.1.2(preact@10.19.3):
+    resolution: {integrity: sha512-uICUaUFYh+XQ+6vZtQn1q+X6rSqwq+zorWOCLWPF5FAsQh3EJ+RsDQ9Ee+fjk545YWQHfUxhrBAaemfxEnMOUg==}
+    peerDependencies:
+      preact: '>=10'
+    dependencies:
+      preact: 10.19.3
+    dev: false
 
   /preact@10.19.3:
     resolution: {integrity: sha512-nHHTeFVBTHRGxJXKkKu5hT8C/YWBkPso4/Gad6xuj5dbptt9iF9NZr9pHbPhBrnT2klheu7mHTxTZ/LjwJiEiQ==}

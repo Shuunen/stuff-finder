@@ -1,6 +1,7 @@
 import { AppItemList } from '../components/app-item-list'
 import type { Item } from '../types'
 import { fakeItem } from '../utils/item.utils'
+import { logger } from '../utils/logger.utils'
 
 const items: Item[] = [
   fakeItem('Sécateur de ouf'),
@@ -8,10 +9,11 @@ const items: Item[] = [
   fakeItem('Brouette de jardin'),
 ]
 
-export function AppSearch ({ input }: { readonly input: string }) {
+export function AppSearch ({ input = '', ...properties }: { readonly input?: string; readonly [key: string]: unknown }) {
+  logger.debug('AppSearch', { input, properties })
   return (
     <div className="flex flex-col gap-6">
-      <h2>Search results for &quot;{input}&quot; :</h2>
+      <h2>Found {items.length} search results for &quot;{input}&quot; :</h2>
       <AppItemList items={items} />
     </div>
   )

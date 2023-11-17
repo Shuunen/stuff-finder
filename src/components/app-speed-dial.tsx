@@ -1,4 +1,5 @@
 import AddIcon from '@mui/icons-material/Add'
+import HomeIcon from '@mui/icons-material/Home'
 import PrintIcon from '@mui/icons-material/Print'
 import SettingsIcon from '@mui/icons-material/Settings'
 import Fade from '@mui/material/Fade'
@@ -6,16 +7,18 @@ import SpeedDial from '@mui/material/SpeedDial'
 import SpeedDialAction from '@mui/material/SpeedDialAction'
 import SpeedDialIcon from '@mui/material/SpeedDialIcon'
 import Zoom from '@mui/material/Zoom'
+import { route } from 'preact-router'
 import { useState } from 'preact/hooks'
-import { emit, on } from 'shuutils'
-import type { AppModalAddItemOpenEvent, AppToasterShowEvent, ItemsReadyEvent } from '../types'
+import { on } from 'shuutils'
+import type { ItemsReadyEvent } from '../types'
 import { scout } from '../utils/browser.utils'
 import { logger } from '../utils/logger.utils'
 
 const actions = [
-  { handleClick: () => emit<AppModalAddItemOpenEvent>('app-modal--add-item--open'), icon: <AddIcon />, name: 'Add' },
-  { handleClick: () => emit<AppToasterShowEvent>('app-toaster--show', { message: 'Settings clicked', type: 'info' }), icon: <SettingsIcon />, name: 'Settings' },
-  { handleClick: () => emit<AppToasterShowEvent>('app-toaster--show', { message: 'Print clicked', type: 'info' }), icon: <PrintIcon />, name: 'Print' },
+  { handleClick: () => route('/'), icon: <HomeIcon />, name: 'Home' },
+  { handleClick: () => route('/item/add'), icon: <AddIcon />, name: 'Add' },
+  { handleClick: () => route('/settings'), icon: <SettingsIcon />, name: 'Settings' },
+  { handleClick: () => route('/print/missing'), icon: <PrintIcon />, name: 'Print' },
 ]
 
 export function AppSpeedDial () {
