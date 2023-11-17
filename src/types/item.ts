@@ -5,10 +5,16 @@ export interface ItemThumbnail {
 }
 
 export interface ItemPhoto {
+  /**
+   * not used for now
+   */
   filename: string
   height: number
   id: string
   size: number
+  /**
+   * not used for now
+   */
   thumbnails: {
     full: ItemThumbnail
     large: ItemThumbnail

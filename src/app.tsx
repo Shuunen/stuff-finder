@@ -1,5 +1,4 @@
 /* eslint-disable jsx-a11y/no-autofocus, react/no-unknown-property, react-form-fields/no-only-value-prop */
-
 import { AppPrompter } from './components/app-prompter'
 import { AppSpeedDial } from './components/app-speed-dial'
 
@@ -77,16 +76,6 @@ export function App () {
               Wrap api is a great & <strong>free</strong> service to fetch data, it ease the process to add products to your Airtable database.<br />
               For exemple, <u>give him the EAN code of your product, he will fetch the name and image</u>.<br />
               Check their <a href="https://wrapapi.com" rel="noreferrer" target="_blank">website</a> to register your free account.
-            </small>
-          </details>
-
-          <details>
-            <summary>Advanced features</summary>
-            <small>
-              <div className="flex gap-4">
-                <button data-action="app-clear-cache" type="button">Clear cache</button>
-                <button data-action="app-clear-credentials" type="button">Clear credentials</button>
-              </div>
             </small>
           </details>
 

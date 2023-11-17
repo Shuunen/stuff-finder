@@ -1,5 +1,5 @@
-import { clone } from 'shuutils'
-import { emptyCommonLists, emptyItem } from '../constants'
+import { clone, slugify } from 'shuutils'
+import { emptyCommonLists, emptyItem, emptyItemPhoto } from '../constants'
 import type { AirtableRecord, Item } from '../types'
 import { sortListsEntries } from './objects.utils'
 
@@ -27,3 +27,11 @@ export function getCommonListsFromItems (items: Item[]) {
   return list
 }
 
+export function fakeItem (name: string) {
+  return {
+    ...emptyItem,
+    id: slugify(name),
+    name,
+    photo: [{ ...emptyItemPhoto, url: `https://picsum.photos/seed/${name}/200/200` }],
+  } satisfies Item
+}
