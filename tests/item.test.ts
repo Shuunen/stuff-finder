@@ -1,6 +1,6 @@
 import { expect, it } from 'vitest'
 import { ItemStatus, type AirtableRecord, type Item } from '../src/types'
-import { airtableRecordToItem, getCommonListsFromItems } from '../src/utils/item.utils'
+import { airtableRecordToItem, fakeItem, getCommonListsFromItems } from '../src/utils/item.utils'
 
 const recordA: AirtableRecord = {
   fields: {
@@ -44,3 +44,9 @@ it('getCommonListsFromItems A', () => {
   expect(getCommonListsFromItems([itemA, itemB])).toMatchSnapshot()
 })
 
+it('fakeItem A', () => {
+  const name = 'super glass tempered shovel'
+  const item = fakeItem(name)
+  expect(item.name).toBe(name)
+  expect(item.photo).toHaveLength(1)
+})
