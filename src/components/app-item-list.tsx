@@ -12,7 +12,7 @@ export function AppItemList ({ items }: { readonly items: Item[] }) {
         {items.map(item => (
           <ListItem disablePadding key={item.id}>
             {/* @ts-expect-error typings issue */}
-            <ListItemButton component="a" href={`/item/${item.id}`}>
+            <ListItemButton component="a" href={`/item/details/${item.id}`}>
               <img alt={item.name} className="mr-4 h-12 w-12 rounded-full" src={item.photo?.[0]?.url ?? ''} />
               <ListItemText primary={item.name} />
             </ListItemButton>
