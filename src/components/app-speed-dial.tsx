@@ -1,4 +1,3 @@
-/* eslint-disable react-perf/jsx-no-jsx-as-prop */
 import AddIcon from '@mui/icons-material/Add'
 import PrintIcon from '@mui/icons-material/Print'
 import SettingsIcon from '@mui/icons-material/Settings'

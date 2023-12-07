@@ -112,6 +112,7 @@
       "error",
       "always-multiline"
     ],
+    "compat/compat": "off",
     "curly": [
       "error",
       "multi"

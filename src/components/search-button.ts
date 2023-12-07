@@ -6,11 +6,11 @@ import { logger } from '../utils/logger.utils'
 const knownSpeechAndHints: Record<AppStatus, { hint: string; speech: string }> = {
   'failed': {
     hint: 'Speech recognition has fail, just press the button to try again or use another method.',
-    speech: pickOne(['Retry', 'Try again']),
+    speech: pickOne(['Retry', 'Try again']) ?? 'One more time',
   },
   'listening': {
     hint: 'Say keywords about what you\'re looking for (ex. "tablet", "biking gloves")',
-    speech: pickOne(['👂 Listening to you', '👂 Give it to me', '👂 Tell me']),
+    speech: pickOne(['👂 Listening to you', '👂 Give it to me']) ?? '👂 Tell me',
   },
   'loading': {
     hint: 'Loading...',
@@ -18,7 +18,7 @@ const knownSpeechAndHints: Record<AppStatus, { hint: string; speech: string }> =
   },
   'ready': {
     hint: 'Search is ready for you sir, just type your search, scan or say something.',
-    speech: pickOne(['Say it', 'Speech']),
+    speech: pickOne(['Say it', 'Speech']) ?? 'Just say it',
   },
   'settings-required': {
     hint: 'You need to configure this app to use it, please use the bouncing setting gear.',
