@@ -6,7 +6,7 @@ export default {
     './src/**/*.{js,ts,jsx,tsx}',
   ],
   plugins: [
-    // eslint-disable-next-line no-undef
+    // eslint-disable-next-line no-undef, import/no-commonjs
     require('@tailwindcss/forms'),
   ],
   theme: {

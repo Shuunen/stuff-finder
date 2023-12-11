@@ -7,7 +7,6 @@ import { urlToUuid } from './url.utils'
 const scout = new BrowserScout()
 logger.info('browser scout', scout)
 
-// eslint-disable-next-line etc/no-misused-generics
 async function request<ResponseType = unknown> (method: 'GET' | 'PATCH' | 'POST', url: string, data?: Record<string, unknown>) {
   const options: RequestInit = { headers: jsonHeaders, method }
   if (data) options.body = JSON.stringify(data)
@@ -24,17 +23,14 @@ export function button (content: string, classes = '', isSecondary = false) {
   return element
 }
 
-// eslint-disable-next-line etc/no-misused-generics
 export async function patch<ResponseType> (url: string, data: Record<string, unknown>) {
   return await request<ResponseType>('PATCH', url, data)
 }
 
-// eslint-disable-next-line etc/no-misused-generics
 export async function post<ResponseType> (url: string, data: Record<string, unknown>) {
   return await request<ResponseType>('POST', url, data)
 }
 
-// eslint-disable-next-line etc/no-misused-generics
 export async function get<ResponseType> (url: string, willCacheResponse = true) {
   const uuid = urlToUuid(url)
   if (willCacheResponse) {
@@ -46,7 +42,6 @@ export async function get<ResponseType> (url: string, willCacheResponse = true) 
   return response
 }
 
-/* eslint-disable etc/no-misused-generics */
 export const find = {
   all: <Type extends Element = Element> (selector: string, context: Document | Element = document) => {
     const elements = context.querySelectorAll<Type>(selector)
@@ -61,7 +56,6 @@ export const find = {
   },
   oneOrNone: <Type extends Element = Element> (selector: string, context: Document | Element = document): Type | null => context.querySelector<Type>(selector),
 }
-/* eslint-enable etc/no-misused-generics */
 
 export async function fadeIn (element: HTMLElement) {
   if (!element.classList.contains('app-hide')) { logger.error('please add "app-hide" class before mounting dom element and then call fade-in'); return }

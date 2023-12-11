@@ -1,4 +1,4 @@
-import { expect, it } from 'vitest'
+import { expect, it } from 'vitest' // eslint-disable-line @typescript-eslint/no-shadow
 import { ItemStatus, type AirtableRecord, type Item } from '../src/types'
 import { airtableRecordToItem, fakeItem, getCommonListsFromItems } from '../src/utils/item.utils'
 

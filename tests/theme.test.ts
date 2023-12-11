@@ -1,4 +1,4 @@
-import { expect, it } from 'vitest'
+import { expect, it } from 'vitest' // eslint-disable-line @typescript-eslint/no-shadow
 import { theme } from '../src/utils/theme.utils'
 
 it('theme A primary palette', () => {

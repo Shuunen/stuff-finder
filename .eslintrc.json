@@ -15,29 +15,6 @@
   "ignorePatterns": [
     "public/*.js"
   ],
-  "overrides": [
-    {
-      "files": [
-        "benchmarks/*",
-        "tests/*"
-      ],
-      "rules": {
-        "@typescript-eslint/no-magic-numbers": "off",
-        "@typescript-eslint/no-shadow": "off",
-        "func-names": "off",
-        "unicorn/prefer-top-level-await": "off"
-      }
-    },
-    {
-      "files": [
-        "**/*.js"
-      ],
-      "rules": {
-        "import/no-commonjs": "off",
-        "import/unambiguous": "off"
-      }
-    }
-  ],
   "parserOptions": {
     "project": "tsconfig.json"
   },
@@ -122,6 +99,7 @@
     "etc/no-deprecated": "off",
     "etc/no-enum": "off",
     "etc/no-internal": "off",
+    "etc/no-misused-generics": "off",
     "etc/prefer-interface": "off",
     "ext/lines-between-object-properties": "off",
     "func-names": [

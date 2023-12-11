@@ -134,7 +134,6 @@ class ItemSearch {
     return suggestions
   }
 
-  // eslint-disable-next-line etc/no-misused-generics
   private async addSuggestionsFromWrap<ResponseType> (endpoint: string) {
     const wrapApiKey = this.getWrapApiKey()
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions

@@ -1,4 +1,4 @@
-import { expect, it } from 'vitest'
+import { expect, it } from 'vitest' // eslint-disable-line @typescript-eslint/no-shadow
 import type { PrintInputData } from '../src/types'
 import { inputToPrintCode, inputToPrintData, inputToPrintQrCodeVisual, inputToPrintText, itemToPrintLocation } from '../src/utils/print.utils'
 
