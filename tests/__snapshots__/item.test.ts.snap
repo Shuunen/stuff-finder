@@ -58,3 +58,23 @@ exports[`getCommonListsFromItems A 1`] = `
   ],
 }
 `;
+
+exports[`getOneItem A 1`] = `
+{
+  "barcode": "",
+  "box": "",
+  "brand": "",
+  "category": "",
+  "details": "",
+  "drawer": "",
+  "id": undefined,
+  "location": "",
+  "name": "",
+  "photo": [],
+  "price": 0,
+  "ref-printed": false,
+  "reference": "",
+  "status": "acheté",
+  "updated-on": "",
+}
+`;

@@ -51,8 +51,8 @@ export async function getOneItem (id: Item['id']) {
   return airtableRecordToItem(response)
 }
 
-export function addOrUpdateItemLocally (itemTouched: Item) {
-  const items = clone(state.items)
+export function addOrUpdateItems (input: Item[], itemTouched: Item) {
+  const items = clone(input)
   const index = items.findIndex(item => item.id === itemTouched.id)
   if (index >= 0) {
     logger.info('updating item locally', itemTouched)
@@ -61,5 +61,5 @@ export function addOrUpdateItemLocally (itemTouched: Item) {
     logger.info('adding item locally', itemTouched)
     items.push(itemTouched)
   } else logger.showError('cannot add item without id')
-  state.items = items
+  return items
 }

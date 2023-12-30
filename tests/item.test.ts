@@ -1,7 +1,7 @@
 import { expect, it } from 'vitest' // eslint-disable-line @typescript-eslint/no-shadow
 import { ItemStatus, type Item } from '../src/types/item.types'
 import type { AirtableSingleRecordResponse } from '../src/types/requests.types'
-import { airtableRecordToItem, fakeItem, getCommonListsFromItems } from '../src/utils/item.utils'
+import { addOrUpdateItems, airtableRecordToItem, fakeItem, getCommonListsFromItems, getOneItem } from '../src/utils/item.utils'
 
 const recordA: AirtableSingleRecordResponse = {
   fields: {
@@ -50,4 +50,32 @@ it('fakeItem A', () => {
   const item = fakeItem(name)
   expect(item.name).toBe(name)
   expect(item.photo).toHaveLength(1)
+})
+
+it('getOneItem A', async () => {
+  const item = await getOneItem('rec123')
+  expect(item).toMatchSnapshot()
+})
+
+it('addOrUpdateItems A update existing item', () => {
+  const itemsInput = [itemA, itemB]
+  const itemTouched = createFakeItem({ id: itemB.id, location: itemA.location })
+  const itemsOutput = addOrUpdateItems(itemsInput, itemTouched)
+  expect(itemsOutput).toHaveLength(2)
+  expect(itemsOutput[1]?.location).toBe(itemTouched.location)
+})
+
+it('addOrUpdateItems B add new item', () => {
+  const itemsInput = [itemA, itemB]
+  const itemTouched = createFakeItem({ id: 'new item' })
+  const itemsOutput = addOrUpdateItems(itemsInput, itemTouched)
+  expect(itemsOutput).toHaveLength(3)
+  expect(itemsOutput[2]?.id).toBe(itemTouched.id)
+})
+
+it('addOrUpdateItems C add new item without id', () => {
+  const itemsInput = [itemA, itemB]
+  const itemTouched = createFakeItem({ id: '' })
+  const itemsOutput = addOrUpdateItems(itemsInput, itemTouched)
+  expect(itemsOutput).toHaveLength(2)
 })
