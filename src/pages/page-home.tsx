@@ -9,7 +9,6 @@ export function AppHome ({ ...properties }: { readonly [key: string]: unknown })
       {/* new good code */}
       <AppPrompter />
       {/* old code to migrate */}
-      <app-toaster />
       <app-loader />
       <app-scan-code />
       <app-search-button />
