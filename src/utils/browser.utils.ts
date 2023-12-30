@@ -1,14 +1,20 @@
 import { BrowserScout, dom, sleep, tw } from 'shuutils'
-import { delays, jsonHeaders } from '../constants'
+import { delays } from '../constants'
 import { logger } from './logger.utils'
+import { state } from './state.utils'
 import { storage } from './storage.utils'
 import { urlToUuid } from './url.utils'
 
 const scout = new BrowserScout()
 logger.info('browser scout', scout)
 
+function airtableHeaders (token: string) {
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  return { 'Accept': 'application/json', 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }
+}
+
 async function request<ResponseType = unknown> (method: 'GET' | 'PATCH' | 'POST', url: string, data?: Record<string, unknown>) {
-  const options: RequestInit = { headers: jsonHeaders, method }
+  const options: RequestInit = { headers: airtableHeaders(state.credentials.token), method }
   if (data) options.body = JSON.stringify(data)
   const response = await fetch(url, options).catch((error: unknown) => { logger.showError(error) })
   if (!response) throw new Error('no response')

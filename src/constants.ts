@@ -1,10 +1,5 @@
 import { ItemField, ItemStatus, type AppCredentials, type Item, type ItemPhoto } from './types'
 
-export const jsonHeaders = {
-  'Accept': 'application/json', // eslint-disable-line @typescript-eslint/naming-convention
-  'Content-Type': 'application/json',
-}
-
 export const defaultImage = 'assets/no-visual.svg'
 
 export interface CommonLists {
@@ -33,8 +28,8 @@ export const emptyCommonLists: CommonLists = {
 
 export const emptyCredentials: AppCredentials = {
   base: '',
-  key: '',
   table: '',
+  token: '',
   view: '',
   wrap: '',
 } satisfies AppCredentials

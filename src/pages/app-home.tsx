@@ -4,9 +4,11 @@ import { logger } from '../utils/logger.utils'
 
 export function AppHome ({ ...properties }: { readonly [key: string]: unknown }) {
   logger.debug('AppHome', { properties })
+  // this if avoid re-injection old web components, remove it when all components are migrated
+  if (document.querySelector('.app-search-button') !== null) return (<AppPrompter />)
   return (
     <>
-      {/* good code */}
+      {/* new good code */}
       <AppPrompter />
       {/* old code to migrate */}
       <app-toaster />
@@ -39,8 +41,8 @@ export function AppHome ({ ...properties }: { readonly [key: string]: unknown })
             <input autoFocus multi-paste name="base" pattern="^app\w{14}$" placeholder="your api base" required type="text" />
           </label>
           <label>
-            <a href="https://airtable.com/account" rel="noreferrer" target="_blank">Airtable api key</a>
-            <input maxLength={17} name="key" pattern="^key\w{14}$" placeholder="your api key" required type="text" />
+            <a href="https://airtable.com/create/tokens" rel="noreferrer" target="_blank">Airtable personal access token</a>
+            <input maxLength={100} name="token" pattern="^pat[\w\.]{50,100}$" placeholder="your pat" required type="text" />
           </label>
           <label>
             Airtable table name

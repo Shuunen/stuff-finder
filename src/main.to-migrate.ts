@@ -2,7 +2,7 @@
 import Fuse, { type IFuseOptions } from 'fuse.js'
 import { clone, debounce, emit, fillTemplate, on, sanitize, sleep } from 'shuutils'
 import './components'
-import { delays, emptyCommonLists, emptyCredentials, type CommonLists } from './constants'
+import { delays, emptyCommonLists, type CommonLists } from './constants'
 import './services/item-search.service'
 import './services/sound.service'
 import './services/speech.service'
@@ -12,6 +12,7 @@ import { find, get, patch, post, valuesToOptions } from './utils/browser.utils'
 import { airtableRecordToItem, getCommonListsFromItems } from './utils/item.utils'
 import { logger } from './utils/logger.utils'
 import { getObjectOrSelf } from './utils/objects.utils'
+import { state } from './utils/state.utils'
 import { storage } from './utils/storage.utils'
 import { coolAscii } from './utils/strings.utils'
 
@@ -50,7 +51,7 @@ class App {
   }
 
   private checkExistingSettings () {
-    const settings = storage.get<AppCredentials>('app-settings', emptyCredentials)
+    const settings = storage.get<AppCredentials>('app-settings', state.credentials)
     if (!settings.base) { this.settingsActionRequired(true); return }
     void this.onSettingsSave(settings)
     on<AppFormSettingsReadyEvent>('app-form--settings--ready', () => emit<AppFormSettingsSetEvent>('app-form--settings--set', settings))
@@ -269,7 +270,8 @@ class App {
   }
 
   private async onSettingsSave (settings: AppCredentials) {
-    this.apiUrl = `https://api.airtable.com/v0/${settings.base}/${settings.table}?api_key=${settings.key}&view=${settings.view}`
+    this.apiUrl = `https://api.airtable.com/v0/${settings.base}/${settings.table}?view=${settings.view}`
+    state.credentials = settings
     const areItemsLoaded = await this.loadItems()
     if (!areItemsLoaded) {
       this.settingsActionRequired(true, 'failed to use api settings')
