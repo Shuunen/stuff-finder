@@ -2,11 +2,18 @@ import { clone, slugify } from 'shuutils'
 import { defaultCommonLists, emptyItem, emptyItemPhoto } from '../constants'
 import type { Item } from '../types/item.types'
 import type { AirtableSingleRecordResponse } from '../types/requests.types'
+import { get } from './browser.utils'
+import { logger } from './logger.utils'
 import { sortListsEntries } from './objects.utils'
+import { state } from './state.utils'
+
+const airtableBaseUrl = 'https://api.airtable.com/v0'
 
 function shouldAddToList (value = '', list: string[] = []) {
   return value.length > 0 && !list.includes(value)
 }
+
+export const airtableMaxRequestPerSecond = 5
 
 export function airtableRecordToItem (record: AirtableSingleRecordResponse) {
   return {
@@ -35,4 +42,24 @@ export function fakeItem (name: string) {
     name,
     photo: [{ ...emptyItemPhoto, url: `https://picsum.photos/seed/${name}/200/200` }],
   } satisfies Item
+}
+
+export async function getOneItem (id: Item['id']) {
+  const { base, table } = state.credentials
+  const url = `${airtableBaseUrl}/${base}/${table}/${id}`
+  const response = await get<AirtableSingleRecordResponse>(url, false)
+  return airtableRecordToItem(response)
+}
+
+export function addOrUpdateItemLocally (itemTouched: Item) {
+  const items = clone(state.items)
+  const index = items.findIndex(item => item.id === itemTouched.id)
+  if (index >= 0) {
+    logger.info('updating item locally', itemTouched)
+    items[index] = itemTouched
+  } else if (itemTouched.id) {
+    logger.info('adding item locally', itemTouched)
+    items.push(itemTouched)
+  } else logger.showError('cannot add item without id')
+  state.items = items
 }

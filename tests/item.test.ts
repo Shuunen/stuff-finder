@@ -1,9 +1,9 @@
 import { expect, it } from 'vitest' // eslint-disable-line @typescript-eslint/no-shadow
 import { ItemStatus, type Item } from '../src/types/item.types'
-import type { AirtableRecord } from '../src/types/requests.types'
+import type { AirtableSingleRecordResponse } from '../src/types/requests.types'
 import { airtableRecordToItem, fakeItem, getCommonListsFromItems } from '../src/utils/item.utils'
 
-const recordA: AirtableRecord = {
+const recordA: AirtableSingleRecordResponse = {
   fields: {
     box: 'box A',
     category: 'category A',
