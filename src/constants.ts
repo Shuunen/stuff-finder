@@ -1,3 +1,5 @@
+import Fuse, { type IFuseOptions } from 'fuse.js'
+import { sanitize } from 'shuutils'
 import { ItemField, ItemStatus, type Item, type ItemPhoto } from './types/item.types'
 import type { AppCredentials } from './types/settings.types'
 
@@ -87,3 +89,29 @@ export const delays = {
   medium: 200,
   small: 100,
 } as const
+
+// https://fusejs.io/
+export const fuseOptions: IFuseOptions<Item> = {
+  distance: 200, // see the tip at https://fusejs.io/concepts/scoring-theory.html#scoring-theory
+  getFn: (object: Item, path: string[] | string) => {
+    const value = Fuse.config.getFn(object, path)
+    if (Array.isArray(value)) return value.map((element: string) => sanitize(element))
+    if (typeof value === 'string') return sanitize(value)
+    return value
+  },
+  ignoreLocation: true, // eslint-disable-line @typescript-eslint/naming-convention
+  keys: [{
+    name: ItemField.Name,
+    weight: 4,
+  }, {
+    name: ItemField.Brand,
+    weight: 2,
+  }, {
+    name: ItemField.Details,
+    weight: 4,
+  }, {
+    name: ItemField.Category,
+    weight: 1,
+  }], // this is not generic ^^"
+  threshold: 0.35, // 0 is perfect match
+}

@@ -1,8 +1,8 @@
 /* eslint-disable max-lines */
-import Fuse, { type IFuseOptions } from 'fuse.js'
+import Fuse from 'fuse.js'
 import { clone, debounce, emit, fillTemplate, on, sanitize, sleep } from 'shuutils'
 import './components'
-import { delays, type CommonLists } from './constants'
+import { delays, fuseOptions, type CommonLists } from './constants'
 import './services/item-search.service'
 import './services/speech.service'
 import type { AppActionEvent, AppCloneItemEvent, AppFormDataValue, AppFormEditItemSaveEvent, AppFormFieldChangeEvent, AppFormSettingsErrorEvent, AppFormSettingsReadyEvent, AppFormSettingsSaveEvent, AppFormSettingsSetEvent, AppImgLoadingErrorEvent, AppModalAddItemCloseEvent, AppModalEditItemCloseEvent, AppModalSearchResultsCloseEvent, AppModalSettingsCloseEvent, AppScanCodeStartEvent, AppSettingsTriggerAnimateEvent, AppSpeechStartEvent, AppStatusEvent, FormEditFormData, FormIdErrorEvent, SearchOrigin, SearchResultsEvent, SearchRetryEvent, SearchStartEvent } from './types/events.types'
@@ -70,32 +70,7 @@ class App {
     this.isLoading(true, 'initFuse starts')
     this.readCommonLists()
     if (!this.hasCommonListsLoaded) throw new Error('common lists not loaded')
-    // https://fusejs.io/
-    const options: IFuseOptions<Item> = {
-      distance: 200, // see the tip at https://fusejs.io/concepts/scoring-theory.html#scoring-theory
-      getFn: (object: Item, path: string[] | string) => {
-        const value = Fuse.config.getFn(object, path)
-        if (Array.isArray(value)) return value.map((element: string) => sanitize(element))
-        if (typeof value === 'string') return sanitize(value)
-        return value
-      },
-      ignoreLocation: true, // eslint-disable-line @typescript-eslint/naming-convention
-      keys: [{
-        name: ItemField.Name,
-        weight: 4,
-      }, {
-        name: ItemField.Brand,
-        weight: 2,
-      }, {
-        name: ItemField.Details,
-        weight: 4,
-      }, {
-        name: ItemField.Category,
-        weight: 1,
-      }], // this is not generic ^^"
-      threshold: 0.35, // 0 is perfect match
-    }
-    this.fuse = new Fuse(state.items, options)
+    this.fuse = new Fuse(state.items, fuseOptions)
     this.isLoading(false, 'initFuse ends')
   }
 
