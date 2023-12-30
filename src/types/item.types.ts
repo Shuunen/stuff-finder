@@ -72,3 +72,5 @@ export interface Item {
 }
 
 export type ItemSuggestions = Record<keyof Item, string[]>
+
+export const defaultItems: Item[] = []

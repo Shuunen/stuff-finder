@@ -1,10 +1,10 @@
 import { div, emit, fillTemplate, on, tw } from 'shuutils'
-import { emptyCommonLists, emptyItem } from '../constants'
+import { emptyItem } from '../constants'
 import type { AppLoaderToggleEvent, AppModalPrepareBarcodesOpenEvent, ItemsReadyEvent } from '../types/events.types'
 import { ItemField, ItemStatus, type Item } from '../types/item.types'
 import { find, valuesToOptions } from '../utils/browser.utils'
 import { logger } from '../utils/logger.utils'
-import { storage } from '../utils/storage.utils'
+import { state } from '../utils/state.utils'
 
 window.customElements.define('app-print-barcodes', class extends HTMLElement {
 
@@ -25,11 +25,10 @@ window.customElements.define('app-print-barcodes', class extends HTMLElement {
     const listElement = find.one('.app-list', this.modal)
     const item = find.one('template#barcodes-list-item')
     const template = item.innerHTML
-    const lists = storage.get<typeof emptyCommonLists>('lists', emptyCommonLists)
-    logger.info('got lists', lists)
+    logger.info('got lists', state.lists)
     // eslint-disable-next-line no-unsanitized/property
     listElement.innerHTML = this.items
-      .map(anItem => fillTemplate(template, { ...emptyItem, ...anItem, boxes: valuesToOptions(lists.boxes, anItem.box), drawers: valuesToOptions(lists.drawers, anItem.drawer) }))
+      .map(anItem => fillTemplate(template, { ...emptyItem, ...anItem, boxes: valuesToOptions(state.lists.boxes, anItem.box), drawers: valuesToOptions(state.lists.drawers, anItem.drawer) }))
       .join('')
     emit<AppModalPrepareBarcodesOpenEvent>('app-modal--prepare-barcodes--open')
     emit<AppLoaderToggleEvent>('app-loader--toggle', false)
@@ -44,10 +43,9 @@ window.customElements.define('app-print-barcodes', class extends HTMLElement {
   }
 
   private findItemsToPrint () {
-    const items = storage.get<Item[]>('items', [])
-    if (items.length === 0) { logger.showError('no items found in storage'); return }
-    logger.info(`found ${items.length} items in storage`)
-    const printable = items.filter(item => !item[ItemField.ReferencePrinted] && item.status === ItemStatus.Acheté)
+    if (state.items.length === 0) { logger.showError('no items found in storage'); return }
+    logger.info(`found ${state.items.length} items in storage`)
+    const printable = state.items.filter(item => !item[ItemField.ReferencePrinted] && item.status === ItemStatus.Acheté)
     logger.info(`found ${printable.length} printable items`)
     this.items = printable
     this.openModal()

@@ -11,7 +11,7 @@ export interface CommonLists {
   statuses: string[]
 }
 
-export const emptyCommonLists: CommonLists = {
+export const defaultCommonLists: CommonLists = {
   boxes: [],
   categories: [],
   drawers: ['', '1', '2', '3', '4', '5', '6', '7'],
@@ -27,7 +27,7 @@ export const emptyCommonLists: CommonLists = {
   ],
 }
 
-export const emptyCredentials: AppCredentials = {
+export const defaultCredentials: AppCredentials = {
   base: '',
   table: '',
   token: '',

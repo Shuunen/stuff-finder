@@ -1,16 +1,18 @@
 import { createState } from 'shuutils'
-import { emptyCredentials } from '../constants'
-import type { Item } from '../types/item.types'
-import type { AppStatus } from '../types/status.types'
+import { defaultCommonLists, defaultCredentials } from '../constants'
+import { defaultItems } from '../types/item.types'
+import { defaultStatus } from '../types/status.types'
+import { defaultTheme } from '../types/theme.types'
 import { storage } from './storage.utils'
 
 export const { state, watchState } = createState(
   {
-    credentials: emptyCredentials,
-    items: [] as Item[], // eslint-disable-line @typescript-eslint/consistent-type-assertions
-    status: storage.get<AppStatus>('status', 'loading'),
-    theme: typeof window !== 'undefined' && /* c8 ignore next */ window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light',
+    credentials: defaultCredentials,
+    items: defaultItems,
+    lists: defaultCommonLists,
+    status: defaultStatus,
+    theme: defaultTheme,
   },
   storage,
-  ['credentials', 'items', 'theme'], // avoid status persistence
+  ['credentials', 'items', 'lists', 'theme'], // avoid status persistence
 )

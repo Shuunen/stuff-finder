@@ -5,6 +5,7 @@ import { AppNavigation } from './components/app-navigation'
 import { AppSpeedDial } from './components/app-speed-dial'
 import { AppError } from './pages/app-error'
 import { AppHome } from './pages/app-home'
+import { AppItemAdd } from './pages/app-item-add'
 import { AppSearch } from './pages/app-search'
 import { AppSettings } from './pages/app-settings'
 import { logger } from './utils/logger.utils'
@@ -24,6 +25,7 @@ export function App () {
     <>
       <Router>
         <AppHome path="/" />
+        <AppItemAdd path="/item/add" />
         <AppSearch path="/search/:input" />
         <AppSettings path="/settings" />
         <AppError code="http-404" default />

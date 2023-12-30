@@ -2,7 +2,7 @@
 import Fuse, { type IFuseOptions } from 'fuse.js'
 import { clone, debounce, emit, fillTemplate, on, sanitize, sleep } from 'shuutils'
 import './components'
-import { delays, emptyCommonLists, type CommonLists } from './constants'
+import { delays, type CommonLists } from './constants'
 import './services/item-search.service'
 import './services/sound.service'
 import './services/speech.service'
@@ -16,7 +16,6 @@ import { airtableRecordToItem, getCommonListsFromItems } from './utils/item.util
 import { logger } from './utils/logger.utils'
 import { getObjectOrSelf } from './utils/objects.utils'
 import { state } from './utils/state.utils'
-import { storage } from './utils/storage.utils'
 import { coolAscii } from './utils/strings.utils'
 
 class App {
@@ -54,10 +53,9 @@ class App {
   }
 
   private checkExistingSettings () {
-    const settings = storage.get<AppCredentials>('app-settings', state.credentials)
-    if (!settings.base) { this.settingsActionRequired(true); return }
-    void this.onSettingsSave(settings)
-    on<AppFormSettingsReadyEvent>('app-form--settings--ready', () => emit<AppFormSettingsSetEvent>('app-form--settings--set', settings))
+    if (!state.credentials.base) { this.settingsActionRequired(true); return }
+    void this.onSettingsSave(state.credentials)
+    on<AppFormSettingsReadyEvent>('app-form--settings--ready', () => emit<AppFormSettingsSetEvent>('app-form--settings--set', state.credentials))
   }
 
   private settingsActionRequired (isActionRequired: boolean, errorMessage = '') {
@@ -101,8 +99,8 @@ class App {
       threshold: 0.35, // 0 is perfect match
     }
     this.fuse = new Fuse(this.items, options)
-    storage.set('items', this.items)
-    if (this.items.length > 0) emit<ItemsReadyEvent>('items-ready')
+    state.items = this.items
+    emit<ItemsReadyEvent>('items-ready')
   }
 
   private parseApiRecords (records: AirtableRecord[]) {
@@ -197,11 +195,6 @@ class App {
     emit<AppActionEvent>(action, getObjectOrSelf(payload) ?? target)
   }
 
-  private saveCommonLists (lists: CommonLists) {
-    logger.info('saving common lists :', lists)
-    storage.set('lists', lists)
-  }
-
   private fillEditItemTemplate (lists: CommonLists) {
     const template = find.one('template#edit-item')
     const data: Record<keyof typeof lists, string> = {
@@ -217,13 +210,9 @@ class App {
 
   private readCommonLists () {
     if (this.hasCommonListsLoaded) return
-    let lists = storage.get<typeof emptyCommonLists>('lists', emptyCommonLists)
-    if (lists.boxes.length <= 1) {
-      lists = getCommonListsFromItems(this.items)
-      this.saveCommonLists(lists)
-    }
-    logger.info('common lists found', lists)
-    this.fillEditItemTemplate(lists)
+    if (state.lists.boxes.length <= 1) state.lists = getCommonListsFromItems(this.items)
+    logger.info('common lists', state.lists)
+    this.fillEditItemTemplate(state.lists)
     this.hasCommonListsLoaded = true
   }
 
@@ -265,7 +254,7 @@ class App {
 
   private async onImgLoadingErrorSync () {
     logger.info('search result image loading error, clearing cached items...')
-    storage.clear('items')
+    state.items = []
     await this.loadItems()
     logger.info('redo last search')
     this.searchItems(this.lastSearch)
@@ -282,18 +271,16 @@ class App {
     }
     this.settingsActionRequired(false)
     emit<AppModalSettingsCloseEvent>('app-modal--settings--close')
-    storage.set('app-settings', settings)
   }
 
   // eslint-disable-next-line max-statements
   private async loadItems () {
     this.isLoading(true)
-    const cachedItems = storage.get<Item[]>('items', [])
-    if (cachedItems.length === 0) logger.showLog('no cached items found')
+    if (state.items.length === 0) logger.showLog('no cached items found')
     else {
-      logger.showLog(`using ${cachedItems.length} cached items`)
+      logger.showLog(`using ${state.items.length} cached items`)
       this.isLoading(false)
-      this.items = cachedItems
+      this.items = state.items
       this.initFuse()
     }
     let response = await this.fetchApi()
@@ -309,8 +296,8 @@ class App {
       return false
     }
     const remote = airtableRecordToItem(records[0])
-    if (cachedItems.some(item => item.id === remote.id && item[ItemField.UpdatedOn] === remote[ItemField.UpdatedOn])) {
-      this.items = cachedItems
+    if (state.items.some(item => item.id === remote.id && item[ItemField.UpdatedOn] === remote[ItemField.UpdatedOn])) {
+      this.items = state.items
       logger.showLog('no updates from Airtable, cache seems up to date')
       this.initFuse()
       return true

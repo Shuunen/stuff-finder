@@ -1,14 +1,13 @@
 import { clone, div, emit, on } from 'shuutils'
 import type { AppForm } from '../components/form'
-import { emptyCredentials, emptyItem, emptyItemSuggestions } from '../constants'
+import { emptyItem, emptyItemSuggestions } from '../constants'
 import type { AppFormData, AppFormEditItemChangeEvent, AppFormEditItemSetEvent, AppFormEditItemSuggestionsEvent, AppLoaderToggleEvent, AppModalAddItemOpenEvent, AppModalPrintOneOpenEvent, AppSearchItemEvent, FormEditFormData } from '../types/events.types'
-import { ItemField, ItemStatus, type Item, type ItemSuggestions } from '../types/item.types'
+import { ItemField, ItemStatus, type ItemSuggestions } from '../types/item.types'
 import type { PrintInputData } from '../types/print.types'
 import type { WrapApiAliExResponse, WrapApiAngboResponse, WrapApiCampoResponse, WrapApiDeyesResponse } from '../types/requests.types'
-import type { AppCredentials } from '../types/settings.types'
 import { find, get } from '../utils/browser.utils'
 import { logger } from '../utils/logger.utils'
-import { storage } from '../utils/storage.utils'
+import { state } from '../utils/state.utils'
 import { cleanSuggestions } from '../utils/suggestions.utils'
 import { getAsin, normalizePhotoUrl } from '../utils/url.utils'
 
@@ -70,8 +69,7 @@ class ItemSearch {
 
   private getWrapApiKey () {
     if (this.wrap.length > 0) return this.wrap
-    const settings = storage.get<AppCredentials>('app-settings', emptyCredentials)
-    this.wrap = !settings.wrap || settings.wrap.length === 0 ? '' : settings.wrap
+    this.wrap = state.credentials.wrap
     if (this.wrap === '') logger.showLog('no wrap api key available in settings stored')
     return this.wrap
   }
@@ -118,8 +116,7 @@ class ItemSearch {
   private async search (str: string) {
     logger.info('search', str)
     emit<AppLoaderToggleEvent>('app-loader--toggle', true)
-    const items = storage.get<Item[]>('items', [])
-    const result = items.find(item => item.reference === str || item.barcode === str)
+    const result = state.items.find(item => item.reference === str || item.barcode === str)
     const appError = find.one('app-form[name="search-item"] .app-error')
     appError.textContent = result && str.length > 0 ? 'ITEM ALREADY EXISTS ! You might not want to add it... again.' : ''
     if (str.length > 0) emit<AppFormEditItemSuggestionsEvent>('app-form--edit-item--suggestions', await this.getSuggestions(str))

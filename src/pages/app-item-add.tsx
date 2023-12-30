@@ -3,7 +3,7 @@ import { logger } from '../utils/logger.utils'
 export function AppItemAdd ({ ...properties }: { readonly [key: string]: unknown }) {
   logger.debug('AppItemAdd', { properties })
   return (
-    <div className="flex h-screen flex-col items-center justify-center" data-page="item-add">
+    <div className="flex flex-col" data-page="item-add">
       <h1>Add Item</h1>
       <form className="flex flex-col gap-6">
         <label htmlFor="name">Name</label>
