@@ -31,7 +31,7 @@ export function AppSettings ({ ...properties }: { readonly [key: string]: unknow
     document.body.dataset.focusHandled = 'true'
     on('focus', async () => {
       const credentials = parseClipboard(await readClipboard())
-      if (credentials.base !== '') { logger.debug('no credentials found in clipboard'); return }
+      if (credentials.base === '') { logger.debug('no credentials found in clipboard'); return }
       logger.debug('found credentials in clipboard', { credentials })
       setBase(credentials.base)
       setToken(credentials.token)
