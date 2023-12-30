@@ -1,6 +1,7 @@
 import { div, emit, fillTemplate, h1, on, readableTimeAgo, sleep, text } from 'shuutils'
 import { defaultImage, delays, emptyItem } from '../constants'
-import { ItemField, type AppModalSearchResultsOpenEvent, type EditItemEvent, type Item, type SearchResultsEvent, type SelectResultEvent } from '../types'
+import type { AppModalSearchResultsOpenEvent, EditItemEvent, SearchResultsEvent, SelectResultEvent } from '../types/events.types'
+import { ItemField, type Item } from '../types/item.types'
 import { find } from '../utils/browser.utils'
 import { logger } from '../utils/logger.utils'
 

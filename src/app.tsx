@@ -13,6 +13,7 @@ import { state, watchState } from './utils/state.utils'
 export function App () {
 
   const [isLoading, setLoading] = useState(state.status === 'loading')
+  // eslint-disable-next-line ssr-friendly/no-dom-globals-in-react-fc
   setLoading(document.readyState === 'loading')
   watchState('status', () => {
     logger.debug('status changed', state.status)

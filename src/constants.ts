@@ -1,4 +1,5 @@
-import { ItemField, ItemStatus, type AppCredentials, type Item, type ItemPhoto } from './types'
+import { ItemField, ItemStatus, type Item, type ItemPhoto } from './types/item.types'
+import type { AppCredentials } from './types/settings.types'
 
 export const defaultImage = 'assets/no-visual.svg'
 

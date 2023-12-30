@@ -1,7 +1,8 @@
 /* eslint-disable import/exports-last */
 import { clone, debounce, div, dom, emit, h2, objectSum, on, sleep, text, tw } from 'shuutils'
 import { defaultImage, delays } from '../constants'
-import { ItemField, type AppFormChangeEvent, type AppFormCloseEvent, type AppFormData, type AppFormDataValue, type AppFormFieldChangeEvent, type AppFormReadyEvent, type FormIdErrorEvent, type FormIdSetEvent, type FormIdSuggestionsEvent, type FormOnSaveEvent, type FormSuggestions } from '../types'
+import type { AppFormChangeEvent, AppFormCloseEvent, AppFormData, AppFormDataValue, AppFormFieldChangeEvent, AppFormReadyEvent, FormIdErrorEvent, FormIdSetEvent, FormIdSuggestionsEvent, FormOnSaveEvent, FormSuggestions } from '../types/events.types'
+import { ItemField } from '../types/item.types'
 import { button, find, isVisible, valuesToOptions } from '../utils/browser.utils'
 import { logger } from '../utils/logger.utils'
 

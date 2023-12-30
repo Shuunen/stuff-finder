@@ -1,6 +1,6 @@
 import { emit, on, sleep } from 'shuutils'
 import { delays } from '../constants'
-import type { AppModalAddItemOpenEvent, ItemsReadyEvent, SearchStartEvent } from '../types'
+import type { AppModalAddItemOpenEvent, ItemsReadyEvent, SearchStartEvent } from '../types/events.types'
 import { logger } from '../utils/logger.utils'
 
 class UrlService {

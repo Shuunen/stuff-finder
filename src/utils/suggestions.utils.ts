@@ -1,5 +1,5 @@
 import { capitalize, clone } from 'shuutils'
-import { ItemField } from '../types'
+import { ItemField } from '../types/item.types'
 
 const keysToCapitalize = new Set([ItemField.Name.toString(), ItemField.Details.toString()])
 

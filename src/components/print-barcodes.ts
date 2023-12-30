@@ -1,6 +1,7 @@
 import { div, emit, fillTemplate, on, tw } from 'shuutils'
 import { emptyCommonLists, emptyItem } from '../constants'
-import { ItemField, ItemStatus, type AppLoaderToggleEvent, type AppModalPrepareBarcodesOpenEvent, type Item, type ItemsReadyEvent } from '../types'
+import type { AppLoaderToggleEvent, AppModalPrepareBarcodesOpenEvent, ItemsReadyEvent } from '../types/events.types'
+import { ItemField, ItemStatus, type Item } from '../types/item.types'
 import { find, valuesToOptions } from '../utils/browser.utils'
 import { logger } from '../utils/logger.utils'
 import { storage } from '../utils/storage.utils'

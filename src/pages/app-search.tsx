@@ -1,9 +1,8 @@
 import { AppItemList } from '../components/app-item-list'
-import type { Item } from '../types'
 import { fakeItem } from '../utils/item.utils'
 import { logger } from '../utils/logger.utils'
 
-const items: Item[] = [
+const items = [
   fakeItem('Sécateur de ouf'),
   fakeItem('Pelle en acier trempé'),
   fakeItem('Brouette de jardin'),

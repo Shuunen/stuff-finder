@@ -1,4 +1,4 @@
-import type { AppCredentials } from '../types'
+import type { AppCredentials } from '../types/settings.types'
 
 export function parseClipboard (clipboard: string) {
   // clipboard should contains something like : "appABC

@@ -1,4 +1,4 @@
-import type { Item, ItemField } from './item'
+import type { Item, ItemField } from './item.types'
 
 export interface WrapApiResponse {
   messages: string[]

@@ -1,5 +1,5 @@
 import { div, emit, on } from 'shuutils'
-import type { AppModalSettingsOpenEvent, AppSettingsTriggerAnimateEvent } from '../types'
+import type { AppModalSettingsOpenEvent, AppSettingsTriggerAnimateEvent } from '../types/events.types'
 
 window.customElements.define('app-settings-trigger', class extends HTMLElement {
 

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-magic-numbers */
 import { on, sleep } from 'shuutils'
-import type { AppSoundErrorEvent, AppSoundInfoEvent, AppSoundSuccessEvent } from '../types'
+import type { AppSoundErrorEvent, AppSoundInfoEvent, AppSoundSuccessEvent } from '../types/events.types'
 
 class AppSound {
 

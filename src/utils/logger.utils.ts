@@ -1,5 +1,5 @@
 import { emit, Logger } from 'shuutils'
-import type { AppToasterShowEvent } from '../types'
+import type { AppToasterShowEvent } from '../types/events.types'
 
 /* c8 ignore start */
 class CustomLogger extends Logger {

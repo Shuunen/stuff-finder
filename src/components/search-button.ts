@@ -1,5 +1,6 @@
 import { div, dom, emit, image, on, pickOne, text, tw } from 'shuutils'
-import type { AppScanCodeStartEvent, AppSpeechStartEvent, AppStatus, AppStatusEvent, ItemsReadyEvent, SearchStartEvent } from '../types'
+import type { AppScanCodeStartEvent, AppSpeechStartEvent, AppStatusEvent, ItemsReadyEvent, SearchStartEvent } from '../types/events.types'
+import type { AppStatus } from '../types/status.types'
 import { button } from '../utils/browser.utils'
 import { logger } from '../utils/logger.utils'
 

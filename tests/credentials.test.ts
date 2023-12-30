@@ -1,4 +1,4 @@
-import { expect, it } from 'vitest'
+import { expect, it } from 'vitest' // eslint-disable-line @typescript-eslint/no-shadow
 import { parseClipboard } from '../src/utils/credentials.utils'
 
 it('parseClipboard A empty', () => {

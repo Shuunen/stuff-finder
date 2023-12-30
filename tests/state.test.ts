@@ -6,12 +6,13 @@ it('state A default', () => {
     {
       "credentials": {
         "base": "",
-        "key": "",
         "table": "",
+        "token": "",
         "view": "",
         "wrap": "",
       },
       "items": [],
+      "status": "loading",
       "theme": "light",
     }
   `)

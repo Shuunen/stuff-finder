@@ -1,6 +1,7 @@
 import { createState } from 'shuutils'
 import { emptyCredentials } from '../constants'
-import type { AppStatus, Item } from '../types'
+import type { Item } from '../types/item.types'
+import type { AppStatus } from '../types/status.types'
 import { storage } from './storage.utils'
 
 export const { state, watchState } = createState(
