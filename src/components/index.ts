@@ -1,6 +1,5 @@
 import './edit-item'
 import './form'
-import './loader'
 import './modal'
 import './print-barcodes'
 import './print-one'

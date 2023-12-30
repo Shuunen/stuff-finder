@@ -24,7 +24,6 @@ export type AppFormSettingsReadyEvent = undefined
 export type AppFormSettingsSaveEvent = AppCredentials
 export type AppFormSettingsSetEvent = AppCredentials
 export type AppImgLoadingErrorEvent = undefined
-export type AppLoaderToggleEvent = boolean
 export type AppModalAddItemCloseEvent = undefined
 export type AppModalAddItemOpenEvent = HTMLElement
 export type AppModalCloseEvent = undefined

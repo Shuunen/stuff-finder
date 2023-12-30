@@ -6,7 +6,6 @@ type TypicalArguments = (number | string)[]
 declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
-      'app-loader': unknown
       'app-scan-code': unknown
       'app-search-button': unknown
       'app-search-results': unknown
