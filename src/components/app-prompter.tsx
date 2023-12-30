@@ -23,6 +23,6 @@ export function AppPrompter () {
   })
 
   return (
-    <h1 className="mb-12 mt-8 h-20 whitespace-pre text-center print:hidden" ref={prompterReference}>Hey ^^</h1>
+    <h1 className="mb-12 mt-8 h-20 whitespace-pre text-center print:hidden" data-component="prompter" ref={prompterReference}>Hey ^^</h1>
   )
 }

@@ -6,7 +6,7 @@ import type { Item } from '../types/item.types'
 
 export function AppItemList ({ items }: { readonly items: Item[] }) {
   return (
-    <nav aria-label="item list">
+    <nav aria-label="item list" data-component="item-list">
       <List>
         {/* @ts-expect-error typings issue */}
         {items.map(item => (

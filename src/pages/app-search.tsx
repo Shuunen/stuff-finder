@@ -11,7 +11,7 @@ const items = [
 export function AppSearch ({ input = '', ...properties }: { readonly input?: string; readonly [key: string]: unknown }) {
   logger.debug('AppSearch', { input, properties })
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6" data-page="search">
       <h2>Found {items.length} search results for &quot;{input}&quot; :</h2>
       <AppItemList items={items} />
     </div>

@@ -43,7 +43,7 @@ export function AppSettings ({ ...properties }: { readonly [key: string]: unknow
   }
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col" data-page="settings">
       <h1>Settings</h1>
       {/* @ts-expect-error typings issue */ /* eslint-disable-next-line react/forbid-component-props */}
       <Box autoComplete="off" className="mt-8 grid gap-4" component="form" noValidate onSubmit={onSubmit} spellCheck="false">

@@ -8,7 +8,7 @@ export function AppHome ({ ...properties }: { readonly [key: string]: unknown })
   // eslint-disable-next-line ssr-friendly/no-dom-globals-in-react-fc
   if (document.querySelector('.app-search-button') !== null) return (<AppPrompter />)
   return (
-    <>
+    <div data-page="home">
       {/* new good code */}
       <AppPrompter />
       {/* old code to migrate */}
@@ -123,6 +123,6 @@ export function AppHome ({ ...properties }: { readonly [key: string]: unknown })
         </app-form>
       </app-modal>
       <app-search-results />
-    </>
+    </div>
   )
 }
