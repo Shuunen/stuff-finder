@@ -3,8 +3,8 @@ import { delays } from '../constants'
 import type { AppSpeechStartEvent, AppStatusEvent, RecognitionErrorEvent, SearchStartEvent } from '../types/events.types'
 import type { AppStatus } from '../types/status.types'
 import { logger } from '../utils/logger.utils'
-import { state } from '../utils/state.utils'
 import { playErrorSound, playInfoSound } from '../utils/sound.utils'
+import { state } from '../utils/state.utils'
 
 class AppSpeech {
 
@@ -80,5 +80,6 @@ class AppSpeech {
 
 }
 
-export const appSpeech = new AppSpeech()
+// eslint-disable-next-line no-new
+new AppSpeech()
 

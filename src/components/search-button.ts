@@ -1,8 +1,9 @@
-import { div, dom, emit, image, on, pickOne, text, tw } from 'shuutils'
-import type { AppScanCodeStartEvent, AppSpeechStartEvent, AppStatusEvent, ItemsReadyEvent, SearchStartEvent } from '../types/events.types'
+import { div, dom, emit, image, pickOne, text, tw } from 'shuutils'
+import type { AppScanCodeStartEvent, AppSpeechStartEvent, SearchStartEvent } from '../types/events.types'
 import type { AppStatus } from '../types/status.types'
 import { button } from '../utils/browser.utils'
 import { logger } from '../utils/logger.utils'
+import { state, watchState } from '../utils/state.utils'
 
 const knownSpeechAndHints: Record<AppStatus, { hint: string; speech: string }> = {
   'failed': {
@@ -47,29 +48,30 @@ window.customElements.define('app-search-button', class extends HTMLElement {
 
   private readonly wrapper = div('app-search-button')
 
+  private inputs = div('')
+
   public connectedCallback () {
-    const inputs = this.createInputs()
-    this.wrapper.append(inputs)
+    this.inputs = this.createInputs()
+    this.wrapper.append(this.inputs)
     this.wrapper.append(this.hint)
     if (!this.parentNode) throw new Error('no parentNode for app-search-button')
     this.parentNode.replaceChild(this.wrapper, this)
     this.handleFocusLessTyping()
-    on<AppStatusEvent>('app-status', this.onStatus.bind(this))
-    on<ItemsReadyEvent>('items-ready', () => {
-      inputs.classList.remove('pointer-events-none')
-      inputs.classList.remove('opacity-50')
-    })
+    watchState('status', () => { this.onStatus(state.status) })
   }
 
   private onStatus (status: AppStatus) {
     const { hint, speech } = this.getSpeechAndHint(status)
     this.speech.textContent = speech
     this.hint.textContent = hint
+    if (status === 'ready') {
+      this.inputs.classList.remove('pointer-events-none')
+      this.inputs.classList.remove('opacity-50')
+    }
   }
 
   private getSpeechAndHint (status: string) {
-    if (status === 'listening') this.speech.style.pointerEvents = 'none'
-    if (status === 'ready') this.speech.style.pointerEvents = 'auto'
+    this.speech.style.pointerEvents = status === 'listening' ? 'none' : 'auto'
     return speechAndHints[status] ?? knownSpeechAndHints['unexpected-error']
   }
 

@@ -1,4 +1,4 @@
-export interface ItemThumbnail {
+interface ItemThumbnail {
   height: number
   url: string
   width: number

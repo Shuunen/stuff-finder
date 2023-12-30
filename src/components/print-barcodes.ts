@@ -1,10 +1,10 @@
-import { div, emit, fillTemplate, on, tw } from 'shuutils'
+import { div, emit, fillTemplate, tw } from 'shuutils'
 import { emptyItem } from '../constants'
-import type { AppLoaderToggleEvent, AppModalPrepareBarcodesOpenEvent, ItemsReadyEvent } from '../types/events.types'
+import type { AppModalPrepareBarcodesOpenEvent } from '../types/events.types'
 import { ItemField, ItemStatus, type Item } from '../types/item.types'
 import { find, valuesToOptions } from '../utils/browser.utils'
 import { logger } from '../utils/logger.utils'
-import { state } from '../utils/state.utils'
+import { state, watchState } from '../utils/state.utils'
 
 window.customElements.define('app-print-barcodes', class extends HTMLElement {
 
@@ -15,7 +15,7 @@ window.customElements.define('app-print-barcodes', class extends HTMLElement {
   private readonly trigger = this.createTrigger()
 
   public connectedCallback () {
-    on<ItemsReadyEvent>('items-ready', this.showTrigger.bind(this))
+    watchState('status', () => { this.trigger.classList.toggle('hidden', state.status !== 'ready') })
     if (!this.parentNode) { logger.showError('no parentNode for barcodes-print-modal'); return }
     this.parentNode.replaceChild(this.trigger, this)
   }
@@ -31,7 +31,6 @@ window.customElements.define('app-print-barcodes', class extends HTMLElement {
       .map(anItem => fillTemplate(template, { ...emptyItem, ...anItem, boxes: valuesToOptions(state.lists.boxes, anItem.box), drawers: valuesToOptions(state.lists.drawers, anItem.drawer) }))
       .join('')
     emit<AppModalPrepareBarcodesOpenEvent>('app-modal--prepare-barcodes--open')
-    emit<AppLoaderToggleEvent>('app-loader--toggle', false)
   }
 
   private createTrigger () {
@@ -49,9 +48,5 @@ window.customElements.define('app-print-barcodes', class extends HTMLElement {
     logger.info(`found ${printable.length} printable items`)
     this.items = printable
     this.openModal()
-  }
-
-  private showTrigger () {
-    this.trigger.classList.remove('hidden')
   }
 })

@@ -5,8 +5,7 @@ import './components'
 import { delays, type CommonLists } from './constants'
 import './services/item-search.service'
 import './services/speech.service'
-import './services/url.service'
-import type { AppActionEvent, AppCloneItemEvent, AppFormDataValue, AppFormEditItemSaveEvent, AppFormFieldChangeEvent, AppFormSettingsErrorEvent, AppFormSettingsReadyEvent, AppFormSettingsSaveEvent, AppFormSettingsSetEvent, AppImgLoadingErrorEvent, AppLoaderToggleEvent, AppModalAddItemCloseEvent, AppModalEditItemCloseEvent, AppModalSearchResultsCloseEvent, AppModalSettingsCloseEvent, AppScanCodeStartEvent, AppSettingsTriggerAnimateEvent, AppSpeechStartEvent, AppStatusEvent, FormEditFormData, FormIdErrorEvent, ItemsReadyEvent, SearchOrigin, SearchResultsEvent, SearchRetryEvent, SearchStartEvent } from './types/events.types'
+import type { AppActionEvent, AppCloneItemEvent, AppFormDataValue, AppFormEditItemSaveEvent, AppFormFieldChangeEvent, AppFormSettingsErrorEvent, AppFormSettingsReadyEvent, AppFormSettingsSaveEvent, AppFormSettingsSetEvent, AppImgLoadingErrorEvent, AppModalAddItemCloseEvent, AppModalEditItemCloseEvent, AppModalSearchResultsCloseEvent, AppModalSettingsCloseEvent, AppScanCodeStartEvent, AppSettingsTriggerAnimateEvent, AppSpeechStartEvent, AppStatusEvent, FormEditFormData, FormIdErrorEvent, SearchOrigin, SearchResultsEvent, SearchRetryEvent, SearchStartEvent } from './types/events.types'
 import { ItemField, type Item, type ItemPhoto } from './types/item.types'
 import type { AirtableRecord, AirtableResponse } from './types/requests.types'
 import type { AppCredentials } from './types/settings.types'
@@ -24,8 +23,6 @@ class App {
   private lastSearch = ''
 
   private lastSearchOrigin: SearchOrigin = 'default'
-
-  private items: Item[] = []
 
   private fuse!: Fuse<Item>
 
@@ -61,15 +58,16 @@ class App {
     emit<AppSettingsTriggerAnimateEvent>('app-settings-trigger--animate', isActionRequired)
     emit<AppFormSettingsErrorEvent>('app-form--settings--error', errorMessage)
     emit<AppStatusEvent>('app-status', isActionRequired ? 'settings-required' : 'ready')
-    this.isLoading(false)
   }
 
-  private isLoading (isActive: boolean) {
-    logger.info('isLoading active ?', isActive)
-    emit<AppLoaderToggleEvent>('app-loader--toggle', isActive)
+  private isLoading (isActive: boolean, reason: string) {
+    logger.info('isLoading active ?', isActive, 'reason ?', reason)
+    state.status = isActive ? 'loading' : 'ready'
   }
 
-  private initFuse () {
+  private initFuse (reason: string) {
+    logger.debug('initFuse start, reason ?', reason)
+    this.isLoading(true, 'initFuse starts')
     this.readCommonLists()
     if (!this.hasCommonListsLoaded) throw new Error('common lists not loaded')
     // https://fusejs.io/
@@ -97,15 +95,14 @@ class App {
       }], // this is not generic ^^"
       threshold: 0.35, // 0 is perfect match
     }
-    this.fuse = new Fuse(this.items, options)
-    state.items = this.items
-    emit<ItemsReadyEvent>('items-ready')
+    this.fuse = new Fuse(state.items, options)
+    this.isLoading(false, 'initFuse ends')
   }
 
   private parseApiRecords (records: AirtableRecord[]) {
-    this.items = records.map(record => airtableRecordToItem(record))
-    logger.showLog(`${this.items.length} item(s) loaded ${coolAscii()}`)
-    this.initFuse()
+    state.items = records.map(record => airtableRecordToItem(record))
+    logger.showLog(`${state.items.length} item(s) loaded ${coolAscii()}`)
+    this.initFuse('parseApiRecords updated this.items')
   }
 
   private onSearchStart (event: SearchStartEvent) {
@@ -117,7 +114,7 @@ class App {
   }
 
   private searchItems (input: string, willScrollTop = false) {
-    const result = this.items.find(item => item.reference === input || item.barcode === input)
+    const result = state.items.find(item => item.reference === input || item.barcode === input)
     const results = result ? [result] : this.fuse.search(sanitize(input)).map(item => item.item)
     let title = 'No results found'
     if (results.length > 0) title = results.length === 1 ? 'One result found' : `${results.length} results found`
@@ -157,7 +154,7 @@ class App {
     fields[ItemField.ReferencePrinted] = data[ItemField.ReferencePrinted] ?? false
     logger.info('fields before clean', clone(fields))
     if (data.id !== undefined && data.id.length > 0) {
-      const existing = this.items.find(existingItem => existingItem.id === data.id)
+      const existing = state.items.find(existingItem => existingItem.id === data.id)
       if (!existing) throw new Error('existing item not found locally')
       // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
       const dataFields = Object.keys(fields) as ItemField[]
@@ -175,11 +172,11 @@ class App {
 
   private pushItemLocally (itemTouched: Item) {
     logger.info('pushing item locally', itemTouched)
-    const index = this.items.findIndex(item => item.id === itemTouched.id)
-    if (index >= 0) this.items[index] = itemTouched // update existing item
-    else if (itemTouched.id) this.items.push(itemTouched) // new item with id
+    const index = state.items.findIndex(item => item.id === itemTouched.id)
+    if (index >= 0) state.items[index] = itemTouched // update existing item
+    else if (itemTouched.id) state.items.push(itemTouched) // new item with id
     else logger.showError('cannot add item without id')
-    this.initFuse()
+    this.initFuse('pushItemLocally')
   }
 
   private onDocumentClick (event: MouseEvent) {
@@ -209,7 +206,7 @@ class App {
 
   private readCommonLists () {
     if (this.hasCommonListsLoaded) return
-    if (state.lists.boxes.length <= 1) state.lists = getCommonListsFromItems(this.items)
+    if (state.lists.boxes.length <= 1) state.lists = getCommonListsFromItems(state.items)
     logger.info('common lists', state.lists)
     this.fillEditItemTemplate(state.lists)
     this.hasCommonListsLoaded = true
@@ -225,7 +222,7 @@ class App {
     logger.info('onIdentifierChange', value)
     const id = String(value).trim()
     if (id.length === 0) return
-    const existing = this.items.find(item => (item.reference === id || item.barcode === id))
+    const existing = state.items.find(item => (item.reference === id || item.barcode === id))
     if (!existing) {
       logger.debug('good, no existing item found with this barcode/reference')
       return
@@ -239,7 +236,7 @@ class App {
   private async onCloneItem (id: string) {
     logger.info('onCloneItem', id)
     emit<AppModalEditItemCloseEvent>('app-modal--edit-item--close')
-    const item = this.items.find(one => one.id === id)
+    const item = state.items.find(one => one.id === id)
     if (!item) throw new Error('no item found')
     logger.info('cloning item', item)
     await sleep(delays.large)
@@ -257,7 +254,7 @@ class App {
     await this.loadItems()
     logger.info('redo last search')
     this.searchItems(this.lastSearch)
-    this.isLoading(false)
+    this.isLoading(false, 'onImgLoadingErrorSync, stop loading after reloading items')
   }
 
   private async onSettingsSave (settings: AppCredentials) {
@@ -274,31 +271,24 @@ class App {
 
   // eslint-disable-next-line max-statements
   private async loadItems () {
-    this.isLoading(true)
-    if (state.items.length === 0) logger.showLog('no cached items found')
-    else {
-      logger.showLog(`using ${state.items.length} cached items`)
-      this.isLoading(false)
-      this.items = state.items
-      this.initFuse()
-    }
+    this.isLoading(true, 'loadItems starts')
+    logger.showLog(`using ${state.items.length} cached items`)
     let response = await this.fetchApi()
     if (response.error) {
-      this.isLoading(false)
+      this.isLoading(false, 'loadItems failed to fetch api')
       logger.showError(`airtable fetch failed with error : ${response.error.message}`)
       return false
     }
     let { offset, records } = response
     if (!records[0] || records.length === 0) {
-      this.isLoading(false)
+      this.isLoading(false, 'loadItems failed to fetch api')
       logger.showError('airtable fetch returned no records')
       return false
     }
     const remote = airtableRecordToItem(records[0])
     if (state.items.some(item => item.id === remote.id && item[ItemField.UpdatedOn] === remote[ItemField.UpdatedOn])) {
-      this.items = state.items
       logger.showLog('no updates from Airtable, cache seems up to date')
-      this.initFuse()
+      this.initFuse('loadItems no updates from Airtable, this.items updated')
       return true
     }
     while ((offset?.length ?? 0) > 0) {
@@ -324,10 +314,10 @@ class App {
   private async onEditItem (data: FormEditFormData) {
     const fields = this.getItemFieldsToPush(data)
     if (Object.keys(fields).length === 0) { logger.showLog('no changes to push'); return false }
-    this.isLoading(true)
+    this.isLoading(true, 'onEditItem starts')
     const response = await this.pushItemRemotely(fields, data.id)
     logger.info('onEditItem response', response)
-    this.isLoading(false)
+    this.isLoading(false, 'onEditItem item was pushed')
     if (response.error) { logger.showError(response.error.message); return false }
     const item = airtableRecordToItem(response)
     this.pushItemLocally(item)

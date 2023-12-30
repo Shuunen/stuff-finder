@@ -1,9 +1,14 @@
 import type { Item, ItemField } from './item.types'
 
-export interface WrapApiResponse {
+interface WrapApiResponse {
   messages: string[]
   // eslint-disable-next-line @typescript-eslint/naming-convention
   success: boolean
+}
+
+interface AirtableError {
+  message: string
+  type: string
 }
 
 export interface WrapApiDeyesResponse extends WrapApiResponse {
@@ -52,11 +57,6 @@ export interface WrapApiAliExResponse extends WrapApiResponse {
       title: string
     }[]
   }
-}
-
-export interface AirtableError {
-  message: string
-  type: string
 }
 
 export interface AirtableRecord {

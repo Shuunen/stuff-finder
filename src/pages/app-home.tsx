@@ -4,9 +4,6 @@ import { logger } from '../utils/logger.utils'
 
 export function AppHome ({ ...properties }: { readonly [key: string]: unknown }) {
   logger.debug('AppHome', { properties })
-  // this if avoid re-injection old web components, remove it when all components are migrated
-  // eslint-disable-next-line ssr-friendly/no-dom-globals-in-react-fc
-  if (document.querySelector('.app-search-button') !== null) return (<AppPrompter />)
   return (
     <div data-page="home">
       {/* new good code */}

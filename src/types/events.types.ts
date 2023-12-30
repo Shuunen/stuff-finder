@@ -1,14 +1,11 @@
 /* eslint-disable sonar/redundant-type-aliases */
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import type { TypicalArguments } from '../shims'
 import type { Item, ItemField } from './item.types'
 import type { PrintFormData, PrintInputData } from './print.types'
 import type { AppCredentials } from './settings.types'
 import type { AppStatus } from './status.types'
 
 export type AppActionEvent = HTMLElement | object | string
-export type AppClearCacheEvent = undefined
-export type AppClearCredentialsEvent = undefined
 export type AppCloneItemEvent = string
 export type AppFormChangeEvent = AppFormData
 export type AppFormCloseEvent = undefined
@@ -44,31 +41,22 @@ export type AppModalSearchResultsCloseEvent = undefined
 export type AppModalSearchResultsOpenEvent = undefined
 export type AppModalSettingsCloseEvent = undefined
 export type AppModalSettingsOpenEvent = undefined
-export type AppPrompterTypeEvent = TypicalArguments
 export type AppScanCodeStartEvent = undefined
 export type AppSearchItemEvent = AppFormData
 export type AppSettingsTriggerAnimateEvent = boolean
-export type AppSoundErrorEvent = undefined
-export type AppSoundInfoEvent = undefined
-export type AppSoundSuccessEvent = undefined
 export type AppSpeechStartEvent = undefined
 export type AppStatusEvent = AppStatus
 export type AppToasterShowEvent = { delay?: number; message: string; type: 'error' | 'info' | 'success' }
-export type BarcodesToPrintEvent = Item[]
 export type DoPrintOneEvent = PrintInputData
 export type EditItemEvent = Item
-export type EditItemPhotoEvent = string
 export type FormEditFormData = AppFormData & Partial<Omit<Item, ItemField.Photo> & { photo: string }>
 export type FormIdErrorEvent = string
 export type FormIdSetEvent = AppFormData
 export type FormIdSuggestionsEvent = FormSuggestions
 export type FormOnSaveEvent = AppFormData
 export type FormSuggestions = Record<string, string[]>
-export type ItemsReadyEvent = undefined
 export type PrintOneEvent = PrintInputData
 export type RecognitionErrorEvent = { error: string }
-export type RecognitionResult = { confidence: number; transcript: string }
-export type RecognitionResultEvent = { results: RecognitionResult[][] }
 export type SearchOrigin = 'default' | 'scan' | 'search-results' | 'speech' | 'type' | 'url'
 export type SearchResultsEvent = { input: string; isReference: boolean; results: Item[]; title: string; willScrollTop: boolean }
 export type SearchRetryEvent = undefined

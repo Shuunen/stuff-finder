@@ -1,7 +1,7 @@
 import { clone, div, emit, on } from 'shuutils'
 import type { AppForm } from '../components/form'
 import { emptyItem, emptyItemSuggestions } from '../constants'
-import type { AppFormData, AppFormEditItemChangeEvent, AppFormEditItemSetEvent, AppFormEditItemSuggestionsEvent, AppLoaderToggleEvent, AppModalAddItemOpenEvent, AppModalPrintOneOpenEvent, AppSearchItemEvent, FormEditFormData } from '../types/events.types'
+import type { AppFormData, AppFormEditItemChangeEvent, AppFormEditItemSetEvent, AppFormEditItemSuggestionsEvent, AppModalAddItemOpenEvent, AppModalPrintOneOpenEvent, AppSearchItemEvent, FormEditFormData } from '../types/events.types'
 import { ItemField, ItemStatus, type ItemSuggestions } from '../types/item.types'
 import type { PrintInputData } from '../types/print.types'
 import type { WrapApiAliExResponse, WrapApiAngboResponse, WrapApiCampoResponse, WrapApiDeyesResponse } from '../types/requests.types'
@@ -115,12 +115,12 @@ class ItemSearch {
 
   private async search (str: string) {
     logger.info('search', str)
-    emit<AppLoaderToggleEvent>('app-loader--toggle', true)
+    state.status = 'loading'
     const result = state.items.find(item => item.reference === str || item.barcode === str)
     const appError = find.one('app-form[name="search-item"] .app-error')
     appError.textContent = result && str.length > 0 ? 'ITEM ALREADY EXISTS ! You might not want to add it... again.' : ''
     if (str.length > 0) emit<AppFormEditItemSuggestionsEvent>('app-form--edit-item--suggestions', await this.getSuggestions(str))
-    emit<AppLoaderToggleEvent>('app-loader--toggle', false)
+    state.status = 'ready'
   }
 
   private async getSuggestions (str: string) {
@@ -192,4 +192,5 @@ class ItemSearch {
   }
 }
 
-export const itemSearch = new ItemSearch()
+// eslint-disable-next-line no-new
+new ItemSearch()

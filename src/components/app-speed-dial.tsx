@@ -9,10 +9,9 @@ import SpeedDialIcon from '@mui/material/SpeedDialIcon'
 import Zoom from '@mui/material/Zoom'
 import { route } from 'preact-router'
 import { useState } from 'preact/hooks'
-import { on } from 'shuutils'
-import type { ItemsReadyEvent } from '../types/events.types'
 import { scout } from '../utils/browser.utils'
 import { logger } from '../utils/logger.utils'
+import { state, watchState } from '../utils/state.utils'
 
 const actions = [
   { handleClick: () => route('/'), icon: <HomeIcon />, name: 'Home' },
@@ -26,8 +25,7 @@ export function AppSpeedDial () {
   const [isVisible, setIsVisible] = useState(false)
   const [isOpen, setOpen] = useState(false)
   function toggleOpen (reason = 'unknown') { logger.debug('toggle cause', reason); setOpen(!isOpen) }
-
-  on<ItemsReadyEvent>('items-ready', () => setIsVisible(true))
+  watchState('status', () => setIsVisible(state.status === 'ready'))
 
   return (
     <>
