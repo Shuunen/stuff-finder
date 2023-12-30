@@ -1,5 +1,6 @@
 /* eslint-disable sonar/redundant-type-aliases */
 /* eslint-disable @typescript-eslint/no-use-before-define */
+import type { AppStatus } from '.'
 import type { TypicalArguments } from '../shims'
 import type { Item, ItemField } from './item'
 import type { PrintFormData, PrintInputData } from './print'
@@ -51,7 +52,6 @@ export type AppSoundErrorEvent = undefined
 export type AppSoundInfoEvent = undefined
 export type AppSoundSuccessEvent = undefined
 export type AppSpeechStartEvent = undefined
-export type AppStatus = 'failed' | 'listening' | 'loading' | 'ready' | 'settings-required' | 'unexpected-error'
 export type AppStatusEvent = AppStatus
 export type AppToasterShowEvent = { delay?: number; message: string; type: 'error' | 'info' | 'success' }
 export type BarcodesToPrintEvent = Item[]
