@@ -1,14 +1,14 @@
 import { clone, slugify } from 'shuutils'
 import { defaultCommonLists, emptyItem, emptyItemPhoto } from '../constants'
 import type { Item } from '../types/item.types'
-import type { AirtableRecord } from '../types/requests.types'
+import type { AirtableSingleRecordResponse } from '../types/requests.types'
 import { sortListsEntries } from './objects.utils'
 
 function shouldAddToList (value = '', list: string[] = []) {
   return value.length > 0 && !list.includes(value)
 }
 
-export function airtableRecordToItem (record: AirtableRecord) {
+export function airtableRecordToItem (record: AirtableSingleRecordResponse) {
   return {
     ...emptyItem,
     ...record.fields,

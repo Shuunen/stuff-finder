@@ -7,7 +7,7 @@ import './services/item-search.service'
 import './services/speech.service'
 import type { AppActionEvent, AppCloneItemEvent, AppFormDataValue, AppFormEditItemSaveEvent, AppFormFieldChangeEvent, AppFormSettingsErrorEvent, AppFormSettingsReadyEvent, AppFormSettingsSaveEvent, AppFormSettingsSetEvent, AppImgLoadingErrorEvent, AppModalAddItemCloseEvent, AppModalEditItemCloseEvent, AppModalSearchResultsCloseEvent, AppModalSettingsCloseEvent, AppScanCodeStartEvent, AppSettingsTriggerAnimateEvent, AppSpeechStartEvent, AppStatusEvent, FormEditFormData, FormIdErrorEvent, SearchOrigin, SearchResultsEvent, SearchRetryEvent, SearchStartEvent } from './types/events.types'
 import { ItemField, type Item, type ItemPhoto } from './types/item.types'
-import type { AirtableRecord, AirtableResponse } from './types/requests.types'
+import type { AirtableMultipleRecordResponse, AirtableSingleRecordResponse } from './types/requests.types'
 import type { AppCredentials } from './types/settings.types'
 import { find, get, patch, post, valuesToOptions } from './utils/browser.utils'
 import { airtableRecordToItem, getCommonListsFromItems } from './utils/item.utils'
@@ -99,7 +99,7 @@ class App {
     this.isLoading(false, 'initFuse ends')
   }
 
-  private parseApiRecords (records: AirtableRecord[]) {
+  private parseApiRecords (records: AirtableSingleRecordResponse[]) {
     state.items = records.map(record => airtableRecordToItem(record))
     logger.showLog(`${state.items.length} item(s) loaded ${coolAscii()}`)
     this.initFuse('parseApiRecords updated this.items')
@@ -137,7 +137,7 @@ class App {
 
   // eslint-disable-next-line max-statements, complexity, sonarjs/cognitive-complexity
   private getItemFieldsToPush (data: FormEditFormData) {
-    const fields: AirtableRecord['fields'] = {}
+    const fields: AirtableSingleRecordResponse['fields'] = {}
     if (data.barcode !== undefined && data.barcode.length > 0) fields.barcode = data.barcode
     if (data.box !== undefined && data.box.length > 0) fields.box = data.box
     if (data.brand !== undefined && data.brand.length > 0) fields.brand = data.brand
@@ -304,7 +304,7 @@ class App {
     const sortByUpdatedFirst = '&sort%5B0%5D%5Bfield%5D=updated-on&sort%5B0%5D%5Bdirection%5D=desc'
     const url = this.apiUrl + (offset === undefined ? '' : `&offset=${offset}`) + sortByUpdatedFirst
     if (!url.startsWith('https://api.airtable.com/v0/')) throw new Error('invalid api url')
-    return await get<AirtableResponse>(url, false)
+    return await get<AirtableMultipleRecordResponse>(url, false)
   }
 
   // eslint-disable-next-line max-statements
@@ -323,12 +323,12 @@ class App {
     return true
   }
 
-  private async pushItemRemotely (fields: AirtableRecord['fields'], id?: Item['id']) {
+  private async pushItemRemotely (fields: AirtableSingleRecordResponse['fields'], id?: Item['id']) {
     if (id === undefined) throw new Error('cannot push item remotely without id')
     const data = { fields }
-    if (id === '') return await post<AirtableRecord>(this.apiUrl, data)
+    if (id === '') return await post<AirtableSingleRecordResponse>(this.apiUrl, data)
     const url = this.apiUrl.replace('?', `/${id}?`)
-    return await patch<AirtableRecord>(url, data)
+    return await patch<AirtableSingleRecordResponse>(url, data)
   }
 
 }

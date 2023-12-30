@@ -59,14 +59,14 @@ export interface WrapApiAliExResponse extends WrapApiResponse {
   }
 }
 
-export interface AirtableRecord {
+export interface AirtableSingleRecordResponse {
   error?: AirtableError
   fields: Partial<Omit<Item, ItemField.Id>>
   id: string
 }
 
-export interface AirtableResponse {
+export interface AirtableMultipleRecordResponse {
   error?: AirtableError
   offset?: string
-  records: AirtableRecord[]
+  records: AirtableSingleRecordResponse[]
 }
