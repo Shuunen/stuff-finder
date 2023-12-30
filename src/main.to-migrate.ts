@@ -4,7 +4,6 @@ import { clone, debounce, emit, fillTemplate, on, sanitize, sleep } from 'shuuti
 import './components'
 import { delays, type CommonLists } from './constants'
 import './services/item-search.service'
-import './services/sound.service'
 import './services/speech.service'
 import './services/url.service'
 import type { AppActionEvent, AppCloneItemEvent, AppFormDataValue, AppFormEditItemSaveEvent, AppFormFieldChangeEvent, AppFormSettingsErrorEvent, AppFormSettingsReadyEvent, AppFormSettingsSaveEvent, AppFormSettingsSetEvent, AppImgLoadingErrorEvent, AppLoaderToggleEvent, AppModalAddItemCloseEvent, AppModalEditItemCloseEvent, AppModalSearchResultsCloseEvent, AppModalSettingsCloseEvent, AppScanCodeStartEvent, AppSettingsTriggerAnimateEvent, AppSpeechStartEvent, AppStatusEvent, FormEditFormData, FormIdErrorEvent, ItemsReadyEvent, SearchOrigin, SearchResultsEvent, SearchRetryEvent, SearchStartEvent } from './types/events.types'

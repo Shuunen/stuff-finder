@@ -1,5 +1,6 @@
 import { div, emit, fillTemplate, h1, on, readableTimeAgo, sleep, text } from 'shuutils'
 import { defaultImage, delays, emptyItem } from '../constants'
+import { playSuccessSound } from '../utils/sound.utils'
 import type { AppModalSearchResultsOpenEvent, EditItemEvent, SearchResultsEvent, SelectResultEvent } from '../types/events.types'
 import { ItemField, type Item } from '../types/item.types'
 import { find } from '../utils/browser.utils'
@@ -45,6 +46,7 @@ window.customElements.define('app-search-results', class extends HTMLElement {
 
   private async onResults (event: SearchResultsEvent) {
     logger.debug('onResults', event)
+    void playSuccessSound()
     this.header.textContent = event.title
     this.results = event.results
     this.list.innerHTML = event.results.map(result => this.renderResult(result)).join('') // eslint-disable-line no-unsanitized/property

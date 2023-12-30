@@ -1,9 +1,10 @@
 import { emit, on, sleep } from 'shuutils'
 import { delays } from '../constants'
-import type { AppSoundErrorEvent, AppSoundInfoEvent, AppSpeechStartEvent, AppStatusEvent, RecognitionErrorEvent, SearchStartEvent } from '../types/events.types'
+import type { AppSpeechStartEvent, AppStatusEvent, RecognitionErrorEvent, SearchStartEvent } from '../types/events.types'
 import type { AppStatus } from '../types/status.types'
 import { logger } from '../utils/logger.utils'
 import { state } from '../utils/state.utils'
+import { playErrorSound, playInfoSound } from '../utils/sound.utils'
 
 class AppSpeech {
 
@@ -63,8 +64,8 @@ class AppSpeech {
   private setStatus (status: AppStatus) {
     emit<AppStatusEvent>('app-status', status)
     state.status = status
-    if (status === 'listening' && !this.isMobile) emit<AppSoundInfoEvent>('app-sound--info')
-    else if (status === 'failed') emit<AppSoundErrorEvent>('app-sound--error')
+    if (status === 'listening' && !this.isMobile) playInfoSound()
+    else if (status === 'failed') void playErrorSound()
     else logger.info('un-handled app status', status)
   }
 
