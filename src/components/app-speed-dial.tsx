@@ -2,6 +2,7 @@ import AddIcon from '@mui/icons-material/Add'
 import SpeedDialIcon from '@mui/icons-material/EjectOutlined'
 import HomeIcon from '@mui/icons-material/Home'
 import PrintIcon from '@mui/icons-material/Print'
+import QrCodeScannerIcon from '@mui/icons-material/QrCodeScanner'
 import SettingsIcon from '@mui/icons-material/Settings'
 import Fade from '@mui/material/Fade'
 import SpeedDial from '@mui/material/SpeedDial'
@@ -18,6 +19,7 @@ const actions = [
   { handleClick: () => route('/item/add'), icon: <AddIcon />, name: 'Add' },
   { handleClick: () => route('/settings'), icon: <SettingsIcon />, name: 'Settings' },
   { handleClick: () => route('/print/missing'), icon: <PrintIcon />, name: 'Print' },
+  { handleClick: () => route('/scan'), icon: <QrCodeScannerIcon />, name: 'Scan' },
 ]
 
 export function AppSpeedDial () {

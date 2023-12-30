@@ -71,5 +71,5 @@ nav a.active {
 }
 
 h1 {
-  @apply text-4xl text-purple-700;
+  @apply text-4xl text-purple-700 text-center;
 }
