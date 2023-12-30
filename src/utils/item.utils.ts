@@ -1,6 +1,7 @@
 import { clone, slugify } from 'shuutils'
 import { emptyCommonLists, emptyItem, emptyItemPhoto } from '../constants'
-import type { AirtableRecord, Item } from '../types'
+import type { Item } from '../types/item.types'
+import type { AirtableRecord } from '../types/requests.types'
 import { sortListsEntries } from './objects.utils'
 
 function shouldAddToList (value = '', list: string[] = []) {

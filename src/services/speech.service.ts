@@ -1,6 +1,7 @@
 import { emit, on, sleep } from 'shuutils'
 import { delays } from '../constants'
-import type { AppSoundErrorEvent, AppSoundInfoEvent, AppSpeechStartEvent, AppStatus, AppStatusEvent, RecognitionErrorEvent, SearchStartEvent } from '../types'
+import type { AppSoundErrorEvent, AppSoundInfoEvent, AppSpeechStartEvent, AppStatusEvent, RecognitionErrorEvent, SearchStartEvent } from '../types/events.types'
+import type { AppStatus } from '../types/status.types'
 import { logger } from '../utils/logger.utils'
 import { state } from '../utils/state.utils'
 

@@ -1,6 +1,7 @@
 import { div, fillTemplate, on, sleep } from 'shuutils'
 import { delays } from '../constants'
-import { PrintFormDataSize, type AppFormPrintOneChangeEvent, type AppFormPrintOneReadyEvent, type AppModalPrintOneCloseEvent, type AppModalPrintOneOpenEvent, type DoPrintOneEvent, type PrintData, type PrintFormData, type PrintInputData, type PrintOneEvent } from '../types'
+import type { AppFormPrintOneChangeEvent, AppFormPrintOneReadyEvent, AppModalPrintOneCloseEvent, AppModalPrintOneOpenEvent, DoPrintOneEvent, PrintOneEvent } from '../types/events.types'
+import { PrintFormDataSize, type PrintData, type PrintFormData, type PrintInputData } from '../types/print.types'
 import { find } from '../utils/browser.utils'
 import { logger } from '../utils/logger.utils'
 import { inputToPrintData } from '../utils/print.utils'

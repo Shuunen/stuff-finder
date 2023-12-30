@@ -1,10 +1,10 @@
 /* eslint-disable sonar/redundant-type-aliases */
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import type { AppStatus } from '.'
 import type { TypicalArguments } from '../shims'
-import type { Item, ItemField } from './item'
-import type { PrintFormData, PrintInputData } from './print'
-import type { AppCredentials } from './settings'
+import type { Item, ItemField } from './item.types'
+import type { PrintFormData, PrintInputData } from './print.types'
+import type { AppCredentials } from './settings.types'
+import type { AppStatus } from './status.types'
 
 export type AppActionEvent = HTMLElement | object | string
 export type AppClearCacheEvent = undefined

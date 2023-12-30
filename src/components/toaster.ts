@@ -1,5 +1,5 @@
 import { on, sleep, text, tw } from 'shuutils'
-import type { AppToasterShowEvent } from '../types'
+import type { AppToasterShowEvent } from '../types/events.types'
 import { fadeIn, fadeOut } from '../utils/browser.utils'
 
 window.customElements.define('app-toaster', class extends HTMLElement {

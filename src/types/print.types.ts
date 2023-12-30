@@ -1,5 +1,5 @@
-import type { AppFormData } from './events'
-import type { Item } from './item'
+import type { AppFormData } from './events.types'
+import type { Item } from './item.types'
 
 export interface PrintData {
   location: string

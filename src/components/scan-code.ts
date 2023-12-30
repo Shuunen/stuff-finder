@@ -2,7 +2,7 @@ import { BrowserMultiFormatReader } from '@zxing/library/es2015/browser/BrowserM
 import notFoundException from '@zxing/library/es2015/core/NotFoundException'
 import { dom, emit, on, sleep, tw } from 'shuutils'
 import { delays } from '../constants'
-import type { AppModalScanCodeCloseEvent, AppModalScanCodeOpenEvent, AppScanCodeStartEvent, AppSoundSuccessEvent, SearchStartEvent } from '../types'
+import type { AppModalScanCodeCloseEvent, AppModalScanCodeOpenEvent, AppScanCodeStartEvent, AppSoundSuccessEvent, SearchStartEvent } from '../types/events.types'
 import { find } from '../utils/browser.utils'
 import { logger } from '../utils/logger.utils'
 

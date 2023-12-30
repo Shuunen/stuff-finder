@@ -1,5 +1,5 @@
 /* c8 ignore next */
-import type { PrintInputData } from '../types'
+import type { PrintInputData } from '../types/print.types'
 
 /**
  * Generate a name from an item

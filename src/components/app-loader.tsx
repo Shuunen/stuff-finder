@@ -1,9 +1,10 @@
-import { CircularProgress, Fade } from '@mui/material'
+import CircularProgress from '@mui/material/CircularProgress'
+import Fade from '@mui/material/Fade'
 
-export function AppLoader ({ isLoading }: { isLoading: boolean }) {
+export function AppLoader ({ isLoading }: { readonly isLoading: boolean }) {
   return (
     <Fade in={isLoading}>
-      <div class="flex flex-col items-center justify-center fixed top-0 left-0 w-full h-full bg-white/50">
+      <div className="fixed left-0 top-0 flex h-full w-full flex-col items-center justify-center bg-white/50">
         <CircularProgress size={50} />
       </div>
     </Fade>

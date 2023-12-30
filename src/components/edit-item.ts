@@ -1,6 +1,7 @@
 import { div, emit, fillTemplate, on, sleep } from 'shuutils'
 import { delays } from '../constants'
-import type { AppFormEditItemSetEvent, AppModalEditItemOpenEvent, EditItemEvent, Item } from '../types'
+import type { AppFormEditItemSetEvent, AppModalEditItemOpenEvent, EditItemEvent } from '../types/events.types'
+import type { Item } from '../types/item.types'
 import { find } from '../utils/browser.utils'
 import { logger } from '../utils/logger.utils'
 
@@ -25,5 +26,5 @@ window.customElements.define('app-edit-item', class extends HTMLElement {
     on<EditItemEvent>('edit-item', this.edit.bind(this))
   }
 
-  
+
 })

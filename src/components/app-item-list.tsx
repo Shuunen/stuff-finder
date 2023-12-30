@@ -2,7 +2,7 @@ import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemText from '@mui/material/ListItemText'
-import type { Item } from '../types'
+import type { Item } from '../types/item.types'
 
 export function AppItemList ({ items }: { readonly items: Item[] }) {
   return (

@@ -10,7 +10,7 @@ import Zoom from '@mui/material/Zoom'
 import { route } from 'preact-router'
 import { useState } from 'preact/hooks'
 import { on } from 'shuutils'
-import type { ItemsReadyEvent } from '../types'
+import type { ItemsReadyEvent } from '../types/events.types'
 import { scout } from '../utils/browser.utils'
 import { logger } from '../utils/logger.utils'
 
