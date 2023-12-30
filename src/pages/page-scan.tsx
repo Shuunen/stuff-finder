@@ -6,7 +6,7 @@ import type Exception from '@zxing/library/es2015/core/Exception'
 import notFoundException from '@zxing/library/es2015/core/NotFoundException'
 import type Result from '@zxing/library/es2015/core/Result'
 import { route } from 'preact-router'
-import { useEffect, useRef } from 'preact/hooks'
+import { useRef } from 'preact/hooks'
 import { logger } from '../utils/logger.utils'
 import { playSuccessSound } from '../utils/sound.utils'
 import { state } from '../utils/state.utils'
@@ -40,16 +40,13 @@ export function PageScan ({ ...properties }: { readonly [key: string]: unknown }
   const video = signal(videoReference)
 
   useSignalEffect(() => {
-    if (video.value.current === null) return
+    // this run once, when the component is mounted
+    if (video.value.current === null) throw new Error('video element is null')
     if (state.status !== 'loading') state.status = 'loading'
     logger.debug('starting video stream decoding...')
     void reader.decodeFromVideoDevice(null, video.value.current, (result, error) => onDecode(result, error) /* eslint-disable-line unicorn/no-null */)
+    return () => { reader.reset() } // this run once, when the component is about to unmount
   })
-
-  useEffect(() => () => {
-    // this runs when the component is about to unmount
-    reader.reset()
-  }, []) // empty dependency array means this effect runs once on mount and cleanup on unmount
 
   return (
     <div className="flex flex-col items-center gap-6" data-page="scan">
