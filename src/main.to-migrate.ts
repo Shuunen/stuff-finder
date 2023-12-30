@@ -287,17 +287,14 @@ class App {
     }
     const remote = airtableRecordToItem(records[0])
     if (state.items.some(item => item.id === remote.id && item[ItemField.UpdatedOn] === remote[ItemField.UpdatedOn])) {
-      logger.showLog('no updates from Airtable, cache seems up to date')
-      this.initFuse('loadItems no updates from Airtable, this.items updated')
+      logger.showLog('no updates from airtable, cache seems up to date')
+      this.initFuse('loadItems no updates from airtable, this.items updated')
       return true
     }
     while ((offset?.length ?? 0) > 0) {
-      // eslint-disable-next-line no-await-in-loop
-      response = await this.fetchApi(offset)
-      // eslint-disable-next-line unicorn/consistent-destructuring
-      offset = response.offset
-      // eslint-disable-next-line unicorn/consistent-destructuring
-      records = [...records, ...response.records]
+      response = await this.fetchApi(offset) // eslint-disable-line no-await-in-loop
+      offset = response.offset // eslint-disable-line unicorn/consistent-destructuring
+      records = [...records, ...response.records] // eslint-disable-line unicorn/consistent-destructuring
     }
     this.parseApiRecords(records)
     return true

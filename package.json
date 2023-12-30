@@ -12,6 +12,7 @@
     "@tailwindcss/forms": "0.5",
     "@zxing/library": "0.20",
     "fuse.js": "7.0",
+    "notistack": "3.0",
     "preact": "10.19",
     "preact-router": "4.1",
     "shuutils": "7.4",

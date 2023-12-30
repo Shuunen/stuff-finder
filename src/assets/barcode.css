@@ -44,7 +44,6 @@
  * For print only
  */
 @media print {
-  app-toaster,
   #app > div:not(.print-one),
   .app-modal--print-one > *:not(.app-print-one--preview),
   .app-print-one--preview > div:not(.app-barcode) {

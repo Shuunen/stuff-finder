@@ -8,5 +8,4 @@ import './scan-code'
 import './search-button'
 import './search-results'
 import './settings-trigger'
-import './toaster'
 

@@ -21,6 +21,7 @@
 - [ ] show given/thrown items with a different color/display, also they're no more in box/room
 - [ ] use hash instead of search params in url service
 - [ ] use a visual switch/toggle instead of input type=checkbox name="ref-printed"
+- [ ] re-try to use async route from preact-router
 
 ## Build sizes
 

@@ -46,7 +46,6 @@ export type AppSearchItemEvent = AppFormData
 export type AppSettingsTriggerAnimateEvent = boolean
 export type AppSpeechStartEvent = undefined
 export type AppStatusEvent = AppStatus
-export type AppToasterShowEvent = { delay?: number; message: string; type: 'error' | 'info' | 'success' }
 export type DoPrintOneEvent = PrintInputData
 export type EditItemEvent = Item
 export type FormEditFormData = AppFormData & Partial<Omit<Item, ItemField.Photo> & { photo: string }>
