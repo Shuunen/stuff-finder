@@ -7,8 +7,8 @@ import { logger } from '../utils/logger.utils'
 import { state } from '../utils/state.utils'
 
 // eslint-disable-next-line max-statements
-export function AppSettings ({ ...properties }: { readonly [key: string]: unknown }) {
-  logger.debug('AppSettings', { properties })
+export function PageSettings ({ ...properties }: { readonly [key: string]: unknown }) {
+  logger.debug('PageSettings', { properties })
   const [base, setBase] = useState(state.credentials.base)
   const [isBaseValid, setBaseValidity] = useState(false)
   const [token, setToken] = useState(state.credentials.token)

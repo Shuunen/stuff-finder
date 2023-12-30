@@ -2,8 +2,8 @@
 import { AppPrompter } from '../components/app-prompter'
 import { logger } from '../utils/logger.utils'
 
-export function AppHome ({ ...properties }: { readonly [key: string]: unknown }) {
-  logger.debug('AppHome', { properties })
+export function PageHome ({ ...properties }: { readonly [key: string]: unknown }) {
+  logger.debug('PageHome', { properties })
   return (
     <div data-page="home">
       {/* new good code */}

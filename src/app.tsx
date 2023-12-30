@@ -4,12 +4,13 @@ import { useState } from 'preact/hooks'
 import { AppLoader } from './components/app-loader'
 import { AppNavigation } from './components/app-navigation'
 import { AppSpeedDial } from './components/app-speed-dial'
-import { AppError } from './pages/page-error'
-import { AppHome } from './pages/page-home'
-import { AppItemAdd } from './pages/page-item-add'
-import { AppItemDetails } from './pages/page-item-details'
-import { AppSearch } from './pages/page-search'
-import { AppSettings } from './pages/page-settings'
+import { PageError } from './pages/page-error'
+import { PageHome } from './pages/page-home'
+import { PageItemAdd } from './pages/page-item-add'
+import { PageItemDetails } from './pages/page-item-details'
+import { PageScan } from './pages/page-scan'
+import { PageSearch } from './pages/page-search'
+import { PageSettings } from './pages/page-settings'
 import { state, watchState } from './utils/state.utils'
 
 export function App () {
@@ -21,12 +22,13 @@ export function App () {
   return (
     <>
       <Router>
-        <AppHome path="/" />
-        <AppItemAdd path="/item/add" />
-        <AppItemDetails path="/item/:id" />
-        <AppSearch path="/search/:input" />
-        <AppSettings path="/settings" />
-        <AppError code="http-404" default />
+        <PageHome path="/" />
+        <PageItemAdd path="/item/add" />
+        <PageItemDetails path="/item/:id" />
+        <PageScan path="/scan" />
+        <PageSearch path="/search/:input" />
+        <PageSettings path="/settings" />
+        <PageError code="http-404" default />
       </Router>
       <AppSpeedDial />
       <AppLoader isLoading={isLoading} />

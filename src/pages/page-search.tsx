@@ -8,8 +8,8 @@ const items = [
   fakeItem('Brouette de jardin'),
 ]
 
-export function AppSearch ({ input = '', ...properties }: { readonly input?: string; readonly [key: string]: unknown }) {
-  logger.debug('AppSearch', { input, properties })
+export function PageSearch ({ input = '', ...properties }: { readonly input?: string; readonly [key: string]: unknown }) {
+  logger.debug('PageSearch', { input, properties })
   return (
     <div className="flex flex-col gap-6" data-page="search">
       <h2>Found {items.length} search results for &quot;{input}&quot; :</h2>

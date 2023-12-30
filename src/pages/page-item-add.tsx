@@ -1,7 +1,7 @@
 import { logger } from '../utils/logger.utils'
 
-export function AppItemAdd ({ ...properties }: { readonly [key: string]: unknown }) {
-  logger.debug('AppItemAdd', { properties })
+export function PageItemAdd ({ ...properties }: { readonly [key: string]: unknown }) {
+  logger.debug('PageItemAdd', { properties })
   return (
     <div className="flex flex-col" data-page="item-add">
       <h1>Add Item</h1>
