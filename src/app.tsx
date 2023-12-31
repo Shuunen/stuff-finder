@@ -2,7 +2,6 @@ import { SnackbarProvider, enqueueSnackbar } from 'notistack'
 import { Router } from 'preact-router'
 import { useState } from 'preact/hooks'
 import { AppLoader } from './components/app-loader'
-import { AppNavigation } from './components/app-navigation'
 import { AppSpeedDial } from './components/app-speed-dial'
 import { PageError } from './pages/page-error'
 import { PageHome } from './pages/page-home'
@@ -34,7 +33,6 @@ export function App () {
       </Router>
       <AppSpeedDial />
       <AppLoader isLoading={isLoading} />
-      <AppNavigation />
       {/* @ts-expect-error typings issue */}
       <SnackbarProvider />
     </>
