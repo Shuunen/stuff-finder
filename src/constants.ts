@@ -87,6 +87,8 @@ export const emptyItemSuggestions = {
 export const delays = {
   large: 300,
   medium: 200,
+  second: 1000,
+  seconds: 2000,
   small: 100,
 } as const
 
