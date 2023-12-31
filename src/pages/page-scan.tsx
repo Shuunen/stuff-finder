@@ -54,7 +54,7 @@ export function PageScan ({ ...properties }: { readonly [key: string]: unknown }
   return (
     <div className="flex flex-col" data-page="scan">
       <h1>Scan code</h1>
-      <h2 className="flex">Scan a QR Code or a barcode to search for it 👀</h2>
+      <h2 className="text-center">Scan a QR Code or a barcode to search for it 👀</h2>
       <div className="relative flex aspect-video h-44 flex-col overflow-hidden rounded-xl shadow-lg">
         {/* eslint-disable-next-line react/forbid-component-props */}
         <Skeleton className="absolute left-0 top-0 h-full w-full" height={176} variant="rounded" />
