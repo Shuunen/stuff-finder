@@ -13,7 +13,8 @@ export function PageItemDetails ({ ...properties }: { readonly [key: string]: un
   return (
     <div className="flex flex-col" data-page="item-details">
       <h1>{item.name}</h1>
-      <AppPageBottom icon={ManageSearchIcon} nextLabel="Edit" nextUrl={`/item/edit/${item.id}`} />
+      {/* eslint-disable-next-line @typescript-eslint/no-magic-numbers */}
+      <AppPageBottom icon={ManageSearchIcon} nextLabel="Edit" nextUrl={`/item/edit/${item.id}`} stepsBack={properties.context === 'single' ? 2 : 1} />
     </div>
   )
 }

@@ -24,7 +24,7 @@ export function App () {
       <Router>
         <PageHome path="/" />
         <PageItemAdd path="/item/add" />
-        <PageItemDetails path="/item/details/:id" />
+        <PageItemDetails path="/item/details/:id/:context?" />
         <PageItemEdit path="/item/edit/:id" />
         <PageScan path="/scan" />
         <PageSearch path="/search/:input" />

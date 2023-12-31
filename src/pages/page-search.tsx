@@ -16,7 +16,7 @@ const maxNameLength = 20
 function search (input: string) {
   const fuse = new Fuse(state.items, fuseOptions)
   const result = state.items.find(item => item.reference === input || item.barcode === input)
-  if (result !== undefined) { route(`/item/details/${result.id}`); return { header: '', results: [] } }
+  if (result !== undefined) { route(`/item/details/${result.id}/single`); return { header: '', results: [] } }
   const results = fuse.search(sanitize(input)).map(item => item.item)
   const header = `${results.length} results found for “${input}”`
   return { header, results }
