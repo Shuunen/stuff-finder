@@ -3,7 +3,7 @@ app-form {
 }
 
 app-form form {
-  @apply gap-3 pr-2;
+  @apply pr-2;
 }
 
 app-form:not([inline=true]) form {
