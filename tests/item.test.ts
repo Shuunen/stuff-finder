@@ -2,7 +2,6 @@ import { expect, it } from 'vitest' // eslint-disable-line @typescript-eslint/no
 import { ItemStatus, type Item, type ItemPhoto } from '../src/types/item.types'
 import type { AirtableSingleRecordResponse } from '../src/types/requests.types'
 import { addOrUpdateItems, airtableRecordToItem, fakeItem, getCommonListsFromItems, getOneItem, itemToImageUrl } from '../src/utils/item.utils'
-import { img } from 'shuutils'
 
 const recordA: AirtableSingleRecordResponse = {
   fields: {
