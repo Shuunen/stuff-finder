@@ -1,8 +1,12 @@
-import { Logger } from 'shuutils'
+import { Logger, debounce } from 'shuutils'
 import { state } from './state.utils'
+import { delays } from '../constants'
 
 /* c8 ignore start */
 class CustomLogger extends Logger {
+
+  // eslint-disable-next-line unicorn/consistent-function-scoping
+  public debouncedDebug = debounce((...data: readonly unknown[]) => this.debug(...data), delays.large)
 
   public showLog (message: string, ...data: readonly unknown[]) {
     this.info(message, ...data)
