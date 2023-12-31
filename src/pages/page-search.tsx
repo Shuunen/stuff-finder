@@ -1,6 +1,7 @@
 import SearchIcon from '@mui/icons-material/Search'
 import { useSignalEffect } from '@preact/signals'
 import Fuse from 'fuse.js'
+import { route } from 'preact-router'
 import { useState } from 'preact/hooks'
 import { ellipsis, sanitize } from 'shuutils'
 import { AppItemList } from '../components/app-item-list'
@@ -15,10 +16,9 @@ const maxNameLength = 20
 function search (input: string) {
   const fuse = new Fuse(state.items, fuseOptions)
   const result = state.items.find(item => item.reference === input || item.barcode === input)
-  const results = result ? [result] : fuse.search(sanitize(input)).map(item => item.item)
-  let header = 'No results found'
-  if (results.length > 0) header = results.length === 1 ? 'One result found' : `${results.length} results found`
-  header += ` for “${input}”`
+  if (result !== undefined) { route(`/item/details/${result.id}`); return { header: '', results: [] } }
+  const results = fuse.search(sanitize(input)).map(item => item.item)
+  const header = `${results.length} results found for “${input}”`
   return { header, results }
 }
 
