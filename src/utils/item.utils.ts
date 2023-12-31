@@ -13,14 +13,47 @@ function shouldAddToList (value = '', list: string[] = []) {
   return value.length > 0 && !list.includes(value)
 }
 
-export const airtableMaxRequestPerSecond = 5
+const airtableMaxRequestPerSecond = 5
 
-export function airtableRecordToItem (record: AirtableSingleRecordResponse) {
+function itemToImageUrl (item?: Item) {
+  return item?.photo?.[0]?.url ?? '/assets/no-visual.svg'
+}
+
+function airtableRecordToItem (record: AirtableSingleRecordResponse) {
   return {
     ...emptyItem,
     ...record.fields,
     id: record.id,
   }
+}
+
+async function getOneItem (id: Item['id']) {
+  const { base, table } = state.credentials
+  const url = `${airtableBaseUrl}/${base}/${table}/${id}`
+  const response = await get<AirtableSingleRecordResponse>(url, false)
+  return airtableRecordToItem(response)
+}
+
+function addOrUpdateItems (input: Item[], itemTouched: Item) {
+  const items = clone(input)
+  const index = items.findIndex(item => item.id === itemTouched.id)
+  if (index >= 0) {
+    logger.info('updating item locally', itemTouched)
+    items[index] = itemTouched
+  } else if (itemTouched.id) {
+    logger.info('adding item locally', itemTouched)
+    items.push(itemTouched)
+  } else logger.showError('cannot add item without id')
+  return items
+}
+
+/* c8 ignore next 7 */
+async function updateItemImage (id: string, image: HTMLImageElement) {
+  logger.debug('image url for item', id, 'has been deprecated, fetching fresh data from server...')
+  const item = await getOneItem(id)
+  // eslint-disable-next-line no-param-reassign
+  image.src = itemToImageUrl(item)
+  state.items = addOrUpdateItems(state.items, item)
 }
 
 export function getCommonListsFromItems (items: Item[]) {
@@ -44,22 +77,17 @@ export function fakeItem (name: string) {
   } satisfies Item
 }
 
-export async function getOneItem (id: Item['id']) {
-  const { base, table } = state.credentials
-  const url = `${airtableBaseUrl}/${base}/${table}/${id}`
-  const response = await get<AirtableSingleRecordResponse>(url, false)
-  return airtableRecordToItem(response)
+/* c8 ignore next 10 */
+export async function onItemImageError (event: Event) {
+  const image = event.target as HTMLImageElement // eslint-disable-line @typescript-eslint/consistent-type-assertions
+  image.src = itemToImageUrl()
+  image.classList.add('animate-pulse')
+  if (document.querySelectorAll('img[data-id]').length > airtableMaxRequestPerSecond) { void logger.debouncedDebug('prevent too many requests to airtable'); return }
+  const { id } = image.dataset
+  if (id === undefined) throw new Error('no id found on image')
+  await updateItemImage(id, image)
+  image.classList.remove('animate-pulse')
 }
 
-export function addOrUpdateItems (input: Item[], itemTouched: Item) {
-  const items = clone(input)
-  const index = items.findIndex(item => item.id === itemTouched.id)
-  if (index >= 0) {
-    logger.info('updating item locally', itemTouched)
-    items[index] = itemTouched
-  } else if (itemTouched.id) {
-    logger.info('adding item locally', itemTouched)
-    items.push(itemTouched)
-  } else logger.showError('cannot add item without id')
-  return items
-}
+export { addOrUpdateItems, airtableRecordToItem, getOneItem, itemToImageUrl }
+

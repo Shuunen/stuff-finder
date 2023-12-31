@@ -1,7 +1,8 @@
 import { expect, it } from 'vitest' // eslint-disable-line @typescript-eslint/no-shadow
-import { ItemStatus, type Item } from '../src/types/item.types'
+import { ItemStatus, type Item, type ItemPhoto } from '../src/types/item.types'
 import type { AirtableSingleRecordResponse } from '../src/types/requests.types'
-import { addOrUpdateItems, airtableRecordToItem, fakeItem, getCommonListsFromItems, getOneItem } from '../src/utils/item.utils'
+import { addOrUpdateItems, airtableRecordToItem, fakeItem, getCommonListsFromItems, getOneItem, itemToImageUrl } from '../src/utils/item.utils'
+import { img } from 'shuutils'
 
 const recordA: AirtableSingleRecordResponse = {
   fields: {
@@ -78,4 +79,15 @@ it('addOrUpdateItems C add new item without id', () => {
   const itemTouched = createFakeItem({ id: '' })
   const itemsOutput = addOrUpdateItems(itemsInput, itemTouched)
   expect(itemsOutput).toHaveLength(2)
+})
+
+it('itemToImageUrl A', () => {
+  expect(itemToImageUrl()).toContain('no-visual')
+})
+
+it('itemToImageUrl B', () => {
+  const url = 'https://picsum.photos/seed/123/200/200'
+  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+  const item = createFakeItem({ photo: [{ url } as ItemPhoto] })
+  expect(itemToImageUrl(item)).toBe(url)
 })
