@@ -1,4 +1,5 @@
 import ManageSearchIcon from '@mui/icons-material/ManageSearch'
+import { AppItemDetails } from '../components/app-item-details'
 import { AppPageBottom } from '../components/app-page-bottom'
 import { setTitle } from '../utils/browser.utils'
 import { logger } from '../utils/logger.utils'
@@ -11,10 +12,12 @@ export function PageItemDetails ({ ...properties }: { readonly [key: string]: un
   logger.debug('PageItemDetails', { item })
   setTitle(`${item.name} - Details`)
   return (
-    <div className="flex flex-col" data-page="item-details">
-      <h1>{item.name}</h1>
-      {/* eslint-disable-next-line @typescript-eslint/no-magic-numbers */}
-      <AppPageBottom icon={ManageSearchIcon} nextLabel="Edit" nextUrl={`/item/edit/${item.id}`} stepsBack={properties.context === 'single' ? 2 : 1} />
+    <div className="flex w-full grow flex-col" data-page="item-details">
+      <AppItemDetails item={item} />
+      <div className="hidden md:block">
+        {/* eslint-disable-next-line @typescript-eslint/no-magic-numbers */}
+        <AppPageBottom icon={ManageSearchIcon} nextLabel="Edit" nextUrl={`/item/edit/${item.id}`} stepsBack={properties.context === 'single' ? 2 : 1} />
+      </div>
     </div>
   )
 }
