@@ -1,12 +1,16 @@
+import SearchIcon from '@mui/icons-material/Search'
 import { useSignalEffect } from '@preact/signals'
 import Fuse from 'fuse.js'
 import { useState } from 'preact/hooks'
-import { sanitize } from 'shuutils'
+import { ellipsis, sanitize } from 'shuutils'
 import { AppItemList } from '../components/app-item-list'
+import { AppPageBottom } from '../components/app-page-bottom'
 import { fuseOptions } from '../constants'
 import { defaultItems } from '../types/item.types'
 import { logger } from '../utils/logger.utils'
 import { state } from '../utils/state.utils'
+
+const maxNameLength = 20
 
 function search (input: string) {
   const fuse = new Fuse(state.items, fuseOptions)
@@ -22,6 +26,7 @@ export function PageSearch ({ input = '', ...properties }: { readonly input?: st
   logger.debug('PageSearch rendering', { input, properties })
   const [items, setItems] = useState(defaultItems)
   const [title, setTitle] = useState('Searching...')
+  setTitle(`Search for “${ellipsis(input, maxNameLength)}”`)
   useSignalEffect(() => {
     logger.debug('PageSearch is mounted')
     const { header, results } = search(input)
@@ -30,10 +35,11 @@ export function PageSearch ({ input = '', ...properties }: { readonly input?: st
   })
 
   return (
-    <div className="flex max-h-full grow flex-col justify-center gap-6" data-page="search">
+    <div className="flex max-h-full grow flex-col" data-page="search">
       <h1>Search</h1>
       <h2>{title}</h2>
       <AppItemList items={items} />
+      <AppPageBottom icon={SearchIcon} />
     </div>
   )
 }

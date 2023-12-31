@@ -14,9 +14,9 @@
   <link href="assets/site.webmanifest" rel="manifest">
 </head>
 
-<body class="flex h-screen flex-col items-center justify-center bg-gradient-to-tr from-purple-200 align-middle">
+<body class="flex h-screen flex-col bg-gradient-to-tr from-purple-200 align-middle">
 
-  <div class="max-h-full flex flex-col items-center justify-center grow" id="app"></div>
+  <div class="max-h-full flex flex-col grow" id="app"></div>
 
   <span class="absolute w-full bottom-0 text-center text-sm font-mono opacity-30 pb-4" id="unique-mark"></span>
 
@@ -61,7 +61,7 @@
       <label>Drawer <select name=drawer>{{ drawers }}</select></label>
       <label>Category <select name=category>{{ categories }}</select></label>
       <label>Price <input name=price pattern="\d+" step=1 type=number /></label>
-      <div class="flex gap-4 flex-wrap lg:flex-nowrap">
+      <div class="flex flex-wrap lg:flex-nowrap">
         <label>Printed ?<input name="ref-printed" type=checkbox /></label>
         <button class="self-end" data-action="app-modal--print-one--open" data-id="{{ id }}" data-payload="" disabled type="button">
           Print this item
