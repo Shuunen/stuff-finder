@@ -71,13 +71,25 @@ nav a.active {
 }
 
 h1 {
-  @apply text-4xl text-purple-700 font-medium text-center;
+  @apply text-4xl text-purple-700 font-medium;
 }
 
 h2 {
   @apply text-2xl text-purple-900;
 }
 
-.flex {
-  @apply gap-6 justify-center items-center;
+h3 {
+  @apply font-mono font-bold text-gray-500 uppercase;
+}
+
+.flex:not(.gap-3) {
+  @apply gap-6;
+}
+
+.flex:not(.items-start) {
+  @apply items-center;
+}
+
+.flex:not(.justify-start):not(.justify-between) {
+  @apply justify-center;
 }
