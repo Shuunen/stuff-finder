@@ -2,6 +2,7 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 @import "./app-form.css";
+@import "./mui-chip.css";
 
 html {
   scroll-behavior: smooth;
@@ -93,3 +94,4 @@ h3 {
 .flex:not(.justify-start):not(.justify-between) {
   @apply justify-center;
 }
+

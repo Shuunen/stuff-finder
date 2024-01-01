@@ -1,0 +1,10 @@
+.MuiChip-root.reverse {
+  @apply flex-row-reverse;
+}
+
+.MuiChip-root.reverse svg {
+  @apply ml-0 mr-1.5;
+}
+.MuiChip-root.reverse svg + .MuiChip-label {
+  @apply pr-1;
+}
