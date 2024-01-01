@@ -8,6 +8,7 @@ import { PageHome } from './pages/page-home'
 import { PageItemAdd } from './pages/page-item-add'
 import { PageItemDetails } from './pages/page-item-details'
 import { PageItemEdit } from './pages/page-item-edit'
+import { PageItemPrint } from './pages/page-item-print'
 import { PageScan } from './pages/page-scan'
 import { PageSearch } from './pages/page-search'
 import { PageSettings } from './pages/page-settings'
@@ -26,6 +27,7 @@ export function App () {
         <PageItemAdd path="/item/add" />
         <PageItemDetails path="/item/details/:id/:context?" />
         <PageItemEdit path="/item/edit/:id" />
+        <PageItemPrint path="/item/print/:id" />
         <PageScan path="/scan" />
         <PageSearch path="/search/:input" />
         <PageSettings path="/settings" />

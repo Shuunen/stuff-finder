@@ -1,4 +1,5 @@
 import LocationOnIcon from '@mui/icons-material/LocationOn'
+import PrintIcon from '@mui/icons-material/Print'
 import type { Item } from '../types/item.types'
 import { itemToImageUrl, onItemImageError } from '../utils/item.utils'
 import { AppButtonBack } from './app-button-back'
@@ -28,7 +29,7 @@ export function AppItemDetails ({ item }: { readonly item: Item }) {
         {Boolean(item.reference) && <AppItemDetailsChip label={item.reference} tooltip="Reference" />}
         {Boolean(item.barcode) && <AppItemDetailsChip label={item.barcode} tooltip="Barcode" />}
         {Boolean(item.status) && <AppItemDetailsChip label={item.status} tooltip="Status" />}
-        {Boolean(item['ref-printed']) && <AppItemDetailsChip label={item['ref-printed'] ? 'printed' : 'not printed'} tooltip="Sticker" />}
+        {Boolean(item['ref-printed']) && <AppItemDetailsChip color="primary" icon={PrintIcon} label={item['ref-printed'] ? 'printed' : 'not printed'} link={`/item/print/${item.id}`} tooltip="Print it !" />}
       </div>
     </div>
   </div>
