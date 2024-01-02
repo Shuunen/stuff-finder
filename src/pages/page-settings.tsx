@@ -45,7 +45,7 @@ export function PageSettings ({ ...properties }: { readonly [key: string]: unkno
 
   return (
     <AppPageCard cardTitle="Edit" icon={TuneIcon} pageCode="settings" pageTitle="Settings">
-      <div className="flex flex-col p-4">
+      <div className="flex flex-col">
         <h2>Stuff-Finder need credentials to access your Airtable base</h2>
         <form autoComplete="off" className="grid w-full grid-cols-2 gap-6" noValidate onSubmit={onSubmit} spellCheck={false}>
           <TextField error={isBaseValid} id="base" label="Airtable base" onChange={event => setBase(event.target.value)} required value={base} variant="standard" />
