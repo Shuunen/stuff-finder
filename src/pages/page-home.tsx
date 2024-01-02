@@ -14,7 +14,6 @@ export function PageHome ({ ...properties }: { readonly [key: string]: unknown }
       <app-scan-code />
       <app-search-button />
       <app-print-barcodes />
-      <app-print-one />
       <app-settings-trigger />
       <app-modal class="hidden px-2 md:max-h-[max(30rem,50vh)]" data-title="Search results" name="search-results">
         <div className="app-list app-results overflow-auto" />
@@ -106,20 +105,6 @@ export function PageHome ({ ...properties }: { readonly [key: string]: unknown }
           <div className="app-barcodes app-a4-65" />
         </div>
       </app-modal>
-      <app-modal class="hidden" data-title="Print item reference" name="print-one">
-        <div className="app-print-one--preview mx-auto mb-4" />
-        <app-form cancel-label="Close" class="mb-4" close="app-modal--print-one--close" keep-save-active name="print-one" save="do-print-one"
-          save-label="Print">
-          <label>
-            Print size ?
-            <select name="size">
-              <option value="40x30">40mm x 30mm</option>
-              <option selected value="40x20">40mm x 20mm</option>
-            </select>
-          </label>
-        </app-form>
-      </app-modal>
-      <app-search-results />
     </div>
   )
 }

@@ -1,7 +1,6 @@
 /* eslint-disable sonar/redundant-type-aliases */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import type { Item, ItemField } from './item.types'
-import type { PrintFormData, PrintInputData } from './print.types'
 import type { AppCredentials } from './settings.types'
 import type { AppStatus } from './status.types'
 
@@ -16,8 +15,6 @@ export type AppFormEditItemSaveEvent = FormEditFormData
 export type AppFormEditItemSetEvent = Partial<FormEditFormData>
 export type AppFormEditItemSuggestionsEvent = FormSuggestions
 export type AppFormFieldChangeEvent = AppFormDataValue
-export type AppFormPrintOneChangeEvent = PrintFormData
-export type AppFormPrintOneReadyEvent = PrintFormData
 export type AppFormReadyEvent = AppFormData
 export type AppFormSettingsErrorEvent = string
 export type AppFormSettingsReadyEvent = undefined
@@ -31,8 +28,6 @@ export type AppModalEditItemCloseEvent = undefined
 export type AppModalEditItemOpenEvent = undefined
 export type AppModalOpenEvent = undefined
 export type AppModalPrepareBarcodesOpenEvent = undefined
-export type AppModalPrintOneCloseEvent = undefined
-export type AppModalPrintOneOpenEvent = PrintInputData
 export type AppModalReadyEvent = undefined
 export type AppModalScanCodeCloseEvent = undefined
 export type AppModalScanCodeOpenEvent = undefined
@@ -45,7 +40,6 @@ export type AppSearchItemEvent = AppFormData
 export type AppSettingsTriggerAnimateEvent = boolean
 export type AppSpeechStartEvent = undefined
 export type AppStatusEvent = AppStatus
-export type DoPrintOneEvent = PrintInputData
 export type EditItemEvent = Item
 export type FormEditFormData = AppFormData & Partial<Omit<Item, ItemField.Photo> & { photo: string }>
 export type FormIdErrorEvent = string
@@ -53,7 +47,6 @@ export type FormIdSetEvent = AppFormData
 export type FormIdSuggestionsEvent = FormSuggestions
 export type FormOnSaveEvent = AppFormData
 export type FormSuggestions = Record<string, string[]>
-export type PrintOneEvent = PrintInputData
 export type RecognitionErrorEvent = { error: string }
 export type SearchOrigin = 'default' | 'scan' | 'search-results' | 'speech' | 'type' | 'url'
 export type SearchResultsEvent = { input: string; isReference: boolean; results: Item[]; title: string; willScrollTop: boolean }

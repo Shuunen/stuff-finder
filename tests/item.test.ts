@@ -47,7 +47,7 @@ it('getCommonListsFromItems A', () => {
 
 it('fakeItem A', () => {
   const name = 'super glass tempered shovel'
-  const item = fakeItem(name)
+  const item = fakeItem({ name })
   expect(item.name).toBe(name)
   expect(item.photo).toHaveLength(1)
 })

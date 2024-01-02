@@ -1,8 +1,9 @@
 import { expect, it } from 'vitest' // eslint-disable-line @typescript-eslint/no-shadow
-import type { PrintInputData } from '../src/types/print.types'
-import { inputToPrintCode, inputToPrintData, inputToPrintQrCodeVisual, inputToPrintText, itemToPrintLocation } from '../src/utils/print.utils'
+import { emptyItemPhoto } from '../src/constants'
+import { fakeItem } from '../src/utils/item.utils'
+import { itemToPrintData } from '../src/utils/print.utils'
 
-const itemA: PrintInputData = {
+const itemA = fakeItem({
   barcode: '  barcode',
   box: ' box ',
   brand: 'brand',
@@ -12,9 +13,9 @@ const itemA: PrintInputData = {
   location: 'location',
   name: 'name',
   reference: 'reference  ',
-}
+})
 
-const itemB: PrintInputData = {
+const itemB = fakeItem({
   barcode: '  barcode',
   box: ' ',
   brand: 'brand',
@@ -22,34 +23,28 @@ const itemB: PrintInputData = {
   drawer: '',
   id: '1234567',
   name: 'name',
-}
+  photo: [{ ...emptyItemPhoto, url: 'https://picsum.photos/seed/1234567/200/200' }],
+})
 
-it('itemToPrintText A', () => { expect(inputToPrintText(itemA)).toEqual('name brand details') })
-it('itemToPrintText B', () => { expect(inputToPrintText({ ...itemA, name: '  ' })).toEqual('brand details') })
-it('itemToPrintText C', () => { expect(inputToPrintText({ ...itemA, brand: '  ' })).toEqual('name details') })
+it('itemToPrintData text A', () => { expect(itemToPrintData(itemA).text).toEqual('name brand details') })
+it('itemToPrintData text B', () => { expect(itemToPrintData({ ...itemA, name: '  ' }).text).toEqual('brand details') })
+it('itemToPrintData text C', () => { expect(itemToPrintData({ ...itemA, brand: '  ' }).text).toEqual('name details') })
 
-it('inputToPrintCode A', () => { expect(inputToPrintCode(itemA)).toEqual('reference') })
-it('inputToPrintCode B', () => { expect(inputToPrintCode({ ...itemA, reference: '  ' })).toEqual('barcode') })
-it('inputToPrintCode C', () => { expect(inputToPrintCode({ ...itemA, barcode: '  ', reference: '  ' })).toEqual('') })
-it('inputToPrintCode D', () => { expect(inputToPrintCode(itemB)).toEqual('barcode') })
-it('inputToPrintCode E', () => { expect(inputToPrintCode({})).toEqual('') })
+it('itemToPrintData value A', () => { expect(itemToPrintData(itemA).value).toEqual('reference') })
+it('itemToPrintData value B', () => { expect(itemToPrintData({ ...itemA, reference: '  ' }).value).toEqual('barcode') })
+it('itemToPrintData value C', () => { expect(itemToPrintData({ ...itemA, barcode: '  ', reference: '  ' }).value).toEqual('') })
+it('itemToPrintData value D', () => { expect(itemToPrintData(itemB).value).toEqual('barcode') })
 
-it('itemToPrintBarcode A', () => { expect(inputToPrintQrCodeVisual(itemA)).toEqual('<qr-code data="reference" margin=0 modulesize=3></qr-code>') })
-it('itemToPrintBarcode B', () => { expect(inputToPrintQrCodeVisual({ ...itemA, barcode: '', reference: '  ' })).toEqual('<div class="bg-red-700 text-white">No reference or barcode</div>') })
-it('itemToPrintBarcode C', () => { expect(inputToPrintQrCodeVisual({ ...itemA, barcode: '  ', reference: '' })).toEqual('<div class="bg-red-700 text-white">No reference or barcode</div>') })
-it('itemToPrintBarcode D', () => { expect(inputToPrintQrCodeVisual({ ...itemA, reference: '' })).toEqual('<qr-code data="barcode" margin=0 modulesize=3></qr-code>') })
-it('itemToPrintBarcode E', () => { expect(inputToPrintQrCodeVisual({ ...itemA, barcode: '' })).toEqual('<qr-code data="reference" margin=0 modulesize=3></qr-code>') })
+it('itemToPrintData location A', () => { expect(itemToPrintData({ ...itemA, box: 'A', drawer: '4' }).location).toEqual('A4') })
+it('itemToPrintData location B', () => { expect(itemToPrintData({ ...itemA, box: 'A', drawer: '' }).location).toEqual('A') })
+it('itemToPrintData location C', () => { expect(itemToPrintData({ ...itemA, box: '', drawer: '4' }).location).toEqual('location') })
+it('itemToPrintData location D', () => { expect(itemToPrintData({ ...itemA, box: '', drawer: '' }).location).toEqual('location') })
+it('itemToPrintData location E', () => { expect(itemToPrintData({ ...itemA, box: 'A', drawer: '4', location: 'Salon' }).location).toEqual('A4') })
+it('itemToPrintData location F', () => { expect(itemToPrintData({ ...itemA, box: 'A', drawer: '', location: 'Salon' }).location).toEqual('A') })
+it('itemToPrintData location G', () => { expect(itemToPrintData({ ...itemA, box: '', drawer: '4', location: 'Salon' }).location).toEqual('Salon') })
+it('itemToPrintData location H', () => { expect(itemToPrintData(itemA).location).toEqual('B2') })
+it('itemToPrintData location I', () => { expect(itemToPrintData({ ...itemA, box: '', drawer: '', location: '' }).location).toEqual('') })
+it('itemToPrintData location J', () => { expect(itemToPrintData(itemB).location).toEqual('') })
 
-it('itemToPrintLocation A', () => { expect(itemToPrintLocation({ ...itemA, box: 'A', drawer: '4' })).toEqual('A4') })
-it('itemToPrintLocation B', () => { expect(itemToPrintLocation({ ...itemA, box: 'A', drawer: '' })).toEqual('A') })
-it('itemToPrintLocation C', () => { expect(itemToPrintLocation({ ...itemA, box: '', drawer: '4' })).toEqual('location') })
-it('itemToPrintLocation D', () => { expect(itemToPrintLocation({ ...itemA, box: '', drawer: '' })).toEqual('location') })
-it('itemToPrintLocation E', () => { expect(itemToPrintLocation({ ...itemA, box: 'A', drawer: '4', location: 'Salon' })).toEqual('A4') })
-it('itemToPrintLocation F', () => { expect(itemToPrintLocation({ ...itemA, box: 'A', drawer: '', location: 'Salon' })).toEqual('A') })
-it('itemToPrintLocation G', () => { expect(itemToPrintLocation({ ...itemA, box: '', drawer: '4', location: 'Salon' })).toEqual('Salon') })
-it('itemToPrintLocation H', () => { expect(itemToPrintLocation(itemA)).toEqual('B2') })
-it('itemToPrintLocation I', () => { expect(itemToPrintLocation({ ...itemA, box: '', drawer: '', location: '' })).toEqual('') })
-it('itemToPrintLocation J', () => { expect(itemToPrintLocation(itemB)).toEqual('') })
-
-it('itemToPrintData A', () => { expect(inputToPrintData(itemA)).toEqual({ location: 'B2', qrCodeValue: 'reference', qrCodeVisual: '<qr-code data="reference" margin=0 modulesize=3></qr-code>', text: 'name brand details' }) })
-
+it('itemToPrintData A', () => { expect(itemToPrintData(itemA)).toMatchSnapshot() })
+it('itemToPrintData B', () => { expect(itemToPrintData(itemB)).toMatchSnapshot() })

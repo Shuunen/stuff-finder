@@ -35,7 +35,7 @@ export function AppSpeedDial () {
         <div className="absolute bottom-0 right-0 z-10 h-screen w-screen bg-black/30" data-component="speed-dial-backdrop" onClick={() => toggleOpen('click on div backdrop')} />
       </Fade>
       <Zoom in={isVisible}>
-        <div className="fixed bottom-10 right-10 z-20" data-component="speed-dial">
+        <div className="fixed bottom-10 right-10 z-20 print:hidden" data-component="speed-dial">
           {/* @ts-expect-error typings issue */}
           <SpeedDial ariaLabel='Actions' icon={<SpeedDialIcon />} onClick={() => toggleOpen('click on dial')} onMouseEnter={() => { if (!scout.isMobile) { logger.debug('open cause mouse enter'); setOpen(true) } }} onMouseLeave={() => { if (!scout.isMobile) { logger.debug('close cause mouse leave'); setOpen(false) } }} open={isOpen}>
             {/* @ts-expect-error typings issue */}

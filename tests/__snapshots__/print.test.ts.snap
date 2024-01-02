@@ -1,0 +1,17 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`itemToPrintData A 1`] = `
+{
+  "location": "B2",
+  "text": "name brand details",
+  "value": "reference",
+}
+`;
+
+exports[`itemToPrintData B 1`] = `
+{
+  "location": "",
+  "text": "name brand details",
+  "value": "barcode",
+}
+`;

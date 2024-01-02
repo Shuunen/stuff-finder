@@ -68,13 +68,14 @@ export function getCommonListsFromItems (items: Item[]) {
   return list
 }
 
-export function fakeItem (name: string) {
-  return {
+export function fakeItem (data: Partial<Item> = {}) {
+  const item: Item = {
     ...emptyItem,
-    id: slugify(name),
-    name,
-    photo: [{ ...emptyItemPhoto, url: `https://picsum.photos/seed/${name}/200/200` }],
-  } satisfies Item
+    ...data,
+  }
+  item.id = item.id || slugify(item.name)
+  item.photo = (item.photo !== undefined && (item.photo.length > 0)) ? item.photo : [{ ...emptyItemPhoto, url: `https://picsum.photos/seed/${item.name}/200/200` }]
+  return item satisfies Item
 }
 
 /* c8 ignore next 10 */

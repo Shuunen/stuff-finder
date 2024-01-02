@@ -1,9 +1,8 @@
 import { clone, div, emit, on } from 'shuutils'
 import type { AppForm } from '../components/form'
 import { emptyItem, emptyItemSuggestions } from '../constants'
-import type { AppFormData, AppFormEditItemChangeEvent, AppFormEditItemSetEvent, AppFormEditItemSuggestionsEvent, AppModalAddItemOpenEvent, AppModalPrintOneOpenEvent, AppSearchItemEvent, FormEditFormData } from '../types/events.types'
+import type { AppFormData, AppFormEditItemChangeEvent, AppFormEditItemSetEvent, AppFormEditItemSuggestionsEvent, AppModalAddItemOpenEvent, AppSearchItemEvent, FormEditFormData } from '../types/events.types'
 import { ItemField, ItemStatus, type ItemSuggestions } from '../types/item.types'
-import type { PrintInputData } from '../types/print.types'
 import type { WrapApiAliExResponse, WrapApiAngboResponse, WrapApiCampoResponse, WrapApiDeyesResponse } from '../types/requests.types'
 import { find, get } from '../utils/browser.utils'
 import { logger } from '../utils/logger.utils'
@@ -18,7 +17,6 @@ class ItemSearch {
   public constructor () {
     on<AppFormEditItemChangeEvent>('app-form--edit-item--change', this.onEditItemFormChange.bind(this))
     on<AppModalAddItemOpenEvent>('app-modal--add-item--open', this.onModalOpen.bind(this))
-    on<AppModalPrintOneOpenEvent>('app-modal--print-one--open', this.setPrinted.bind(this))
     on<AppSearchItemEvent>('app-search-item', this.onSearchItem.bind(this))
   }
 
@@ -95,12 +93,6 @@ class ItemSearch {
     form.setAttribute('close', 'app-modal--add-item--close')
     const content = find.one('.content', modal)
     content.append(form)
-  }
-
-  private setPrinted (data: PrintInputData) {
-    const form = find.one<AppForm>(`app-form[data-id="${data.id ?? ''}"]`)
-    find.one<HTMLInputElement>('input[name="ref-printed"]', form).checked = true
-    form.validateBecause('ref-printed-changed')
   }
 
   private setDefaults () {

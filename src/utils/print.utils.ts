@@ -1,42 +1,35 @@
 /* c8 ignore next */
-import type { PrintInputData } from '../types/print.types'
+import type { Item } from '../types/item.types'
 
 /**
  * Generate a name from an item
- * @param input
+ * @param item
  * @returns the generated name
  */
-export function inputToPrintText (input: PrintInputData) {
-  return [input.name, input.brand, input.details].join(' ').replace(/\s{2,}/gu, ' ').trim()
+function itemToPrintText (item: Item) {
+  return [item.name, item.brand, item.details].join(' ').replace(/\s{2,}/gu, ' ').trim()
 }
 
-export function inputToPrintCode (input: PrintInputData) {
-  const reference = input.reference?.trim() ?? ''
+function itemToPrintCode (item: Item) {
+  const reference = item.reference.trim()
   if (reference.length > 0) return reference
-  const barcode = input.barcode?.trim() ?? ''
+  const barcode = item.barcode.trim()
   if (barcode.length > 0) return barcode
   return ''
 }
 
-export function inputToPrintQrCodeVisual (input: PrintInputData) {
-  const code = inputToPrintCode(input)
-  if (code === '') return '<div class="bg-red-700 text-white">No reference or barcode</div>'
-  return `<qr-code data="${code}" margin=0 modulesize=3></qr-code>`
-}
-
-export function itemToPrintLocation (input: PrintInputData) {
-  const box = (input.box?.trim()[0] ?? '').toUpperCase()
-  if (box.length === 0) return input.location ?? ''
-  const drawer = (input.drawer?.[0] ?? '').toUpperCase()
+function itemToPrintLocation (input: Item) {
+  const box = (input.box.trim()[0] ?? '').toUpperCase()
+  if (box.length === 0) return input.location
+  const drawer = (input.drawer[0] ?? '').toUpperCase()
   return `${box}${drawer}`.trim()
 }
 
-export function inputToPrintData (input: PrintInputData) {
+export function itemToPrintData (item: Item) {
   return ({
-    location: itemToPrintLocation(input),
-    qrCodeValue: inputToPrintCode(input),
-    qrCodeVisual: inputToPrintQrCodeVisual(input),
-    text: inputToPrintText(input),
+    location: itemToPrintLocation(item),
+    text: itemToPrintText(item),
+    value: itemToPrintCode(item),
   })
 }
 

@@ -1,7 +1,6 @@
 import ThemeProvider from '@mui/material/styles/ThemeProvider'
 import { render } from 'preact'
 import { App } from './app.tsx'
-import './assets/barcode.css'
 import './assets/styles.css'
 import './main.to-migrate.ts'
 import { theme } from './utils/theme.utils.ts'

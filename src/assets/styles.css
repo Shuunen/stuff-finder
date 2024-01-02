@@ -85,7 +85,7 @@ h3 {
   -webkit-text-stroke-color: grey;
 }
 
-.flex:not(.gap-3) {
+.flex:not(.gap-3):not(.gap-0) {
   @apply gap-6;
 }
 
@@ -93,7 +93,7 @@ h3 {
   @apply items-center;
 }
 
-.flex:not(.justify-start):not(.justify-between) {
+.flex:not(.justify-start):not(.justify-between):not(.justify-end) {
   @apply justify-center;
 }
 
