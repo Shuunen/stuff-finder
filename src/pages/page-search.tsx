@@ -5,7 +5,7 @@ import { route } from 'preact-router'
 import { useState } from 'preact/hooks'
 import { ellipsis, sanitize } from 'shuutils'
 import { AppItemList } from '../components/app-item-list'
-import { AppPageBottom } from '../components/app-page-bottom'
+import { AppPageCard } from '../components/app-page-card'
 import { fuseOptions } from '../constants'
 import { defaultItems } from '../types/item.types'
 import { logger } from '../utils/logger.utils'
@@ -26,7 +26,6 @@ export function PageSearch ({ input = '', ...properties }: { readonly input?: st
   logger.debug('PageSearch rendering', { input, properties })
   const [items, setItems] = useState(defaultItems)
   const [title, setTitle] = useState('Searching...')
-  setTitle(`Search for “${ellipsis(input, maxNameLength)}”`)
   useSignalEffect(() => {
     logger.debug('PageSearch is mounted')
     const { header, results } = search(input)
@@ -35,11 +34,11 @@ export function PageSearch ({ input = '', ...properties }: { readonly input?: st
   })
 
   return (
-    <div className="flex max-h-full grow flex-col" data-page="search">
-      <h1>Search</h1>
-      <h2>{title}</h2>
-      <AppItemList items={items} />
-      <AppPageBottom icon={SearchIcon} />
-    </div>
+    <AppPageCard cardTitle="Search" icon={SearchIcon} pageCode="search" pageTitle={`Search for “${ellipsis(input, maxNameLength)}”`}>
+      <div className="flex h-5/6 grow flex-col justify-start">
+        <h2>{title}</h2>
+        <AppItemList items={items} />
+      </div>
+    </AppPageCard>
   )
 }

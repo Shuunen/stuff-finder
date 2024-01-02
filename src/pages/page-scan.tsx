@@ -7,8 +7,7 @@ import notFoundException from '@zxing/library/es2015/core/NotFoundException'
 import type Result from '@zxing/library/es2015/core/Result'
 import { route } from 'preact-router'
 import { useRef } from 'preact/hooks'
-import { AppPageBottom } from '../components/app-page-bottom'
-import { setTitle } from '../utils/browser.utils'
+import { AppPageCard } from '../components/app-page-card'
 import { logger } from '../utils/logger.utils'
 import { playSuccessSound } from '../utils/sound.utils'
 import { state } from '../utils/state.utils'
@@ -40,7 +39,6 @@ export function PageScan ({ ...properties }: { readonly [key: string]: unknown }
   logger.debug('PageScan', { properties })
   const videoReference = useRef<HTMLVideoElement>(null)
   const video = signal(videoReference)
-  setTitle('Scan QR Code or Barcode')
 
   useSignalEffect(() => {
     // this run once, when the component is mounted
@@ -52,16 +50,16 @@ export function PageScan ({ ...properties }: { readonly [key: string]: unknown }
   })
 
   return (
-    <div className="flex flex-col" data-page="scan">
-      <h1>Scan code</h1>
-      <h2 className="text-center">Scan a QR Code or a barcode to search for it 👀</h2>
-      <div className="relative flex aspect-video h-44 flex-col overflow-hidden rounded-xl shadow-lg">
-        {/* eslint-disable-next-line react/forbid-component-props */}
-        <Skeleton className="absolute left-0 top-0 h-full w-full" height={176} variant="rounded" />
-        {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
-        <video className="w-full object-cover" ref={videoReference} />
+    <AppPageCard cardTitle="Scan" icon={QrCodeScannerIcon} pageCode="scan" pageTitle="Scan QR Code or Barcode">
+      <div className="flex flex-col">
+        <h2 className="text-center">Scan a QR Code or a barcode to search for it 👀</h2>
+        <div className="relative flex aspect-video h-44 flex-col overflow-hidden rounded-xl shadow-lg">
+          {/* eslint-disable-next-line react/forbid-component-props */}
+          <Skeleton className="absolute left-0 top-0 h-full w-full" height={176} variant="rounded" />
+          {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
+          <video className="w-full object-cover" ref={videoReference} />
+        </div>
       </div>
-      <AppPageBottom icon={QrCodeScannerIcon} />
-    </div>
+    </AppPageCard>
   )
 }

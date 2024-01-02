@@ -95,7 +95,6 @@ export function isVisible (element: Element | HTMLElement | undefined) {
 
 export { scout }
 
-export function setTitle (title: string) {
+export function setPageTitle (title: string) {
   document.title = `${title} - Stuff Finder`
 }
-

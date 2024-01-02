@@ -80,7 +80,9 @@ h2 {
 }
 
 h3 {
-  @apply font-mono font-bold text-gray-500 uppercase;
+  @apply text-5xl md:text-[5rem] relative indent-6 md:indent-8 translate-y-10 md:translate-y-12 z-0 tracking-[1.5rem] md:tracking-[2rem] font-black text-transparent opacity-30 uppercase;
+  -webkit-text-stroke-width: 2px;
+  -webkit-text-stroke-color: grey;
 }
 
 .flex:not(.gap-3) {

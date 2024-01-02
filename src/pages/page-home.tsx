@@ -1,11 +1,11 @@
 /* eslint-disable jsx-a11y/no-autofocus, react/no-unknown-property, react-form-fields/no-only-value-prop */
 import { AppPrompter } from '../components/app-prompter'
-import { setTitle } from '../utils/browser.utils'
+import { setPageTitle } from '../utils/browser.utils'
 import { logger } from '../utils/logger.utils'
 
 export function PageHome ({ ...properties }: { readonly [key: string]: unknown }) {
   logger.debug('PageHome', { properties })
-  setTitle('Home')
+  setPageTitle('Home')
   return (
     <div data-page="home">
       {/* new good code */}
