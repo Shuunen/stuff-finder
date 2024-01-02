@@ -1,5 +1,5 @@
 import { clone, slugify } from 'shuutils'
-import { defaultCommonLists, emptyItem, emptyItemPhoto } from '../constants'
+import { defaultCommonLists, defaultImage, emptyItem, emptyItemPhoto } from '../constants'
 import type { Item } from '../types/item.types'
 import type { AirtableSingleRecordResponse } from '../types/requests.types'
 import { get } from './browser.utils'
@@ -16,7 +16,7 @@ function shouldAddToList (value = '', list: string[] = []) {
 const airtableMaxRequestPerSecond = 5
 
 function itemToImageUrl (item?: Item) {
-  return item?.photo?.[0]?.url ?? '/assets/no-visual.svg'
+  return item?.photo?.[0]?.url ?? defaultImage
 }
 
 function airtableRecordToItem (record: AirtableSingleRecordResponse) {

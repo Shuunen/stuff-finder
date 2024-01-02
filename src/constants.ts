@@ -3,15 +3,15 @@ import { sanitize } from 'shuutils'
 import { ItemField, ItemStatus, type Item, type ItemPhoto } from './types/item.types'
 import type { AppCredentials } from './types/settings.types'
 
-export const defaultImage = 'assets/no-visual.svg'
-
-export interface CommonLists {
+interface CommonLists {
   boxes: string[]
   categories: string[]
   drawers: string[]
   locations: string[]
   statuses: string[]
 }
+
+export const defaultImage = '/assets/no-visual.svg'
 
 export const defaultCommonLists: CommonLists = {
   boxes: [],
