@@ -23,7 +23,7 @@
     "@babel/plugin-syntax-class-properties": "*",
     "@babel/plugin-syntax-decorators": "*",
     "@babel/plugin-syntax-jsx": "*",
-    "@preact/preset-vite": "2.7",
+    "@preact/preset-vite": "2.8",
     "@types/dom-speech-recognition": "0",
     "@types/node": "20",
     "@vitest/coverage-v8": "1.1",
