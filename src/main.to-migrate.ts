@@ -1,18 +1,10 @@
-/* eslint-disable max-lines */
-import Fuse from 'fuse.js'
-import { clone, debounce, emit, fillTemplate, on, sanitize, sleep } from 'shuutils'
-import './components'
-import { delays, fuseOptions, type CommonLists } from './constants'
-import './services/item-search.service'
-import './services/speech.service'
-import type { AppActionEvent, AppCloneItemEvent, AppFormDataValue, AppFormEditItemSaveEvent, AppFormFieldChangeEvent, AppFormSettingsErrorEvent, AppFormSettingsReadyEvent, AppFormSettingsSaveEvent, AppFormSettingsSetEvent, AppImgLoadingErrorEvent, AppModalAddItemCloseEvent, AppModalEditItemCloseEvent, AppModalSearchResultsCloseEvent, AppModalSettingsCloseEvent, AppScanCodeStartEvent, AppSettingsTriggerAnimateEvent, AppSpeechStartEvent, AppStatusEvent, FormEditFormData, FormIdErrorEvent, SearchOrigin, SearchResultsEvent, SearchRetryEvent, SearchStartEvent } from './types/events.types'
+import { clone } from 'shuutils'
 import { ItemField, type Item, type ItemPhoto } from './types/item.types'
 import type { AirtableMultipleRecordResponse, AirtableSingleRecordResponse } from './types/requests.types'
 import type { AppCredentials } from './types/settings.types'
-import { find, get, patch, post, valuesToOptions } from './utils/browser.utils'
-import { airtableRecordToItem, getCommonListsFromItems } from './utils/item.utils'
+import { get, patch, post } from './utils/browser.utils'
+import { airtableRecordToItem } from './utils/item.utils'
 import { logger } from './utils/logger.utils'
-import { getObjectOrSelf } from './utils/objects.utils'
 import { state } from './utils/state.utils'
 import { coolAscii } from './utils/strings.utils'
 
@@ -20,44 +12,16 @@ class App {
 
   private apiUrl = ''
 
-  private lastSearch = ''
-
-  private lastSearchOrigin: SearchOrigin = 'default'
-
-  private fuse!: Fuse<Item>
-
-  private hasCommonListsLoaded = false
-
-  private readonly onImgLoadingError = debounce(this.onImgLoadingErrorSync.bind(this), delays.medium)
-
   public constructor () {
     logger.info('app start')
-    this.setListeners()
     this.checkExistingSettings()
-  }
-
-  private setListeners () {
-    on<AppFormSettingsSaveEvent>('app-form--settings--save', this.onSettingsSave.bind(this))
-    on<AppFormEditItemSaveEvent>('app-form--edit-item--save', this.onEditItem.bind(this))
-    on<SearchStartEvent>('search-start', this.onSearchStart.bind(this))
-    on<SearchRetryEvent>('search-retry', this.onSearchRetry.bind(this))
-    on<AppImgLoadingErrorEvent>('app--img-loading-error', this.onImgLoadingError.bind(this))
-    on<AppCloneItemEvent>('app-clone-item', this.onCloneItem.bind(this))
-    on<AppFormFieldChangeEvent>('app-form--edit-item--reference--change', this.onIdentifierChange.bind(this))
-    on<AppFormFieldChangeEvent>('app-form--edit-item--barcode--change', this.onIdentifierChange.bind(this))
-    document.addEventListener('click', this.onDocumentClick.bind(this))
+    // eslint-disable-next-line @typescript-eslint/unbound-method
+    logger.debug(this.getItemFieldsToPush, this.pushItemLocally, this.pushItemRemotely)
   }
 
   private checkExistingSettings () {
     if (!state.credentials.base) { this.settingsActionRequired(true); return }
     void this.onSettingsSave(state.credentials)
-    on<AppFormSettingsReadyEvent>('app-form--settings--ready', () => emit<AppFormSettingsSetEvent>('app-form--settings--set', state.credentials))
-  }
-
-  private settingsActionRequired (isActionRequired: boolean, errorMessage = '') {
-    emit<AppSettingsTriggerAnimateEvent>('app-settings-trigger--animate', isActionRequired)
-    emit<AppFormSettingsErrorEvent>('app-form--settings--error', errorMessage)
-    emit<AppStatusEvent>('app-status', isActionRequired ? 'settings-required' : 'ready')
   }
 
   private isLoading (isActive: boolean, reason: string) {
@@ -65,53 +29,13 @@ class App {
     state.status = isActive ? 'loading' : 'ready'
   }
 
-  private initFuse (reason: string) {
-    logger.debug('initFuse start, reason ?', reason)
-    this.isLoading(true, 'initFuse starts')
-    this.readCommonLists()
-    if (!this.hasCommonListsLoaded) throw new Error('common lists not loaded')
-    this.fuse = new Fuse(state.items, fuseOptions)
-    this.isLoading(false, 'initFuse ends')
-  }
-
   private parseApiRecords (records: AirtableSingleRecordResponse[]) {
     state.items = records.map(record => airtableRecordToItem(record))
     logger.showLog(`${state.items.length} item(s) loaded ${coolAscii()}`)
-    this.initFuse('parseApiRecords updated this.items')
-  }
-
-  private onSearchStart (event: SearchStartEvent) {
-    const input = event.str.trim()
-    logger.debug('onSearchStart', input)
-    this.lastSearch = input
-    this.lastSearchOrigin = event.origin
-    this.searchItems(input, event.willScrollTop)
-  }
-
-  private searchItems (input: string, willScrollTop = false) {
-    const result = state.items.find(item => item.reference === input || item.barcode === input)
-    const results = result ? [result] : this.fuse.search(sanitize(input)).map(item => item.item)
-    let title = 'No results found'
-    if (results.length > 0) title = results.length === 1 ? 'One result found' : `${results.length} results found`
-    title += ` for “${input}”`
-    const data: SearchResultsEvent = { input, isReference: Boolean(result), results, title, willScrollTop }
-    emit<SearchResultsEvent>('search-results', data)
-  }
-
-  private onSearchRetry () {
-    logger.info('retry and this.lastSearchOrigin', this.lastSearchOrigin)
-    if (this.lastSearchOrigin === 'type') {
-      find.one<HTMLInputElement>('#input-type').focus()
-      return true
-    }
-    if (this.lastSearchOrigin === 'scan') return emit<AppScanCodeStartEvent>('app-scan-code--start')
-    if (this.lastSearchOrigin === 'speech') return emit<AppSpeechStartEvent>('app-speech--start')
-    logger.showError('un-handled search retry case')
-    return false
   }
 
   // eslint-disable-next-line max-statements, complexity, sonarjs/cognitive-complexity
-  private getItemFieldsToPush (data: FormEditFormData) {
+  private getItemFieldsToPush (data: Partial<Item>) {
     const fields: AirtableSingleRecordResponse['fields'] = {}
     if (data.barcode !== undefined && data.barcode.length > 0) fields.barcode = data.barcode
     if (data.box !== undefined && data.box.length > 0) fields.box = data.box
@@ -122,7 +46,7 @@ class App {
     if (data.location !== undefined && data.location.length > 0) fields.location = data.location
     if (data.name !== undefined && data.name.length > 0) fields.name = data.name
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-    if (data.photo !== undefined) fields.photo = [{ url: data.photo } as ItemPhoto] // we don't need the whole object
+    if (data.photo !== undefined) fields.photo = [{ url: data.photo } as unknown as ItemPhoto] // we don't need the whole object
     if (data.price !== undefined) fields.price = data.price
     if (data.reference !== undefined && data.reference.length > 0) fields.reference = data.reference
     if (data.status !== undefined && data.status.length > 0) fields.status = data.status
@@ -151,85 +75,11 @@ class App {
     if (index >= 0) state.items[index] = itemTouched // update existing item
     else if (itemTouched.id) state.items.push(itemTouched) // new item with id
     else logger.showError('cannot add item without id')
-    this.initFuse('pushItemLocally')
   }
 
-  private onDocumentClick (event: MouseEvent) {
-    if (!(event.target instanceof HTMLElement)) return
-    const { target } = event
-    let { action, payload } = target.dataset
-    if (action === undefined) return
-    action = action.trim()
-    payload = payload?.trim()
-    event.stopPropagation()
-    logger.info('clicked :', { action, payload })
-    emit<AppActionEvent>(action, getObjectOrSelf(payload) ?? target)
-  }
-
-  private fillEditItemTemplate (lists: CommonLists) {
-    const template = find.one('template#edit-item')
-    const data: Record<keyof typeof lists, string> = {
-      boxes: valuesToOptions(lists.boxes),
-      categories: valuesToOptions(lists.categories),
-      drawers: valuesToOptions(lists.drawers),
-      locations: valuesToOptions(lists.locations),
-      statuses: valuesToOptions(lists.statuses),
-    }
-    // eslint-disable-next-line no-unsanitized/property
-    template.innerHTML = fillTemplate(template.innerHTML, data)
-  }
-
-  private readCommonLists () {
-    if (this.hasCommonListsLoaded) return
-    if (state.lists.boxes.length <= 1) state.lists = getCommonListsFromItems(state.items)
-    logger.info('common lists', state.lists)
-    this.fillEditItemTemplate(state.lists)
-    this.hasCommonListsLoaded = true
-  }
-
-  private closeModals () {
-    emit<AppModalEditItemCloseEvent>('app-modal--edit-item--close')
-    emit<AppModalAddItemCloseEvent>('app-modal--add-item--close')
-    emit<AppModalSearchResultsCloseEvent>('app-modal--search-results--close')
-  }
-
-  private async onIdentifierChange (value: AppFormDataValue) {
-    logger.info('onIdentifierChange', value)
-    const id = String(value).trim()
-    if (id.length === 0) return
-    const existing = state.items.find(item => (item.reference === id || item.barcode === id))
-    if (!existing) {
-      logger.debug('good, no existing item found with this barcode/reference')
-      return
-    }
-    logger.error('existing item found with this barcode/reference')
-    await sleep(delays.large)
-    emit<FormIdErrorEvent>('app-form--edit-item--error', `Identifier "${id}" already exists, please choose another one`)
-  }
-
-  // eslint-disable-next-line max-statements
-  private async onCloneItem (id: string) {
-    logger.info('onCloneItem', id)
-    emit<AppModalEditItemCloseEvent>('app-modal--edit-item--close')
-    const item = state.items.find(one => one.id === id)
-    if (!item) throw new Error('no item found')
-    logger.info('cloning item', item)
-    await sleep(delays.large)
-    emit('edit-item', { ...item, 'barcode': '', 'id': '', 'ref-printed': false, 'reference': '' })
-    const modal = find.one('.app-modal--edit-item')
-    find.one<HTMLHeadingElement>('.app-header', modal).textContent = 'Add item (clone)'
-    find.one<HTMLElement>('[data-action="app-clone-item"]', modal).style.display = 'none'
-    find.one<HTMLButtonElement>('.app-save', modal).textContent = 'Add'
-    logger.info('modal', modal)
-  }
-
-  private async onImgLoadingErrorSync () {
-    logger.info('search result image loading error, clearing cached items...')
-    state.items = []
-    await this.loadItems()
-    logger.info('redo last search')
-    this.searchItems(this.lastSearch)
-    this.isLoading(false, 'onImgLoadingErrorSync, stop loading after reloading items')
+  private settingsActionRequired (isActionRequired: boolean, errorMessage = '') {
+    logger.info('settingsActionRequired', { errorMessage, isActionRequired })
+    state.status = isActionRequired ? 'settings-required' : 'ready'
   }
 
   private async onSettingsSave (settings: AppCredentials) {
@@ -241,7 +91,6 @@ class App {
       return
     }
     this.settingsActionRequired(false)
-    emit<AppModalSettingsCloseEvent>('app-modal--settings--close')
   }
 
   // eslint-disable-next-line max-statements
@@ -263,7 +112,6 @@ class App {
     const remote = airtableRecordToItem(records[0])
     if (state.items.some(item => item.id === remote.id && item[ItemField.UpdatedOn] === remote[ItemField.UpdatedOn])) {
       logger.showLog('no updates from airtable, cache seems up to date')
-      this.initFuse('loadItems no updates from airtable, this.items updated')
       return true
     }
     while ((offset?.length ?? 0) > 0) {
@@ -280,22 +128,6 @@ class App {
     const url = this.apiUrl + (offset === undefined ? '' : `&offset=${offset}`) + sortByUpdatedFirst
     if (!url.startsWith('https://api.airtable.com/v0/')) throw new Error('invalid api url')
     return await get<AirtableMultipleRecordResponse>(url, false)
-  }
-
-  // eslint-disable-next-line max-statements
-  private async onEditItem (data: FormEditFormData) {
-    const fields = this.getItemFieldsToPush(data)
-    if (Object.keys(fields).length === 0) { logger.showLog('no changes to push'); return false }
-    this.isLoading(true, 'onEditItem starts')
-    const response = await this.pushItemRemotely(fields, data.id)
-    logger.info('onEditItem response', response)
-    this.isLoading(false, 'onEditItem item was pushed')
-    if (response.error) { logger.showError(response.error.message); return false }
-    const item = airtableRecordToItem(response)
-    this.pushItemLocally(item)
-    this.closeModals()
-    document.location.hash = ''
-    return true
   }
 
   private async pushItemRemotely (fields: AirtableSingleRecordResponse['fields'], id?: Item['id']) {

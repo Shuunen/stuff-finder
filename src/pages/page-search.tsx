@@ -28,9 +28,11 @@ export function PageSearch ({ input = '', ...properties }: { readonly input?: st
   const [title, setTitle] = useState('Searching...')
   useSignalEffect(() => {
     logger.debug('PageSearch is mounted')
+    state.status = 'loading'
     const { header, results } = search(input)
     setItems(results)
     setTitle(header)
+    state.status = 'ready'
   })
 
   return (
