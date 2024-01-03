@@ -1,17 +1,12 @@
 import { SnackbarProvider, enqueueSnackbar } from 'notistack'
 import { Router } from 'preact-router'
+import { Suspense } from 'preact/compat'
 import { useState } from 'preact/hooks'
 import { AppLoader } from './components/app-loader'
 import { AppSpeedDial } from './components/app-speed-dial'
 import { PageError } from './pages/page-error'
 import { PageHome } from './pages/page-home'
-import { PageItemAdd } from './pages/page-item-add'
-import { PageItemDetails } from './pages/page-item-details'
-import { PageItemEdit } from './pages/page-item-edit'
-import { PageItemPrint } from './pages/page-item-print'
-import { PageScan } from './pages/page-scan'
-import { PageSearch } from './pages/page-search'
-import { PageSettings } from './pages/page-settings'
+import { RouteItemAdd, RouteItemDetails, RouteItemEdit, RouteItemPrint, RouteScan, RouteSearch, RouteSettings } from './routes'
 import { state, watchState } from './utils/state.utils'
 
 export function App () {
@@ -22,17 +17,19 @@ export function App () {
 
   return (
     <>
-      <Router>
-        <PageHome path="/" />
-        <PageItemAdd path="/item/add" />
-        <PageItemDetails path="/item/details/:id/:context?" />
-        <PageItemEdit path="/item/edit/:id" />
-        <PageItemPrint path="/item/print/:id" />
-        <PageScan path="/scan" />
-        <PageSearch path="/search/:input" />
-        <PageSettings path="/settings" />
-        <PageError code="page-not-found" default />
-      </Router>
+      <Suspense fallback={<AppLoader isLoading />}>
+        <Router>
+          <PageHome path="/" />
+          <RouteItemAdd path="/item/add" />
+          <RouteItemDetails path="/item/details/:id/:context?" />
+          <RouteItemEdit path="/item/edit/:id" />
+          <RouteItemPrint path="/item/print/:id" />
+          <RouteScan path="/scan" />
+          <RouteSearch path="/search/:input" />
+          <RouteSettings path="/settings" />
+          <PageError code="page-not-found" default />
+        </Router>
+      </Suspense>
       <AppSpeedDial />
       <AppLoader isLoading={isLoading} />
       {/* @ts-expect-error typings issue */}

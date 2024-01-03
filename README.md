@@ -14,14 +14,13 @@
 ## Todo
 
 - [ ] nicer colorful identity ([something like this ?](https://www.iconfinder.com/icons/44859/cube_icon))
-- [ ] BrowserMultiFormatReader is responsible for 245KB of the 320KB js build, maybe let user choose qr or [barcode](https://zxing-js.github.io/library/examples/barcode-camera/) to import only 2 specific readers instead of the fat "multi", and import on the fly
+- [ ] BrowserMultiFormatReader is responsible for 245KB of js, try to import only 2 specific readers instead of the fat "multi", and import on the fly
 - [ ] remove old batch print barcode html/js/css
 - [ ] add close confirmation on unsaved add item form modal
 - [ ] detect user in/activity to refresh data
 - [ ] show given/thrown items with a different color/display, also they're no more in box/room
 - [ ] use hash instead of search params in url service
 - [ ] use a visual switch/toggle instead of input type=checkbox name="ref-printed"
-- [ ] re-try to use async route from preact-router
 - [ ] features to recover :
   - [ ] item edit & save
   - [ ] item add & save
@@ -43,6 +42,7 @@
 - 0.5.0 : 12KB html + 22KB css + 330KB js
 - 1.0.0 :  6KB html + 27KB css + 360KB js (migration to vite & preact with old code)
 - 1.1.0 :  6KB html + 27KB css + 445KB js (added mui + mui icons)
+- 1.2.0 :  3KB html + 26KB css + 622KB js (added notistack + preact-router)
 
 Check build stats in details by adding `--metafile=meta.json` to the esbuild command and use a tool like [Bundle Buddy](https://bundle-buddy.com/)
 
