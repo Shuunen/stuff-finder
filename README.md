@@ -15,12 +15,12 @@
 
 - [ ] nicer colorful identity ([something like this ?](https://www.iconfinder.com/icons/44859/cube_icon))
 - [ ] BrowserMultiFormatReader is responsible for 245KB of js, try to import only 2 specific readers instead of the fat "multi", and import on the fly
-- [ ] remove old batch print barcode html/js/css
 - [ ] add close confirmation on unsaved add item form modal
 - [ ] detect user in/activity to refresh data
 - [ ] show given/thrown items with a different color/display, also they're no more in box/room
-- [ ] use hash instead of search params in url service
 - [ ] use a visual switch/toggle instead of input type=checkbox name="ref-printed"
+- [ ] add a "Tuuut" sound when scan is successful (issue #200)
+- [ ] add E2E tests (issue #27 ^^')
 - [ ] features to recover :
   - [ ] item edit & save
   - [ ] item add & save
