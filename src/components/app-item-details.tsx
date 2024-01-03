@@ -13,7 +13,7 @@ export function AppItemDetails ({ item }: { readonly item: Item }) {
       </div>
       <div className="flex flex-col items-start justify-start gap-3 md:w-2/3">
         <h1>{item.name}</h1>
-        <h2>{item.category}</h2>
+        <h2>{item.brand ? `${item.brand} - ` : ''}{item.category}</h2>
         {Boolean(item.details) && <p className="first-letter:uppercase">{item.details}</p>}
         <div className="my-2 flex gap-3">
           {/* eslint-disable-next-line react/forbid-component-props */}
