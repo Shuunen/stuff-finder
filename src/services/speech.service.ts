@@ -65,7 +65,7 @@ class AppSpeech {
     emit<AppStatusEvent>('app-status', status)
     state.status = status
     if (status === 'listening' && !this.isMobile) playInfoSound()
-    else if (status === 'failed') void playErrorSound()
+    else if (status === 'failed') playErrorSound()
     else logger.info('un-handled app status', status)
   }
 

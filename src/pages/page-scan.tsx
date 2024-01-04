@@ -17,7 +17,7 @@ const reader = new BrowserMultiFormatReader()
 function onDecodeSuccess (result: Result) {
   const code = result.getText()
   logger.info('found qr or barcode :', code)
-  void playSuccessSound()
+  playSuccessSound()
   route(`/search/${code}`)
 }
 
