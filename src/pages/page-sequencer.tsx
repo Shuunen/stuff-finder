@@ -19,7 +19,7 @@ import { state } from '../utils/state.utils'
 
 const ranges = {
   toneDelay: { max: 3000, min: 25 },
-  toneValue: { max: 3000, min: 50 },
+  toneValue: { max: 3000, min: 25 },
   waitDelay: { max: 1000, min: 25 },
 }
 
