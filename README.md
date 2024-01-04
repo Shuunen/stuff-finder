@@ -20,7 +20,6 @@
 - [ ] show given/thrown items with a different color/display, also they're no more in box/room
 - [ ] use a visual switch/toggle instead of input type=checkbox name="ref-printed"
 - [ ] add a "Tuuut" sound when scan is successful (issue #200)
-- [ ] add E2E tests (issue #27 ^^')
 - [ ] features to recover :
   - [ ] item edit & save
   - [ ] item add & save

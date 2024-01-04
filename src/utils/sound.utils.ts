@@ -4,7 +4,7 @@ import { logger } from './logger.utils'
 
 const audioContext = new window.AudioContext({ latencyHint: 'interactive' })
 
-function playTone (frequency = 400, seconds = 1) {
+function playTone (frequency = 400, milliseconds = 1000) {
   const oscillator = audioContext.createOscillator()
   const gain = audioContext.createGain()
   oscillator.connect(gain)
@@ -12,24 +12,27 @@ function playTone (frequency = 400, seconds = 1) {
   oscillator.frequency.value = frequency
   gain.connect(audioContext.destination)
   oscillator.start(0)
-  gain.gain.exponentialRampToValueAtTime(0.000_006, audioContext.currentTime + seconds)
+  gain.gain.exponentialRampToValueAtTime(0.000_006, audioContext.currentTime + milliseconds / 1000)
 }
 
-export function playInfoSound () {
-  logger.debug('playing info sound')
-  playTone(400, 0.7)
+type SequenceItem = number | readonly [number, number]
+type Sequence = ReadonlyArray<SequenceItem>
+
+export async function playSequence (sequence: Sequence) {
+  logger.debug('playing sequence', JSON.stringify(sequence))
+  // eslint-disable-next-line no-await-in-loop
+  for (const item of sequence) await (typeof item === 'number' ? sleep(item) : playTone(item[0], item[1]))
 }
 
-export async function playErrorSound () {
-  logger.debug('playing error sound')
-  playTone(200, 0.4)
-  await sleep(100)
-  playTone(100, 0.7)
-}
+export const sequences = {
+  error: [[200, 400], 100, [100, 700]],
+  info: [[400, 700]],
+  success: [[600, 400], 100, [800, 700]],
+} as const
 
-export async function playSuccessSound () {
-  logger.debug('playing success sound')
-  playTone(600, 0.4)
-  await sleep(100)
-  playTone(800, 0.7)
-}
+export function playInfoSound () { logger.debug('playing info sound'); void playSequence(sequences.info) }
+export function playErrorSound () { logger.debug('playing error sound'); void playSequence(sequences.error) }
+export function playSuccessSound () { logger.debug('playing success sound'); void playSequence(sequences.success) }
+
+export type { Sequence }
+
