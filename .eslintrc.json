@@ -12,9 +12,6 @@
     "hardcore/react",
     "hardcore/ts"
   ],
-  "ignorePatterns": [
-    "public/*.js"
-  ],
   "parserOptions": {
     "project": "tsconfig.json"
   },
