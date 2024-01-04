@@ -18,7 +18,7 @@ const AsyncPageItemEdit = lazy<Component>(() => import('./pages/page-item-edit')
 const AsyncPageItemPrint = lazy<Component>(() => import('./pages/page-item-print').then(({ PageItemPrint }) => ({ default: PageItemPrint })))
 const AsyncPageSearch = lazy<Component>(() => import('./pages/page-search').then(({ PageSearch }) => ({ default: PageSearch })))
 const AsyncPageSettings = lazy<Component>(() => import('./pages/page-settings').then(({ PageSettings }) => ({ default: PageSettings })))
-const AsyncPageSoundDesigner = lazy<Component>(() => import('./pages/page-sound-designer').then(({ PageSoundDesigner }) => ({ default: PageSoundDesigner })))
+const AsyncPageSequencer = lazy<Component>(() => import('./pages/page-sequencer').then(({ PageSequencer }) => ({ default: PageSequencer })))
 /* eslint-enable @typescript-eslint/promise-function-async, @typescript-eslint/naming-convention, promise/prefer-await-to-then */
 
 export function App () {
@@ -39,7 +39,7 @@ export function App () {
           <AsyncPageScan path="/scan" />
           <AsyncPageSearch path="/search/:input" />
           <AsyncPageSettings path="/settings" />
-          <AsyncPageSoundDesigner path="/sound-designer" />
+          <AsyncPageSequencer path="/sequencer" />
           <PageError code="page-not-found" default />
         </Router>
       </Suspense>
