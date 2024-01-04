@@ -7,12 +7,14 @@ const audioContext = new window.AudioContext({ latencyHint: 'interactive' })
 function playTone (frequency = 400, milliseconds = 1000) {
   const oscillator = audioContext.createOscillator()
   const gain = audioContext.createGain()
+  gain.gain.value = 0.5 // 50 %
   oscillator.connect(gain)
   oscillator.type = 'sine'
   oscillator.frequency.value = frequency
   gain.connect(audioContext.destination)
   oscillator.start(0)
   gain.gain.exponentialRampToValueAtTime(0.000_006, audioContext.currentTime + milliseconds / 1000)
+  // another way to do : oscillator.stop(audioContext.currentTime + milliseconds / 1000)
 }
 
 type SequenceItemTone = readonly [number, number]
