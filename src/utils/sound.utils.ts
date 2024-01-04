@@ -15,7 +15,9 @@ function playTone (frequency = 400, milliseconds = 1000) {
   gain.gain.exponentialRampToValueAtTime(0.000_006, audioContext.currentTime + milliseconds / 1000)
 }
 
-type SequenceItem = number | readonly [number, number]
+type SequenceItemTone = readonly [number, number]
+type SequenceItemWait = number // eslint-disable-line sonar/redundant-type-aliases
+type SequenceItem = SequenceItemTone | SequenceItemWait
 type Sequence = ReadonlyArray<SequenceItem>
 
 export async function playSequence (sequence: Sequence) {
@@ -34,5 +36,5 @@ export function playInfoSound () { logger.debug('playing info sound'); void play
 export function playErrorSound () { logger.debug('playing error sound'); void playSequence(sequences.error) }
 export function playSuccessSound () { logger.debug('playing success sound'); void playSequence(sequences.success) }
 
-export type { Sequence }
+export type { Sequence, SequenceItem, SequenceItemTone, SequenceItemWait }
 
