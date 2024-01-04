@@ -19,7 +19,6 @@
 - [ ] detect user in/activity to refresh data
 - [ ] show given/thrown items with a different color/display, also they're no more in box/room
 - [ ] use a visual switch/toggle instead of input type=checkbox name="ref-printed"
-- [ ] add a "Tuuut" sound when scan is successful (issue #200)
 - [ ] features to recover :
   - [ ] item edit & save
   - [ ] item add & save
@@ -47,6 +46,7 @@ Check build stats in details by adding `--metafile=meta.json` to the esbuild com
 
 ## Thanks
 
+- [101 Soundboards](https://www.101soundboards.com/sounds/1295599-barcode-scan-beep-09) : for "Barcode Scan Beep 09"
 - [Add icon](https://www.iconfinder.com/icons/1814113/add_more_plus_icon) by Alexander Madyankin & Roman Shamin
 - [Box icon](https://www.iconfinder.com/icons/2123914/app_box_essential_ui_icon) by Just Icon
 - [Dependency-cruiser](https://github.com/sverweij/dependency-cruiser) : handy tool to validate and visualize dependencies

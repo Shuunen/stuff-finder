@@ -36,7 +36,6 @@ export const sequences = {
 
 export function playInfoSound () { logger.debug('playing info sound'); void playSequence(sequences.info) }
 export function playErrorSound () { logger.debug('playing error sound'); void playSequence(sequences.error) }
-export function playSuccessSound () { logger.debug('playing success sound'); void playSequence(sequences.success) }
 
 export type { Sequence, SequenceItem, SequenceItemTone, SequenceItemWait }
 
