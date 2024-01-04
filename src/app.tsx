@@ -1,3 +1,4 @@
+import { useSignalEffect } from '@preact/signals'
 import { SnackbarProvider, enqueueSnackbar } from 'notistack'
 import { Router } from 'preact-router'
 import { Suspense, lazy } from 'preact/compat'
@@ -6,6 +7,7 @@ import { AppLoader } from './components/app-loader'
 import { AppSpeedDial } from './components/app-speed-dial'
 import { PageError } from './pages/page-error'
 import { PageHome } from './pages/page-home'
+import { logger } from './utils/logger.utils'
 import { state, watchState } from './utils/state.utils'
 
 type Component = typeof PageHome
@@ -24,8 +26,10 @@ const AsyncPageSequencer = lazy<Component>(() => import('./pages/page-sequencer'
 export function App () {
 
   const [isLoading, setLoading] = useState(true)
-  watchState('status', () => { setLoading(state.status === 'loading') })
-  watchState('message', () => { if (state.message) enqueueSnackbar(state.message.content, { anchorOrigin: { horizontal: 'center', vertical: 'bottom' }, autoHideDuration: state.message.delay, preventDuplicate: true, variant: state.message.type }) }) // eslint-disable-line @typescript-eslint/naming-convention
+  useSignalEffect(() => {
+    watchState('status', () => { logger.info(`status is now : ${state.status}`); setLoading(state.status === 'loading') })
+    watchState('message', () => { if (state.message) enqueueSnackbar(state.message.content, { anchorOrigin: { horizontal: 'center', vertical: 'bottom' }, autoHideDuration: state.message.delay, preventDuplicate: true, variant: state.message.type }) }) // eslint-disable-line @typescript-eslint/naming-convention
+  })
 
   return (
     <>
