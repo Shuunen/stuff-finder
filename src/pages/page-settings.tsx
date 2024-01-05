@@ -6,8 +6,9 @@ import { useState } from 'preact/hooks'
 import { off, on, readClipboard } from 'shuutils'
 import { AppPageCard } from '../components/app-page-card'
 import { parseClipboard } from '../utils/credentials.utils'
+import { validateForm } from '../utils/forms.utils'
 import { logger } from '../utils/logger.utils'
-import { settingsForm, validateForm, type SettingFormFieldName } from '../utils/settings.utils'
+import { settingsForm } from '../utils/settings.utils'
 import { state } from '../utils/state.utils'
 
 export function PageSettings ({ ...properties }: { readonly [key: string]: unknown }) {
@@ -21,19 +22,21 @@ export function PageSettings ({ ...properties }: { readonly [key: string]: unkno
     event.preventDefault()
     logger.debug('onSubmit', { form })
     state.credentials = {
-      base: form.fields.base.value,
-      table: form.fields.table.value,
-      token: form.fields.token.value,
-      view: form.fields.view.value,
-      wrap: form.fields.wrap.value,
+      base: form.fields.base?.value ?? state.credentials.base,
+      table: form.fields.table?.value ?? state.credentials.table,
+      token: form.fields.token?.value ?? state.credentials.token,
+      view: form.fields.view?.value ?? state.credentials.view,
+      wrap: form.fields.wrap?.value ?? state.credentials.wrap,
     }
     logger.showLog('credentials saved, reloading...', { credentials: state.credentials })
     document.location.reload()
   }
 
-  function updateField (field: SettingFormFieldName, value: string) {
-    logger.debug('updateForm', { field, value })
-    setForm({ ...form, fields: { ...form.fields, [field]: { ...form.fields[field], value } }, isTouched: true })
+  function updateField (field: string, value: string) {
+    logger.debug('updateField', { field, value })
+    const actualField = form.fields[field]
+    if (actualField === undefined) throw new Error(`field "${field}" not found in form`)
+    setForm({ ...form, fields: { ...form.fields, [field]: { ...actualField, value } }, isTouched: true })
   }
 
   async function checkCredentialsInClipboard () { // eslint-disable-line max-statements
@@ -59,8 +62,8 @@ export function PageSettings ({ ...properties }: { readonly [key: string]: unkno
       <div className="flex flex-col">
         <p>Stuff-Finder need credentials to access your Airtable base, data will be saved in your browser local storage.</p>
         <form autoComplete="off" className="grid w-full gap-6 md:grid-cols-2" noValidate onSubmit={onSubmit} spellCheck={false}>
-          {Object.entries(form.fields).map(([field, { isRequired, isValid, label, value }]) => ( // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-            <TextField error={!isValid} id={field} key={field} label={label} onChange={event => updateField(field as SettingFormFieldName, event.target.value)} required={isRequired} value={value} variant="standard" />
+          {Object.entries(form.fields).map(([field, { isRequired, isValid, label, value }]) => (
+            <TextField error={!isValid} id={field} key={field} label={label} onChange={event => updateField(field, event.target.value)} required={isRequired} value={value} variant="standard" />
           ))}
           <div />
           <div className="flex flex-col md:col-span-2">

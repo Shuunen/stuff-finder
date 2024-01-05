@@ -1,8 +1,8 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`validateForm A default form 1`] = `
+exports[`validateForm A default settingsForm is not changed but invalid 1`] = `
 {
-  "errorMessage": "Field view is required",
+  "errorMessage": "Airtable view is required",
   "fields": {
     "base": {
       "isRequired": true,
@@ -45,101 +45,5 @@ exports[`validateForm A default form 1`] = `
   },
   "isTouched": false,
   "isValid": false,
-}
-`;
-
-exports[`validateForm B invalid field value 1`] = `
-{
-  "errorMessage": "Field view is required",
-  "fields": {
-    "base": {
-      "isRequired": true,
-      "isValid": false,
-      "label": "Airtable base",
-      "link": "https://airtable.com/api",
-      "regex": /\\^app\\\\w\\{14\\}\\$/u,
-      "value": "azerty",
-    },
-    "table": {
-      "isRequired": true,
-      "isValid": false,
-      "label": "Airtable table",
-      "regex": /\\^\\[\\\\w-\\]\\+\\$/u,
-      "value": "",
-    },
-    "token": {
-      "isRequired": true,
-      "isValid": false,
-      "label": "Airtable personal access token",
-      "link": "https://airtable.com/create/tokens",
-      "regex": /\\^pat\\[\\\\w\\.\\]\\{50,100\\}\\$/u,
-      "value": "",
-    },
-    "view": {
-      "isRequired": true,
-      "isValid": false,
-      "label": "Airtable view",
-      "regex": /\\^\\[\\\\w-\\]\\+\\$/u,
-      "value": "",
-    },
-    "wrap": {
-      "isRequired": false,
-      "isValid": true,
-      "label": "Wrap api key",
-      "link": "https://wrapapi.com/user/api",
-      "regex": /\\^\\\\w\\{32\\}\\$/u,
-      "value": "",
-    },
-  },
-  "isTouched": false,
-  "isValid": false,
-}
-`;
-
-exports[`validateForm C valid form 1`] = `
-{
-  "errorMessage": "",
-  "fields": {
-    "base": {
-      "isRequired": true,
-      "isValid": true,
-      "label": "Airtable base",
-      "link": "https://airtable.com/api",
-      "regex": /\\^app\\\\w\\{14\\}\\$/u,
-      "value": "app1238479649646a",
-    },
-    "table": {
-      "isRequired": true,
-      "isValid": true,
-      "label": "Airtable table",
-      "regex": /\\^\\[\\\\w-\\]\\+\\$/u,
-      "value": "my-table",
-    },
-    "token": {
-      "isRequired": true,
-      "isValid": true,
-      "label": "Airtable personal access token",
-      "link": "https://airtable.com/create/tokens",
-      "regex": /\\^pat\\[\\\\w\\.\\]\\{50,100\\}\\$/u,
-      "value": "pat12345654987123azdazdzadazdzadaz465465468479649646azd46az465azdazd",
-    },
-    "view": {
-      "isRequired": true,
-      "isValid": true,
-      "label": "Airtable view",
-      "regex": /\\^\\[\\\\w-\\]\\+\\$/u,
-      "value": "my-view",
-    },
-    "wrap": {
-      "isRequired": false,
-      "isValid": true,
-      "label": "Wrap api key",
-      "link": "https://wrapapi.com/user/api",
-      "regex": /\\^\\\\w\\{32\\}\\$/u,
-      "value": "13246874kpohj4987_azdzad13546354",
-    },
-  },
-  "isTouched": false,
-  "isValid": true,
 }
 `;
