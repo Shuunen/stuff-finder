@@ -1,62 +1,71 @@
 import TuneIcon from '@mui/icons-material/Tune'
+import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
+import { useSignalEffect } from '@preact/signals'
 import { useState } from 'preact/hooks'
-import { on, readClipboard } from 'shuutils'
-import { AppButtonNext } from '../components/app-button-next'
+import { off, on, readClipboard } from 'shuutils'
 import { AppPageCard } from '../components/app-page-card'
 import { parseClipboard } from '../utils/credentials.utils'
 import { logger } from '../utils/logger.utils'
+import { settingsForm, validateForm, type SettingFormFieldName } from '../utils/settings.utils'
 import { state } from '../utils/state.utils'
 
-// eslint-disable-next-line max-statements
 export function PageSettings ({ ...properties }: { readonly [key: string]: unknown }) {
   logger.debug('PageSettings', { properties })
-  const [base, setBase] = useState(state.credentials.base)
-  const [isBaseValid, setBaseValidity] = useState(false)
-  const [token, setToken] = useState(state.credentials.token)
-  const [table, setTable] = useState(state.credentials.table)
-  const [view, setView] = useState(state.credentials.view)
-  const [wrap, setWrap] = useState(state.credentials.wrap)
-  const [error, setError] = useState('')
+  const [form, setForm] = useState(settingsForm)
+
+  const { hasChanged, updatedForm } = validateForm(form)
+  if (hasChanged) setForm(updatedForm)
 
   function onSubmit (event: Event) {
     event.preventDefault()
-    logger.debug('onSubmit values', { base, table, token, view, wrap })
-    setBaseValidity(base === '')
-    setError('')
-    if (base === '') setError('Base is required')
-    // save to state.credentials...
+    logger.debug('onSubmit', { form })
+    state.credentials = {
+      base: form.fields.base.value,
+      table: form.fields.table.value,
+      token: form.fields.token.value,
+      view: form.fields.view.value,
+      wrap: form.fields.wrap.value,
+    }
+    logger.showLog('credentials saved, reloading...', { credentials: state.credentials })
+    document.location.reload()
   }
 
-  // eslint-disable-next-line ssr-friendly/no-dom-globals-in-react-fc
-  if (document.body.dataset.focusHandled === undefined) {
-    document.body.dataset.focusHandled = 'true'
-    on('focus', async () => {
-      const credentials = parseClipboard(await readClipboard())
-      if (credentials.base === '') { logger.debug('no credentials found in clipboard'); return }
-      logger.debug('found credentials in clipboard', { credentials })
-      setBase(credentials.base)
-      setToken(credentials.token)
-      setTable(credentials.table)
-      setView(credentials.view)
-      setWrap(credentials.wrap)
-    })
+  function updateField (field: SettingFormFieldName, value: string) {
+    logger.debug('updateForm', { field, value })
+    setForm({ ...form, fields: { ...form.fields, [field]: { ...form.fields[field], value } }, isTouched: true })
   }
+
+  async function checkCredentialsInClipboard () { // eslint-disable-line max-statements
+    logger.debug('checkCredentialsInClipboard')
+    const credentials = parseClipboard(await readClipboard())
+    if (credentials.base === '') { logger.debug('no credentials found in clipboard'); return }
+    logger.showLog('found credentials in clipboard', { credentials })
+    updateField('base', credentials.base)
+    updateField('table', credentials.table)
+    updateField('token', credentials.token)
+    updateField('view', credentials.view)
+    updateField('wrap', credentials.wrap)
+  }
+
+  useSignalEffect(() => {
+    const handler = on('focus', () => { void checkCredentialsInClipboard() }, window)
+    void checkCredentialsInClipboard()
+    return () => { if (handler !== false) off(handler) }
+  })
 
   return (
-    <AppPageCard cardTitle="Edit" icon={TuneIcon} pageCode="settings" pageTitle="Settings">
+    <AppPageCard cardTitle="Settings" icon={TuneIcon} pageCode="settings" pageTitle="Settings">
       <div className="flex flex-col">
-        <h2>Stuff-Finder need credentials to access your Airtable base</h2>
-        <form autoComplete="off" className="grid w-full grid-cols-2 gap-6" noValidate onSubmit={onSubmit} spellCheck={false}>
-          <TextField error={isBaseValid} id="base" label="Airtable base" onChange={event => setBase(event.target.value)} required value={base} variant="standard" />
-          <TextField id="token" label="Airtable token" onChange={event => setToken(event.target.value)} required value={token} variant="standard" />
-          <TextField id="table" label="Airtable table" onChange={event => setTable(event.target.value)} required value={table} variant="standard" />
-          <TextField id="view" label="Airtable view" onChange={event => setView(event.target.value)} required value={view} variant="standard" />
-          <TextField id="wrap" label="Wrap Api key (optional)" onChange={event => setWrap(event.target.value)} value={wrap} variant="standard" />
-          {Boolean(error) && <p className="text-red-500">{error}</p>}
+        <p>Stuff-Finder need credentials to access your Airtable base, data will be saved in your browser local storage.</p>
+        <form autoComplete="off" className="grid w-full gap-6 md:grid-cols-2" noValidate onSubmit={onSubmit} spellCheck={false}>
+          {Object.entries(form.fields).map(([field, { isRequired, isValid, label, value }]) => ( // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+            <TextField error={!isValid} id={field} key={field} label={label} onChange={event => updateField(field as SettingFormFieldName, event.target.value)} required={isRequired} value={value} variant="standard" />
+          ))}
           <div />
-          <div className="col-span-2 mt-4 flex">
-            <AppButtonNext label="Save" type="submit" />
+          <div className="flex flex-col md:col-span-2">
+            {Boolean(form.errorMessage) && <p className="text-red-500">{form.errorMessage}</p>}
+            <Button disabled={!form.isValid || !form.isTouched} type="submit" variant="contained">Save</Button>
           </div>
         </form>
       </div>
