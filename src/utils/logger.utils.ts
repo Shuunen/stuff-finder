@@ -1,6 +1,6 @@
 import { Logger, debounce } from 'shuutils'
-import { state } from './state.utils'
 import { delays } from '../constants'
+import { state } from './state.utils'
 
 /* c8 ignore start */
 class CustomLogger extends Logger {
@@ -10,7 +10,7 @@ class CustomLogger extends Logger {
 
   public showLog (message: string, ...data: readonly unknown[]) {
     this.info(message, ...data)
-    state.message = { content: message, delay: 5000, type: 'info' }
+    state.message = { content: message, delay: 2000, type: 'info' }
   }
 
   public showError (error: unknown, ...data: readonly unknown[]) {
