@@ -15,7 +15,7 @@ export function AppForm<FormType extends Form> ({ initialForm, onChange = voidFu
   const [form, setForm] = useState(initialForm)
 
   const { hasChanged, updatedForm } = validateForm(form)
-  if (hasChanged) setForm(updatedForm)
+  if (hasChanged) { onChange(updatedForm); setForm(updatedForm) }
 
   function onFormSubmit (event: Event) {
     event.preventDefault()
