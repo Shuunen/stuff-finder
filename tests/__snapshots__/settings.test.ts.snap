@@ -1,8 +1,61 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`validateForm A default settingsForm is not changed & not valid 1`] = `
+{
+  "errorMessage": "Airtable base is required",
+  "fields": {
+    "base": {
+      "isRequired": true,
+      "isValid": false,
+      "label": "Airtable base",
+      "link": "https://airtable.com/api",
+      "order": 10,
+      "regex": /\\^app\\\\w\\{14\\}\\$/u,
+      "value": "",
+    },
+    "table": {
+      "isRequired": true,
+      "isValid": false,
+      "label": "Airtable table",
+      "order": 30,
+      "regex": /\\^\\[\\\\w-\\]\\{3,100\\}\\$/u,
+      "value": "",
+    },
+    "token": {
+      "isRequired": true,
+      "isValid": false,
+      "label": "Airtable personal access token",
+      "link": "https://airtable.com/create/tokens",
+      "order": 20,
+      "regex": /\\^pat\\[\\\\w\\.\\]\\{50,100\\}\\$/u,
+      "value": "",
+    },
+    "view": {
+      "isRequired": true,
+      "isValid": false,
+      "label": "Airtable view",
+      "order": 40,
+      "regex": /\\^\\[\\\\w-\\]\\{3,100\\}\\$/u,
+      "value": "",
+    },
+    "wrap": {
+      "isRequired": false,
+      "isValid": true,
+      "label": "Wrap api key",
+      "link": "https://wrapapi.com/user/api",
+      "order": 50,
+      "regex": /\\^\\\\w\\{32\\}\\$/u,
+      "value": "",
+    },
+  },
+  "isTouched": false,
+  "isValid": false,
+}
+`;
+
 exports[`validateForm A default settingsForm is not changed but invalid 1`] = `
 {
-  "errorMessage": "Airtable view is required",
+  "errorMessage": "Airtable base is required",
   "fields": {
     "base": {
       "isRequired": true,

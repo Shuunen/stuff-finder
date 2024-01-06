@@ -39,8 +39,8 @@ dependencies:
     specifier: '4.1'
     version: 4.1.2(preact@10.19.3)
   shuutils:
-    specifier: '7.4'
-    version: 7.4.0
+    specifier: '7.7'
+    version: 7.7.0
   webcomponent-qr-code:
     specifier: '1.2'
     version: 1.2.0
@@ -8525,8 +8525,8 @@ packages:
       tiny-glob: 0.2.9
     dev: true
 
-  /shuutils@7.4.0:
-    resolution: {integrity: sha512-XlNT7tPeVUgB4S2YNDJYLRXdcvN7r182b/TP46J2w17xzoA33rKH17296N6gaZJiYYS4/WLqfNZl/wghCh1LNw==}
+  /shuutils@7.7.0:
+    resolution: {integrity: sha512-ultnGsBIR9zdHCFDxqWO9YlUBfDa5+oXSi5Gi45o5ne30cNunDzr6sKRntks73VhmgBXQG4IhlbxW3t3cIpfLw==}
     hasBin: true
     dependencies:
       tiny-glob: 0.2.9

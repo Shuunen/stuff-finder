@@ -2,7 +2,7 @@
 
 exports[`validateForm A invalid field value 1`] = `
 {
-  "errorMessage": "Airtable view is required",
+  "errorMessage": "Airtable base is invalid, it should match /^app\\w{14}$/u",
   "fields": {
     "base": {
       "isRequired": true,
