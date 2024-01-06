@@ -117,3 +117,5 @@ export const fuseOptions: IFuseOptions<Item> = {
   }], // this is not generic ^^"
   threshold: 0.35, // 0 is perfect match
 }
+
+export function voidFunction () { /* empty */ }
