@@ -4,12 +4,12 @@ import TextField from '@mui/material/TextField'
 import { useSignalEffect } from '@preact/signals'
 import { useState } from 'preact/hooks'
 import { off, on, parseJson, readClipboard } from 'shuutils'
-import { delays } from '../constants'
+import { delays, voidFunction } from '../constants'
 import { validateForm, type Form } from '../utils/forms.utils'
 import { logger } from '../utils/logger.utils'
 import { state } from '../utils/state.utils'
 
-export function AppForm ({ initialForm, onSubmit }: { readonly initialForm: Form; readonly onSubmit: (form: Form) => void }) {
+export function AppForm<FormType extends Form> ({ initialForm, onChange = voidFunction, onSubmit }: { readonly initialForm: FormType; readonly onChange?: (form: FormType) => void; readonly onSubmit: (form: FormType) => void }) {
 
   const [form, setForm] = useState(initialForm)
 

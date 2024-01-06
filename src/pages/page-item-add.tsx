@@ -7,6 +7,7 @@ import { logger } from '../utils/logger.utils'
 
 export function PageItemAdd ({ ...properties }: { readonly [key: string]: unknown }) {
   logger.debug('PageItemAdd', { properties })
+  type Form = typeof itemForm
 
   function onSubmit (form: Form) {
     logger.debug('onSubmit', { form })

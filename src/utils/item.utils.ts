@@ -91,7 +91,7 @@ export async function onItemImageError (event: Event) {
   image.classList.remove('animate-pulse')
 }
 
-export const itemForm: Form = {
+export const itemForm = {
   columns: 3,
   errorMessage: '',
   fields: {
@@ -111,7 +111,7 @@ export const itemForm: Form = {
   },
   isTouched: false,
   isValid: false,
-}
+} satisfies Form
 
 export { addOrUpdateItems, airtableRecordToItem, getOneItem, itemToImageUrl }
 

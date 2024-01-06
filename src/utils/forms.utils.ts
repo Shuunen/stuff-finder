@@ -18,7 +18,7 @@ export type Form = {
   isValid: boolean
 }
 
-export function validateForm (form: Form) {
+export function validateForm<FormType extends Form> (form: FormType) {
   let errorMessage = ''
   const updatedFields = Object.entries(form.fields).reduce((accumulator, [field, { isRequired, label, regex, value }]) => { // eslint-disable-line unicorn/no-array-reduce
     const isValid = (!isRequired && value === '') || regex.test(value)
@@ -26,9 +26,9 @@ export function validateForm (form: Form) {
     return { ...accumulator, [field]: { ...form.fields[field], isValid } }
   }, {})
   const isFormValid = errorMessage === ''
-  const updatedForm: Form = { ...form, errorMessage, fields: updatedFields, isTouched: form.isTouched, isValid: isFormValid } satisfies Form
+  const updatedForm: FormType = { ...form, errorMessage, fields: updatedFields, isTouched: form.isTouched, isValid: isFormValid } satisfies FormType
   const hasChanged = objectSum(form) !== objectSum(updatedForm)
-  return { hasChanged, updatedForm } satisfies { hasChanged: boolean; updatedForm: Form }
+  return { hasChanged, updatedForm }
 }
 
 export function createField ({ isRequired = false, isValid = false, label = '', link, maxLength = 100, minLength = 3, order = 0, regex, value = '' }: Partial<FormField> & { maxLength?: number; minLength?: number }) {

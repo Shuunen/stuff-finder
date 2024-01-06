@@ -1,7 +1,7 @@
 import { createField, type Form } from './forms.utils'
 import { state } from './state.utils'
 
-export const settingsForm: Form = {
+export const settingsForm = {
   errorMessage: 'Airtable view is required', // this is the default error message when the form is empty
   fields: {
     base: createField({ isRequired: true, label: 'Airtable base', link: 'https://airtable.com/api', order: 10, regex: /^app\w{14}$/u, value: state.credentials.base }),
