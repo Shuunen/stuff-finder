@@ -53,7 +53,7 @@ export function AppForm<FormType extends Form> ({ initialForm, onChange = voidFu
     <form autoComplete="off" className={`grid w-full ${form.columns === 3 ? 'gap-3 md:grid-cols-3' : 'gap-6 md:grid-cols-2'}`} noValidate onSubmit={onFormSubmit} spellCheck={false}>{/* eslint-disable-line @typescript-eslint/no-magic-numbers */}
       {Object.entries(form.fields).map(([field, { isRequired, isValid, label, order, value }]) => (
         <div className="grid w-full" key={field} style={{ order }}>
-          <TextField error={!isValid} id={field} label={label} onChange={event => { void updateField(field, event.target.value) }} required={isRequired} value={value} variant="standard" />
+          <TextField error={Boolean(form.isTouched) && !isValid} id={field} label={label} onChange={event => { void updateField(field, event.target.value) }} required={isRequired} value={value} variant="standard" />
         </div>
       ))}
       <div className="order-last flex flex-col md:col-span-full">
