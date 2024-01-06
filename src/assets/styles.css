@@ -1,7 +1,6 @@
 @import "tailwindcss/base";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
-@import "./app-form.css";
 @import "./mui-chip.css";
 
 html {
@@ -18,57 +17,6 @@ html {
 
 ::-webkit-scrollbar-thumb {
   @apply bg-purple-600 border border-current;
-}
-
-.app-hide {
-  @apply transition-opacity duration-300 opacity-0;
-}
-
-a[data-action], button[data-action] {
-  @apply font-medium transition-colors border-b-2 border-current whitespace-nowrap hover:text-purple-700;
-}
-
-img[src=""] {
-  @apply hidden;
-}
-
-details summary {
-  @apply transition-colors cursor-pointer hover:text-purple-700;
-}
-
-details summary::marker {
-  @apply text-purple-400 transition-colors;
-}
-
-details:hover summary::marker {
-  @apply text-purple-600;
-}
-
-details small {
-  @apply block mt-2 ml-4;
-}
-
-app-form[name="search-item"] img + div > a.clear {
-  @apply hidden;
-}
-
-app-form[name="search-item"] img[src^="http"] + div > a.clear {
-  @apply block;
-}
-
-.result-status:not(.result-status--acheté) {
-  @apply grayscale opacity-70;
-  transform: skewX(-1deg) scaleX(0.99);
-}
-
-/* global styles after mui (recent) */
-
-nav a {
-  @apply font-medium transition-colors border-b-2 border-transparent whitespace-nowrap hover:text-purple-700;
-}
-
-nav a.active {
-  @apply text-purple-700 border-purple-700;
 }
 
 h1 {
@@ -96,4 +44,3 @@ h3 {
 .flex:not(.justify-start):not(.justify-between):not(.justify-end) {
   @apply justify-center;
 }
-
