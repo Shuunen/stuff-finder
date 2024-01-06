@@ -57,7 +57,7 @@ export function AppForm<FormType extends Form> ({ initialForm, onChange = voidFu
         </div>
       ))}
       <div className="order-last flex flex-col md:col-span-full">
-        {Boolean(form.errorMessage) && <p className="text-red-500">{form.errorMessage}</p>}
+        {Boolean(form.errorMessage) && Boolean(form.isTouched) && <p className="text-red-500">{form.errorMessage}</p>}
         <Button disabled={!form.isValid || !form.isTouched} type="submit" variant="contained">Save</Button>
       </div>
     </form>
