@@ -3,6 +3,7 @@ import { defaultCommonLists, defaultImage, emptyItem, emptyItemPhoto } from '../
 import type { Item } from '../types/item.types'
 import type { AirtableSingleRecordResponse } from '../types/requests.types'
 import { get } from './browser.utils'
+import { createField, type Form } from './forms.utils'
 import { logger } from './logger.utils'
 import { sortListsEntries } from './objects.utils'
 import { state } from './state.utils'
@@ -88,6 +89,28 @@ export async function onItemImageError (event: Event) {
   if (id === undefined) throw new Error('no id found on image')
   await updateItemImage(id, image)
   image.classList.remove('animate-pulse')
+}
+
+export const itemForm: Form = {
+  columns: 3,
+  errorMessage: '',
+  fields: {
+    barcode: createField({ label: 'Barcode', maxLength: 30, order: 50 }),
+    box: createField({ label: 'Box', order: 80 }),
+    brand: createField({ label: 'Brand', order: 20 }),
+    category: createField({ label: 'Category', order: 100 }),
+    details: createField({ label: 'Details', maxLength: 200, order: 30 }),
+    drawer: createField({ label: 'Drawer', order: 90 }),
+    location: createField({ label: 'Location', order: 70 }),
+    name: createField({ isRequired: true, label: 'Name', order: 10 }),
+    photo: createField({ label: 'Photo', order: 120 }),
+    price: createField({ label: 'Price', order: 110 }),
+    printed: createField({ label: 'Printed', order: 130 }),
+    reference: createField({ isRequired: true, label: 'Reference', maxLength: 30, order: 40 }),
+    status: createField({ label: 'Status', order: 60 }),
+  },
+  isTouched: false,
+  isValid: false,
 }
 
 export { addOrUpdateItems, airtableRecordToItem, getOneItem, itemToImageUrl }
