@@ -47,12 +47,13 @@ export function AppForm ({ initialForm, onSubmit }: { readonly initialForm: Form
   })
 
   return (
-    <form autoComplete="off" className="grid w-full gap-6 md:grid-cols-2" noValidate onSubmit={onFormSubmit} spellCheck={false}>
-      {Object.entries(form.fields).map(([field, { isRequired, isValid, label, value }]) => (
-        <TextField error={!isValid} id={field} key={field} label={label} onChange={event => updateField(field, event.target.value)} required={isRequired} value={value} variant="standard" />
+    <form autoComplete="off" className={`grid w-full ${form.columns === 3 ? 'gap-3 md:grid-cols-3' : 'gap-6 md:grid-cols-2'}`} noValidate onSubmit={onFormSubmit} spellCheck={false}>{/* eslint-disable-line @typescript-eslint/no-magic-numbers */}
+      {Object.entries(form.fields).map(([field, { isRequired, isValid, label, order, value }]) => (
+        <div className="grid w-full" key={field} style={{ order }}>
+          <TextField error={!isValid} id={field} label={label} onChange={event => updateField(field, event.target.value)} required={isRequired} value={value} variant="standard" />
+        </div>
       ))}
-      <div />
-      <div className="flex flex-col md:col-span-2">
+      <div className="order-last flex flex-col md:col-span-full">
         {Boolean(form.errorMessage) && <p className="text-red-500">{form.errorMessage}</p>}
         <Button disabled={!form.isValid || !form.isTouched} type="submit" variant="contained">Save</Button>
       </div>

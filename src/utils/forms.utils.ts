@@ -5,11 +5,13 @@ type FormField = {
   isValid: boolean
   label: string
   link?: string
+  order: number
   regex: RegExp
   value: string
 }
 
 export type Form = {
+  columns?: number
   errorMessage: string
   fields: Record<string, FormField>
   isTouched: boolean
@@ -24,7 +26,14 @@ export function validateForm (form: Form) {
     return { ...accumulator, [field]: { ...form.fields[field], isValid } }
   }, {})
   const isFormValid = errorMessage === ''
-  const updatedForm: Form = { errorMessage, fields: updatedFields, isTouched: form.isTouched, isValid: isFormValid } satisfies Form
+  const updatedForm: Form = { ...form, errorMessage, fields: updatedFields, isTouched: form.isTouched, isValid: isFormValid } satisfies Form
   const hasChanged = objectSum(form) !== objectSum(updatedForm)
   return { hasChanged, updatedForm } satisfies { hasChanged: boolean; updatedForm: Form }
+}
+
+export function createField ({ isRequired = false, isValid = false, label = '', link, maxLength = 100, minLength = 3, order = 0, regex, value = '' }: Partial<FormField> & { maxLength?: number; minLength?: number }) {
+  const finalRegex = regex ?? new RegExp(`^[\\w-]{${minLength},${maxLength}}$`, 'u') // eslint-disable-line security/detect-non-literal-regexp
+  const field: FormField = { isRequired, isValid, label, order, regex: finalRegex, value }
+  if (link !== undefined) field.link = link
+  return field
 }
