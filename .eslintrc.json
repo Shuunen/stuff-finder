@@ -159,7 +159,6 @@
       "consistent-as-needed"
     ],
     "quotes": "off",
-    "react-perf/jsx-no-new-function-as-prop": "off",
     "regexp/require-unicode-sets-regexp": "off",
     "require-atomic-updates": [
       "error",
