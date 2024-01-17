@@ -1,12 +1,16 @@
 import { useSignalEffect } from '@preact/signals'
 import { SnackbarProvider, enqueueSnackbar } from 'notistack'
-import { Router } from 'preact-router'
+import { Router, route } from 'preact-router'
 import { Suspense, lazy } from 'preact/compat'
 import { useState } from 'preact/hooks'
+import { debounce } from 'shuutils'
 import { AppLoader } from './components/app-loader'
 import { AppSpeedDial } from './components/app-speed-dial'
+import { delays } from './constants'
 import { PageError } from './pages/page-error'
 import { PageHome } from './pages/page-home'
+import type { AppMessage } from './types/messages.types'
+import type { AppStatus } from './types/status.types'
 import { logger } from './utils/logger.utils'
 import { state, watchState } from './utils/state.utils'
 
@@ -23,13 +27,35 @@ const AsyncPageSettings = lazy<Component>(() => import('./pages/page-settings').
 const AsyncPageSequencer = lazy<Component>(() => import('./pages/page-sequencer').then(({ PageSequencer }) => ({ default: PageSequencer })))
 /* eslint-enable @typescript-eslint/promise-function-async, @typescript-eslint/naming-convention, promise/prefer-await-to-then */
 
+
+function onMessage (message: AppMessage) {
+  enqueueSnackbar(message.content, {
+    anchorOrigin: { horizontal: 'center', vertical: 'bottom' },
+    autoHideDuration: message.delay,
+    preventDuplicate: true, // eslint-disable-line @typescript-eslint/naming-convention
+    variant: message.type,
+  })
+}
+
 export function App () {
 
   const [isLoading, setLoading] = useState(true)
+
+  function onStatusChangeSync (status: AppStatus) {
+    logger.info(`status is now : ${status}`)
+    setLoading(status === 'loading')
+    if (status === 'settings-required') route('/settings')
+    if (status === 'ready' && document.location.pathname.includes('/settings')) route('/')
+  }
+
+  const onStatusChange = debounce(onStatusChangeSync, delays.large)
+
   useSignalEffect(() => {
-    watchState('status', () => { logger.info(`status is now : ${state.status}`); setLoading(state.status === 'loading') })
-    watchState('message', () => { if (state.message) enqueueSnackbar(state.message.content, { anchorOrigin: { horizontal: 'center', vertical: 'bottom' }, autoHideDuration: state.message.delay, preventDuplicate: true, variant: state.message.type }) }) // eslint-disable-line @typescript-eslint/naming-convention
+    watchState('status', () => { void onStatusChange(state.status) })
+    watchState('message', () => { if (state.message) onMessage(state.message) })
   })
+
+  void onStatusChange(state.status)
 
   return (
     <>
