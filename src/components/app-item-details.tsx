@@ -24,7 +24,7 @@ export function AppItemDetails ({ item }: { readonly item: Item }) {
           {Boolean(item.reference) && <AppItemDetailsChip label={item.reference} tooltip="Reference" />}
           {Boolean(item.barcode) && <AppItemDetailsChip label={item.barcode} tooltip="Barcode" />}
           {Boolean(item.status) && <AppItemDetailsChip label={item.status} tooltip="Status" />}
-          {Boolean(item['ref-printed']) && <AppItemDetailsChip color="primary" icon={PrintIcon} label={item['ref-printed'] ? 'printed' : 'not printed'} link={`/item/print/${item.id}`} tooltip="Print it !" />}
+          <AppItemDetailsChip color="primary" icon={PrintIcon} label={item['ref-printed'] ? 'printed' : 'not printed'} link={`/item/print/${item.id}`} tooltip="Print it !" />
         </div>
       </div>
     </>
