@@ -1,19 +1,35 @@
 {
-  "name": "Stuff Finder",
-  "short_name": "Stuff Finder",
+  "$schema": "https://json.schemastore.org/web-manifest-combined.json",
+  "background_color": "#ffffff",
+  "display": "standalone",
   "icons": [
     {
-      "src": "/assets/android-chrome-192x192.png",
+      "purpose": "any",
       "sizes": "192x192",
+      "src": "/assets/android-chrome-192x192.png",
       "type": "image/png"
     },
     {
-      "src": "/assets/android-chrome-512x512.png",
+      "purpose": "maskable",
+      "sizes": "192x192",
+      "src": "/assets/maskable-192x192.png",
+      "type": "image/png"
+    },
+    {
       "sizes": "512x512",
+      "src": "/assets/android-chrome-512x512.png",
+      "type": "image/png"
+    },
+    {
+      "purpose": "maskable",
+      "sizes": "512x512",
+      "src": "/assets/maskable-512x512.png",
       "type": "image/png"
     }
   ],
-  "theme_color": "#209CEE",
-  "background_color": "#ffffff",
-  "display": "standalone"
+  "name": "Stuff Finder",
+  "prefer_related_applications": false,
+  "short_name": "Stuff Finder",
+  "start_url": "/",
+  "theme_color": "#209CEE"
 }
