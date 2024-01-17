@@ -34,7 +34,7 @@ export function AppSpeedDial () {
   return (
     <>
       <Fade in={isOpen}>
-        <div className="absolute bottom-0 right-0 z-10 h-screen w-screen bg-black/30" data-component="speed-dial-backdrop" onClick={toggleOpen('click on div backdrop')} />
+        <div className="absolute bottom-0 right-0 z-10 size-full bg-black/30" data-component="speed-dial-backdrop" onClick={toggleOpen('click on div backdrop')} />
       </Fade>
       <Zoom in={isVisible}>
         <div className="fixed bottom-10 right-10 z-20 print:hidden" data-component="speed-dial">

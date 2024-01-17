@@ -58,7 +58,7 @@ export function PageScan ({ ...properties }: { readonly [key: string]: unknown }
       <div className="flex flex-col">
         <h2 className="text-center">Scan a QR Code or a barcode to search for it 👀</h2>
         <div className="relative flex aspect-video h-44 flex-col overflow-hidden rounded-xl shadow-lg">{/* eslint-disable-next-line react/forbid-component-props */}
-          <Skeleton className="absolute left-0 top-0 h-full w-full" height={176} variant="rounded" />{/* eslint-disable-next-line jsx-a11y/media-has-caption */}
+          <Skeleton className="absolute left-0 top-0 size-full" height={176} variant="rounded" />{/* eslint-disable-next-line jsx-a11y/media-has-caption */}
           <video className="w-full object-cover" ref={videoReference} />{/* eslint-disable-next-line jsx-a11y/media-has-caption */}
           <audio preload="auto" ref={soundReference} src="/assets/barcode-scan-beep-09.mp3" />
         </div>

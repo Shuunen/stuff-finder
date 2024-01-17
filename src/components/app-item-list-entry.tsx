@@ -10,7 +10,7 @@ export function AppItemListEntry ({ item }: { readonly item: Item }) {
       {/* @ts-expect-error typings issue */}
       <ListItemButton component="a" href={`/item/details/${item.id}`}>
         {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
-        <img alt={item.name} className="mr-4 h-12 w-12 rounded-full" data-id={item.id} onError={onItemImageError} src={itemToImageUrl(item)} />
+        <img alt={item.name} className="mr-4 size-12 rounded-full" data-id={item.id} onError={onItemImageError} src={itemToImageUrl(item)} />
         <ListItemText primary={item.name} />
       </ListItemButton>
     </ListItem>

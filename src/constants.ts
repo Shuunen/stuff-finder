@@ -98,7 +98,7 @@ export const fuseOptions: IFuseOptions<Item> = {
   getFn: (object: Item, path: string[] | string) => {
     const value = Fuse.config.getFn(object, path)
     if (Array.isArray(value)) return value.map((element: string) => sanitize(element))
-    if (typeof value === 'string') return sanitize(value)
+    if (typeof value === 'string') return [sanitize(value)]
     return value
   },
   ignoreLocation: true, // eslint-disable-line @typescript-eslint/naming-convention
