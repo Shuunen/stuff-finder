@@ -51,9 +51,9 @@ export function PageItemPrint ({ ...properties }: { readonly [key: string]: unkn
   return (
     <>
       <AppPageCard cardTitle="Print" icon={Print} pageCode="item-print" pageTitle={`${item.name} - Print`}>
-        <div className="grid md:grid-cols-2">
+        <div className="flex flex-col md:flex-row">
           {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
-          <img alt={item.name} className="size-full max-h-64 object-contain pb-4 md:max-h-none md:p-12" data-id={item.id} onError={onItemImageError} src={itemToImageUrl(item)} />
+          <img alt={item.name} className="mx-auto max-h-64 object-contain" data-id={item.id} onError={onItemImageError} src={itemToImageUrl(item)} />
           <div className="flex flex-col gap-3 text-center md:items-start md:text-left">
             <h1 className="w-full">{item.name}</h1>
             <p>You are about to print a barcode with the following value : {value}</p>
