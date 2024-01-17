@@ -32,15 +32,23 @@ export function AppForm<FormType extends Form> ({ initialForm, onChange = voidFu
 
   const updateField = debounce(updateFieldSync, delays.large)
 
+  // eslint-disable-next-line max-statements
   async function checkDataInClipboard () {
-    logger.debug('checkDataInClipboard')
-    const { error, value: data } = parseJson(await readClipboard())
+    const clip = await readClipboard()
+    const clean = clip.replace(/""/gu, '"').replace('"{', '{').replace('}"', '}') // need to replace double double quotes with single double quotes (Google Sheet issue -.-'''''')
+    logger.debug('checkDataInClipboard', { clean, clip })
+    const { error, value: data } = parseJson(clean)
     if (error !== '' || typeof data !== 'object' || data === null) { logger.debug('error or data not an object', { data, error }); return }
     logger.debug('found object', { data })
+    const futureForm = structuredClone(form)
+    futureForm.isTouched = true
     Object.entries(data).forEach(([key, value]) => {
       if (typeof key !== 'string' || typeof value !== 'string' || key === '' || value === '') return
-      if (form.fields[key] !== undefined) void updateField(key, value, true)
+      const actualField = futureForm.fields[key]
+      if (actualField === undefined) return
+      futureForm.fields[key] = { ...actualField, value }
     })
+    setForm(futureForm)
   }
 
   useSignalEffect(() => {
