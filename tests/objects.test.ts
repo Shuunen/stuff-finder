@@ -1,4 +1,4 @@
-import { expect, it } from 'vitest' // eslint-disable-line @typescript-eslint/no-shadow
+import { expect, it } from 'vitest'  
 import { sortListsEntries } from '../src/utils/objects.utils'
 
 it('sortListsEntries A', () => { expect(sortListsEntries({ key: ['c', 'a', 'b'] })).toEqual({ key: ['', 'a', 'b', 'c'] }) })

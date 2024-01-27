@@ -1,4 +1,4 @@
-import { expect, it } from 'vitest' // eslint-disable-line @typescript-eslint/no-shadow
+import { expect, it } from 'vitest'  
 import { coolAscii } from '../src/utils/strings.utils'
 
 it('coolAscii A', () => {

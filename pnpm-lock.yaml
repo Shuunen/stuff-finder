@@ -79,9 +79,6 @@ devDependencies:
   eslint-config-hardcore:
     specifier: '45.2'
     version: 45.2.0(@babel/core@7.23.7)(@babel/eslint-parser@7.23.3)(eslint@8.56.0)(prettier@3.2.4)(typescript@5.3.3)(vue-eslint-parser@9.4.0)
-  eslint-config-preact:
-    specifier: '1.3'
-    version: 1.3.0(eslint@8.56.0)(typescript@5.3.3)
   eslint-plugin-tailwindcss:
     specifier: '3'
     version: 3.14.0(tailwindcss@3.4.1)
@@ -4481,28 +4478,6 @@ packages:
       - vue-eslint-parser
     dev: true
 
-  /eslint-config-preact@1.3.0(eslint@8.56.0)(typescript@5.3.3):
-    resolution: {integrity: sha512-yHYXg5qNzEJd3D/30AmsIW0W8MuY858KpApXp7xxBF08IYUljSKCOqMx+dVucXHQnAm7+11wOnMkgVHIBAechw==}
-    peerDependencies:
-      eslint: 6.x || 7.x || 8.x
-    dependencies:
-      '@babel/core': 7.23.7
-      '@babel/eslint-parser': 7.23.3(@babel/core@7.23.7)(eslint@8.56.0)
-      '@babel/plugin-syntax-class-properties': 7.12.13(@babel/core@7.23.7)
-      '@babel/plugin-syntax-decorators': 7.23.3(@babel/core@7.23.7)
-      '@babel/plugin-syntax-jsx': 7.23.3(@babel/core@7.23.7)
-      eslint: 8.56.0
-      eslint-plugin-compat: 4.2.0(eslint@8.56.0)
-      eslint-plugin-jest: 25.7.0(eslint@8.56.0)(typescript@5.3.3)
-      eslint-plugin-react: 7.33.2(eslint@8.56.0)
-      eslint-plugin-react-hooks: 4.6.0(eslint@8.56.0)
-    transitivePeerDependencies:
-      - '@typescript-eslint/eslint-plugin'
-      - jest
-      - supports-color
-      - typescript
-    dev: true
-
   /eslint-config-prettier@8.10.0(eslint@8.56.0):
     resolution: {integrity: sha512-SM8AMJdeQqRYT9O9zguiruQZaN7+z+E4eAP9oiLNGKMtomwaB1E9dcgUD6ZAn/eQAb52USbvezbiljfZUhbJcg==}
     hasBin: true
@@ -4789,26 +4764,6 @@ packages:
       eslint: '>=0.8.0'
     dependencies:
       eslint: 8.56.0
-    dev: true
-
-  /eslint-plugin-jest@25.7.0(eslint@8.56.0)(typescript@5.3.3):
-    resolution: {integrity: sha512-PWLUEXeeF7C9QGKqvdSbzLOiLTx+bno7/HC9eefePfEb257QFHg7ye3dh80AZVkaa/RQsBB1Q/ORQvg2X7F0NQ==}
-    engines: {node: ^12.13.0 || ^14.15.0 || >=16.0.0}
-    peerDependencies:
-      '@typescript-eslint/eslint-plugin': ^4.0.0 || ^5.0.0
-      eslint: ^6.0.0 || ^7.0.0 || ^8.0.0
-      jest: '*'
-    peerDependenciesMeta:
-      '@typescript-eslint/eslint-plugin':
-        optional: true
-      jest:
-        optional: true
-    dependencies:
-      '@typescript-eslint/experimental-utils': 5.62.0(eslint@8.56.0)(typescript@5.3.3)
-      eslint: 8.56.0
-    transitivePeerDependencies:
-      - supports-color
-      - typescript
     dev: true
 
   /eslint-plugin-jest@27.6.3(@typescript-eslint/eslint-plugin@6.19.0)(eslint@8.56.0)(typescript@5.3.3):

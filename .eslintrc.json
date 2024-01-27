@@ -5,7 +5,6 @@
     "node": false
   },
   "extends": [
-    "preact",
     "plugin:tailwindcss/recommended",
     "plugin:unicorn/all",
     "hardcore",

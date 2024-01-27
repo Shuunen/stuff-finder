@@ -1,5 +1,4 @@
-
-import { expect, it } from 'vitest' // eslint-disable-line @typescript-eslint/no-shadow
+import { expect, it } from 'vitest'
 import { validateForm } from '../src/utils/forms.utils'
 import { settingsForm } from '../src/utils/settings.utils'
 

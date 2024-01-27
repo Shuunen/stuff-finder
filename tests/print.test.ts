@@ -1,4 +1,4 @@
-import { expect, it } from 'vitest' // eslint-disable-line @typescript-eslint/no-shadow
+import { expect, it } from 'vitest'  
 import { emptyItemPhoto } from '../src/constants'
 import { fakeItem } from '../src/utils/item.utils'
 import { itemToPrintData } from '../src/utils/print.utils'

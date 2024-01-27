@@ -1,4 +1,4 @@
-import { expect, it } from 'vitest' // eslint-disable-line @typescript-eslint/no-shadow
+import { expect, it } from 'vitest'  
 import { cleanSuggestions } from '../src/utils/suggestions.utils'
 
 it('cleanSuggestions A', () => { expect(cleanSuggestions({ keyA: ['a', 'b', 'c'], keyB: ['a', 'b', 'c'] })).toEqual({ keyA: ['a', 'b', 'c'], keyB: ['a', 'b', 'c'] }) })
