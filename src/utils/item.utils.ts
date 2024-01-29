@@ -30,8 +30,9 @@ function airtableRecordToItem (record: AirtableSingleRecordResponse) {
 async function getOneItem (id: Item['id'], getMethod = get) {
   const { base, table } = state.credentials
   const url = `${airtableBaseUrl}/${base}/${table}/${id}`
-  const response = airtableSingleRecordResponseParser(await getMethod(url))
-  return airtableRecordToItem(response)
+  const result = airtableSingleRecordResponseParser(await getMethod(url))
+  if (!result.success) throw new Error(`failed to fetch item, issue(s) : ${result.error.message}`)
+  return airtableRecordToItem(result.output)
 }
 
 async function getAllItems (offset?: string, getMethod = get) {
@@ -39,7 +40,9 @@ async function getAllItems (offset?: string, getMethod = get) {
   const sortByUpdatedFirst = '&sort%5B0%5D%5Bfield%5D=updated-on&sort%5B0%5D%5Bdirection%5D=desc'
   const { base, table, view } = state.credentials
   const url = `${airtableBaseUrl}/${base}/${table}?view=${view}${offsetParameter}${sortByUpdatedFirst}`
-  return airtableMultipleRecordResponseParser(await getMethod(url))
+  const result = airtableMultipleRecordResponseParser(await getMethod(url))
+  if (!result.success) throw new Error(`failed to fetch item, issue(s) : ${result.error.message}`)
+  return result.output
 }
 
 function addOrUpdateItems (input: Item[], itemTouched: Item) {

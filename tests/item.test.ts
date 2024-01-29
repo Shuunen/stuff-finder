@@ -7,6 +7,7 @@ import type { AirtableSingleRecordResponse, Item, ItemPhoto, ItemStatus } from '
 import { state } from '../src/utils/state.utils'
 
 const recordA: AirtableSingleRecordResponse = {
+  createdTime: '',
   fields: {
     'barcode': '',
     'box': 'box A',
@@ -74,7 +75,7 @@ it('fakeItem A', () => {
   expect(item.photo).toHaveLength(1)
 })
 
-it('getOneItem A', async () => {
+it('getOneItem A success result', async () => {
   let urlCalled = ''
   let nbCalls = 0
   const item = await getOneItem('rec123', async (url) => {
@@ -86,6 +87,13 @@ it('getOneItem A', async () => {
   expect(item).toMatchSnapshot()
   expect(urlCalled).toMatchInlineSnapshot('"https://api.airtable.com/v0///rec123"') // `${airtableBaseUrl}/${base}/${table}/${id}` but base and table are empty
   expect(nbCalls).toBe(1)
+})
+
+it('getOneItem B error result', () => {
+  void expect(async () => await getOneItem('rec123', async () => {
+    await sleep(1)
+    return { id: 'malformed-item' }
+  })).rejects.toThrowErrorMatchingInlineSnapshot('[Error: failed to fetch item, issue(s) : Invalid type]')
 })
 
 it('getAllItems A no offset', async () => {
@@ -116,6 +124,12 @@ it('getAllItems B with offset', async () => {
   expect(nbCalls).toBe(1)
 })
 
+it('getAllItems C error result', () => {
+  void expect(async () => await getAllItems(undefined, async () => {
+    await sleep(1)
+    return { records: [{}] }
+  })).rejects.toThrowErrorMatchingInlineSnapshot('[Error: failed to fetch item, issue(s) : Invalid type]')
+})
 
 it('addOrUpdateItems A update existing item', () => {
   const itemsInput = [itemA, itemB]

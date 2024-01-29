@@ -24,6 +24,7 @@ exports[`getAllItems A no offset 1`] = `
 {
   "records": [
     {
+      "createdTime": "",
       "fields": {
         "barcode": "",
         "box": "box A",
@@ -48,6 +49,7 @@ exports[`getAllItems B with offset 1`] = `
 {
   "records": [
     {
+      "createdTime": "",
       "fields": {
         "barcode": "",
         "box": "box A",
@@ -107,7 +109,7 @@ exports[`getCommonListsFromItems A 1`] = `
 }
 `;
 
-exports[`getOneItem A 1`] = `
+exports[`getOneItem A success result 1`] = `
 {
   "barcode": "",
   "box": "box A",
@@ -129,21 +131,46 @@ exports[`getOneItem A 1`] = `
 
 exports[`pushItemRemotely A itemAA updated && no id should post 1`] = `
 {
-  "fields": {
-    "barcode": "",
-    "box": "box A",
-    "brand": "",
-    "category": "category A",
-    "details": "",
-    "drawer": "",
-    "location": "location A",
-    "name": "item A",
-    "ref-printed": false,
-    "reference": "",
-    "status": "acheté",
-    "updated-on": "",
+  "data": {
+    "createdTime": "",
+    "fields": {
+      "barcode": "",
+      "box": "box A",
+      "brand": "",
+      "category": "category A",
+      "details": "",
+      "drawer": "",
+      "location": "location A",
+      "name": "item A",
+      "ref-printed": false,
+      "reference": "",
+      "status": "acheté",
+      "updated-on": "",
+    },
+    "id": "rec123",
   },
-  "id": "rec123",
+  "error": undefined,
+  "issues": undefined,
+  "output": {
+    "createdTime": "",
+    "fields": {
+      "barcode": "",
+      "box": "box A",
+      "brand": "",
+      "category": "category A",
+      "details": "",
+      "drawer": "",
+      "location": "location A",
+      "name": "item A",
+      "ref-printed": false,
+      "reference": "",
+      "status": "acheté",
+      "updated-on": "",
+    },
+    "id": "rec123",
+  },
+  "success": true,
+  "typed": true,
 }
 `;
 
@@ -157,21 +184,46 @@ exports[`pushItemRemotely A itemAA updated && no id should post 3`] = `
 
 exports[`pushItemRemotely B itemAA updated && his id should patch 1`] = `
 {
-  "fields": {
-    "barcode": "",
-    "box": "box A",
-    "brand": "",
-    "category": "category A",
-    "details": "",
-    "drawer": "",
-    "location": "location A",
-    "name": "item A",
-    "ref-printed": false,
-    "reference": "",
-    "status": "acheté",
-    "updated-on": "",
+  "data": {
+    "createdTime": "",
+    "fields": {
+      "barcode": "",
+      "box": "box A",
+      "brand": "",
+      "category": "category A",
+      "details": "",
+      "drawer": "",
+      "location": "location A",
+      "name": "item A",
+      "ref-printed": false,
+      "reference": "",
+      "status": "acheté",
+      "updated-on": "",
+    },
+    "id": "rec123",
   },
-  "id": "rec123",
+  "error": undefined,
+  "issues": undefined,
+  "output": {
+    "createdTime": "",
+    "fields": {
+      "barcode": "",
+      "box": "box A",
+      "brand": "",
+      "category": "category A",
+      "details": "",
+      "drawer": "",
+      "location": "location A",
+      "name": "item A",
+      "ref-printed": false,
+      "reference": "",
+      "status": "acheté",
+      "updated-on": "",
+    },
+    "id": "rec123",
+  },
+  "success": true,
+  "typed": true,
 }
 `;
 

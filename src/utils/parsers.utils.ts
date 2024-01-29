@@ -1,4 +1,4 @@
-import { array, boolean, literal, merge, number, object, optional, parse, string, union, type Output } from 'valibot'
+import { array, boolean, fallback, literal, merge, number, object, optional, safeParse, string, union, type Output } from 'valibot'
 
 const itemStatusSchema = union([
   literal('acheté'),
@@ -43,19 +43,19 @@ const itemPhotoSchema = object({
 type ItemPhoto = Output<typeof itemPhotoSchema>
 
 const itemBaseSchema = object({
-  'barcode': string(),
-  'box': string(),
-  'brand': string(),
-  'category': string(),
-  'details': string(),
-  'drawer': string(),
-  'location': string(),
-  'name': string(),
+  'barcode': fallback(string(), ''),
+  'box': fallback(string(), ''),
+  'brand': fallback(string(), ''),
+  'category': fallback(string(), ''),
+  'details': fallback(string(), ''),
+  'drawer': fallback(string(), ''),
+  'location': fallback(string(), ''),
+  'name': fallback(string(), ''),
   'photo': optional(array(itemPhotoSchema)),
   'price': optional(number()),
-  'ref-printed': boolean(),
-  'reference': string(),
-  'status': itemStatusSchema,
+  'ref-printed': fallback(boolean(), false),
+  'reference': fallback(string(), ''),
+  'status': fallback(itemStatusSchema, 'acheté'),
   'updated-on': string(),
 })
 
@@ -70,6 +70,7 @@ type Item = Output<typeof itemSchema>
 type ItemField = keyof Item
 
 const airtableSingleRecordResponseSchema = object({
+  createdTime: string(),
   error: optional(airtableErrorSchema),
   fields: itemBaseSchema,
   id: idSchema,
@@ -86,11 +87,11 @@ const airtableMultipleRecordResponseSchema = object({
 type ItemSuggestions = Record<keyof Item, string[]>
 
 export function airtableSingleRecordResponseParser (data: unknown) {
-  return parse(airtableSingleRecordResponseSchema, data)
+  return safeParse(airtableSingleRecordResponseSchema, data)
 }
 
 export function airtableMultipleRecordResponseParser (data: unknown) {
-  return parse(airtableMultipleRecordResponseSchema, data)
+  return safeParse(airtableMultipleRecordResponseSchema, data)
 }
 
 export type { AirtableSingleRecordResponse, Item, ItemField, ItemPhoto, ItemStatus, ItemSuggestions }

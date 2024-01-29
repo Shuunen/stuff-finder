@@ -46,13 +46,8 @@ class App {
   private async loadItems () {
     this.isLoading(true, 'loadItems starts')
     logger.showLog(`using ${state.items.length} cached items`)
-    let response = await getAllItems()
-    if (response.error) {
-      this.isLoading(false, 'loadItems failed to fetch api')
-      logger.showError(`airtable fetch failed with error : ${response.error.message}`)
-      return false
-    }
-    let { offset, records } = response
+    let result = await getAllItems()
+    let { offset, records } = result
     if (!records[0] || records.length === 0) {
       this.isLoading(false, 'loadItems failed to fetch api')
       logger.showError('airtable fetch returned no records')
@@ -64,9 +59,9 @@ class App {
       return true
     }
     while ((offset?.length ?? 0) > 0) {
-      response = await getAllItems(offset) // eslint-disable-line no-await-in-loop
-      offset = response.offset // eslint-disable-line unicorn/consistent-destructuring
-      records = [...records, ...response.records] // eslint-disable-line unicorn/consistent-destructuring
+      result = await getAllItems(offset) // eslint-disable-line no-await-in-loop
+      offset = result.offset // eslint-disable-line unicorn/consistent-destructuring
+      records = [...records, ...result.records] // eslint-disable-line unicorn/consistent-destructuring
     }
     this.parseApiRecords(records)
     return true
