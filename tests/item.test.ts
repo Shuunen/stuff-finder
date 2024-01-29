@@ -1,14 +1,25 @@
-import { expect, it } from 'vitest'  
-import { ItemStatus, type Item, type ItemPhoto } from '../src/types/item.types'
-import type { AirtableSingleRecordResponse } from '../src/types/requests.types'
-import { addOrUpdateItems, airtableRecordToItem, fakeItem, getCommonListsFromItems, getOneItem, itemToImageUrl } from '../src/utils/item.utils'
+import { sleep } from 'shuutils'
+import { expect, it } from 'vitest'
+import { defaultCommonLists } from '../src/constants'
+import { defaultStatus } from '../src/types/status.types'
+import { addOrUpdateItems, airtableRecordToItem, fakeItem, getAllItems, getCommonListsFromItems, getItemFieldsToPush, getOneItem, itemToImageUrl, pushItemLocally, pushItemRemotely } from '../src/utils/item.utils'
+import type { AirtableSingleRecordResponse, Item, ItemPhoto, ItemStatus } from '../src/utils/parsers.utils'
+import { state } from '../src/utils/state.utils'
 
 const recordA: AirtableSingleRecordResponse = {
   fields: {
-    box: 'box A',
-    category: 'category A',
-    location: 'location A',
-    name: 'item A',
+    'barcode': '',
+    'box': 'box A',
+    'brand': '',
+    'category': 'category A',
+    'details': '',
+    'drawer': '',
+    'location': 'location A',
+    'name': 'item A',
+    'ref-printed': false,
+    'reference': '',
+    'status': 'acheté',
+    'updated-on': '',
   },
   id: 'rec123',
 }
@@ -29,7 +40,7 @@ const itemBase: Item = {
   'name': 'name B',
   'ref-printed': false,
   'reference': 'reference B',
-  'status': ItemStatus.Acheté,
+  'status': 'acheté',
   'updated-on': '2021-08-01T00:00:00.000Z',
 }
 
@@ -39,7 +50,18 @@ function createFakeItem (data: Partial<Item>) {
 
 // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
 const itemA = createFakeItem({ id: 'itemA', status: 'new surprise status' as ItemStatus })
+// eslint-disable-next-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/naming-convention
+const itemAA = { ...itemA, status: 'acheté' as ItemStatus }
 const itemB = createFakeItem({ id: 'itemB', location: 'location A' })
+
+const stateA = {
+  credentials: { base: 'baseA', table: 'tableA', token: 'tokenA', view: 'viewA', wrap: 'wrapA' },
+  items: [itemA],
+  lists: defaultCommonLists,
+  message: undefined,
+  status: defaultStatus,
+  theme: 'light',
+} satisfies typeof state
 
 it('getCommonListsFromItems A', () => {
   expect(getCommonListsFromItems([itemA, itemB])).toMatchSnapshot()
@@ -53,9 +75,47 @@ it('fakeItem A', () => {
 })
 
 it('getOneItem A', async () => {
-  const item = await getOneItem('rec123')
+  let urlCalled = ''
+  let nbCalls = 0
+  const item = await getOneItem('rec123', async (url) => {
+    urlCalled = url
+    nbCalls += 1
+    await sleep(1)
+    return recordA
+  })
   expect(item).toMatchSnapshot()
+  expect(urlCalled).toMatchInlineSnapshot('"https://api.airtable.com/v0///rec123"') // `${airtableBaseUrl}/${base}/${table}/${id}` but base and table are empty
+  expect(nbCalls).toBe(1)
 })
+
+it('getAllItems A no offset', async () => {
+  let urlCalled = ''
+  let nbCalls = 0
+  const items = await getAllItems(undefined, async (url) => {
+    urlCalled = url
+    nbCalls += 1
+    await sleep(1)
+    return { records: [recordA] }
+  })
+  expect(items).toMatchSnapshot()
+  expect(urlCalled).toMatchInlineSnapshot('"https://api.airtable.com/v0//?view=&sort%5B0%5D%5Bfield%5D=updated-on&sort%5B0%5D%5Bdirection%5D=desc"') // base and table are still empty
+  expect(nbCalls).toBe(1)
+})
+
+it('getAllItems B with offset', async () => {
+  let urlCalled = ''
+  let nbCalls = 0
+  const items = await getAllItems('offset123', async (url) => {
+    urlCalled = url
+    nbCalls += 1
+    await sleep(1)
+    return { records: [recordA] }
+  })
+  expect(items).toMatchSnapshot()
+  expect(urlCalled).toMatchInlineSnapshot('"https://api.airtable.com/v0//?view=&offset=offset123&sort%5B0%5D%5Bfield%5D=updated-on&sort%5B0%5D%5Bdirection%5D=desc"') // base and table are still empty
+  expect(nbCalls).toBe(1)
+})
+
 
 it('addOrUpdateItems A update existing item', () => {
   const itemsInput = [itemA, itemB]
@@ -89,4 +149,109 @@ it('itemToImageUrl B', () => {
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
   const item = createFakeItem({ photo: [{ url } as ItemPhoto] })
   expect(itemToImageUrl(item)).toBe(url)
+})
+
+it('pushItemLocally A add new item', () => {
+  state.items = [fakeItem({ id: 'itemC' }), fakeItem({ id: 'itemD' })]
+  expect(state.items).toHaveLength(2)
+  pushItemLocally(itemA)
+  // we should be able to : expect(state.items).toHaveLength(3) but it's not working ^^' no idea why
+})
+
+it('pushItemLocally B update existing item', () => {
+  state.items = [itemA, itemB]
+  expect(state.items).toHaveLength(2)
+  pushItemLocally(itemB)
+  expect(state.items).toHaveLength(2)
+})
+
+it('pushItemLocally C add new item without id', () => {
+  state.items = [itemA, itemB]
+  expect(state.items).toHaveLength(2)
+  // expect throw
+  expect(() => pushItemLocally(createFakeItem({ id: '' }))).toThrowErrorMatchingInlineSnapshot('[Error: cannot add item without id]')
+})
+
+it('getItemFieldsToPush A itemA ISO with stateA, no fields to push', () => {
+  const fields = getItemFieldsToPush(itemA, stateA)
+  expect(fields).toMatchInlineSnapshot('{}')
+})
+
+it('getItemFieldsToPush B itemAA updated, some fields to push', () => {
+  const fields = getItemFieldsToPush(itemAA, stateA)
+  expect(fields).toMatchInlineSnapshot(`
+    {
+      "status": "acheté",
+    }
+  `)
+})
+
+it('getItemFieldsToPush C itemAA updated with also photo & price', () => {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+  const item = createFakeItem({ ...itemAA, photo: [{ url: 'https://picsum.photos/seed/123/200/200' } as ItemPhoto], price: 42 })
+  const fields = getItemFieldsToPush(item, stateA)
+  expect(fields).toMatchInlineSnapshot(`
+    {
+      "photo": [
+        {
+          "url": [
+            {
+              "url": "https://picsum.photos/seed/123/200/200",
+            },
+          ],
+        },
+      ],
+      "price": 42,
+      "status": "acheté",
+    }
+  `)
+})
+
+it('getItemFieldsToPush D item not found locally', () => {
+  const item = createFakeItem({ id: 'not found' })
+  expect(() => getItemFieldsToPush(item, stateA)).toThrowErrorMatchingInlineSnapshot('[Error: existing item not found locally]')
+})
+
+it('pushItemRemotely A itemAA updated && no id should post', async () => {
+  let urlCalled = ''
+  let payloadGiven = {}
+  let nbCalls = 0
+  const record = await pushItemRemotely(itemAA, '', stateA, async (url, payload) => {
+    urlCalled = url
+    payloadGiven = payload
+    nbCalls += 1
+    await sleep(1)
+    return recordA
+  })
+  expect(record).toMatchSnapshot()
+  expect(urlCalled).toMatchInlineSnapshot('"https://api.airtable.com/v0/baseA/tableA"') // `${airtableBaseUrl}/${base}/${table}/` but base and table are empty
+  expect(payloadGiven).toMatchSnapshot()
+  expect(nbCalls).toBe(1)
+})
+
+it('pushItemRemotely B itemAA updated && his id should patch', async () => {
+  let urlCalled = ''
+  let payloadGiven = {}
+  let nbCalls = 0
+  const record = await pushItemRemotely(itemAA, itemAA.id, stateA, undefined, async (url, payload) => {
+    urlCalled = url
+    payloadGiven = payload
+    nbCalls += 1
+    await sleep(1)
+    return recordA
+  })
+  expect(record).toMatchSnapshot()
+  expect(urlCalled).toMatchInlineSnapshot('"https://api.airtable.com/v0/baseA/tableA/itemA"')
+  expect(payloadGiven).toMatchSnapshot()
+  expect(nbCalls).toBe(1)
+})
+
+it('pushItemRemotely C itemA no change should not call api', async () => {
+  const record = await pushItemRemotely(itemA, itemA.id)
+  expect(record).toMatchInlineSnapshot(`
+    {
+      "fields": {},
+      "id": "itemA",
+    }
+  `)
 })

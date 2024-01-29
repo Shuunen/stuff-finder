@@ -91,9 +91,7 @@
       "multi"
     ],
     "eslint-comments/no-use": "off",
-    "etc/no-const-enum": "off",
     "etc/no-deprecated": "off",
-    "etc/no-enum": "off",
     "etc/no-internal": "off",
     "etc/no-misused-generics": "off",
     "etc/prefer-interface": "off",

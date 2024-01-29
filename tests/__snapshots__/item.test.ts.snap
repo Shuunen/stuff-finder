@@ -20,6 +20,54 @@ exports[`airtableRecordToItem A 1`] = `
 }
 `;
 
+exports[`getAllItems A no offset 1`] = `
+{
+  "records": [
+    {
+      "fields": {
+        "barcode": "",
+        "box": "box A",
+        "brand": "",
+        "category": "category A",
+        "details": "",
+        "drawer": "",
+        "location": "location A",
+        "name": "item A",
+        "ref-printed": false,
+        "reference": "",
+        "status": "acheté",
+        "updated-on": "",
+      },
+      "id": "rec123",
+    },
+  ],
+}
+`;
+
+exports[`getAllItems B with offset 1`] = `
+{
+  "records": [
+    {
+      "fields": {
+        "barcode": "",
+        "box": "box A",
+        "brand": "",
+        "category": "category A",
+        "details": "",
+        "drawer": "",
+        "location": "location A",
+        "name": "item A",
+        "ref-printed": false,
+        "reference": "",
+        "status": "acheté",
+        "updated-on": "",
+      },
+      "id": "rec123",
+    },
+  ],
+}
+`;
+
 exports[`getCommonListsFromItems A 1`] = `
 {
   "boxes": [
@@ -62,19 +110,75 @@ exports[`getCommonListsFromItems A 1`] = `
 exports[`getOneItem A 1`] = `
 {
   "barcode": "",
-  "box": "",
+  "box": "box A",
   "brand": "",
-  "category": "",
+  "category": "category A",
   "details": "",
   "drawer": "",
-  "id": undefined,
-  "location": "",
-  "name": "",
+  "id": "rec123",
+  "location": "location A",
+  "name": "item A",
   "photo": [],
   "price": 0,
   "ref-printed": false,
   "reference": "",
   "status": "acheté",
   "updated-on": "",
+}
+`;
+
+exports[`pushItemRemotely A itemAA updated && no id should post 1`] = `
+{
+  "fields": {
+    "barcode": "",
+    "box": "box A",
+    "brand": "",
+    "category": "category A",
+    "details": "",
+    "drawer": "",
+    "location": "location A",
+    "name": "item A",
+    "ref-printed": false,
+    "reference": "",
+    "status": "acheté",
+    "updated-on": "",
+  },
+  "id": "rec123",
+}
+`;
+
+exports[`pushItemRemotely A itemAA updated && no id should post 3`] = `
+{
+  "fields": {
+    "status": "acheté",
+  },
+}
+`;
+
+exports[`pushItemRemotely B itemAA updated && his id should patch 1`] = `
+{
+  "fields": {
+    "barcode": "",
+    "box": "box A",
+    "brand": "",
+    "category": "category A",
+    "details": "",
+    "drawer": "",
+    "location": "location A",
+    "name": "item A",
+    "ref-printed": false,
+    "reference": "",
+    "status": "acheté",
+    "updated-on": "",
+  },
+  "id": "rec123",
+}
+`;
+
+exports[`pushItemRemotely B itemAA updated && his id should patch 3`] = `
+{
+  "fields": {
+    "status": "acheté",
+  },
 }
 `;

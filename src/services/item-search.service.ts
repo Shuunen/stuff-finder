@@ -1,13 +1,11 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-
-
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { clone } from 'shuutils'
 import { emptyItemSuggestions } from '../constants'
-import type { ItemSuggestions } from '../types/item.types'
 import type { WrapApiAliExResponse, WrapApiAngboResponse, WrapApiCampoResponse, WrapApiDeyesResponse } from '../types/requests.types'
 import { get } from '../utils/browser.utils'
 import { logger } from '../utils/logger.utils'
+import type { ItemSuggestions } from '../utils/parsers.utils'
 import { state } from '../utils/state.utils'
 import { cleanSuggestions } from '../utils/suggestions.utils'
 import { getAsin } from '../utils/url.utils'
@@ -35,7 +33,8 @@ async function addSuggestionsFromWrap<ResponseType> (endpoint: string) {
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
   if (wrapApiKey === '') return {} as ResponseType
   // disable cache for wrap-api because it's taking too much space in the browser
-  return await get<ResponseType>(`https://wrapapi.com/use/jojo/${endpoint}&wrapAPIKey=${wrapApiKey}`, false)
+  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+  return await get(`https://wrapapi.com/use/jojo/${endpoint}&wrapAPIKey=${wrapApiKey}`) as ResponseType
 }
 
 async function addSuggestionsFromDeyes (suggestions: ItemSuggestions, code: string) {

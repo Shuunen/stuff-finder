@@ -41,6 +41,9 @@ dependencies:
   shuutils:
     specifier: '7.7'
     version: 7.7.0
+  valibot:
+    specifier: '0.27'
+    version: 0.27.0
   webcomponent-qr-code:
     specifier: '1.2'
     version: 1.2.0
@@ -9291,6 +9294,10 @@ packages:
       '@types/istanbul-lib-coverage': 2.0.6
       convert-source-map: 2.0.0
     dev: true
+
+  /valibot@0.27.0:
+    resolution: {integrity: sha512-1Wv0FfiosoAYruPhueHJgJtgj18KlUoBaIEeCefCEsohStcJQWp3jL59J8Tj9w8jiuQ3USkZGH8BtzDHDGgdxQ==}
+    dev: false
 
   /validate-html-nesting@1.2.2:
     resolution: {integrity: sha512-hGdgQozCsQJMyfK5urgFcWEqsSSrK63Awe0t/IMR0bZ0QMtnuaiHzThW81guu3qx9abLi99NEuiaN6P9gVYsNg==}

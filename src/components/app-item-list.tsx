@@ -1,5 +1,5 @@
 import List from '@mui/material/List'
-import type { Item } from '../types/item.types'
+import type { Item } from '../utils/parsers.utils'
 import { AppItemListEntry } from './app-item-list-entry'
 
 export function AppItemList ({ items }: { readonly items: Item[] }) {

@@ -1,5 +1,5 @@
 /* c8 ignore next */
-import type { Item } from '../types/item.types'
+import type { Item } from './parsers.utils'
 
 /**
  * Generate a name from an item

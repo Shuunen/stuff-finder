@@ -1,8 +1,8 @@
 import ListItem from '@mui/material/ListItem'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemText from '@mui/material/ListItemText'
-import type { Item } from '../types/item.types'
 import { itemToImageUrl, onItemImageError } from '../utils/item.utils'
+import type { Item } from '../utils/parsers.utils'
 
 export function AppItemListEntry ({ item }: { readonly item: Item }) {
 

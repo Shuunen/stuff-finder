@@ -1,8 +1,8 @@
 
 import 'webcomponent-qr-code'
-import type { Item } from '../types/item.types'
 import { printSizes, type PrintSize } from '../types/print.types'
 import { logger } from '../utils/logger.utils'
+import type { Item } from '../utils/parsers.utils'
 import { itemToPrintData } from '../utils/print.utils'
 
 export function AppBarcode ({ isHighlighted = false, item, size }: { readonly isHighlighted?: boolean; readonly item: Item; readonly size: PrintSize }) {

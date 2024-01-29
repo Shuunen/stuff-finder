@@ -1,14 +1,14 @@
 import Fuse, { type IFuseOptions } from 'fuse.js'
 import { sanitize } from 'shuutils'
-import { ItemField, ItemStatus, type Item, type ItemPhoto } from './types/item.types'
 import type { AppCredentials } from './types/settings.types'
+import type { Item, ItemField, ItemPhoto, ItemStatus } from './utils/parsers.utils'
 
 interface CommonLists {
   boxes: string[]
   categories: string[]
   drawers: string[]
   locations: string[]
-  statuses: string[]
+  statuses: ItemStatus[]
 }
 
 export const defaultImage = '/assets/no-visual.svg'
@@ -19,15 +19,15 @@ export const defaultCommonLists: CommonLists = {
   drawers: ['', '1', '2', '3', '4', '5', '6', '7'],
   locations: [],
   statuses: [
-    ItemStatus.Acheté,
-    ItemStatus.ADonner,
-    ItemStatus.AVendre,
-    ItemStatus.Donné,
-    ItemStatus.Jeté,
-    ItemStatus.Renvoyé,
-    ItemStatus.Vendu,
+    'acheté',
+    'à donner',
+    'à vendre',
+    'donné',
+    'jeté',
+    'renvoyé',
+    'vendu',
   ],
-}
+} satisfies CommonLists
 
 export const defaultCredentials: AppCredentials = {
   base: '',
@@ -38,22 +38,22 @@ export const defaultCredentials: AppCredentials = {
 } satisfies AppCredentials
 
 export const emptyItem: Item = {
-  [ItemField.Barcode]: '',
-  [ItemField.Box]: '',
-  [ItemField.Brand]: '',
-  [ItemField.Category]: '',
-  [ItemField.Details]: '',
-  [ItemField.Drawer]: '',
-  [ItemField.Id]: '',
-  [ItemField.Location]: '',
-  [ItemField.Name]: '',
-  [ItemField.Photo]: [],
-  [ItemField.Price]: 0,
-  [ItemField.Reference]: '',
-  [ItemField.ReferencePrinted]: false,
-  [ItemField.Status]: ItemStatus.Acheté,
-  [ItemField.UpdatedOn]: '',
-}
+  'barcode': '',
+  'box': '',
+  'brand': '',
+  'category': '',
+  'details': '',
+  'drawer': '',
+  'id': '',
+  'location': '',
+  'name': '',
+  'photo': [],
+  'price': 0,
+  'ref-printed': false,
+  'reference': '',
+  'status': 'acheté',
+  'updated-on': '',
+} satisfies Item
 
 export const emptyItemPhoto: ItemPhoto = {
   filename: '',
@@ -64,25 +64,25 @@ export const emptyItemPhoto: ItemPhoto = {
   type: '',
   url: '',
   width: 0,
-}
+} satisfies ItemPhoto
 
 export const emptyItemSuggestions = {
-  [ItemField.Barcode]: [],
-  [ItemField.Box]: [],
-  [ItemField.Brand]: [],
-  [ItemField.Category]: [],
-  [ItemField.Details]: [],
-  [ItemField.Drawer]: [],
-  [ItemField.Id]: [],
-  [ItemField.Location]: [],
-  [ItemField.Name]: [],
-  [ItemField.Photo]: [],
-  [ItemField.Price]: [],
-  [ItemField.Reference]: [],
-  [ItemField.ReferencePrinted]: [],
-  [ItemField.Status]: [ItemStatus.Acheté],
-  [ItemField.UpdatedOn]: [],
-}
+  'barcode': [],
+  'box': [],
+  'brand': [],
+  'category': [],
+  'details': [],
+  'drawer': [],
+  'id': [],
+  'location': [],
+  'name': [],
+  'photo': [],
+  'price': [],
+  'ref-printed': [],
+  'reference': [],
+  'status': ['acheté'],
+  'updated-on': [],
+} satisfies Record<ItemField, string[]>
 
 export const delays = {
   large: 300,
@@ -103,19 +103,21 @@ export const fuseOptions: IFuseOptions<Item> = {
   },
   ignoreLocation: true, // eslint-disable-line @typescript-eslint/naming-convention
   keys: [{
-    name: ItemField.Name,
+    name: 'name',
     weight: 4,
   }, {
-    name: ItemField.Brand,
+    name: 'brand',
     weight: 2,
   }, {
-    name: ItemField.Details,
+    name: 'details',
     weight: 4,
   }, {
-    name: ItemField.Category,
+    name: 'category',
     weight: 1,
   }], // this is not generic ^^"
   threshold: 0.35, // 0 is perfect match
 }
 
 export function voidFunction () { /* empty */ }
+
+export const defaultItems: Item[] = []

@@ -1,7 +1,6 @@
 import { capitalize, clone } from 'shuutils'
-import { ItemField } from '../types/item.types'
 
-const keysToCapitalize = new Set([ItemField.Name.toString(), ItemField.Details.toString()])
+const keysToCapitalize = new Set(['name', 'details'])
 
 export function cleanSuggestions (suggestionsInput: Record<string, string[] | undefined>) {
   const suggestions = clone(suggestionsInput)

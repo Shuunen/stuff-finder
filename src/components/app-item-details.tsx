@@ -1,7 +1,7 @@
 import LocationOnIcon from '@mui/icons-material/LocationOn'
 import PrintIcon from '@mui/icons-material/Print'
-import type { Item } from '../types/item.types'
 import { itemToImageUrl, onItemImageError } from '../utils/item.utils'
+import type { Item } from '../utils/parsers.utils'
 import { AppItemDetailsChip } from './app-item-details-chip'
 
 export function AppItemDetails ({ item }: { readonly item: Item }) {
