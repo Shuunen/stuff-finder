@@ -2,58 +2,22 @@ import { sleep } from 'shuutils'
 import { expect, it } from 'vitest'
 import { defaultCommonLists } from '../src/constants'
 import { defaultStatus } from '../src/types/status.types'
-import { addOrUpdateItems, airtableRecordToItem, fakeItem, getAllItems, getCommonListsFromItems, getItemFieldsToPush, getOneItem, itemToImageUrl, pushItemLocally, pushItemRemotely } from '../src/utils/item.utils'
-import type { AirtableSingleRecordResponse, Item, ItemPhoto, ItemStatus } from '../src/utils/parsers.utils'
+import { addOrUpdateItems, airtableRecordToItem, getAllItems, getCommonListsFromItems, getItemFieldsToPush, getOneItem, isLocalAndRemoteSync, itemToImageUrl, pushItemLocally, pushItemRemotely } from '../src/utils/item.utils'
+import { mockItem, mockRecord } from '../src/utils/mock.utils'
+import type { Item, ItemPhoto, ItemStatus } from '../src/utils/parsers.utils'
 import { state } from '../src/utils/state.utils'
 
-const recordA: AirtableSingleRecordResponse = {
-  createdTime: '',
-  fields: {
-    'barcode': '',
-    'box': 'box A',
-    'brand': '',
-    'category': 'category A',
-    'details': '',
-    'drawer': '',
-    'location': 'location A',
-    'name': 'item A',
-    'ref-printed': false,
-    'reference': '',
-    'status': 'acheté',
-    'updated-on': '',
-  },
-  id: 'rec123',
-}
+const recordA = mockRecord(undefined, { 'reference': '', 'updated-on': '' })
 
 it('airtableRecordToItem A', () => {
   expect(airtableRecordToItem(recordA)).toMatchSnapshot()
 })
 
-const itemBase: Item = {
-  'barcode': 'barcode B',
-  'box': 'box B',
-  'brand': 'brand B',
-  'category': 'category B',
-  'details': 'details B',
-  'drawer': 'drawer B',
-  'id': 'rec234',
-  'location': 'location B',
-  'name': 'name B',
-  'ref-printed': false,
-  'reference': 'reference B',
-  'status': 'acheté',
-  'updated-on': '2021-08-01T00:00:00.000Z',
-}
-
-function createFakeItem (data: Partial<Item>) {
-  return { ...itemBase, ...data }
-}
-
 // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-const itemA = createFakeItem({ id: 'itemA', status: 'new surprise status' as ItemStatus })
+const itemA = mockItem({ id: 'itemA', status: 'new surprise status' as ItemStatus })
 // eslint-disable-next-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/naming-convention
 const itemAA = { ...itemA, status: 'acheté' as ItemStatus }
-const itemB = createFakeItem({ id: 'itemB', location: 'location A' })
+const itemB = mockItem({ id: 'itemB', location: 'location A' })
 
 const stateA = {
   credentials: { base: 'baseA', table: 'tableA', token: 'tokenA', view: 'viewA', wrap: 'wrapA' },
@@ -68,9 +32,9 @@ it('getCommonListsFromItems A', () => {
   expect(getCommonListsFromItems([itemA, itemB])).toMatchSnapshot()
 })
 
-it('fakeItem A', () => {
+it('mockItem A', () => {
   const name = 'super glass tempered shovel'
-  const item = fakeItem({ name })
+  const item = mockItem({ name })
   expect(item.name).toBe(name)
   expect(item.photo).toHaveLength(1)
 })
@@ -133,7 +97,7 @@ it('getAllItems C error result', () => {
 
 it('addOrUpdateItems A update existing item', () => {
   const itemsInput = [itemA, itemB]
-  const itemTouched = createFakeItem({ id: itemB.id, location: itemA.location })
+  const itemTouched = mockItem({ id: itemB.id, location: itemA.location })
   const itemsOutput = addOrUpdateItems(itemsInput, itemTouched)
   expect(itemsOutput).toHaveLength(2)
   expect(itemsOutput[1]?.location).toBe(itemTouched.location)
@@ -141,7 +105,7 @@ it('addOrUpdateItems A update existing item', () => {
 
 it('addOrUpdateItems B add new item', () => {
   const itemsInput = [itemA, itemB]
-  const itemTouched = createFakeItem({ id: 'new item' })
+  const itemTouched = mockItem({ id: 'new item' })
   const itemsOutput = addOrUpdateItems(itemsInput, itemTouched)
   expect(itemsOutput).toHaveLength(3)
   expect(itemsOutput[2]?.id).toBe(itemTouched.id)
@@ -149,7 +113,8 @@ it('addOrUpdateItems B add new item', () => {
 
 it('addOrUpdateItems C add new item without id', () => {
   const itemsInput = [itemA, itemB]
-  const itemTouched = createFakeItem({ id: '' })
+  const itemTouched = mockItem()
+  itemTouched.id = ''
   const itemsOutput = addOrUpdateItems(itemsInput, itemTouched)
   expect(itemsOutput).toHaveLength(2)
 })
@@ -161,12 +126,12 @@ it('itemToImageUrl A', () => {
 it('itemToImageUrl B', () => {
   const url = 'https://picsum.photos/seed/123/200/200'
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-  const item = createFakeItem({ photo: [{ url } as ItemPhoto] })
+  const item = mockItem({ photo: [{ url } as ItemPhoto] })
   expect(itemToImageUrl(item)).toBe(url)
 })
 
 it('pushItemLocally A add new item', () => {
-  state.items = [fakeItem({ id: 'itemC' }), fakeItem({ id: 'itemD' })]
+  state.items = [mockItem({ id: 'itemC' }), mockItem({ id: 'itemD' })]
   expect(state.items).toHaveLength(2)
   pushItemLocally(itemA)
   // we should be able to : expect(state.items).toHaveLength(3) but it's not working ^^' no idea why
@@ -182,8 +147,10 @@ it('pushItemLocally B update existing item', () => {
 it('pushItemLocally C add new item without id', () => {
   state.items = [itemA, itemB]
   expect(state.items).toHaveLength(2)
+  const item = mockItem()
+  item.id = ''
   // expect throw
-  expect(() => pushItemLocally(createFakeItem({ id: '' }))).toThrowErrorMatchingInlineSnapshot('[Error: cannot add item without id]')
+  expect(() => pushItemLocally(item)).toThrowErrorMatchingInlineSnapshot('[Error: cannot add item without id]')
 })
 
 it('getItemFieldsToPush A itemA ISO with stateA, no fields to push', () => {
@@ -201,8 +168,9 @@ it('getItemFieldsToPush B itemAA updated, some fields to push', () => {
 })
 
 it('getItemFieldsToPush C itemAA updated with also photo & price', () => {
+  const url = 'https://picsum.photos/seed/123/200/200'
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-  const item = createFakeItem({ ...itemAA, photo: [{ url: 'https://picsum.photos/seed/123/200/200' } as ItemPhoto], price: 42 })
+  const item = mockItem({ ...itemAA, photo: [{ url } as ItemPhoto], price: 42 })
   const fields = getItemFieldsToPush(item, stateA)
   expect(fields).toMatchInlineSnapshot(`
     {
@@ -222,7 +190,7 @@ it('getItemFieldsToPush C itemAA updated with also photo & price', () => {
 })
 
 it('getItemFieldsToPush D item not found locally', () => {
-  const item = createFakeItem({ id: 'not found' })
+  const item = mockItem({ id: 'not found' })
   expect(() => getItemFieldsToPush(item, stateA)).toThrowErrorMatchingInlineSnapshot('[Error: existing item not found locally]')
 })
 

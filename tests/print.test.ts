@@ -1,9 +1,9 @@
-import { expect, it } from 'vitest'  
+import { expect, it } from 'vitest'
 import { emptyItemPhoto } from '../src/constants'
-import { fakeItem } from '../src/utils/item.utils'
+import { mockItem } from '../src/utils/mock.utils'
 import { itemToPrintData } from '../src/utils/print.utils'
 
-const itemA = fakeItem({
+const itemA = mockItem({
   barcode: '  barcode',
   box: ' box ',
   brand: 'brand',
@@ -15,15 +15,17 @@ const itemA = fakeItem({
   reference: 'reference  ',
 })
 
-const itemB = fakeItem({
+const itemB = mockItem({
   barcode: '  barcode',
   box: ' ',
   brand: 'brand',
   details: 'details',
   drawer: '',
   id: '1234567',
+  location: '',
   name: 'name',
   photo: [{ ...emptyItemPhoto, url: 'https://picsum.photos/seed/1234567/200/200' }],
+  reference: '',
 })
 
 it('itemToPrintData text A', () => { expect(itemToPrintData(itemA).text).toEqual('name brand details') })

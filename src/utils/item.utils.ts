@@ -1,5 +1,5 @@
-import { clone, slugify } from 'shuutils'
-import { defaultCommonLists, defaultImage, emptyItem, emptyItemPhoto } from '../constants'
+import { clone } from 'shuutils'
+import { defaultCommonLists, defaultImage, emptyItem } from '../constants'
 import { get, patch, post } from './browser.utils'
 import { createField, type Form } from './forms.utils'
 import { logger } from './logger.utils'
@@ -134,16 +134,6 @@ export function getCommonListsFromItems (items: Item[]) {
   })
   list = sortListsEntries(list)
   return list
-}
-
-export function fakeItem (data: Partial<Item> = {}) {
-  const item: Item = {
-    ...emptyItem,
-    ...data,
-  }
-  item.id = item.id || slugify(item.name)
-  item.photo = (item.photo !== undefined && (item.photo.length > 0)) ? item.photo : [{ ...emptyItemPhoto, url: `https://picsum.photos/seed/${item.name}/200/200` }]
-  return item satisfies Item
 }
 
 /* c8 ignore next 10 */
