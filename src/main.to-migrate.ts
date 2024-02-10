@@ -1,5 +1,5 @@
 import type { AppCredentials } from './types/settings.types'
-import { airtableRecordToItem, getAllItems } from './utils/item.utils'
+import { airtableRecordToItem, getAllItems, isLocalAndRemoteSync } from './utils/item.utils'
 import { logger } from './utils/logger.utils'
 import type { AirtableSingleRecordResponse } from './utils/parsers.utils'
 import { state } from './utils/state.utils'
@@ -53,8 +53,7 @@ class App {
       logger.showError('airtable fetch returned no records')
       return false
     }
-    const remote = airtableRecordToItem(records[0])
-    if (state.items.some(item => item.id === remote.id && item['updated-on'] === remote['updated-on'])) {
+    if (isLocalAndRemoteSync(records)) {
       logger.showLog('no updates from airtable, cache seems up to date')
       return true
     }

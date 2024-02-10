@@ -178,7 +178,18 @@ export const itemForm = {
   },
   isTouched: false,
   isValid: false,
-} satisfies Form
+} as const satisfies Form
+
+export function isLocalAndRemoteSync (records: AirtableSingleRecordResponse[], currentState = state) {
+  const record = records.at(0)
+  if (!record) throw new Error('remoteFirst is undefined')
+  const remoteFirst = airtableRecordToItem(record)
+  const localFirst = currentState.items.at(0)
+  const isFirst = localFirst === undefined ? false : remoteFirst.id === localFirst.id && remoteFirst['updated-on'] === localFirst['updated-on']
+  if (isFirst) return true
+  const localLast = currentState.items.at(-1) // eslint-disable-line @typescript-eslint/no-magic-numbers
+  return localLast === undefined ? false : remoteFirst.id === localLast.id && remoteFirst['updated-on'] === localLast['updated-on']
+}
 
 export { addOrUpdateItems, airtableRecordToItem, getAllItems, getOneItem, itemToImageUrl }
 

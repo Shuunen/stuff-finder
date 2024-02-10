@@ -262,10 +262,36 @@ it('pushItemRemotely B itemAA updated && his id should patch', async () => {
 
 it('pushItemRemotely C itemA no change should not call api', async () => {
   const record = await pushItemRemotely(itemA, itemA.id)
-  expect(record).toMatchInlineSnapshot(`
-    {
-      "fields": {},
-      "id": "itemA",
-    }
-  `)
+  expect(record.success).toBe(false)
+})
+
+it('isLocalAndRemoteSync A is not in sync', () => {
+  expect(isLocalAndRemoteSync([recordA], stateA)).toBe(false)
+})
+
+it('isLocalAndRemoteSync B is in sync (first match)', () => {
+  const recordB = mockRecord()
+  const items = [airtableRecordToItem(recordB)]
+  const stateB = { ...stateA, items }
+  expect(isLocalAndRemoteSync([recordB], stateB)).toBe(true)
+})
+
+it('isLocalAndRemoteSync C no records', () => {
+  expect(() => isLocalAndRemoteSync([], stateA)).toThrowErrorMatchingInlineSnapshot('[Error: remoteFirst is undefined]')
+})
+
+it('isLocalAndRemoteSync D is in sync (last match)', () => {
+  const recordB = mockRecord()
+  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+  const items = [undefined as unknown as Item, itemAA, itemB, airtableRecordToItem(recordB)]
+  const stateB = { ...stateA, items }
+  expect(isLocalAndRemoteSync([recordB], stateB)).toBe(true)
+})
+
+it('isLocalAndRemoteSync E first & last are undefined', () => {
+  const recordB = mockRecord()
+  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+  const items = [undefined as unknown as Item, itemAA, itemB, undefined as unknown as Item]
+  const stateB = { ...stateA, items }
+  expect(isLocalAndRemoteSync([recordB], stateB)).toBe(false)
 })
