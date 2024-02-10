@@ -1,8 +1,8 @@
-import { sleep } from 'shuutils'
+import { clone, sleep } from 'shuutils'
 import { expect, it } from 'vitest'
 import { defaultCommonLists } from '../src/constants'
 import { defaultStatus } from '../src/types/status.types'
-import { addOrUpdateItems, airtableRecordToItem, getAllItems, getCommonListsFromItems, getItemFieldsToPush, getOneItem, isLocalAndRemoteSync, itemToImageUrl, pushItemLocally, pushItemRemotely } from '../src/utils/item.utils'
+import { addOrUpdateItems, airtableRecordToItem, formToItem, getAllItems, getCommonListsFromItems, getItemFieldsToPush, getOneItem, isLocalAndRemoteSync, itemForm, itemToImageUrl, pushItemLocally, pushItemRemotely } from '../src/utils/item.utils'
 import { mockItem, mockRecord } from '../src/utils/mock.utils'
 import type { Item, ItemPhoto, ItemStatus } from '../src/utils/parsers.utils'
 import { state } from '../src/utils/state.utils'
@@ -250,4 +250,36 @@ it('isLocalAndRemoteSync E first & last are undefined', () => {
   const items = [undefined as unknown as Item, itemAA, itemB, undefined as unknown as Item]
   const stateB = { ...stateA, items }
   expect(isLocalAndRemoteSync([recordB], stateB)).toBe(false)
+})
+
+it('formToItem A default itemForm', () => {
+  const item = formToItem(itemForm)
+  expect(item).toMatchSnapshot()
+  expect(item.photo).toHaveLength(0)
+})
+
+it('formToItem B itemForm with some values', () => {
+  const form = clone(itemForm)
+  const url = 'https://photos.org/200/200'
+  form.fields.price.value = '42'
+  form.fields.photo.value = url
+  const item = formToItem(form)
+  expect(item).toMatchSnapshot()
+  expect(item.price).toBe(42)
+  expect(item.photo).toHaveLength(1)
+  expect(item.photo?.[0]?.url).toBe(url)
+})
+
+it('formToItem C status mapping', () => {
+  const form = clone(itemForm)
+  const statuses = ['acheté', 'donné', 'jeté', 'à donner', 'à vendre', 'vendu', 'renvoyé', 'vendu'] satisfies ItemStatus[]
+  statuses.forEach((status) => {
+    form.fields.status.value = status
+    const item = formToItem(form)
+    expect(item.status).toBe(status)
+  })
+  // empty status default map to 'acheté'
+  form.fields.status.value = ''
+  const item = formToItem(form)
+  expect(item.status).toBe('acheté')
 })

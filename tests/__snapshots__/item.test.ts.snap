@@ -20,6 +20,50 @@ exports[`airtableRecordToItem A 1`] = `
 }
 `;
 
+exports[`formToItem A default itemForm 1`] = `
+{
+  "barcode": "",
+  "box": "",
+  "brand": "",
+  "category": "",
+  "details": "",
+  "drawer": "",
+  "id": "",
+  "location": "",
+  "name": "",
+  "photo": [],
+  "price": undefined,
+  "ref-printed": false,
+  "reference": "",
+  "status": "acheté",
+  "updated-on": "",
+}
+`;
+
+exports[`formToItem B itemForm with some values 1`] = `
+{
+  "barcode": "",
+  "box": "",
+  "brand": "",
+  "category": "",
+  "details": "",
+  "drawer": "",
+  "id": "",
+  "location": "",
+  "name": "",
+  "photo": [
+    {
+      "url": "https://photos.org/200/200",
+    },
+  ],
+  "price": 42,
+  "ref-printed": false,
+  "reference": "",
+  "status": "acheté",
+  "updated-on": "",
+}
+`;
+
 exports[`getAllItems A no offset 1`] = `
 {
   "records": [

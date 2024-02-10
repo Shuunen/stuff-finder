@@ -67,6 +67,17 @@ async function updateItemImage (id: string, image: HTMLImageElement) {
   state.items = addOrUpdateItems(state.items, item)
 }
 
+function statusStringToStatus (status: string) {
+  if (status === 'acheté') return 'acheté'
+  if (status === 'à donner') return 'à donner'
+  if (status === 'à vendre') return 'à vendre'
+  if (status === 'donné') return 'donné'
+  if (status === 'jeté') return 'jeté'
+  if (status === 'renvoyé') return 'renvoyé'
+  if (status === 'vendu') return 'vendu'
+  return 'acheté'
+}
+
 // eslint-disable-next-line max-statements, complexity, sonarjs/cognitive-complexity
 export function getItemFieldsToPush (data: Item, currentState = state) {
   const fields: Partial<AirtableSingleRecordResponse['fields']> = {}
@@ -104,19 +115,20 @@ export function getItemFieldsToPush (data: Item, currentState = state) {
 }
 
 export function pushItemLocally (itemTouched: Item) {
-  logger.info('pushing item locally', itemTouched)
-  const index = state.items.findIndex(item => item.id === itemTouched.id)
-  if (index >= 0) state.items[index] = itemTouched // update existing item
-  else if (itemTouched.id) state.items.push(itemTouched) // new item with id
+  const items = clone(state.items)
+  const index = items.findIndex(item => item.id === itemTouched.id)
+  if (index >= 0) items[index] = itemTouched // update existing item
+  else if (itemTouched.id) items.push(itemTouched) // new item with id
   else throw new Error('cannot add item without id')
+  state.items = items
 }
 
 // eslint-disable-next-line @typescript-eslint/max-params
-export async function pushItemRemotely (item: Item, id: Item['id'], currentState = state, postMethod = post, patchMethod = patch) {
+export async function pushItemRemotely (item: Item, id = '', currentState = state, postMethod = post, patchMethod = patch) {
   const fields = getItemFieldsToPush(item, currentState)
   if (Object.keys(fields).length === 0) {
     logger.showLog('no update to push')
-    return { fields, id }
+    return { output: { fields, id }, success: false } // eslint-disable-line @typescript-eslint/naming-convention
   }
   const data = { fields }
   const { base, table } = currentState.credentials
@@ -171,6 +183,27 @@ export const itemForm = {
   isTouched: false,
   isValid: false,
 } as const satisfies Form
+
+export function formToItem (form: typeof itemForm) {
+  // eslint-disable-next-line @typescript-eslint/no-shadow
+  const { barcode, box, brand, category, details, drawer, isPrinted, location, name, photo, price, reference, status } = form.fields
+  return {
+    ...emptyItem,
+    'barcode': barcode.value,
+    'box': box.value,
+    'brand': brand.value,
+    'category': category.value,
+    'details': details.value,
+    'drawer': drawer.value,
+    'location': location.value,
+    'name': name.value,
+    'photo': photo.value === '' ? emptyItem.photo : [{ url: photo.value } as unknown as ItemPhoto], // eslint-disable-line @typescript-eslint/consistent-type-assertions
+    'price': price.value === '' ? undefined : Number.parseFloat(price.value),
+    'ref-printed': isPrinted.value,
+    'reference': reference.value,
+    'status': statusStringToStatus(status.value),
+  } satisfies Item
+}
 
 export function isLocalAndRemoteSync (records: AirtableSingleRecordResponse[], currentState = state) {
   const record = records.at(0)
