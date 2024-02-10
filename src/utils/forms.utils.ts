@@ -1,21 +1,24 @@
 import { objectEqual } from 'shuutils'
 
-type FormField = {
+type FormFieldType = 'checkbox' | 'text'
+
+type FormField<Type extends FormFieldType = 'text'> = {
   isRequired: boolean
   isValid: boolean
   label: string
   link?: string
   order: number
   regex: RegExp
-  value: string
+  type: Type
+  value: Type extends 'checkbox' ? boolean : string
 }
 
-function byOrder ([, { order: orderA }]: [string, FormField], [, { order: orderB }]: [string, FormField]) { return orderB - orderA }
+function byOrder ([, { order: orderA }]: [string, FormField<FormFieldType>], [, { order: orderB }]: [string, FormField<FormFieldType>]) { return orderB - orderA }
 
 export type Form = {
   columns?: number
   errorMessage: string
-  fields: Record<string, FormField>
+  fields: Record<string, FormField<FormFieldType>>
   isTouched: boolean
   isValid: boolean
 }
@@ -23,7 +26,7 @@ export type Form = {
 export function validateForm<FormType extends Form> (form: FormType) {
   let errorMessage = ''
   const updatedFields = Object.entries(form.fields).sort(byOrder).reduce((accumulator, [field, { isRequired, label, regex, value }]) => { // eslint-disable-line unicorn/no-array-reduce
-    const isValid = (!isRequired && value === '') || regex.test(value)
+    const isValid = (!isRequired && (typeof value === 'string' && value === '')) || (typeof value === 'string' && regex.test(value)) || (typeof value === 'boolean')
     if (!isValid) errorMessage = value === '' ? `${label} is required` : `${label} is invalid, it should match ${String(regex)}`
     return { ...accumulator, [field]: { ...form.fields[field], isValid } }
   }, {})
@@ -33,9 +36,10 @@ export function validateForm<FormType extends Form> (form: FormType) {
   return { hasChanged, updatedForm }
 }
 
-export function createField ({ isRequired = false, isValid = false, label = '', link, maxLength = 100, minLength = 3, order = 0, regex, value = '' }: Partial<FormField> & { maxLength?: number; minLength?: number }) {
-  const finalRegex = regex ?? new RegExp(`^[\\w-]{${minLength},${maxLength}}$`, 'u') // eslint-disable-line security/detect-non-literal-regexp
-  const field: FormField = { isRequired, isValid, label, order, regex: finalRegex, value }
+export function createField<Type extends FormFieldType> ({ isRequired = false, isValid = false, label = '', link, maxLength = 100, minLength = 3, order = 0, regex, type, value }: Partial<Pick<FormField<Type>, 'isRequired' | 'isValid' | 'link' | 'regex'>> & Pick<FormField<Type>, 'label' | 'order' | 'value'> & { maxLength?: number; minLength?: number; type: Type }) {
+  const finalRegex = regex ?? new RegExp(`^[\\w\\s]{${minLength},${maxLength}}$`, 'u') // eslint-disable-line security/detect-non-literal-regexp
+  const field: FormField<Type> = { isRequired, isValid, label, order, regex: finalRegex, type, value }
   if (link !== undefined) field.link = link
   return field
 }
+

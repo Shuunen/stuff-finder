@@ -11,6 +11,7 @@ exports[`validateForm A default settingsForm is not changed & not valid 1`] = `
       "link": "https://airtable.com/api",
       "order": 10,
       "regex": /\\^app\\\\w\\{14\\}\\$/u,
+      "type": "text",
       "value": "",
     },
     "table": {
@@ -19,6 +20,7 @@ exports[`validateForm A default settingsForm is not changed & not valid 1`] = `
       "label": "Airtable table",
       "order": 30,
       "regex": /\\^\\[\\\\w-\\]\\{3,100\\}\\$/u,
+      "type": "text",
       "value": "",
     },
     "token": {
@@ -28,6 +30,7 @@ exports[`validateForm A default settingsForm is not changed & not valid 1`] = `
       "link": "https://airtable.com/create/tokens",
       "order": 20,
       "regex": /\\^pat\\[\\\\w\\.\\]\\{50,100\\}\\$/u,
+      "type": "text",
       "value": "",
     },
     "view": {
@@ -36,6 +39,7 @@ exports[`validateForm A default settingsForm is not changed & not valid 1`] = `
       "label": "Airtable view",
       "order": 40,
       "regex": /\\^\\[\\\\w-\\]\\{3,100\\}\\$/u,
+      "type": "text",
       "value": "",
     },
     "wrap": {
@@ -45,6 +49,7 @@ exports[`validateForm A default settingsForm is not changed & not valid 1`] = `
       "link": "https://wrapapi.com/user/api",
       "order": 50,
       "regex": /\\^\\\\w\\{32\\}\\$/u,
+      "type": "text",
       "value": "",
     },
   },
