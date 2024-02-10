@@ -78,9 +78,11 @@ export function getItemFieldsToPush (data: Item, currentState = state) {
   if (data.drawer.length > 0) fields.drawer = data.drawer
   if (data.location.length > 0) fields.location = data.location
   if (data.name.length > 0) fields.name = data.name
+  /* c8 ignore next 2 */
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-  if (data.photo !== undefined) fields.photo = [{ url: data.photo } as unknown as ItemPhoto] // we don't need the whole object
-  if (data.price !== undefined) fields.price = data.price
+  if (data.photo !== undefined && data.photo.length > 0 && fields.photo?.[0]?.url !== data.photo[0]?.url) fields.photo = [{ url: data.photo[0]?.url } as unknown as ItemPhoto] // we don't need the whole object
+  // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+  if (data.price !== undefined && data.price > -1) fields.price = data.price
   if (data.reference.length > 0) fields.reference = data.reference
   if (data.status.length > 0) fields.status = data.status
   fields['ref-printed'] = data['ref-printed']

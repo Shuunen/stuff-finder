@@ -172,21 +172,9 @@ it('getItemFieldsToPush C itemAA updated with also photo & price', () => {
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
   const item = mockItem({ ...itemAA, photo: [{ url } as ItemPhoto], price: 42 })
   const fields = getItemFieldsToPush(item, stateA)
-  expect(fields).toMatchInlineSnapshot(`
-    {
-      "photo": [
-        {
-          "url": [
-            {
-              "url": "https://picsum.photos/seed/123/200/200",
-            },
-          ],
-        },
-      ],
-      "price": 42,
-      "status": "acheté",
-    }
-  `)
+  expect(fields.photo?.[0]?.url).toBe(url)
+  expect(fields.price).toBe(42)
+  expect(fields.status).toBe('acheté')
 })
 
 it('getItemFieldsToPush D item not found locally', () => {
