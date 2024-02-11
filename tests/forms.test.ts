@@ -1,5 +1,5 @@
 import { expect, it } from 'vitest'
-import { validateForm } from '../src/utils/forms.utils'
+import { createCheckboxField, createSelectField, validateForm } from '../src/utils/forms.utils'
 import { settingsForm } from '../src/utils/settings.utils'
 
 it('validateForm A invalid field value', () => {
@@ -27,4 +27,12 @@ it('validateForm B valid form', () => {
   expect(hasChanged).toBe(true)
   expect(updatedForm.isValid).toBe(true)
   expect(updatedForm.errorMessage).toBe('')
+})
+
+it('createCheckboxField A with a link', () => {
+  expect(createCheckboxField({ label: 'label', link: 'https://example.com', order: 0 })).toMatchSnapshot()
+})
+
+it('createSelectField A with a link', () => {
+  expect(createSelectField({ label: 'label', link: 'https://example.com', options: [], order: 0 })).toMatchSnapshot()
 })

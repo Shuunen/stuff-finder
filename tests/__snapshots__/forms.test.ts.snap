@@ -1,5 +1,32 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`createCheckboxField A with a link 1`] = `
+{
+  "isRequired": false,
+  "isValid": false,
+  "label": "label",
+  "link": "https://example.com",
+  "order": 0,
+  "regex": /\\^\\[\\\\w\\\\s\\]\\{3,100\\}\\$/u,
+  "type": "checkbox",
+  "value": false,
+}
+`;
+
+exports[`createSelectField A with a link 1`] = `
+{
+  "isRequired": false,
+  "isValid": false,
+  "label": "label",
+  "link": "https://example.com",
+  "options": [],
+  "order": 0,
+  "regex": /\\^\\[\\\\w\\\\s\\]\\{3,100\\}\\$/u,
+  "type": "select",
+  "value": "",
+}
+`;
+
 exports[`validateForm A invalid field value 1`] = `
 {
   "errorMessage": "Airtable base is invalid, "azerty" should match /^app\\w{14}$/u",
