@@ -8,7 +8,7 @@ it('validateForm A invalid field value', () => {
   expect(updatedForm).toMatchSnapshot()
   expect(hasChanged).toBe(true)
   expect(updatedForm.isValid).toBe(false)
-  expect(updatedForm.errorMessage).toMatchInlineSnapshot('"Airtable base is invalid, it should match /^app\\w{14}$/u"')
+  expect(updatedForm.errorMessage).toMatchInlineSnapshot('"Airtable base is invalid, "azerty" should match /^app\\w{14}$/u"')
 })
 
 it('validateForm B valid form', () => {
