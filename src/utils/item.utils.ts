@@ -1,7 +1,7 @@
 import { clone } from 'shuutils'
-import { defaultCommonLists, defaultImage, emptyItem } from '../constants'
+import { defaultCommonLists, defaultImage, emptyItem, type CommonLists } from '../constants'
 import { get, patch, post } from './browser.utils'
-import { createField, type Form } from './forms.utils'
+import { createCheckboxField, createSelectField, createTextField, type Form } from './forms.utils'
 import { logger } from './logger.utils'
 import { sortListsEntries } from './objects.utils'
 import { airtableMultipleRecordResponseParser, airtableSingleRecordResponseParser, type AirtableSingleRecordResponse, type Item, type ItemField, type ItemPhoto } from './parsers.utils'
@@ -76,6 +76,10 @@ function statusStringToStatus (status: string) {
   if (status === 'renvoyé') return 'renvoyé'
   if (status === 'vendu') return 'vendu'
   return 'acheté'
+}
+
+function optionsFor (type: keyof CommonLists) {
+  return state.lists[type].map((value) => ({ label: value, value }))
 }
 
 // eslint-disable-next-line max-statements, complexity, sonarjs/cognitive-complexity
@@ -166,19 +170,19 @@ export const itemForm = {
   columns: 3,
   errorMessage: '',
   fields: {
-    barcode: createField({ label: 'Barcode', maxLength: 30, order: 50, type: 'text', value: '' }),
-    box: createField({ label: 'Box', order: 80, type: 'text', value: '' }),
-    brand: createField({ label: 'Brand', order: 20, type: 'text', value: '' }),
-    category: createField({ label: 'Category', order: 100, type: 'text', value: '' }),
-    details: createField({ label: 'Details', maxLength: 200, order: 30, type: 'text', value: '' }),
-    drawer: createField({ label: 'Drawer', order: 90, type: 'text', value: '' }),
-    isPrinted: createField({ label: 'Printed', order: 130, type: 'checkbox', value: false }), // eslint-disable-line @typescript-eslint/naming-convention
-    location: createField({ label: 'Location', order: 70, type: 'text', value: '' }),
-    name: createField({ isRequired: true, label: 'Name', order: 10, type: 'text', value: '' }),
-    photo: createField({ label: 'Photo', order: 120, regex: /^https?:\/\/\S+$/u, type: 'text', value: '' }),
-    price: createField({ label: 'Price', order: 110, regex: /^\d{1,4}$/u, type: 'text', value: '' }),
-    reference: createField({ isRequired: true, label: 'Reference', maxLength: 30, order: 40, regex: /^[\w-]{3,50}$/u, type: 'text', value: '' }),
-    status: createField({ label: 'Status', order: 60, type: 'text', value: '' }),
+    barcode: createTextField({ label: 'Barcode', maxLength: 30, order: 50 }),
+    box: createSelectField({ label: 'Box', options: optionsFor('boxes'), order: 80, regex: /^[\w\s()]{3,100}$/u }),
+    brand: createTextField({ label: 'Brand', order: 20 }),
+    category: createSelectField({ label: 'Category', options: optionsFor('categories'), order: 100 }),
+    details: createTextField({ label: 'Details', maxLength: 200, order: 30 }),
+    drawer: createSelectField({ label: 'Drawer', options: optionsFor('drawers'), order: 90 }),
+    isPrinted: createCheckboxField({ label: 'Printed', order: 130 }),
+    location: createSelectField({ label: 'Location', options: optionsFor('locations'), order: 70 }),
+    name: createTextField({ isRequired: true, label: 'Name', order: 10 }),
+    photo: createTextField({ label: 'Photo', order: 120, regex: /^https?:\/\/\S+$/u }),
+    price: createTextField({ label: 'Price', order: 110, regex: /^\d{1,4}$/u }),
+    reference: createTextField({ isRequired: true, label: 'Reference', maxLength: 30, order: 40, regex: /^[\w-]{3,50}$/u }),
+    status: createSelectField({ label: 'Status', options: optionsFor('statuses'), order: 60, value: 'acheté' }),
   },
   isTouched: false,
   isValid: false,

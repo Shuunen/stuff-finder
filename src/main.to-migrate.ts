@@ -1,5 +1,5 @@
 import type { AppCredentials } from './types/settings.types'
-import { airtableRecordToItem, getAllItems, isLocalAndRemoteSync } from './utils/item.utils'
+import { airtableRecordToItem, getAllItems, getCommonListsFromItems, isLocalAndRemoteSync } from './utils/item.utils'
 import { logger } from './utils/logger.utils'
 import type { AirtableSingleRecordResponse } from './utils/parsers.utils'
 import { state } from './utils/state.utils'
@@ -24,6 +24,7 @@ class App {
 
   private parseApiRecords (records: AirtableSingleRecordResponse[]) {
     state.items = records.map(record => airtableRecordToItem(record))
+    state.lists = getCommonListsFromItems(state.items)
     logger.showLog(`${state.items.length} item(s) loaded ${coolAscii()}`)
   }
 

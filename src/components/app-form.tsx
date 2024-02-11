@@ -1,7 +1,11 @@
 
 import Button from '@mui/material/Button'
 import Checkbox from '@mui/material/Checkbox'
+import FormControl from '@mui/material/FormControl'
 import FormControlLabel from '@mui/material/FormControlLabel'
+import InputLabel from '@mui/material/InputLabel'
+import MenuItem from '@mui/material/MenuItem'
+import Select from '@mui/material/Select'
 import TextField from '@mui/material/TextField'
 import { useSignalEffect } from '@preact/signals'
 import { useState } from 'preact/hooks'
@@ -51,6 +55,7 @@ export function AppForm<FormType extends Form> ({ error: parentError = '', initi
       if (typeof key !== 'string' || typeof value !== 'string' || key === '' || value === '') return
       const actualField = futureForm.fields[key]
       if (actualField === undefined) return
+      // @ts-expect-error typing issue
       futureForm.fields[key] = { ...actualField, value }
     })
     setForm(futureForm)
@@ -68,10 +73,22 @@ export function AppForm<FormType extends Form> ({ error: parentError = '', initi
 
   return (
     <form autoComplete="off" className={`grid w-full ${form.columns === 3 ? 'gap-3 md:grid-cols-3' : 'gap-6 md:grid-cols-2'}`} noValidate onSubmit={onFormSubmit} spellCheck={false}>{/* eslint-disable-line @typescript-eslint/no-magic-numbers */}
-      {fields.map(([field, { isRequired, isValid, label, type, value }]) => (
+      {fields.map(([field, { isRequired, isValid, label, options, type, value }]) => (
         <div className="grid w-full" key={field}>
           {type === 'text' && <TextField error={Boolean(form.isTouched) && !isValid} id={field} label={label} onChange={event => { void updateField(field, event.target) }} required={isRequired} value={value} variant="standard" />}
           {type === 'checkbox' && <FormControlLabel control={<Checkbox />} id={field} label={label} onChange={event => { void updateField(field, event.target) }} required={isRequired} value={value} />}
+          {/* @ts-expect-error typing issue */}
+          {type === 'select' && <FormControl fullWidth variant="standard">
+            <InputLabel id={field}>{label}</InputLabel>
+            <Select
+              label={label}
+              labelId={field}
+              onChange={event => { void updateField(field, event.target) }}
+              value={value}
+            >{/* @ts-expect-error typing issue */}
+              {options.map(({ label: optionLabel, value: optionValue }) => <MenuItem key={optionValue} value={optionValue}>{optionLabel}</MenuItem>)}
+            </Select>
+          </FormControl>}
         </div>
       ))}
       <div className="order-last flex flex-col md:col-span-full">

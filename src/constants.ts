@@ -3,7 +3,7 @@ import { sanitize } from 'shuutils'
 import type { AppCredentials } from './types/settings.types'
 import type { Item, ItemField, ItemPhoto, ItemStatus } from './utils/parsers.utils'
 
-interface CommonLists {
+export interface CommonLists {
   boxes: string[]
   categories: string[]
   drawers: string[]
