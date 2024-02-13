@@ -5,6 +5,7 @@ import type { AirtableSingleRecordResponse } from './utils/parsers.utils'
 import { state } from './utils/state.utils'
 import { coolAscii } from './utils/strings.utils'
 
+// eslint-disable-next-line no-restricted-syntax
 class App {
 
   public constructor () {

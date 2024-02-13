@@ -6,6 +6,7 @@ import { logger } from '../utils/logger.utils'
 import { playErrorSound, playInfoSound } from '../utils/sound.utils'
 import { state } from '../utils/state.utils'
 
+// eslint-disable-next-line no-restricted-syntax
 class AppSpeech {
 
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition

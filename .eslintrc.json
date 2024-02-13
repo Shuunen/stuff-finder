@@ -144,11 +144,19 @@
         ]
       }
     ],
+    "no-restricted-syntax": [
+      "error",
+      {
+        "message": "Avoid using Class, just use good old unit-testable functions :)",
+        "selector": "ClassDeclaration"
+      }
+    ],
     "object-curly-spacing": [
       "error",
       "always"
     ],
     "padding-line-between-statements": "off",
+    "prefer-destructuring": "off",
     "prettier/prettier": "off",
     "putout/putout": "off",
     "quote-props": [
