@@ -13,11 +13,11 @@ export function AppItemDetails ({ item }: { readonly item: Item }) {
       </div>
       <div className="flex flex-col items-start justify-start gap-3 md:w-2/3">
         <h1>{item.name}</h1>
-        <h2>{item.brand ? `${item.brand} - ` : ''}{item.category}</h2>
+        <h2>{item.brand}{item.category ? ' - ' : ''}{item.category}</h2>
         {Boolean(item.details) && <p className="first-letter:uppercase">{item.details}</p>}
         <div className="my-2 flex gap-3">
           {/* eslint-disable-next-line react/forbid-component-props */}
-          <LocationOnIcon className="text-purple-600" /><div className="font-medium">{item.location} {item.box} {item.drawer}</div>
+          <LocationOnIcon className="text-purple-600" /><div className="font-medium">{item.location || 'unknown'} {item.box} {item.drawer}</div>
         </div>
         <div className="flex flex-wrap justify-start gap-3">
           {Boolean(item.price) && <AppItemDetailsChip label={`${item.price ?? '?'} €`} tooltip="Price" />}
