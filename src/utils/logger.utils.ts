@@ -3,6 +3,7 @@ import { delays } from '../constants'
 import { state } from './state.utils'
 
 /* c8 ignore start */
+// eslint-disable-next-line no-restricted-syntax
 class CustomLogger extends Logger {
 
   // eslint-disable-next-line unicorn/consistent-function-scoping
