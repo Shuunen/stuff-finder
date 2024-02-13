@@ -3,6 +3,7 @@ import Button from '@mui/material/Button'
 import Checkbox from '@mui/material/Checkbox'
 import FormControl from '@mui/material/FormControl'
 import FormControlLabel from '@mui/material/FormControlLabel'
+import InputAdornment from '@mui/material/InputAdornment'
 import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
 import Select from '@mui/material/Select'
@@ -15,10 +16,10 @@ import { validateForm, type Form } from '../utils/forms.utils'
 import { logger } from '../utils/logger.utils'
 import { state } from '../utils/state.utils'
 
-type Properties<FormType extends Form> = { readonly error?: string; readonly initialForm: FormType; readonly onChange?: (form: FormType) => void; readonly onSubmit: (form: FormType) => void }
+type Properties<FormType extends Form> = { readonly error?: string; readonly initialForm: FormType; readonly onChange?: (form: FormType) => void; readonly onSubmit?: ((form: FormType) => void) | undefined }
 
-// eslint-disable-next-line max-statements
-export function AppForm<FormType extends Form> ({ error: parentError = '', initialForm, onChange = voidFunction, onSubmit }: Properties<FormType>) {
+// eslint-disable-next-line max-statements, unicorn/no-useless-undefined
+export function AppForm<FormType extends Form> ({ error: parentError = '', initialForm, onChange = voidFunction, onSubmit = undefined }: Properties<FormType>) {
 
   const [form, setForm] = useState(initialForm)
 
@@ -27,7 +28,7 @@ export function AppForm<FormType extends Form> ({ error: parentError = '', initi
 
   function onFormSubmit (event: Event) {
     event.preventDefault()
-    onSubmit(form)
+    onSubmit?.(form)
   }
 
   function updateFieldSync (field: string, target: EventTarget, isFromClipboard = false) {
@@ -72,20 +73,14 @@ export function AppForm<FormType extends Form> ({ error: parentError = '', initi
   const canSubmit = form.isValid && form.isTouched && errorMessage.length === 0
 
   return (
-    <form autoComplete="off" className={`grid w-full ${form.columns === 3 ? 'gap-3 md:grid-cols-3' : 'gap-6 md:grid-cols-2'}`} noValidate onSubmit={onFormSubmit} spellCheck={false}>{/* eslint-disable-line @typescript-eslint/no-magic-numbers */}
-      {fields.map(([field, { isRequired, isValid, label, options, type, value }]) => (
-        <div className="grid w-full" key={field}>
-          {type === 'text' && <TextField error={Boolean(form.isTouched) && !isValid} id={field} label={label} onChange={event => { void updateField(field, event.target) }} required={isRequired} value={value} variant="standard" />}
-          {type === 'checkbox' && <FormControlLabel control={<Checkbox />} id={field} label={label} onChange={event => { void updateField(field, event.target) }} required={isRequired} value={value} />}
-          {/* @ts-expect-error typing issue */}
+    <form autoComplete="off" className={`grid w-full gap-6 ${form.columns === 3 ? 'md:grid-cols-3' : 'md:grid-cols-2'}`} noValidate onSubmit={onFormSubmit} spellCheck={false}>{/* eslint-disable-line @typescript-eslint/no-magic-numbers */}
+      {fields.map(([field, { isRequired, isValid, label, options, type, unit, value }]) => (
+        <div className="grid w-full" key={field}>{/* @ts-expect-error typing issue */}
+          {type === 'text' && <TextField error={Boolean(form.isTouched) && !isValid} id={field} InputProps={{ endAdornment: unit.length > 0 && <InputAdornment position="end">{unit}</InputAdornment> }} label={label} onChange={event => { void updateField(field, event.target) }} required={isRequired} value={value} variant="standard" />}
+          {type === 'checkbox' && <FormControlLabel control={<Checkbox />} id={field} label={label} onChange={event => { void updateField(field, event.target) }} required={isRequired} value={value} />}{/* @ts-expect-error typing issue */}
           {type === 'select' && <FormControl fullWidth variant="standard">
             <InputLabel id={field}>{label}</InputLabel>
-            <Select
-              label={label}
-              labelId={field}
-              onChange={event => { void updateField(field, event.target) }}
-              value={value}
-            >{/* @ts-expect-error typing issue */}
+            <Select label={label} labelId={field} onChange={event => { void updateField(field, event.target) }} value={value}>{/* @ts-expect-error typing issue */}
               {options.map(({ label: optionLabel, value: optionValue }) => <MenuItem key={optionValue} value={optionValue}>{optionLabel}</MenuItem>)}
             </Select>
           </FormControl>}
@@ -93,7 +88,7 @@ export function AppForm<FormType extends Form> ({ error: parentError = '', initi
       ))}
       <div className="order-last flex flex-col md:col-span-full">
         {Boolean(errorMessage) && Boolean(form.isTouched) && <p className="text-red-500">{errorMessage}</p>}
-        <Button disabled={!canSubmit} type="submit" variant="contained">Save</Button>
+        {onSubmit !== undefined && <Button disabled={!canSubmit} type="submit" variant="contained">Save</Button>}
       </div>
     </form>
   )

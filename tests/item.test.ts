@@ -57,7 +57,7 @@ it('getOneItem B error result', () => {
   void expect(async () => await getOneItem('rec123', async () => {
     await sleep(1)
     return { id: 'malformed-item' }
-  })).rejects.toThrowErrorMatchingInlineSnapshot('[Error: failed to fetch item, issue(s) : Invalid type]')
+  })).rejects.toThrowErrorMatchingInlineSnapshot('[Error: failed to fetch item, issue(s) : Invalid type: Expected string but received undefined]')
 })
 
 it('getAllItems A no offset', async () => {
@@ -92,7 +92,7 @@ it('getAllItems C error result', () => {
   void expect(async () => await getAllItems(undefined, async () => {
     await sleep(1)
     return { records: [{}] }
-  })).rejects.toThrowErrorMatchingInlineSnapshot('[Error: failed to fetch item, issue(s) : Invalid type]')
+  })).rejects.toThrowErrorMatchingInlineSnapshot('[Error: failed to fetch item, issue(s) : Invalid type: Expected string but received undefined]')
 })
 
 it('addOrUpdateItems A update existing item', () => {

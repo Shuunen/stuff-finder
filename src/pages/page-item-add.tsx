@@ -1,5 +1,7 @@
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
+import Button from '@mui/material/Button'
 import { signal, useSignalEffect } from '@preact/signals'
+import { route } from 'preact-router'
 import { useRef, useState } from 'preact/hooks'
 import { dom, off, on } from 'shuutils'
 import { AppForm } from '../components/app-form'
@@ -26,6 +28,9 @@ function checkExisting (item: Item) {
 export function PageItemAdd ({ ...properties }: { readonly [key: string]: unknown }) {
   logger.debug('PageItemAdd', { properties })
   const [error, setError] = useState('')
+  const [canSubmit, setCanSubmit] = useState(false)
+  const [itemId, setItemId] = useState('')
+  const [lastForm, setLastForm] = useState(itemForm)
   const photoReference = useRef<HTMLImageElement>(null)
   const photo = signal(photoReference)
   type Form = typeof itemForm
@@ -39,6 +44,7 @@ export function PageItemAdd ({ ...properties }: { readonly [key: string]: unknow
     return exists
   }
 
+  // eslint-disable-next-line max-statements
   async function onSubmit (form: Form) {
     const item = formToItem(form)
     logger.debug('onSubmit', { form, item })
@@ -49,6 +55,8 @@ export function PageItemAdd ({ ...properties }: { readonly [key: string]: unknow
     if (result.success) {
       item.id = result.output.id
       pushItemLocally(item)
+      setItemId(item.id)
+      checkExistingSetError(item)
     }
     state.message = { content, delay: delays.seconds, type }
   }
@@ -61,8 +69,12 @@ export function PageItemAdd ({ ...properties }: { readonly [key: string]: unknow
   }
 
   function onChange (form: Form) {
-    logger.debug('onChange', { form })
-    checkExistingSetError(formToItem(form))
+    const item = formToItem(form)
+    const isValid = error === '' && form.isValid
+    logger.debug('onChange', { form, isValid, item })
+    setLastForm(form)
+    setCanSubmit(isValid)
+    checkExistingSetError(item)
     handlePhoto(form)
   }
 
@@ -79,8 +91,11 @@ export function PageItemAdd ({ ...properties }: { readonly [key: string]: unknow
         <div className="grid grid-cols-3 gap-6">
           <img alt="item visual" ref={photoReference} src={defaultImage} />
           <div className="col-span-2">
-            {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
-            <AppForm error={error} initialForm={itemForm} onChange={onChange} onSubmit={onSubmit} />
+            <AppForm error={error} initialForm={itemForm} onChange={onChange} />
+          </div>
+          <div className="col-span-3 flex">
+            <Button disabled={!canSubmit} onClick={() => { void onSubmit(lastForm) }} variant="contained">Create</Button>
+            <Button disabled={itemId === ''} onClick={() => { route(`/item/details/${itemId}`) }} variant="contained">View</Button>
           </div>
         </div>
       </div>

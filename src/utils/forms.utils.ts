@@ -1,42 +1,26 @@
 import { objectEqual } from 'shuutils'
-import { logger } from './logger.utils'
 
 type FormFieldType = 'checkbox' | 'select' | 'text'
-
 type FormFieldOptions = { label: string; value: string }[]
-
 type FormFieldBase = {
   isRequired: boolean
   isValid: boolean
   label: string
-  link?: string
+  link: string
   options?: FormFieldOptions
   order: number
   regex: RegExp
+  unit: string
 }
-
-type FormFieldText = FormFieldBase & {
-  type: 'text'
-  value: string
-}
-
-type FormFieldSelect = FormFieldBase & {
-  options: FormFieldOptions
-  type: 'select'
-  value: string
-}
-
-type FormFieldCheckbox = FormFieldBase & {
-  type: 'checkbox'
-  value: boolean // eslint-disable-line @typescript-eslint/naming-convention
-}
-
+type FormFieldText = FormFieldBase & { type: 'text'; value: string }
+type FormFieldSelect = FormFieldBase & { options: FormFieldOptions; type: 'select'; value: string }
+type FormFieldCheckbox = FormFieldBase & { type: 'checkbox'; value: boolean } // eslint-disable-line @typescript-eslint/naming-convention
 type FormField<Type extends FormFieldType> = Type extends 'text' ? FormFieldText : Type extends 'select' ? FormFieldSelect : FormFieldCheckbox
 
 function byOrder ([, { order: orderA }]: [string, FormField<FormFieldType>], [, { order: orderB }]: [string, FormField<FormFieldType>]) { return orderB - orderA }
 
 function fieldRegex (regex?: RegExp, minLength = 3, maxLength = 100) {
-  return regex ?? new RegExp(`^[\\w\\s]{${minLength},${maxLength}}$`, 'u') // eslint-disable-line security/detect-non-literal-regexp
+  return regex ?? new RegExp(`^[\\d\\p{L}\\s/&]{${minLength},${maxLength}}$`, 'u') // eslint-disable-line security/detect-non-literal-regexp
 }
 
 export type Form = {
@@ -60,24 +44,17 @@ export function validateForm<FormType extends Form> (form: FormType) {
   return { hasChanged, updatedForm }
 }
 
-export function createTextField (parameters: Partial<Pick<FormFieldText, 'isRequired' | 'isValid' | 'link' | 'regex' | 'value'>> & Pick<FormFieldText, 'label' | 'order'> & { maxLength?: number; minLength?: number }) {
-  const { isRequired = false, isValid = false, label = '', link, maxLength = 100, minLength = 3, order = 0, regex, value = '' } = parameters
-  const field: FormFieldText = { isRequired, isValid, label, order, regex: fieldRegex(regex, minLength, maxLength), type: 'text', value }
-  if (link !== undefined) field.link = link
-  return field
+export function createTextField (parameters: Partial<Pick<FormFieldText, 'isRequired' | 'isValid' | 'link' | 'regex' | 'unit' | 'value'>> & Pick<FormFieldText, 'label' | 'order'> & { maxLength?: number; minLength?: number }) {
+  const { isRequired = false, isValid = false, label = '', link = '', maxLength = 100, minLength = 3, order = 0, regex, unit = '', value = '' } = parameters
+  return { isRequired, isValid, label, link, order, regex: fieldRegex(regex, minLength, maxLength), type: 'text', unit, value } satisfies FormFieldText
 }
 
 export function createCheckboxField (parameters: Partial<Pick<FormFieldCheckbox, 'isRequired' | 'isValid' | 'link' | 'value'>> & Pick<FormFieldCheckbox, 'label' | 'order'>) {
-  const { isRequired = false, isValid = false, label = '', link, order = 0, value = false } = parameters // eslint-disable-line @typescript-eslint/naming-convention
-  const field: FormFieldCheckbox = { isRequired, isValid, label, order, regex: fieldRegex(), type: 'checkbox', value } // eslint-disable-line @typescript-eslint/naming-convention
-  if (link !== undefined) field.link = link
-  return field
+  const { isRequired = false, isValid = false, label = '', link = '', order = 0, value = false } = parameters // eslint-disable-line @typescript-eslint/naming-convention
+  return { isRequired, isValid, label, link, order, regex: fieldRegex(), type: 'checkbox', unit: '', value } satisfies FormFieldCheckbox // eslint-disable-line @typescript-eslint/naming-convention
 }
 
 export function createSelectField (parameters: Partial<Pick<FormFieldSelect, 'isRequired' | 'isValid' | 'link' | 'regex' | 'value'>> & Pick<FormFieldSelect, 'label' | 'options' | 'order'>) {
-  const { isRequired = false, isValid = false, label = '', link, options, order = 0, regex, value = '' } = parameters
-  logger.debug('createSelectField', { isRequired, isValid, label, link, options, order, value })
-  const field: FormFieldSelect = { isRequired, isValid, label, options, order, regex: fieldRegex(regex), type: 'select', value }
-  if (link !== undefined) field.link = link
-  return field
+  const { isRequired = false, isValid = false, label = '', link = '', options, order = 0, regex, value = '' } = parameters
+  return { isRequired, isValid, label, link, options, order, regex: fieldRegex(regex), type: 'select', unit: '', value } satisfies FormFieldSelect
 }

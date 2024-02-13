@@ -19,7 +19,7 @@ it('validateForm B valid form', () => {
       table: { ...settingsForm.fields.table, value: 'my-table' },
       token: { ...settingsForm.fields.token, value: 'pat12345654987123azdazdzadazdzadaz465465468479649646azd46az465azdazd' },
       view: { ...settingsForm.fields.view, value: 'my-view' },
-      wrap: { ...settingsForm.fields.wrap, value: '13246874kpohj4987_azdzad13546354' },
+      wrap: { ...settingsForm.fields.wrap, value: '13246874azerty4987_pools13546354' },
     },
   }
   const { hasChanged, updatedForm } = validateForm(form)
