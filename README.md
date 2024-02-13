@@ -11,6 +11,8 @@
 
 [![logo](public/assets/favicon-16x16.png)](https://stuff-finder.netlify.app) [https://stuff-finder.netlify.app](https://stuff-finder.netlify.app)
 
+[![demo](docs/design-1.2.0.jpg)](https://stuff-finder.netlify.app)
+
 ## Todo
 
 - [ ] remove `eslint-disable-next-line no-restricted-syntax` in `main.to-migrate.ts` & `speech.service.ts`
