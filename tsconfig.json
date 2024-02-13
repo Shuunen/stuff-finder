@@ -34,6 +34,9 @@
     "strict": true,
     "strictNullChecks": true,
     "target": "ES2020",
+    "types": [
+      "@types/dom-speech-recognition"
+    ],
     "useDefineForClassFields": true,
     "verbatimModuleSyntax": true
   },
