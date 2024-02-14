@@ -7,7 +7,8 @@ import type { Item } from '../utils/parsers.utils'
 export function AppItemListEntry ({ item }: { readonly item: Item }) {
 
   const title = `${item.name}${item.brand ? ` - ${item.brand.trim()}` : ''}` // eslint-disable-line sonarjs/no-nested-template-literals
-  const subtitle = `${item.category} - ${item.box.split(' ')[0] ?? ''}${item.drawer}`
+  const drawer = `${item.box.split(' ')[0] ?? ''}${item.drawer}`.trim()
+  const subtitle = `${item.category}${drawer.length > 0 ? ' - ' : ''}${drawer}`
 
   return (
     <ListItem disablePadding key={item.id}>
