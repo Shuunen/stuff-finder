@@ -7,5 +7,4 @@ import { theme } from './utils/theme.utils.ts'
 
 const root = document.querySelector('#app')
 if (!root) throw new Error('No root element found!')
-// @ts-expect-error typings issue
 render(<ThemeProvider theme={theme}><App /></ThemeProvider>, root)

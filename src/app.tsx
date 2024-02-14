@@ -75,7 +75,6 @@ export function App () {
       </Suspense>
       <AppSpeedDial />
       <AppLoader isLoading={isLoading} />
-      {/* @ts-expect-error typings issue */}
       <SnackbarProvider />
     </>
   )

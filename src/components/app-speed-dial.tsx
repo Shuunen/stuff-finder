@@ -37,10 +37,8 @@ export function AppSpeedDial () {
       </Fade>
       <Zoom in={isVisible}>
         <div className="fixed bottom-10 right-10 z-20 print:hidden" data-component="speed-dial">
-          {/* @ts-expect-error typings issue */}
           <SpeedDial ariaLabel='Actions' icon={<SpeedDialIcon />} onClick={() => toggleOpen('click on dial')} onMouseEnter={() => onMouse('enter')} onMouseLeave={() => onMouse('leave')} open={isOpen}>
-            {/* @ts-expect-error typings issue */}
-            {actions.map((action) => /* @ts-expect-error typings issue */ (
+            {actions.map((action) => (
               <SpeedDialAction icon={action.icon} key={action.name} onClick={action.handleClick} tooltipTitle={action.name} />
             ))}
           </SpeedDial>

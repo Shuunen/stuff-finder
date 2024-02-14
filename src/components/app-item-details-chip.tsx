@@ -12,11 +12,12 @@ const chipsStyle = { height: 28, paddingTop: 0.3 }
 // eslint-disable-next-line @typescript-eslint/naming-convention, react/require-default-props
 export function AppItemDetailsChip ({ color = 'default', icon: Icon, label, link, tooltip }: { readonly color?: ChipOwnProps['color']; readonly icon?: MuiIcon | undefined; readonly label: string; readonly link?: string; readonly tooltip: string }) {
 
-  async function onChipClick (event: React.MouseEvent<HTMLDivElement>) {
+  async function onChipClick (event: MouseEvent) {
     event.stopPropagation()
     logger.debug('onChipClick', { event })
     if (link !== undefined) { route(link); return }
-    await copyToClipboard(event.currentTarget.textContent ?? '')
+    const target = event.currentTarget as HTMLElement // eslint-disable-line @typescript-eslint/consistent-type-assertions
+    await copyToClipboard(target.textContent ?? '')
     state.message = { content: `${tooltip} copied to clipboard`, delay: delays.second, type: 'success' }
   }
 

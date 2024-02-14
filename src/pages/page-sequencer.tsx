@@ -103,13 +103,13 @@ export function PageSequencer ({ ...properties }: { readonly [key: string]: unkn
         <form className="max-h-[19rem] w-full overflow-auto whitespace-nowrap">{/* eslint-disable-next-line react/no-array-index-key */}
           {sequence.map((item, index) => <AppSequenceItem index={index} item={item} key={`${typeof item === 'number' ? 'wait' : 'tone'}-${index}`} onChange={onChange} onDelete={onDelete} />)}
         </form>
-        <div className="flex w-full">{/* @ts-expect-error typings issue */}
+        <div className="flex w-full">
           <Button onClick={updateSequence(sequences.success)} startIcon={<RestartAltIcon />} variant="outlined">Reset</Button>
           <div className="grow" />
-          <Button onClick={updateSequence([...sequence, delays.small])} variant="outlined">Add wait</Button>{/* @ts-expect-error typings issue */ /* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
+          <Button onClick={updateSequence([...sequence, delays.small])} variant="outlined">Add wait</Button>{/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
           <Button onClick={async () => await playSequence(sequence)} startIcon={<PlayCircleFilledWhiteOutlinedIcon />} variant="contained">Play</Button>{/* eslint-disable-next-line @typescript-eslint/no-magic-numbers */}
           <Button onClick={updateSequence([...sequence, [delays.small, delays.large * 2]])} variant="outlined">Add tone</Button>
-          <div className="grow" />{/* @ts-expect-error typings issue */}
+          <div className="grow" />
           <Button endIcon={<ContentCopyIcon />} onClick={copySequence(sequence)} variant="outlined">Copy</Button>
         </div>
       </div>

@@ -76,11 +76,11 @@ export function AppForm<FormType extends Form> ({ error: parentError = '', initi
     <form autoComplete="off" className={`grid w-full gap-6 ${form.columns === 3 ? 'md:grid-cols-3' : 'md:grid-cols-2'}`} noValidate onSubmit={onFormSubmit} spellCheck={false}>{/* eslint-disable-line @typescript-eslint/no-magic-numbers */}
       {fields.map(([field, { isRequired, isValid, label, options, type, unit, value }]) => (
         <div className="grid w-full" key={field}>{/* @ts-expect-error typing issue */}
-          {type === 'text' && <TextField error={Boolean(form.isTouched) && !isValid} id={field} InputProps={{ endAdornment: unit.length > 0 && <InputAdornment position="end">{unit}</InputAdornment> }} label={label} onChange={event => { void updateField(field, event.target) }} required={isRequired} value={value} variant="standard" />}
-          {type === 'checkbox' && <FormControlLabel control={<Checkbox />} id={field} label={label} onChange={event => { void updateField(field, event.target) }} required={isRequired} value={value} />}{/* @ts-expect-error typing issue */}
+          {type === 'text' && <TextField error={Boolean(form.isTouched) && !isValid} id={field} InputProps={{ endAdornment: unit.length > 0 && <InputAdornment position="end">{unit}</InputAdornment> }} label={label} onChange={event => { void updateField(field, event.target) }} required={isRequired} value={value} variant="standard" />}{/* eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access */}
+          {type === 'checkbox' && <FormControlLabel control={<Checkbox />} id={field} label={label} onChange={event => { void updateField(field, event.target) }} required={isRequired} value={value} />}
           {type === 'select' && <FormControl fullWidth variant="standard">
             <InputLabel id={field}>{label}</InputLabel>
-            <Select label={label} labelId={field} onChange={event => { void updateField(field, event.target) }} value={value}>{/* @ts-expect-error typing issue */}
+            <Select label={label} labelId={field} onChange={event => { if (event.target !== null) void updateField(field, event.target) }} value={value}>{/* @ts-expect-error typing issue */}
               {options.map(({ label: optionLabel, value: optionValue }) => <MenuItem key={optionValue} value={optionValue}>{optionLabel}</MenuItem>)}
             </Select>
           </FormControl>}

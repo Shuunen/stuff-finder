@@ -45,8 +45,8 @@ export function PageItemPrint ({ ...properties }: { readonly [key: string]: unkn
   const [isHighlighted, setHighlight] = useState<boolean>(false)
   logger.debug('PageItemPrint', { item })
 
-  function onSizeChange (_event: React.MouseEvent<HTMLElement>, selectedSize: PrintSize) { setSize(selectedSize) } // eslint-disable-line no-underscore-dangle, @typescript-eslint/naming-convention
-  function onHighlightChange (_event: React.ChangeEvent<HTMLInputElement>, isChecked: boolean) { setHighlight(isChecked) } // eslint-disable-line no-underscore-dangle, @typescript-eslint/naming-convention
+  function onSizeChange (_event: unknown, selectedSize: PrintSize) { setSize(selectedSize) } // eslint-disable-line no-underscore-dangle, @typescript-eslint/naming-convention
+  function onHighlightChange (_event: unknown, isChecked: boolean) { setHighlight(isChecked) } // eslint-disable-line no-underscore-dangle, @typescript-eslint/naming-convention
 
   return (
     <>
@@ -61,7 +61,6 @@ export function PageItemPrint ({ ...properties }: { readonly [key: string]: unkn
               <AppBarcode isHighlighted={isHighlighted} item={item} size={size} />
               <div className="flex flex-col gap-3 md:ml-6 md:items-start">
                 <ToggleButtonGroup aria-label="Size" color="primary" exclusive onChange={onSizeChange} size="small" value={size}>
-                  {/* @ts-expect-error issue with types */}
                   {Object.keys(printSizes).map(one => <ToggleButton key={one} value={one}>{one}</ToggleButton>)}
                 </ToggleButtonGroup>
                 <FormControlLabel control={<Switch checked={isHighlighted} onChange={onHighlightChange} />} label="Highlight zones" />
