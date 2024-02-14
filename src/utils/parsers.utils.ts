@@ -86,12 +86,21 @@ const airtableMultipleRecordResponseSchema = object({
 
 type ItemSuggestions = Record<keyof Item, string[]>
 
+const airtableDeleteRecordResponseSchema = object({
+  deleted: boolean(),
+  id: idSchema,
+})
+
 export function airtableSingleRecordResponseParser (data: unknown) {
   return safeParse(airtableSingleRecordResponseSchema, data)
 }
 
 export function airtableMultipleRecordResponseParser (data: unknown) {
   return safeParse(airtableMultipleRecordResponseSchema, data)
+}
+
+export function airtableDeleteRecordResponseParser (data: unknown) {
+  return safeParse(airtableDeleteRecordResponseSchema, data)
 }
 
 export type { AirtableSingleRecordResponse, Item, ItemField, ItemPhoto, ItemStatus, ItemSuggestions }

@@ -1,10 +1,10 @@
 import { clone } from 'shuutils'
 import { defaultCommonLists, defaultImage, emptyItem, type CommonLists } from '../constants'
-import { get, patch, post } from './browser.utils'
+import { del, get, patch, post } from './browser.utils'
 import { createCheckboxField, createSelectField, createTextField, type Form } from './forms.utils'
 import { logger } from './logger.utils'
 import { sortListsEntries } from './objects.utils'
-import { airtableMultipleRecordResponseParser, airtableSingleRecordResponseParser, type AirtableSingleRecordResponse, type Item, type ItemField, type ItemPhoto } from './parsers.utils'
+import { airtableMultipleRecordResponseParser, airtableSingleRecordResponseParser, type AirtableSingleRecordResponse, type Item, type ItemField, type ItemPhoto, airtableDeleteRecordResponseParser } from './parsers.utils'
 import { state } from './state.utils'
 
 const airtableBaseUrl = 'https://api.airtable.com/v0'
@@ -82,6 +82,20 @@ function optionsFor (type: keyof CommonLists) {
   return state.lists[type].map((value) => ({ label: value, value }))
 }
 
+function deleteItemLocally (id: Item['id'], currentState = state) {
+  const items = clone(currentState.items)
+  const index = items.findIndex(item => item.id === id)
+  if (index === -1) throw new Error('item not found in state') // eslint-disable-line @typescript-eslint/no-magic-numbers
+  items.splice(index, 1)
+  currentState.items = items // eslint-disable-line no-param-reassign
+}
+
+async function deleteItemRemotely (id: Item['id'], currentState = state, delMethod = del) {
+  const { base, table } = currentState.credentials
+  const url = `${airtableBaseUrl}/${base}/${table}/${id}`
+  return airtableDeleteRecordResponseParser(await delMethod(url))
+}
+
 // eslint-disable-next-line max-statements, complexity, sonarjs/cognitive-complexity
 export function getItemFieldsToPush (data: Item, currentState = state) {
   const fields: Partial<AirtableSingleRecordResponse['fields']> = {}
@@ -140,6 +154,12 @@ export async function pushItemRemotely (item: Item, id = '', currentState = stat
   if (id === '') return airtableSingleRecordResponseParser(await postMethod(baseUrl, data))
   const url = `${baseUrl}/${id}`
   return airtableSingleRecordResponseParser(await patchMethod(url, data))
+}
+
+export async function deleteItem (id: Item['id'], currentState = state, delMethod = del) {
+  const result = await deleteItemRemotely(id, currentState, delMethod)
+  if (result.success) deleteItemLocally(id, currentState)
+  return result
 }
 
 export function getCommonListsFromItems (items: Item[]) {

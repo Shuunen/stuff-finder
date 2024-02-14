@@ -1,8 +1,9 @@
+/* eslint-disable max-lines */
 import { clone, sleep } from 'shuutils'
 import { expect, it } from 'vitest'
 import { defaultCommonLists } from '../src/constants'
 import { defaultStatus } from '../src/types/status.types'
-import { addOrUpdateItems, airtableRecordToItem, formToItem, getAllItems, getCommonListsFromItems, getItemFieldsToPush, getOneItem, isLocalAndRemoteSync, itemForm, itemToImageUrl, pushItemLocally, pushItemRemotely } from '../src/utils/item.utils'
+import { addOrUpdateItems, airtableRecordToItem, deleteItem, formToItem, getAllItems, getCommonListsFromItems, getItemFieldsToPush, getOneItem, isLocalAndRemoteSync, itemForm, itemToImageUrl, pushItemLocally, pushItemRemotely } from '../src/utils/item.utils'
 import { mockItem, mockRecord } from '../src/utils/mock.utils'
 import type { Item, ItemPhoto, ItemStatus } from '../src/utils/parsers.utils'
 import { state } from '../src/utils/state.utils'
@@ -186,14 +187,14 @@ it('pushItemRemotely A itemAA updated && no id should post', async () => {
   let urlCalled = ''
   let payloadGiven = {}
   let nbCalls = 0
-  const record = await pushItemRemotely(itemAA, '', stateA, async (url, payload) => {
+  const result = await pushItemRemotely(itemAA, '', stateA, async (url, payload) => {
     urlCalled = url
     payloadGiven = payload
     nbCalls += 1
     await sleep(1)
     return recordA
   })
-  expect(record).toMatchSnapshot()
+  expect(result).toMatchSnapshot()
   expect(urlCalled).toMatchInlineSnapshot('"https://api.airtable.com/v0/baseA/tableA"') // `${airtableBaseUrl}/${base}/${table}/` but base and table are empty
   expect(payloadGiven).toMatchSnapshot()
   expect(nbCalls).toBe(1)
@@ -282,4 +283,29 @@ it('formToItem C status mapping', () => {
   form.fields.status.value = ''
   const item = formToItem(form)
   expect(item.status).toBe('acheté')
+})
+
+it('deleteItem A delete an item in state', async () => {
+  let urlCalled = ''
+  let nbCalls = 0
+  const result = await deleteItem(itemAA.id, stateA, async (url) => {
+    urlCalled = url
+    nbCalls += 1
+    await sleep(1)
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    return { deleted: true, id: itemAA.id }
+  })
+  expect(result).toMatchSnapshot()
+  expect(urlCalled).toMatchInlineSnapshot('"https://api.airtable.com/v0/baseA/tableA/itemA"') // `${airtableBaseUrl}/${base}/${table}/` but base and table are empty
+  expect(nbCalls).toBe(1)
+})
+
+it('deleteItem B delete an item not in state', () => {
+  // eslint-disable-next-line no-underscore-dangle, @typescript-eslint/naming-convention, unused-imports/no-unused-vars, unicorn/consistent-function-scoping
+  async function deleteMethodMock (_url: string) {
+    await sleep(1) // eslint-disable-next-line @typescript-eslint/naming-convention
+    return { deleted: true, id: itemB.id }
+  }
+  void expect(async () => await deleteItem(itemB.id, stateA, deleteMethodMock))
+    .rejects.toThrowErrorMatchingInlineSnapshot('[Error: item not found in state]')
 })

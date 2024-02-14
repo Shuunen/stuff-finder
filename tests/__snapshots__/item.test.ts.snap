@@ -20,6 +20,23 @@ exports[`airtableRecordToItem A 1`] = `
 }
 `;
 
+exports[`deleteItem A delete an item in state 1`] = `
+{
+  "data": {
+    "deleted": true,
+    "id": "itemA",
+  },
+  "error": undefined,
+  "issues": undefined,
+  "output": {
+    "deleted": true,
+    "id": "itemA",
+  },
+  "success": true,
+  "typed": true,
+}
+`;
+
 exports[`formToItem A default itemForm 1`] = `
 {
   "barcode": "",
