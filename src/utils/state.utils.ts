@@ -17,3 +17,5 @@ export const { state, watchState } = createState(
   storage,
   ['credentials', 'items', 'lists', 'theme'], // avoid status persistence
 )
+
+export type State = typeof state

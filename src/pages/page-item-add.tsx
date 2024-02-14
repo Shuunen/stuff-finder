@@ -7,7 +7,7 @@ import { dom, off, on } from 'shuutils'
 import { AppForm } from '../components/app-form'
 import { AppPageCard } from '../components/app-page-card'
 import { defaultImage, delays } from '../constants'
-import { formToItem, itemForm, pushItemLocally, pushItemRemotely } from '../utils/item.utils'
+import { formToItem, itemForm, pushItem } from '../utils/item.utils'
 import { logger } from '../utils/logger.utils'
 import type { Item } from '../utils/parsers.utils'
 import { state } from '../utils/state.utils'
@@ -44,21 +44,19 @@ export function PageItemAdd ({ ...properties }: { readonly [key: string]: unknow
     return exists
   }
 
-  // eslint-disable-next-line max-statements
+  function onSubmitSuccess (item: Item) {
+    state.message = { content: 'item added successfully', delay: delays.second, type: 'success' }
+    setItemId(item.id)
+    checkExistingSetError(item)
+  }
+
   async function onSubmit (form: Form) {
     const item = formToItem(form)
     logger.debug('onSubmit', { form, item })
     if (checkExistingSetError(item).isDuplicate) return
-    const result = await pushItemRemotely(item)
-    const content = result.success ? 'item added successfully' : 'error adding item'
-    const type = result.success ? 'success' : 'error'
-    if (result.success) {
-      item.id = result.output.id
-      pushItemLocally(item)
-      setItemId(item.id)
-      checkExistingSetError(item)
-    }
-    state.message = { content, delay: delays.seconds, type }
+    const result = await pushItem(item)
+    if (result.success) onSubmitSuccess({ ...item, id: result.output.id })
+    else state.message = { content: 'error adding item', delay: delays.seconds, type: 'error' }
   }
 
   function handlePhoto (form: Form) {

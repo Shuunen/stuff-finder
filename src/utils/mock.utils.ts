@@ -1,5 +1,8 @@
-import { emptyItemPhoto } from '../constants'
+import { defaultCommonLists, defaultItems, emptyItemPhoto } from '../constants'
+import { defaultStatus } from '../types/status.types'
+import { defaultTheme } from '../types/theme.types'
 import type { AirtableSingleRecordResponse, Item } from './parsers.utils'
+import type { State } from './state.utils'
 
 export function mockRecord (id = 'rec123', fields: Partial<AirtableSingleRecordResponse['fields']> = {}) {
   return {
@@ -44,3 +47,14 @@ export function mockItem (data: Partial<Item> = {}) {
   return item
 }
 
+export function mockState (data: Partial<State> = {}) {
+  return {
+    credentials: { base: 'baseA', table: 'tableA', token: 'tokenA', view: 'viewA', wrap: 'wrapA' },
+    items: defaultItems,
+    lists: defaultCommonLists,
+    message: undefined,
+    status: defaultStatus,
+    theme: defaultTheme,
+    ...data,
+  } satisfies State
+}

@@ -4,7 +4,7 @@ import { del, get, patch, post } from './browser.utils'
 import { createCheckboxField, createSelectField, createTextField, type Form } from './forms.utils'
 import { logger } from './logger.utils'
 import { sortListsEntries } from './objects.utils'
-import { airtableMultipleRecordResponseParser, airtableSingleRecordResponseParser, type AirtableSingleRecordResponse, type Item, type ItemField, type ItemPhoto, airtableDeleteRecordResponseParser } from './parsers.utils'
+import { airtableDeleteRecordResponseParser, airtableMultipleRecordResponseParser, airtableSingleRecordResponseParser, type AirtableSingleRecordResponse, type Item, type ItemField, type ItemPhoto } from './parsers.utils'
 import { state } from './state.utils'
 
 const airtableBaseUrl = 'https://api.airtable.com/v0'
@@ -97,7 +97,7 @@ async function deleteItemRemotely (id: Item['id'], currentState = state, delMeth
 }
 
 // eslint-disable-next-line max-statements, complexity, sonarjs/cognitive-complexity
-export function getItemFieldsToPush (data: Item, currentState = state) {
+function getItemFieldsToPush (data: Item, currentState = state) {
   const fields: Partial<AirtableSingleRecordResponse['fields']> = {}
   if (data.barcode.length > 0) fields.barcode = data.barcode
   if (data.box.length > 0) fields.box = data.box
@@ -132,28 +132,35 @@ export function getItemFieldsToPush (data: Item, currentState = state) {
   return fields
 }
 
-export function pushItemLocally (itemTouched: Item) {
-  const items = clone(state.items)
-  const index = items.findIndex(item => item.id === itemTouched.id)
-  if (index >= 0) items[index] = itemTouched // update existing item
-  else if (itemTouched.id) items.push(itemTouched) // new item with id
-  else throw new Error('cannot add item without id')
-  state.items = items
+function pushItemLocally (item: Item, currentState = state) {
+  const items = clone(currentState.items)
+  const index = items.findIndex(one => one.id === item.id)
+  if (index >= 0) items[index] = item // update existing item
+  else items.push(item) // new item with id
+  // eslint-disable-next-line no-param-reassign
+  currentState.items = items
 }
 
 // eslint-disable-next-line @typescript-eslint/max-params
-export async function pushItemRemotely (item: Item, id = '', currentState = state, postMethod = post, patchMethod = patch) {
+async function pushItemRemotely (item: Item, currentState = state, postMethod = post, patchMethod = patch) {
   const fields = getItemFieldsToPush(item, currentState)
   if (Object.keys(fields).length === 0) {
     logger.showLog('no update to push')
-    return { output: { fields, id }, success: false } // eslint-disable-line @typescript-eslint/naming-convention
+    return { output: { fields, id: item.id }, success: false } // eslint-disable-line @typescript-eslint/naming-convention
   }
   const data = { fields }
   const { base, table } = currentState.credentials
   const baseUrl = `${airtableBaseUrl}/${base}/${table}`
-  if (id === '') return airtableSingleRecordResponseParser(await postMethod(baseUrl, data))
-  const url = `${baseUrl}/${id}`
+  if (item.id === '') return airtableSingleRecordResponseParser(await postMethod(baseUrl, data))
+  const url = `${baseUrl}/${item.id}`
   return airtableSingleRecordResponseParser(await patchMethod(url, data))
+}
+
+// eslint-disable-next-line @typescript-eslint/max-params
+export async function pushItem (item: Item, currentState = state, postMethod = post, patchMethod = patch) {
+  const result = await pushItemRemotely(item, currentState, postMethod, patchMethod)
+  if (result.success) pushItemLocally({ ...item, id: result.output.id }, currentState)
+  return result
 }
 
 export async function deleteItem (id: Item['id'], currentState = state, delMethod = del) {
@@ -240,5 +247,5 @@ export function isLocalAndRemoteSync (records: AirtableSingleRecordResponse[], c
   return localLast === undefined ? false : remoteFirst.id === localLast.id && remoteFirst['updated-on'] === localLast['updated-on']
 }
 
-export { addOrUpdateItems, airtableRecordToItem, getAllItems, getOneItem, itemToImageUrl }
+export { addOrUpdateItems, airtableRecordToItem, getAllItems, getItemFieldsToPush, getOneItem, itemToImageUrl }
 

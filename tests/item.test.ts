@@ -1,12 +1,9 @@
-/* eslint-disable max-lines */
+
 import { clone, sleep } from 'shuutils'
 import { expect, it } from 'vitest'
-import { defaultCommonLists } from '../src/constants'
-import { defaultStatus } from '../src/types/status.types'
-import { addOrUpdateItems, airtableRecordToItem, deleteItem, formToItem, getAllItems, getCommonListsFromItems, getItemFieldsToPush, getOneItem, isLocalAndRemoteSync, itemForm, itemToImageUrl, pushItemLocally, pushItemRemotely } from '../src/utils/item.utils'
-import { mockItem, mockRecord } from '../src/utils/mock.utils'
+import { addOrUpdateItems, airtableRecordToItem, deleteItem, formToItem, getAllItems, getCommonListsFromItems, getItemFieldsToPush, getOneItem, isLocalAndRemoteSync, itemForm, itemToImageUrl, pushItem } from '../src/utils/item.utils'
+import { mockItem, mockRecord, mockState } from '../src/utils/mock.utils'
 import type { Item, ItemPhoto, ItemStatus } from '../src/utils/parsers.utils'
-import { state } from '../src/utils/state.utils'
 
 const recordA = mockRecord(undefined, { 'reference': '', 'updated-on': '' })
 
@@ -20,14 +17,7 @@ const itemA = mockItem({ id: 'itemA', status: 'new surprise status' as ItemStatu
 const itemAA = { ...itemA, status: 'acheté' as ItemStatus }
 const itemB = mockItem({ id: 'itemB', location: 'location A' })
 
-const stateA = {
-  credentials: { base: 'baseA', table: 'tableA', token: 'tokenA', view: 'viewA', wrap: 'wrapA' },
-  items: [itemA],
-  lists: defaultCommonLists,
-  message: undefined,
-  status: defaultStatus,
-  theme: 'light',
-} satisfies typeof state
+const stateA = mockState({ items: [itemA] })
 
 it('getCommonListsFromItems A', () => {
   expect(getCommonListsFromItems([itemA, itemB])).toMatchSnapshot()
@@ -131,29 +121,6 @@ it('itemToImageUrl B', () => {
   expect(itemToImageUrl(item)).toBe(url)
 })
 
-it('pushItemLocally A add new item', () => {
-  state.items = [mockItem({ id: 'itemC' }), mockItem({ id: 'itemD' })]
-  expect(state.items).toHaveLength(2)
-  pushItemLocally(itemA)
-  // we should be able to : expect(state.items).toHaveLength(3) but it's not working ^^' no idea why
-})
-
-it('pushItemLocally B update existing item', () => {
-  state.items = [itemA, itemB]
-  expect(state.items).toHaveLength(2)
-  pushItemLocally(itemB)
-  expect(state.items).toHaveLength(2)
-})
-
-it('pushItemLocally C add new item without id', () => {
-  state.items = [itemA, itemB]
-  expect(state.items).toHaveLength(2)
-  const item = mockItem()
-  item.id = ''
-  // expect throw
-  expect(() => pushItemLocally(item)).toThrowErrorMatchingInlineSnapshot('[Error: cannot add item without id]')
-})
-
 it('getItemFieldsToPush A itemA ISO with stateA, no fields to push', () => {
   const fields = getItemFieldsToPush(itemA, stateA)
   expect(fields).toMatchInlineSnapshot('{}')
@@ -180,46 +147,60 @@ it('getItemFieldsToPush C itemAA updated with also photo & price', () => {
 
 it('getItemFieldsToPush D item not found locally', () => {
   const item = mockItem({ id: 'not found' })
-  expect(() => getItemFieldsToPush(item, stateA)).toThrowErrorMatchingInlineSnapshot('[Error: existing item not found locally]')
+  const state = mockState({ items: [mockItem({ id: '1' })] })
+  expect(() => getItemFieldsToPush(item, state)).toThrowErrorMatchingInlineSnapshot('[Error: existing item not found locally]')
 })
 
-it('pushItemRemotely A itemAA updated && no id should post', async () => {
+it('pushItem A item with no id should post remotely & push locally', async () => {
   let urlCalled = ''
   let payloadGiven = {}
   let nbCalls = 0
-  const result = await pushItemRemotely(itemAA, '', stateA, async (url, payload) => {
+  const item = mockItem({ id: '' })
+  const state = mockState({ items: [mockItem({ id: '1' }), mockItem({ id: '2' })] })
+  expect(state.items).toHaveLength(2)
+  const result = await pushItem(item, state, async (url, payload) => {
     urlCalled = url
     payloadGiven = payload
     nbCalls += 1
     await sleep(1)
-    return recordA
+    return mockRecord('freshly-created')
   })
+  expect(result.success).toBe(true) // should be a success to have added the item remotely & locally
   expect(result).toMatchSnapshot()
+  expect(state.items).toHaveLength(3) // because we just added a new item, the number of items should increase
   expect(urlCalled).toMatchInlineSnapshot('"https://api.airtable.com/v0/baseA/tableA"') // `${airtableBaseUrl}/${base}/${table}/` but base and table are empty
   expect(payloadGiven).toMatchSnapshot()
   expect(nbCalls).toBe(1)
 })
 
-it('pushItemRemotely B itemAA updated && his id should patch', async () => {
+it('pushItem B item with id should patch remotely & update locally', async () => {
   let urlCalled = ''
   let payloadGiven = {}
   let nbCalls = 0
-  const record = await pushItemRemotely(itemAA, itemAA.id, stateA, undefined, async (url, payload) => {
+  const id = 'existing'
+  const item = mockItem({ details: 'new details', id })
+  const state = mockState({ items: [mockItem({ id: 'another' }), mockItem({ id })] })
+  expect(state.items).toHaveLength(2)
+  const result = await pushItem(item, state, undefined, async (url, payload) => {
     urlCalled = url
     payloadGiven = payload
     nbCalls += 1
     await sleep(1)
-    return recordA
+    return mockRecord(id) // because record has been updated, we return a record with the same id
   })
-  expect(record).toMatchSnapshot()
-  expect(urlCalled).toMatchInlineSnapshot('"https://api.airtable.com/v0/baseA/tableA/itemA"')
+  expect(result.success).toBe(true) // should be a success to have updated the item remotely & locally
+  expect(result).toMatchSnapshot()
+  expect(state.items).toHaveLength(2) // because we just updated an existing item, the number of items should not change
+  expect(urlCalled).toMatchInlineSnapshot('"https://api.airtable.com/v0/baseA/tableA/existing"')
   expect(payloadGiven).toMatchSnapshot()
   expect(nbCalls).toBe(1)
 })
 
-it('pushItemRemotely C itemA no change should not call api', async () => {
-  const record = await pushItemRemotely(itemA, itemA.id)
-  expect(record.success).toBe(false)
+it('pushItem C itemA with no change should not call api', async () => {
+  const item = mockItem({ id: '1' })
+  const state = mockState({ items: [item, mockItem({ id: '2' })] }) // here item in state is the same as item
+  const result = await pushItem(item, state)
+  expect(result.success).toBe(false) // no change, so no call to the api
 })
 
 it('isLocalAndRemoteSync A is not in sync', () => {

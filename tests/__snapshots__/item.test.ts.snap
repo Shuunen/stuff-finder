@@ -190,7 +190,7 @@ exports[`getOneItem A success result 1`] = `
 }
 `;
 
-exports[`pushItemRemotely A itemAA updated && no id should post 1`] = `
+exports[`pushItem A item with no id should post remotely & push locally 1`] = `
 {
   "data": {
     "createdTime": "",
@@ -204,11 +204,11 @@ exports[`pushItemRemotely A itemAA updated && no id should post 1`] = `
       "location": "location A",
       "name": "item A",
       "ref-printed": false,
-      "reference": "",
+      "reference": "reference-a",
       "status": "acheté",
-      "updated-on": "",
+      "updated-on": "2022-12-26T15:42:00.000Z",
     },
-    "id": "rec123",
+    "id": "freshly-created",
   },
   "error": undefined,
   "issues": undefined,
@@ -224,26 +224,41 @@ exports[`pushItemRemotely A itemAA updated && no id should post 1`] = `
       "location": "location A",
       "name": "item A",
       "ref-printed": false,
-      "reference": "",
+      "reference": "reference-a",
       "status": "acheté",
-      "updated-on": "",
+      "updated-on": "2022-12-26T15:42:00.000Z",
     },
-    "id": "rec123",
+    "id": "freshly-created",
   },
   "success": true,
   "typed": true,
 }
 `;
 
-exports[`pushItemRemotely A itemAA updated && no id should post 3`] = `
+exports[`pushItem A item with no id should post remotely & push locally 3`] = `
 {
   "fields": {
+    "barcode": "barcode B",
+    "box": "box B",
+    "brand": "brand B",
+    "category": "category B",
+    "details": "details B",
+    "drawer": "drawer B",
+    "location": "location B",
+    "name": "name B",
+    "photo": [
+      {
+        "url": "https://picsum.photos/seed/name B/200/200",
+      },
+    ],
+    "ref-printed": false,
+    "reference": "reference B",
     "status": "acheté",
   },
 }
 `;
 
-exports[`pushItemRemotely B itemAA updated && his id should patch 1`] = `
+exports[`pushItem B item with id should patch remotely & update locally 1`] = `
 {
   "data": {
     "createdTime": "",
@@ -257,11 +272,11 @@ exports[`pushItemRemotely B itemAA updated && his id should patch 1`] = `
       "location": "location A",
       "name": "item A",
       "ref-printed": false,
-      "reference": "",
+      "reference": "reference-a",
       "status": "acheté",
-      "updated-on": "",
+      "updated-on": "2022-12-26T15:42:00.000Z",
     },
-    "id": "rec123",
+    "id": "existing",
   },
   "error": undefined,
   "issues": undefined,
@@ -277,21 +292,21 @@ exports[`pushItemRemotely B itemAA updated && his id should patch 1`] = `
       "location": "location A",
       "name": "item A",
       "ref-printed": false,
-      "reference": "",
+      "reference": "reference-a",
       "status": "acheté",
-      "updated-on": "",
+      "updated-on": "2022-12-26T15:42:00.000Z",
     },
-    "id": "rec123",
+    "id": "existing",
   },
   "success": true,
   "typed": true,
 }
 `;
 
-exports[`pushItemRemotely B itemAA updated && his id should patch 3`] = `
+exports[`pushItem B item with id should patch remotely & update locally 3`] = `
 {
   "fields": {
-    "status": "acheté",
+    "details": "new details",
   },
 }
 `;
