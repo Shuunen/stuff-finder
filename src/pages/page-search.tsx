@@ -34,6 +34,8 @@ export function PageSearch ({ input = '', ...properties }: { readonly input?: st
     state.status = 'ready'
   })
 
+  if (items.length === 1) route(`/item/details/${items[0]?.id ?? ''}/single`)
+
   return (
     <AppPageCard cardTitle="Search" icon={SearchIcon} pageCode="search" pageTitle={`Search for “${ellipsis(input, maxNameLength)}”`}>
       <div className="flex h-5/6 grow flex-col justify-start">
