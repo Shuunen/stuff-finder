@@ -73,8 +73,7 @@ export function App () {
           <PageError code="page-not-found" default />
         </Router>
       </Suspense>
-      <AppSpeedDial />
-      <AppLoader isLoading={isLoading} />
+      <AppSpeedDial isLoading={isLoading} />
       <SnackbarProvider />
     </>
   )

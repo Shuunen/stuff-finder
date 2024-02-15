@@ -1,6 +1,7 @@
 import AddIcon from '@mui/icons-material/Add'
 import SpeedDialIcon from '@mui/icons-material/EjectOutlined'
 import HomeIcon from '@mui/icons-material/Home'
+import HourglassTop from '@mui/icons-material/HourglassTop'
 import PrintIcon from '@mui/icons-material/Print'
 import QrCodeScannerIcon from '@mui/icons-material/QrCodeScanner'
 import SettingsIcon from '@mui/icons-material/Settings'
@@ -22,7 +23,7 @@ const actions = [
   { handleClick: () => route('/scan'), icon: <QrCodeScannerIcon />, name: 'Scan' },
 ]
 
-export function AppSpeedDial () {
+export function AppSpeedDial ({ isLoading }: { readonly isLoading: boolean }) {
 
   const [isVisible, setIsVisible] = useState(false)
   const [isOpen, setOpen] = useState(false)
@@ -37,7 +38,7 @@ export function AppSpeedDial () {
       </Fade>
       <Zoom in={isVisible}>
         <div className="fixed bottom-10 right-10 z-20 print:hidden" data-component="speed-dial">
-          <SpeedDial ariaLabel='Actions' icon={<SpeedDialIcon />} onClick={() => toggleOpen('click on dial')} onMouseEnter={() => onMouse('enter')} onMouseLeave={() => onMouse('leave')} open={isOpen}>
+          <SpeedDial ariaLabel='Actions' FabProps={{ color: isLoading ? 'warning' : 'primary' }} icon={isLoading ? <HourglassTop /> : <SpeedDialIcon />} onClick={() => toggleOpen('click on dial')} onMouseEnter={() => onMouse('enter')} onMouseLeave={() => onMouse('leave')} open={isOpen}>
             {actions.map((action) => (
               <SpeedDialAction icon={action.icon} key={action.name} onClick={action.handleClick} tooltipTitle={action.name} />
             ))}

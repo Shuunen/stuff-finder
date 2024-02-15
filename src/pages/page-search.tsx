@@ -3,16 +3,17 @@ import { useSignalEffect } from '@preact/signals'
 import Fuse from 'fuse.js'
 import { route } from 'preact-router'
 import { useState } from 'preact/hooks'
-import { ellipsis, sanitize } from 'shuutils'
+import { debounce, ellipsis, sanitize } from 'shuutils'
 import { AppItemList } from '../components/app-item-list'
 import { AppPageCard } from '../components/app-page-card'
-import { defaultItems, fuseOptions } from '../constants'
+import { defaultItems, delays, fuseOptions } from '../constants'
 import { logger } from '../utils/logger.utils'
-import { state } from '../utils/state.utils'
+import { state, watchState } from '../utils/state.utils'
 
 const maxNameLength = 20
 
 function search (input: string) {
+  logger.debug('search, input', { input })
   const fuse = new Fuse(state.items, fuseOptions)
   const result = state.items.find(item => item.reference === input || item.barcode === input)
   if (result !== undefined) { route(`/item/details/${result.id}/single`); return { header: '', results: [] } }
@@ -25,16 +26,19 @@ export function PageSearch ({ input = '', ...properties }: { readonly input?: st
   logger.debug('PageSearch rendering', { input, properties })
   const [items, setItems] = useState(defaultItems)
   const [title, setTitle] = useState('Searching...')
-  useSignalEffect(() => {
-    logger.debug('PageSearch is mounted')
-    state.status = 'loading'
+
+  function triggerSearchSync () {
     const { header, results } = search(input)
     setItems(results)
     setTitle(header)
-    state.status = 'ready'
-  })
+  }
+
+  const triggerSearch = debounce(triggerSearchSync, delays.large)
+
+  useSignalEffect(() => { triggerSearchSync() })
 
   if (items.length === 1) route(`/item/details/${items[0]?.id ?? ''}/single`)
+  else watchState('items', () => { void triggerSearch() })
 
   return (
     <AppPageCard cardTitle="Search" icon={SearchIcon} pageCode="search" pageTitle={`Search for “${ellipsis(input, maxNameLength)}”`}>
