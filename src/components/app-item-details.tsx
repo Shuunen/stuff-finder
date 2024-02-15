@@ -19,14 +19,14 @@ export function AppItemDetails ({ item }: { readonly item: Item }) {
   }
 
   return (
-    <>
+    <div className="flex flex-row">
       <div className="absolute right-5 top-5 opacity-50 transition-opacity hover:opacity-85">
         <AppDeleteRessource onDelete={() => { void onDelete() }} />
       </div>
       <div className="relative flex aspect-square w-full min-w-40 max-w-[30vh] flex-col md:w-1/3 md:min-w-[16rem] md:max-w-[40vh]">{/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
         <img alt={item.name} className="absolute top-0 size-full object-contain md:p-4" data-id={item.id} onError={onItemImageError} src={itemToImageUrl(item)} />
       </div>
-      <div className="flex min-w-80 flex-col items-start justify-start gap-3 md:w-2/3">
+      <div className="mr-6 flex min-w-80 flex-col items-start justify-start gap-3 md:w-2/3">
         <h1>{item.name}</h1>
         <h2>{item.brand}{item.category ? ' - ' : ''}{item.category}</h2>
         {Boolean(item.details) && <p className="first-letter:uppercase">{item.details}</p>}
@@ -41,6 +41,6 @@ export function AppItemDetails ({ item }: { readonly item: Item }) {
           <AppItemDetailsChip color="primary" icon={PrintIcon} label={item['ref-printed'] ? 'printed' : 'not printed'} link={`/item/print/${item.id}`} tooltip="Print it !" />
         </div>
       </div>
-    </>
+    </div>
   )
 }
