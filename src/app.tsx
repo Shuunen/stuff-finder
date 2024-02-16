@@ -18,9 +18,8 @@ type Component = typeof PageHome
 
 /* eslint-disable @typescript-eslint/promise-function-async, @typescript-eslint/naming-convention, promise/prefer-await-to-then */
 const AsyncPageScan = lazy<Component>(() => import('./pages/page-scan').then(({ PageScan }) => ({ default: PageScan })))
-const AsyncPageItemAdd = lazy<Component>(() => import('./pages/page-item-add').then(({ PageItemAdd }) => ({ default: PageItemAdd })))
+const AsyncPageItemAddEdit = lazy<Component>(() => import('./pages/page-item-add-edit').then(({ PageItemAddEdit }) => ({ default: PageItemAddEdit })))
 const AsyncPageItemDetails = lazy<Component>(() => import('./pages/page-item-details').then(({ PageItemDetails }) => ({ default: PageItemDetails })))
-const AsyncPageItemEdit = lazy<Component>(() => import('./pages/page-item-edit').then(({ PageItemEdit }) => ({ default: PageItemEdit })))
 const AsyncPageItemPrint = lazy<Component>(() => import('./pages/page-item-print').then(({ PageItemPrint }) => ({ default: PageItemPrint })))
 const AsyncPageSearch = lazy<Component>(() => import('./pages/page-search').then(({ PageSearch }) => ({ default: PageSearch })))
 const AsyncPageSettings = lazy<Component>(() => import('./pages/page-settings').then(({ PageSettings }) => ({ default: PageSettings })))
@@ -62,9 +61,9 @@ export function App () {
       <Suspense fallback={<AppLoader isLoading />}>
         <Router>
           <PageHome path="/" />
-          <AsyncPageItemAdd path="/item/add" />
+          <AsyncPageItemAddEdit path="/item/add" />
+          <AsyncPageItemAddEdit isEdit path="/item/edit/:id" />
           <AsyncPageItemDetails path="/item/details/:id/:context?" />
-          <AsyncPageItemEdit path="/item/edit/:id" />
           <AsyncPageItemPrint path="/item/print/:id" />
           <AsyncPageScan path="/scan" />
           <AsyncPageSearch path="/search/:input" />

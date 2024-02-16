@@ -17,11 +17,9 @@
 
 - [ ] remove `eslint-disable-next-line no-restricted-syntax` in `main.to-migrate.ts` & `speech.service.ts`
 - [ ] nicer colorful identity ([something like this ?](https://www.iconfinder.com/icons/44859/cube_icon))
-- [ ] add close confirmation on unsaved add item form modal
 - [ ] detect user in/activity to refresh data
 - [ ] show given/thrown items with a different color/display, also they're no more in box/room
 - [ ] features to recover :
-  - [ ] item edit & save
   - [ ] clone item
   - [ ] search retry when scan, search, or speech fail
   - [ ] reduce image size via `normalizePhotoUrl`

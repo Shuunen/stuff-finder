@@ -59,7 +59,6 @@ export const emptyItemPhoto: ItemPhoto = {
   filename: '',
   height: 0,
   id: '',
-  size: 0,
   thumbnails: { full: { height: 0, url: '', width: 0 }, large: { height: 0, url: '', width: 0 }, small: { height: 0, url: '', width: 0 } },
   type: '',
   url: '',

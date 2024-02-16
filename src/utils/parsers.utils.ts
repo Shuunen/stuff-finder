@@ -29,7 +29,6 @@ const itemPhotoSchema = object({
   filename: string(),
   height: number(),
   id: idSchema,
-  size: number(),
   thumbnails: object({
     full: itemThumbnailSchema,
     large: itemThumbnailSchema,

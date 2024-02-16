@@ -27,7 +27,7 @@ export function mockRecord (id = 'rec123', fields: Partial<AirtableSingleRecordR
 }
 
 export function mockItem (data: Partial<Item> = {}) {
-  const item: Item = {
+  return {
     'barcode': 'barcode B',
     'box': 'box B',
     'brand': 'brand B',
@@ -37,14 +37,13 @@ export function mockItem (data: Partial<Item> = {}) {
     'id': 'rec234',
     'location': 'location B',
     'name': 'name B',
+    'photo': [{ ...emptyItemPhoto, url: `https://picsum.photos/seed/${data.name ?? 'unknown-name'}/200/200` }],
     'ref-printed': false,
     'reference': 'reference B',
     'status': 'acheté',
     'updated-on': '2021-08-01T00:00:00.000Z',
     ...data,
   } satisfies Item
-  item.photo = (item.photo !== undefined && (item.photo.length > 0)) ? item.photo : [{ ...emptyItemPhoto, url: `https://picsum.photos/seed/${item.name}/200/200` }]
-  return item
 }
 
 export function mockState (data: Partial<State> = {}) {

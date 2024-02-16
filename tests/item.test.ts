@@ -1,7 +1,7 @@
-
+/* eslint-disable max-lines */
 import { clone, sleep } from 'shuutils'
 import { expect, it } from 'vitest'
-import { addOrUpdateItems, airtableRecordToItem, deleteItem, formToItem, getAllItems, getCommonListsFromItems, getItemFieldsToPush, getOneItem, isLocalAndRemoteSync, itemForm, itemToImageUrl, pushItem } from '../src/utils/item.utils'
+import { addOrUpdateItems, airtableRecordToItem, areItemsEquivalent, deleteItem, formToItem, getAllItems, getCommonListsFromItems, getItemFieldsToPush, getOneItem, isLocalAndRemoteSync, itemForm, itemToForm, itemToImageUrl, pushItem } from '../src/utils/item.utils'
 import { mockItem, mockRecord, mockState } from '../src/utils/mock.utils'
 import type { Item, ItemPhoto, ItemStatus } from '../src/utils/parsers.utils'
 
@@ -48,7 +48,7 @@ it('getOneItem B error result', () => {
   void expect(async () => await getOneItem('rec123', async () => {
     await sleep(1)
     return { id: 'malformed-item' }
-  })).rejects.toThrowErrorMatchingInlineSnapshot('[Error: failed to fetch item, issue(s) : Invalid type: Expected string but received undefined]')
+  })).rejects.toThrowErrorMatchingInlineSnapshot('[Error: failed to fetch item, issue(s) : Invalid type: Expected string but received undefined, Invalid type: Expected Object but received undefined]')
 })
 
 it('getAllItems A no offset', async () => {
@@ -83,7 +83,7 @@ it('getAllItems C error result', () => {
   void expect(async () => await getAllItems(undefined, async () => {
     await sleep(1)
     return { records: [{}] }
-  })).rejects.toThrowErrorMatchingInlineSnapshot('[Error: failed to fetch item, issue(s) : Invalid type: Expected string but received undefined]')
+  })).rejects.toThrowErrorMatchingInlineSnapshot('[Error: failed to fetch item, issue(s) : Invalid type: Expected string but received undefined, Invalid type: Expected Object but received undefined, Invalid type: Expected string but received undefined]')
 })
 
 it('addOrUpdateItems A update existing item', () => {
@@ -289,4 +289,45 @@ it('deleteItem B delete an item not in state', () => {
   }
   void expect(async () => await deleteItem(itemB.id, stateA, deleteMethodMock))
     .rejects.toThrowErrorMatchingInlineSnapshot('[Error: item not found in state]')
+})
+
+it('areItemsEquivalent A should be equivalent', () => {
+  const itemLeft = mockItem({ id: 'same' })
+  const itemRight = mockItem({ id: 'same' })
+  expect(areItemsEquivalent(itemLeft, itemRight)).toBe(true)
+})
+
+it('areItemsEquivalent B should be equivalent because we dont check id', () => {
+  const itemLeft = mockItem({ id: 'same' })
+  const itemRight = mockItem({ id: 'different' })
+  expect(areItemsEquivalent(itemLeft, itemRight)).toBe(true)
+})
+
+it('areItemsEquivalent C should not be equivalent', () => {
+  const itemLeft = mockItem({ id: 'same' })
+  const itemRight = mockItem({ id: 'different', name: 'something else' })
+  expect(areItemsEquivalent(itemLeft, itemRight)).toBe(false)
+})
+
+it('areItemsEquivalent D should not be equivalent because of photo', () => {
+  const itemLeft = mockItem({ id: 'same' })
+  const itemRight = mockItem({ id: 'same', photo: [] })
+  expect(areItemsEquivalent(itemLeft, itemRight)).toBe(false)
+})
+
+it('itemToForm A mocked item', () => {
+  const item = mockItem({ id: 'itemToForm-A' })
+  const form = itemToForm(item)
+  expect(form).toMatchSnapshot()
+})
+
+it('itemToForm B mocked item without photo', () => {
+  const item = mockItem({ id: 'itemToForm-B', photo: undefined })
+  const form = itemToForm(item)
+  expect(form.fields.photo.value).toBe('')
+})
+
+it('itemToForm C no item', () => {
+  const form = itemToForm()
+  expect(form).toMatchSnapshot()
 })

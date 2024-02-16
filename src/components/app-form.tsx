@@ -15,6 +15,7 @@ import { delays, voidFunction } from '../constants'
 import { validateForm, type Form } from '../utils/forms.utils'
 import { logger } from '../utils/logger.utils'
 import { state } from '../utils/state.utils'
+import { colSpanClass, gridClass } from '../utils/theme.utils'
 
 type Properties<FormType extends Form> = { readonly error?: string; readonly initialForm: FormType; readonly onChange?: (form: FormType) => void; readonly onSubmit?: ((form: FormType) => void) | undefined }
 
@@ -55,8 +56,7 @@ export function AppForm<FormType extends Form> ({ error: parentError = '', initi
     Object.entries(data).forEach(([key, value]) => {
       if (typeof key !== 'string' || typeof value !== 'string' || key === '' || value === '') return
       const actualField = futureForm.fields[key]
-      if (actualField === undefined) return
-      // @ts-expect-error typing issue
+      if (actualField === undefined) return // @ts-expect-error typing issue
       futureForm.fields[key] = { ...actualField, value }
     })
     setForm(futureForm)
@@ -68,16 +68,15 @@ export function AppForm<FormType extends Form> ({ error: parentError = '', initi
     return () => { if (handler !== false) off(handler) }
   })
 
-  const fields = Object.entries(form.fields).sort(([, { order: orderA }], [, { order: orderB }]) => orderA - orderB)
   const errorMessage = parentError.length > 0 ? parentError : form.errorMessage
   const canSubmit = form.isValid && form.isTouched && errorMessage.length === 0
 
   return (
-    <form autoComplete="off" className={`grid w-full gap-6 ${form.columns === 3 ? 'md:grid-cols-3' : 'md:grid-cols-2'}`} noValidate onSubmit={onFormSubmit} spellCheck={false}>{/* eslint-disable-line @typescript-eslint/no-magic-numbers */}
-      {fields.map(([field, { isRequired, isValid, label, options, type, unit, value }]) => (
-        <div className="grid w-full" key={field}>{/* @ts-expect-error typing issue */}
+    <form autoComplete="off" className={`grid w-full gap-6 ${gridClass(form.columns)}`} noValidate onSubmit={onFormSubmit} spellCheck={false}>{ }
+      {Object.entries(form.fields).map(([field, { columns, isRequired, isValid, label, options, type, unit, value }]) => (
+        <div className={`grid w-full ${colSpanClass(columns)}`} key={field}>{/* @ts-expect-error typing issue */}
           {type === 'text' && <TextField error={Boolean(form.isTouched) && !isValid} id={field} InputProps={{ endAdornment: unit.length > 0 && <InputAdornment position="end">{unit}</InputAdornment> }} label={label} onChange={event => { void updateField(field, event.target) }} required={isRequired} value={value} variant="standard" />}{/* eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access */}
-          {type === 'checkbox' && <FormControlLabel control={<Checkbox />} id={field} label={label} onChange={event => { void updateField(field, event.target) }} required={isRequired} value={value} />}
+          {type === 'checkbox' && <FormControlLabel control={<Checkbox checked={Boolean(value)} />} id={field} label={label} onChange={event => { void updateField(field, event.target) }} required={isRequired} />}
           {type === 'select' && <FormControl fullWidth variant="standard">
             <InputLabel id={field}>{label}</InputLabel>
             <Select label={label} labelId={field} onChange={event => { if (event.target !== null) void updateField(field, event.target) }} value={value}>{/* @ts-expect-error typing issue */}

@@ -6,9 +6,9 @@ it('validateForm A invalid field value', () => {
   const form = { ...settingsForm, fields: { ...settingsForm.fields, base: { ...settingsForm.fields.base, value: 'azerty' } } }
   const { hasChanged, updatedForm } = validateForm(form)
   expect(updatedForm).toMatchSnapshot()
-  expect(hasChanged).toBe(true)
+  expect(hasChanged).toBe(false)
   expect(updatedForm.isValid).toBe(false)
-  expect(updatedForm.errorMessage).toMatchInlineSnapshot('"Airtable base is invalid, "azerty" should match /^app\\w{14}$/u"')
+  expect(updatedForm.errorMessage).toMatchInlineSnapshot('"Airtable view is required"')
 })
 
 it('validateForm B valid form', () => {
@@ -30,9 +30,9 @@ it('validateForm B valid form', () => {
 })
 
 it('createCheckboxField A with a link', () => {
-  expect(createCheckboxField({ label: 'label', link: 'https://example.com', order: 0 })).toMatchSnapshot()
+  expect(createCheckboxField({ label: 'label', link: 'https://example.com' })).toMatchSnapshot()
 })
 
 it('createSelectField A with a link', () => {
-  expect(createSelectField({ label: 'label', link: 'https://example.com', options: [], order: 0 })).toMatchSnapshot()
+  expect(createSelectField({ label: 'label', link: 'https://example.com', options: [] })).toMatchSnapshot()
 })

@@ -80,7 +80,7 @@ export function PageSequencer ({ ...properties }: { readonly [key: string]: unkn
     return voidFunction
   }
 
-  function onChange (index: number, type: 'tone-delay' | 'tone-value' | 'wait-delay') { // eslint-disable-line sonarjs/cognitive-complexity
+  function onChange (index: number, type: 'tone-delay' | 'tone-value' | 'wait-delay') {  
     return (_event: Event, value: number[] | number) => { // eslint-disable-line no-underscore-dangle, @typescript-eslint/naming-convention
       if (typeof value !== 'number') throw new Error('Weird case where value is not a number')
       if (type === 'wait-delay') setSequence(sequence.map((item, itemIndex) => (itemIndex === index ? value : item))) /* @ts-expect-error typings issue */
