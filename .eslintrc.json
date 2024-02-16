@@ -109,8 +109,16 @@
         "min": 2
       }
     ],
+    "import/default": "off",
     "import/extensions": "off",
+    "import/named": "off",
+    "import/namespace": "off",
     "import/newline-after-import": "off",
+    "import/no-cycle": "off", // slow, handled by dependency-cruiser
+    "import/no-deprecated": "off",
+    "import/no-named-as-default": "off",
+    "import/no-named-as-default-member": "off",
+    "import/no-unresolved": "off",
     "import/order": "off",
     "import/prefer-default-export": "off",
     "indent": "off",

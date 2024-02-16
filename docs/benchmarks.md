@@ -4,9 +4,11 @@
 
 `hyperfine --runs 3 --warmup 1 'npx eslint --ext .js,.ts,.tsx .'`
 
-|     date     | delay | node  |   machine    | comment                    |
-| :----------: | :---: | :---: | :----------: | -------------------------- |
-| 2024-01-27#1 |  25s  | 20.11 | romain win11 | initial mesure, see note 0 |
+|     date     | delay | node  |   machine    | comment                          |
+| :----------: | :---: | :---: | :----------: | -------------------------------- |
+| 2024-01-27#1 |  25s  | 20.11 | romain win11 | initial mesure, see note 0       |
+| 2024-02-16#1 |  25s  | 20.11 | romain win11 | stable                           |
+| 2024-02-16#2 |  15s  | 20.11 | romain win11 | removed some import rules... lol |
 
 Note 0 : with plugin:tailwindcss/recommended,  plugin:unicorn/all, hardcore, hardcore/react, hardcore/ts
 Note 1 : to show time taken by rules : `TIMING=1 npx eslint --ext .js,.ts,.tsx .`
