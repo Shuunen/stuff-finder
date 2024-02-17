@@ -1,4 +1,4 @@
-import { array, boolean, fallback, literal, merge, number, object, optional, safeParse, string, union, type Output } from 'valibot'
+import { array, boolean, fallback, literal, merge, number, object, optional, string, union, type Output } from 'valibot'
 
 const itemStatusSchema = union([
   literal('acheté'),
@@ -9,8 +9,6 @@ const itemStatusSchema = union([
   literal('renvoyé'),
   literal('vendu'),
 ])
-
-type ItemStatus = Output<typeof itemStatusSchema>
 
 const airtableErrorSchema = object({
   message: string(),
@@ -39,8 +37,6 @@ const itemPhotoSchema = object({
   width: optional(number()),
 })
 
-type ItemPhoto = Output<typeof itemPhotoSchema>
-
 const itemBaseSchema = object({
   'barcode': fallback(string(), ''),
   'box': fallback(string(), ''),
@@ -65,41 +61,32 @@ const itemSchema = merge([
   }),
 ])
 
-type Item = Output<typeof itemSchema>
-type ItemField = keyof Item
+export type ItemStatus = Output<typeof itemStatusSchema>
 
-const airtableSingleRecordResponseSchema = object({
+export type ItemPhoto = Output<typeof itemPhotoSchema>
+
+export type Item = Output<typeof itemSchema>
+
+export type ItemField = keyof Item
+
+export const airtableSingleResponseSchema = object({
   createdTime: string(),
   error: optional(airtableErrorSchema),
   fields: itemBaseSchema,
   id: idSchema,
 })
 
-type AirtableSingleRecordResponse = Output<typeof airtableSingleRecordResponseSchema>
+export type AirtableSingleRecordResponse = Output<typeof airtableSingleResponseSchema>
 
-const airtableMultipleRecordResponseSchema = object({
+export const airtableMultipleResponseSchema = object({
   error: optional(airtableErrorSchema),
   offset: optional(string()),
-  records: array(airtableSingleRecordResponseSchema),
+  records: array(airtableSingleResponseSchema),
 })
 
-type ItemSuggestions = Record<keyof Item, string[]>
+export type ItemSuggestions = Record<keyof Item, string[]>
 
-const airtableDeleteRecordResponseSchema = object({
+export const airtableDeleteResponseSchema = object({
   deleted: boolean(),
   id: idSchema,
 })
-
-export function airtableSingleRecordResponseParser (data: unknown) {
-  return safeParse(airtableSingleRecordResponseSchema, data)
-}
-
-export function airtableMultipleRecordResponseParser (data: unknown) {
-  return safeParse(airtableMultipleRecordResponseSchema, data)
-}
-
-export function airtableDeleteRecordResponseParser (data: unknown) {
-  return safeParse(airtableDeleteRecordResponseSchema, data)
-}
-
-export type { AirtableSingleRecordResponse, Item, ItemField, ItemPhoto, ItemStatus, ItemSuggestions }

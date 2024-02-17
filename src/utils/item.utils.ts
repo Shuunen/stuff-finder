@@ -1,10 +1,11 @@
 import { clone, objectSum } from 'shuutils'
+import { safeParse } from 'valibot'
 import { defaultCommonLists, defaultImage, emptyItem, type CommonLists } from '../constants'
 import { del, get, patch, post } from './browser.utils'
 import { createCheckboxField, createSelectField, createTextField, type Form } from './forms.utils'
 import { logger } from './logger.utils'
 import { sortListsEntries } from './objects.utils'
-import { airtableDeleteRecordResponseParser, airtableMultipleRecordResponseParser, airtableSingleRecordResponseParser, type AirtableSingleRecordResponse, type Item, type ItemField, type ItemPhoto } from './parsers.utils'
+import { airtableDeleteResponseSchema, airtableMultipleResponseSchema, airtableSingleResponseSchema, type AirtableSingleRecordResponse, type Item, type ItemField, type ItemPhoto } from './parsers.utils'
 import { state } from './state.utils'
 
 const airtableBaseUrl = 'https://api.airtable.com/v0'
@@ -30,7 +31,7 @@ function airtableRecordToItem (record: AirtableSingleRecordResponse) {
 async function getOneItem (id: Item['id'], getMethod = get) {
   const { base, table } = state.credentials
   const url = `${airtableBaseUrl}/${base}/${table}/${id}`
-  const result = airtableSingleRecordResponseParser(await getMethod(url))
+  const result = safeParse(airtableSingleResponseSchema, await getMethod(url))
   if (!result.success) {
     logger.error(result.issues)
     throw new Error(`failed to fetch item, issue(s) : ${result.issues.map(issue => issue.message).join(', ')}`)
@@ -43,7 +44,7 @@ async function getAllItems (offset?: string, getMethod = get) {
   const sortByUpdatedFirst = '&sort%5B0%5D%5Bfield%5D=updated-on&sort%5B0%5D%5Bdirection%5D=desc'
   const { base, table, view } = state.credentials
   const url = `${airtableBaseUrl}/${base}/${table}?view=${view}${offsetParameter}${sortByUpdatedFirst}`
-  const result = airtableMultipleRecordResponseParser(await getMethod(url))
+  const result = safeParse(airtableMultipleResponseSchema, await getMethod(url))
   if (!result.success) {
     logger.error(result.issues)
     throw new Error(`failed to fetch item, issue(s) : ${result.issues.map(issue => issue.message).join(', ')}`)
@@ -99,7 +100,7 @@ function deleteItemLocally (id: Item['id'], currentState = state) {
 async function deleteItemRemotely (id: Item['id'], currentState = state, delMethod = del) {
   const { base, table } = currentState.credentials
   const url = `${airtableBaseUrl}/${base}/${table}/${id}`
-  return airtableDeleteRecordResponseParser(await delMethod(url))
+  return safeParse(airtableDeleteResponseSchema, await delMethod(url))
 }
 
 // eslint-disable-next-line max-statements, complexity, sonarjs/cognitive-complexity
@@ -157,9 +158,9 @@ async function pushItemRemotely (item: Item, currentState = state, postMethod = 
   const data = { fields }
   const { base, table } = currentState.credentials
   const baseUrl = `${airtableBaseUrl}/${base}/${table}`
-  if (item.id === '') return airtableSingleRecordResponseParser(await postMethod(baseUrl, data))
+  if (item.id === '') return safeParse(airtableSingleResponseSchema, await postMethod(baseUrl, data))
   const url = `${baseUrl}/${item.id}`
-  return airtableSingleRecordResponseParser(await patchMethod(url, data))
+  return safeParse(airtableSingleResponseSchema, await patchMethod(url, data))
 }
 
 function getCoreData (item: Item) {
