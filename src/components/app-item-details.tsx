@@ -8,6 +8,7 @@ import { state } from '../utils/state.utils'
 import { AppDeleteRessource } from './app-delete-ressource'
 import { AppItemDetailsChip } from './app-item-details-chip'
 
+// eslint-disable-next-line complexity
 export function AppItemDetails ({ item }: { readonly item: Item }) {
 
   async function onDelete () {
@@ -34,11 +35,12 @@ export function AppItemDetails ({ item }: { readonly item: Item }) {
           <LocationOnIcon className="text-purple-600" /><div className="font-medium">{item.location || 'unknown'} {item.box} {item.drawer}</div>
         </div>
         <div className="flex flex-wrap justify-start gap-3">
-          {Boolean(item.price) && <AppItemDetailsChip label={`${item.price ?? '?'} €`} tooltip="Price" />}
-          {Boolean(item.reference) && <AppItemDetailsChip label={item.reference} tooltip="Reference" />}
-          {Boolean(item.barcode) && <AppItemDetailsChip label={item.barcode} tooltip="Barcode" />}
-          {Boolean(item.status) && <AppItemDetailsChip label={item.status} tooltip="Status" />}
-          <AppItemDetailsChip color="primary" icon={PrintIcon} label={item['ref-printed'] ? 'printed' : 'not printed'} link={`/item/print/${item.id}`} tooltip="Print it !" />
+          {Boolean(item.brand) && <AppItemDetailsChip label={item.brand} link={`/search/${item.brand}`} tooltip="Brand, click to search" />}
+          {Boolean(item.price) && <AppItemDetailsChip label={`${item.price ?? '?'} €`} tooltip="Price, click to copy" />}
+          {Boolean(item.reference) && <AppItemDetailsChip label={item.reference} tooltip="Reference, click to copy" />}
+          {Boolean(item.barcode) && <AppItemDetailsChip label={item.barcode} tooltip="Barcode, click to copy" />}
+          {Boolean(item.status) && <AppItemDetailsChip label={item.status} tooltip="Status, click to copy" />}
+          <AppItemDetailsChip color="primary" icon={PrintIcon} label={item['ref-printed'] ? 'printed' : 'not printed'} link={`/item/print/${item.id}`} tooltip="Click to print" />
         </div>
       </div>
     </div>
