@@ -27,16 +27,16 @@ const itemThumbnailSchema = object({
 
 const itemPhotoSchema = object({
   filename: string(),
-  height: number(),
+  height: optional(number()),
   id: idSchema,
-  thumbnails: object({
+  thumbnails: optional(object({
     full: itemThumbnailSchema,
     large: itemThumbnailSchema,
     small: itemThumbnailSchema,
-  }),
-  type: string(),
+  })),
+  type: optional(string()),
   url: string(),
-  width: number(),
+  width: optional(number()),
 })
 
 type ItemPhoto = Output<typeof itemPhotoSchema>
