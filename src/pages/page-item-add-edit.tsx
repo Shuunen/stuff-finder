@@ -63,8 +63,9 @@ export function PageItemAddEdit ({ id = '', isEdit = false }: { readonly id?: st
     logger.debug('onSubmit', { form, item })
     if (!isEdit && checkExistingSetError(item).isDuplicate) return
     const result = await pushItem(item)
-    if (result.success) onSubmitSuccess({ ...item, id: result.output.id })
-    else state.message = { content: `error ${isEdit ? 'updating' : 'adding'} item`, delay: delays.seconds, type: 'error' }
+    if (result.success) { onSubmitSuccess({ ...item, id: result.output.id }); return }
+    state.message = { content: `error ${isEdit ? 'updating' : 'adding'} item`, delay: delays.seconds, type: 'error' }
+    logger.error('onSubmit failed', result)
   }
 
   function handlePhoto (form: Form) {
