@@ -8,10 +8,11 @@ import { useState } from 'preact/hooks'
 import { AppBarcode } from '../components/app-barcode'
 import { AppPageCard } from '../components/app-page-card'
 import { printSizes, type PrintSize } from '../types/print.types'
-import { itemToImageUrl, onItemImageError } from '../utils/item.utils'
+import { itemToImageUrl, onItemImageError, pushItem } from '../utils/item.utils'
 import { logger } from '../utils/logger.utils'
 import { itemToPrintData } from '../utils/print.utils'
 import { state } from '../utils/state.utils'
+import { delays } from '../constants'
 
 // if qr code size need to be adjusted, use this old block of code :
 // async function adjustQrCode () {
@@ -30,10 +31,7 @@ import { state } from '../utils/state.utils'
 // wc.setAttribute('modulesize', '2')
 // }
 
-function doPrint () {
-  window.print()
-}
-
+// eslint-disable-next-line max-statements
 export function PageItemPrint ({ ...properties }: { readonly [key: string]: unknown }) {
 
   if (typeof properties.id !== 'string') throw new Error('An id in the url is required')
@@ -44,6 +42,15 @@ export function PageItemPrint ({ ...properties }: { readonly [key: string]: unkn
   const [size, setSize] = useState<PrintSize>('40x20')
   const [isHighlighted, setHighlight] = useState<boolean>(false)
   logger.debug('PageItemPrint', { item })
+
+  async function doPrint () {
+    window.print()
+    if (item === undefined || item['ref-printed']) return
+    item['ref-printed'] = true
+    const result = await pushItem(item)
+    state.message = { content: `${result.success ? 'updated' : 'failed updating'} item as printed`, delay: delays.seconds, type: result.success ? 'success' : 'error' }
+    if (!result.success) logger.error('pushItem failed', result)
+  }
 
   function onSizeChange (_event: unknown, selectedSize: PrintSize) { setSize(selectedSize) } // eslint-disable-line no-underscore-dangle, @typescript-eslint/naming-convention
   function onHighlightChange (_event: unknown, isChecked: boolean) { setHighlight(isChecked) } // eslint-disable-line no-underscore-dangle, @typescript-eslint/naming-convention
@@ -64,7 +71,7 @@ export function PageItemPrint ({ ...properties }: { readonly [key: string]: unkn
                   {Object.keys(printSizes).map(one => <ToggleButton key={one} value={one}>{one}</ToggleButton>)}
                 </ToggleButtonGroup>
                 <FormControlLabel control={<Switch checked={isHighlighted} onChange={onHighlightChange} />} label="Highlight zones" />
-                <Button onClick={doPrint} variant="contained">Print</Button>
+                <Button onClick={() => { void doPrint() }} variant="contained">Print</Button>
               </div>
             </div>
           </div>
