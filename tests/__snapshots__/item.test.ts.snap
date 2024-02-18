@@ -1,25 +1,5 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`airtableRecordToItem A 1`] = `
-{
-  "barcode": "",
-  "box": "box A",
-  "brand": "",
-  "category": "category A",
-  "details": "",
-  "drawer": "",
-  "id": "rec123",
-  "location": "location A",
-  "name": "item A",
-  "photo": [],
-  "price": 0,
-  "ref-printed": false,
-  "reference": "",
-  "status": "acheté",
-  "updated-on": "",
-}
-`;
-
 exports[`deleteItem A delete an item in state 1`] = `
 {
   "data": {
@@ -78,56 +58,6 @@ exports[`formToItem B itemForm with some values 1`] = `
   "reference": "",
   "status": "acheté",
   "updated-on": "",
-}
-`;
-
-exports[`getAllItems A no offset 1`] = `
-{
-  "records": [
-    {
-      "createdTime": "",
-      "fields": {
-        "barcode": "",
-        "box": "box A",
-        "brand": "",
-        "category": "category A",
-        "details": "",
-        "drawer": "",
-        "location": "location A",
-        "name": "item A",
-        "ref-printed": false,
-        "reference": "",
-        "status": "acheté",
-        "updated-on": "",
-      },
-      "id": "rec123",
-    },
-  ],
-}
-`;
-
-exports[`getAllItems B with offset 1`] = `
-{
-  "records": [
-    {
-      "createdTime": "",
-      "fields": {
-        "barcode": "",
-        "box": "box A",
-        "brand": "",
-        "category": "category A",
-        "details": "",
-        "drawer": "",
-        "location": "location A",
-        "name": "item A",
-        "ref-printed": false,
-        "reference": "",
-        "status": "acheté",
-        "updated-on": "",
-      },
-      "id": "rec123",
-    },
-  ],
 }
 `;
 

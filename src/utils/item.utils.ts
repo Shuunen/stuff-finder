@@ -1,14 +1,13 @@
 import { clone, objectSum } from 'shuutils'
-import { safeParse } from 'valibot'
 import { defaultCommonLists, defaultImage, emptyItem, type CommonLists } from '../constants'
-import { del, get, patch, post } from './browser.utils'
+import { deleteItemRemotely, getOneItem, pushItemRemotely } from './airtable.utils'
+import { del, patch, post } from './browser.utils'
 import { createCheckboxField, createSelectField, createTextField, type Form } from './forms.utils'
 import { logger } from './logger.utils'
 import { sortListsEntries } from './objects.utils'
-import { airtableDeleteResponseSchema, airtableMultipleResponseSchema, airtableSingleResponseSchema, type AirtableSingleRecordResponse, type Item, type ItemField, type ItemPhoto } from './parsers.utils'
+import type { Item, ItemPhoto } from './parsers.utils'
 import { state } from './state.utils'
 
-const airtableBaseUrl = 'https://api.airtable.com/v0'
 
 function shouldAddToList (value = '', list: string[] = []) {
   return value.length > 0 && !list.includes(value)
@@ -18,38 +17,6 @@ const airtableMaxRequestPerSecond = 5
 
 function itemToImageUrl (item?: Item) {
   return item?.photo?.[0]?.url ?? defaultImage
-}
-
-function airtableRecordToItem (record: AirtableSingleRecordResponse) {
-  return {
-    ...emptyItem,
-    ...record.fields,
-    id: record.id,
-  }
-}
-
-async function getOneItem (id: Item['id'], getMethod = get) {
-  const { base, table } = state.credentials
-  const url = `${airtableBaseUrl}/${base}/${table}/${id}`
-  const result = safeParse(airtableSingleResponseSchema, await getMethod(url))
-  if (!result.success) {
-    logger.error(result.issues)
-    throw new Error(`failed to fetch item, issue(s) : ${result.issues.map(issue => issue.message).join(', ')}`)
-  }
-  return airtableRecordToItem(result.output)
-}
-
-async function getAllItems (offset?: string, getMethod = get) {
-  const offsetParameter = offset === undefined ? '' : `&offset=${offset}`
-  const sortByUpdatedFirst = '&sort%5B0%5D%5Bfield%5D=updated-on&sort%5B0%5D%5Bdirection%5D=desc'
-  const { base, table, view } = state.credentials
-  const url = `${airtableBaseUrl}/${base}/${table}?view=${view}${offsetParameter}${sortByUpdatedFirst}`
-  const result = safeParse(airtableMultipleResponseSchema, await getMethod(url))
-  if (!result.success) {
-    logger.error(result.issues)
-    throw new Error(`failed to fetch item, issue(s) : ${result.issues.map(issue => issue.message).join(', ')}`)
-  }
-  return result.output
 }
 
 function addOrUpdateItems (input: Item[], itemTouched: Item) {
@@ -97,48 +64,6 @@ function deleteItemLocally (id: Item['id'], currentState = state) {
   currentState.items = items // eslint-disable-line no-param-reassign
 }
 
-async function deleteItemRemotely (id: Item['id'], currentState = state, delMethod = del) {
-  const { base, table } = currentState.credentials
-  const url = `${airtableBaseUrl}/${base}/${table}/${id}`
-  return safeParse(airtableDeleteResponseSchema, await delMethod(url))
-}
-
-// eslint-disable-next-line max-statements, complexity, sonarjs/cognitive-complexity
-function getItemFieldsToPush (data: Item, currentState = state) {
-  const fields: Partial<AirtableSingleRecordResponse['fields']> = {}
-  if (data.barcode.length > 0) fields.barcode = data.barcode
-  if (data.box.length > 0) fields.box = data.box
-  if (data.brand.length > 0) fields.brand = data.brand
-  if (data.category.length > 0) fields.category = data.category
-  if (data.details.length > 0) fields.details = data.details
-  if (data.drawer.length > 0) fields.drawer = data.drawer
-  if (data.location.length > 0) fields.location = data.location
-  if (data.name.length > 0) fields.name = data.name
-  /* c8 ignore next 2 */
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-  if (data.photo !== undefined && data.photo.length > 0 && fields.photo?.[0]?.url !== data.photo[0]?.url) fields.photo = [{ url: data.photo[0]?.url } as unknown as ItemPhoto] // we don't need the whole object
-  // eslint-disable-next-line @typescript-eslint/no-magic-numbers
-  if (data.price !== undefined && data.price > -1) fields.price = data.price
-  if (data.reference.length > 0) fields.reference = data.reference
-  if (data.status.length > 0) fields.status = data.status
-  fields['ref-printed'] = data['ref-printed']
-  if (data.id.length > 0) {
-    const existing = currentState.items.find(existingItem => existingItem.id === data.id)
-    if (!existing) throw new Error('existing item not found locally')
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-    const dataFields = Object.keys(fields) as ItemField[]
-    dataFields.forEach((field) => {
-      /* c8 ignore next 2 */
-      if (field === 'id') return
-      const hasSamePhoto = (field === 'photo' && existing.photo && existing.photo[0]?.url === fields.photo?.[0]?.url) ?? false
-      const hasSameValue = existing[field] === fields[field]
-      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-      if (hasSamePhoto || hasSameValue) delete fields[field]
-    })
-  }
-  return fields
-}
-
 function pushItemLocally (item: Item, currentState = state) {
   const items = clone(currentState.items)
   const index = items.findIndex(one => one.id === item.id)
@@ -146,21 +71,6 @@ function pushItemLocally (item: Item, currentState = state) {
   else items.push(item) // new item with id
   // eslint-disable-next-line no-param-reassign
   currentState.items = items
-}
-
-// eslint-disable-next-line @typescript-eslint/max-params
-async function pushItemRemotely (item: Item, currentState = state, postMethod = post, patchMethod = patch) {
-  const fields = getItemFieldsToPush(item, currentState)
-  if (Object.keys(fields).length === 0) {
-    logger.showLog('no update to push')
-    return { output: { fields, id: item.id }, success: false } // eslint-disable-line @typescript-eslint/naming-convention
-  }
-  const data = { fields }
-  const { base, table } = currentState.credentials
-  const baseUrl = `${airtableBaseUrl}/${base}/${table}`
-  if (item.id === '') return safeParse(airtableSingleResponseSchema, await postMethod(baseUrl, data))
-  const url = `${baseUrl}/${item.id}`
-  return safeParse(airtableSingleResponseSchema, await patchMethod(url, data))
 }
 
 function getCoreData (item: Item) {
@@ -270,20 +180,9 @@ export function itemToForm (item?: Item) {
   return form
 }
 
-export function isLocalAndRemoteSync (records: AirtableSingleRecordResponse[], currentState = state) {
-  const record = records.at(0)
-  if (!record) throw new Error('remoteFirst is undefined')
-  const remoteFirst = airtableRecordToItem(record)
-  const localFirst = currentState.items.at(0)
-  const isFirst = localFirst === undefined ? false : remoteFirst.id === localFirst.id && remoteFirst['updated-on'] === localFirst['updated-on']
-  if (isFirst) return true
-  const localLast = currentState.items.at(-1) // eslint-disable-line @typescript-eslint/no-magic-numbers
-  return localLast === undefined ? false : remoteFirst.id === localLast.id && remoteFirst['updated-on'] === localLast['updated-on']
-}
-
 export function areItemsEquivalent (itemA: Item, itemB: Item) {
   return objectSum(getCoreData(itemA)) === objectSum(getCoreData(itemB))
 }
 
-export { addOrUpdateItems, airtableRecordToItem, getAllItems, getItemFieldsToPush, getOneItem, itemToImageUrl }
+export { addOrUpdateItems, getOneItem, itemToImageUrl }
 

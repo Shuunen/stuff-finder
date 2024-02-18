@@ -1,20 +1,15 @@
-/* eslint-disable max-lines */
 import { clone, sleep } from 'shuutils'
 import { expect, it } from 'vitest'
-import { addOrUpdateItems, airtableRecordToItem, areItemsEquivalent, deleteItem, formToItem, getAllItems, getCommonListsFromItems, getItemFieldsToPush, getOneItem, isLocalAndRemoteSync, itemForm, itemToForm, itemToImageUrl, pushItem } from '../src/utils/item.utils'
+import { addOrUpdateItems, areItemsEquivalent, deleteItem, formToItem, getCommonListsFromItems, getOneItem, itemForm, itemToForm, itemToImageUrl, pushItem } from '../src/utils/item.utils'
 import { mockItem, mockRecord, mockState } from '../src/utils/mock.utils'
-import type { Item, ItemPhoto, ItemStatus } from '../src/utils/parsers.utils'
+import type { ItemPhoto, ItemStatus } from '../src/utils/parsers.utils'
 
 const recordA = mockRecord(undefined, { 'reference': '', 'updated-on': '' })
 
-it('airtableRecordToItem A', () => {
-  expect(airtableRecordToItem(recordA)).toMatchSnapshot()
-})
-
 // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
 const itemA = mockItem({ id: 'itemA', status: 'new surprise status' as ItemStatus })
-// eslint-disable-next-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/naming-convention
-const itemAA = { ...itemA, status: 'acheté' as ItemStatus }
+// eslint-disable-next-line @typescript-eslint/naming-convention
+const itemAA = { ...itemA }
 const itemB = mockItem({ id: 'itemB', location: 'location A' })
 
 const stateA = mockState({ items: [itemA] })
@@ -51,41 +46,6 @@ it('getOneItem B error result', () => {
   })).rejects.toThrowErrorMatchingInlineSnapshot('[Error: failed to fetch item, issue(s) : Invalid type: Expected string but received undefined, Invalid type: Expected Object but received undefined]')
 })
 
-it('getAllItems A no offset', async () => {
-  let urlCalled = ''
-  let nbCalls = 0
-  const items = await getAllItems(undefined, async (url) => {
-    urlCalled = url
-    nbCalls += 1
-    await sleep(1)
-    return { records: [recordA] }
-  })
-  expect(items).toMatchSnapshot()
-  expect(urlCalled).toMatchInlineSnapshot('"https://api.airtable.com/v0//?view=&sort%5B0%5D%5Bfield%5D=updated-on&sort%5B0%5D%5Bdirection%5D=desc"') // base and table are still empty
-  expect(nbCalls).toBe(1)
-})
-
-it('getAllItems B with offset', async () => {
-  let urlCalled = ''
-  let nbCalls = 0
-  const items = await getAllItems('offset123', async (url) => {
-    urlCalled = url
-    nbCalls += 1
-    await sleep(1)
-    return { records: [recordA] }
-  })
-  expect(items).toMatchSnapshot()
-  expect(urlCalled).toMatchInlineSnapshot('"https://api.airtable.com/v0//?view=&offset=offset123&sort%5B0%5D%5Bfield%5D=updated-on&sort%5B0%5D%5Bdirection%5D=desc"') // base and table are still empty
-  expect(nbCalls).toBe(1)
-})
-
-it('getAllItems C error result', () => {
-  void expect(async () => await getAllItems(undefined, async () => {
-    await sleep(1)
-    return { records: [{}] }
-  })).rejects.toThrowErrorMatchingInlineSnapshot('[Error: failed to fetch item, issue(s) : Invalid type: Expected string but received undefined, Invalid type: Expected Object but received undefined, Invalid type: Expected string but received undefined]')
-})
-
 it('addOrUpdateItems A update existing item', () => {
   const itemsInput = [itemA, itemB]
   const itemTouched = mockItem({ id: itemB.id, location: itemA.location })
@@ -119,36 +79,6 @@ it('itemToImageUrl B', () => {
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
   const item = mockItem({ photo: [{ url } as ItemPhoto] })
   expect(itemToImageUrl(item)).toBe(url)
-})
-
-it('getItemFieldsToPush A itemA ISO with stateA, no fields to push', () => {
-  const fields = getItemFieldsToPush(itemA, stateA)
-  expect(fields).toMatchInlineSnapshot('{}')
-})
-
-it('getItemFieldsToPush B itemAA updated, some fields to push', () => {
-  const fields = getItemFieldsToPush(itemAA, stateA)
-  expect(fields).toMatchInlineSnapshot(`
-    {
-      "status": "acheté",
-    }
-  `)
-})
-
-it('getItemFieldsToPush C itemAA updated with also photo & price', () => {
-  const url = 'https://picsum.photos/seed/123/200/200'
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-  const item = mockItem({ ...itemAA, photo: [{ url } as ItemPhoto], price: 42 })
-  const fields = getItemFieldsToPush(item, stateA)
-  expect(fields.photo?.[0]?.url).toBe(url)
-  expect(fields.price).toBe(42)
-  expect(fields.status).toBe('acheté')
-})
-
-it('getItemFieldsToPush D item not found locally', () => {
-  const item = mockItem({ id: 'not found' })
-  const state = mockState({ items: [mockItem({ id: '1' })] })
-  expect(() => getItemFieldsToPush(item, state)).toThrowErrorMatchingInlineSnapshot('[Error: existing item not found locally]')
 })
 
 it('pushItem A item with no id should post remotely & push locally', async () => {
@@ -201,37 +131,6 @@ it('pushItem C itemA with no change should not call api', async () => {
   const state = mockState({ items: [item, mockItem({ id: '2' })] }) // here item in state is the same as item
   const result = await pushItem(item, state)
   expect(result.success).toBe(false) // no change, so no call to the api
-})
-
-it('isLocalAndRemoteSync A is not in sync', () => {
-  expect(isLocalAndRemoteSync([recordA], stateA)).toBe(false)
-})
-
-it('isLocalAndRemoteSync B is in sync (first match)', () => {
-  const recordB = mockRecord()
-  const items = [airtableRecordToItem(recordB)]
-  const stateB = { ...stateA, items }
-  expect(isLocalAndRemoteSync([recordB], stateB)).toBe(true)
-})
-
-it('isLocalAndRemoteSync C no records', () => {
-  expect(() => isLocalAndRemoteSync([], stateA)).toThrowErrorMatchingInlineSnapshot('[Error: remoteFirst is undefined]')
-})
-
-it('isLocalAndRemoteSync D is in sync (last match)', () => {
-  const recordB = mockRecord()
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-  const items = [undefined as unknown as Item, itemAA, itemB, airtableRecordToItem(recordB)]
-  const stateB = { ...stateA, items }
-  expect(isLocalAndRemoteSync([recordB], stateB)).toBe(true)
-})
-
-it('isLocalAndRemoteSync E first & last are undefined', () => {
-  const recordB = mockRecord()
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-  const items = [undefined as unknown as Item, itemAA, itemB, undefined as unknown as Item]
-  const stateB = { ...stateA, items }
-  expect(isLocalAndRemoteSync([recordB], stateB)).toBe(false)
 })
 
 it('formToItem A default itemForm', () => {
