@@ -7,6 +7,8 @@ import { state } from './state.utils'
 
 const airtableBaseUrl = 'https://api.airtable.com/v0'
 
+export const airtableMaxRequestPerSecond = 5
+
 // eslint-disable-next-line max-statements, complexity, sonarjs/cognitive-complexity
 export function getItemFieldsToPush (data: Item, currentState = state) {
   const fields: Partial<AirtableSingleRecordResponse['fields']> = {}

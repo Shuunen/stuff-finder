@@ -1,6 +1,6 @@
 import { clone, objectSum } from 'shuutils'
 import { defaultCommonLists, defaultImage, emptyItem, type CommonLists } from '../constants'
-import { deleteItemRemotely, getOneItem, pushItemRemotely } from './airtable.utils'
+import { airtableMaxRequestPerSecond, deleteItemRemotely, getOneItem, pushItemRemotely } from './airtable.utils'
 import { del, patch, post } from './browser.utils'
 import { createCheckboxField, createSelectField, createTextField, type Form } from './forms.utils'
 import { logger } from './logger.utils'
@@ -12,8 +12,6 @@ import { state } from './state.utils'
 function shouldAddToList (value = '', list: string[] = []) {
   return value.length > 0 && !list.includes(value)
 }
-
-const airtableMaxRequestPerSecond = 5
 
 function itemToImageUrl (item?: Item) {
   return item?.photo?.[0]?.url ?? defaultImage
