@@ -1,0 +1,167 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`addSuggestionsFromAliEx A with working get 1`] = `
+{
+  "barcode": [],
+  "box": [],
+  "brand": [],
+  "category": [],
+  "details": [],
+  "drawer": [],
+  "id": [],
+  "location": [],
+  "name": [
+    "title A",
+  ],
+  "photo": [
+    undefined,
+  ],
+  "price": [
+    "",
+  ],
+  "ref-printed": [],
+  "reference": [
+    undefined,
+  ],
+  "status": [
+    "acheté",
+  ],
+  "updated-on": [],
+}
+`;
+
+exports[`addSuggestionsFromAngbo A with working get 1`] = `
+{
+  "barcode": [],
+  "box": [],
+  "brand": [],
+  "category": [],
+  "details": [],
+  "drawer": [],
+  "id": [],
+  "location": [],
+  "name": [
+    "title A",
+  ],
+  "photo": [
+    undefined,
+  ],
+  "price": [
+    "",
+  ],
+  "ref-printed": [],
+  "reference": [
+    undefined,
+  ],
+  "status": [
+    "acheté",
+  ],
+  "updated-on": [],
+}
+`;
+
+exports[`addSuggestionsFromCampo B with working get 1`] = `
+{
+  "barcode": [],
+  "box": [],
+  "brand": [
+    "brand B",
+  ],
+  "category": [],
+  "details": [],
+  "drawer": [],
+  "id": [],
+  "location": [],
+  "name": [
+    undefined,
+  ],
+  "photo": [
+    [
+      {
+        "filename": "",
+        "height": 0,
+        "id": "",
+        "thumbnails": {
+          "full": {
+            "height": 0,
+            "url": "",
+            "width": 0,
+          },
+          "large": {
+            "height": 0,
+            "url": "",
+            "width": 0,
+          },
+          "small": {
+            "height": 0,
+            "url": "",
+            "width": 0,
+          },
+        },
+        "type": "",
+        "url": "https://picsum.photos/seed/unknown-name/200/200",
+        "width": 0,
+      },
+    ],
+  ],
+  "price": [
+    "42",
+  ],
+  "ref-printed": [],
+  "reference": [
+    undefined,
+  ],
+  "status": [
+    "acheté",
+  ],
+  "updated-on": [],
+}
+`;
+
+exports[`addSuggestionsFromDeyes A with working get 1`] = `
+{
+  "barcode": [],
+  "box": [],
+  "brand": [
+    "brand A",
+  ],
+  "category": [],
+  "details": [
+    "",
+  ],
+  "drawer": [],
+  "id": [],
+  "location": [],
+  "name": [
+    "name A",
+  ],
+  "photo": [
+    {
+      "image": undefined,
+    },
+  ],
+  "price": [
+    "43",
+  ],
+  "ref-printed": [],
+  "reference": [
+    "gtin13azdaz4878",
+  ],
+  "status": [
+    "acheté",
+  ],
+  "updated-on": [],
+}
+`;
+
+exports[`addSuggestionsFromWrap B with wrapApiKey 1`] = `
+{
+  "errTypes": [
+    "noAPIKey",
+  ],
+  "messages": [
+    "A 32-character API key is required; include it as wrapAPIKey=... in the query string or POST body or generate it within the "My account" section of the website",
+  ],
+  "success": false,
+}
+`;
