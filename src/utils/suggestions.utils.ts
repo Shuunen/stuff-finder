@@ -78,7 +78,7 @@ export function cleanSuggestions (suggestionsInput: Record<string, string[] | un
     if (keysToCapitalize.has(key)) values = values.map(value => capitalize(value, true))
     // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
     if (values.length === 0) delete suggestions[key] // clear empty fields
-    else suggestions[key] = values.filter((value, index, array) => array.indexOf(value) === index) // remove duplicates
+    else suggestions[key] = values.filter((value, index, array) => (array.indexOf(value) === index) && (value !== '')) // remove duplicates
   })
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
   return suggestions as Record<string, string[]>
