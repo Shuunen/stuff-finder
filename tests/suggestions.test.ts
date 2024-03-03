@@ -11,9 +11,26 @@ import { addSuggestionsFromAliEx, addSuggestionsFromAngbo, addSuggestionsFromCam
 it('cleanSuggestions A', () => { expect(cleanSuggestions({ keyA: ['a', 'b', 'c'], keyB: ['a', 'b', 'c'] })).toEqual({ keyA: ['a', 'b', 'c'], keyB: ['a', 'b', 'c'] }) })
 it('cleanSuggestions B', () => { expect(cleanSuggestions({})).toEqual({}) })
 it('cleanSuggestions C', () => { expect(cleanSuggestions({ keyA: ['a', 'b', 'c'], keyB: [] })).toEqual({ keyA: ['a', 'b', 'c'] }) })
-it('cleanSuggestions D', () => { expect(cleanSuggestions({ keyA: ['a', 'b', 'c'], keyB: ['a', 'b', 'c', 'a', 'b', 'c'] })).toEqual({ keyA: ['a', 'b', 'c'], keyB: ['a', 'b', 'c'] }) })
-it('cleanSuggestions E', () => { expect(cleanSuggestions({ name: ['a', 'b', '', 'c'] })).toEqual({ name: ['A', 'B', 'C'] }) })
-it('cleanSuggestions F', () => { expect(cleanSuggestions({ details: ['a', 'b', 'c'], plop: undefined })).toEqual({ details: ['A', 'B', 'C'] }) })
+it('cleanSuggestions D', () => { expect(cleanSuggestions({ keyA: ['a', 'b', '', '0', 'c'], keyB: ['a', 'b', 'c', 'a', 'b', 'c'] })).toEqual({ keyA: ['a', 'b', 'c'], keyB: ['a', 'b', 'c'] }) })
+// @ts-expect-error typing is not correct
+// eslint-disable-next-line unicorn/no-null
+it('cleanSuggestions E', () => { expect(cleanSuggestions({ name: ['a', -1, '0', null, undefined, 'b', '', 0, 'c'] })).toEqual({ name: ['A', 'B', 'C'] }) })
+it('cleanSuggestions F', () => {
+  // @ts-expect-error typing is not correct
+  expect(cleanSuggestions({ details: ['a', 'b', 'c'], plo: ['0', 0, 12, new Date()], plop: undefined, zob: [''] })).toMatchInlineSnapshot(`
+    {
+      "details": [
+        "A",
+        "B",
+        "C",
+      ],
+      "plo": [
+        12,
+      ],
+      "zob": [],
+    }
+  `)
+})
 
 it('getSuggestions A', async () => {
   const url = 'https://www.amazon.fr/dp/B07V7GZQJ2'
@@ -87,7 +104,7 @@ it('addSuggestionsFromDeyes A with working get', async () => {
   state.credentials.wrap = 'xyz'
   const suggestions = clone(emptyItemSuggestions)
   const mock = vi.fn().mockImplementation(get)
-  mock.mockImplementationOnce(() => ({ data: { brand: { name: 'brand A' }, description: '', gtin13: 'gtin13azdaz4878', image: [{ image: undefined }], name: 'name A', offers: { price: '42.50' } }, success: true }))
+  mock.mockImplementationOnce(() => ({ data: { brand: { name: 'brand A' }, description: '', gtin13: 'gtin13omg4878', image: [{ image: undefined }], name: 'name A', offers: { price: '42.50' } }, success: true }))
   await addSuggestionsFromDeyes(suggestions, '3760052142741', mock)
   expect(mock).toHaveBeenCalledTimes(1)
   expect(mock).toHaveBeenCalledWith('https://wrapapi.com/use/jojo/deyes/json/0.0.2?code=3760052142741&wrapAPIKey=xyz')

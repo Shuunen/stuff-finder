@@ -1,12 +1,8 @@
 
+import Autocomplete from '@mui/material/Autocomplete'
 import Button from '@mui/material/Button'
 import Checkbox from '@mui/material/Checkbox'
-import FormControl from '@mui/material/FormControl'
 import FormControlLabel from '@mui/material/FormControlLabel'
-import InputAdornment from '@mui/material/InputAdornment'
-import InputLabel from '@mui/material/InputLabel'
-import MenuItem from '@mui/material/MenuItem'
-import Select from '@mui/material/Select'
 import TextField from '@mui/material/TextField'
 import { useSignalEffect } from '@preact/signals'
 import { useState } from 'preact/hooks'
@@ -17,10 +13,16 @@ import { logger } from '../utils/logger.utils'
 import { state } from '../utils/state.utils'
 import { colSpanClass, gridClass } from '../utils/theme.utils'
 
-type Properties<FormType extends Form> = { readonly error?: string; readonly initialForm: FormType; readonly onChange?: (form: FormType) => void; readonly onSubmit?: ((form: FormType) => void) | undefined }
+type Properties<FormType extends Form> = {
+  readonly error?: string
+  readonly initialForm: FormType
+  readonly onChange?: (form: FormType) => void
+  readonly onSubmit?: ((form: FormType) => void) | undefined
+  readonly suggestions?: Record<string, string[]>
+}
 
 // eslint-disable-next-line max-statements, unicorn/no-useless-undefined
-export function AppForm<FormType extends Form> ({ error: parentError = '', initialForm, onChange = voidFunction, onSubmit = undefined }: Properties<FormType>) {
+export function AppForm<FormType extends Form> ({ error: parentError = '', initialForm, onChange = voidFunction, onSubmit = undefined, suggestions = {} }: Properties<FormType>) {
 
   const [form, setForm] = useState(initialForm)
 
@@ -34,7 +36,8 @@ export function AppForm<FormType extends Form> ({ error: parentError = '', initi
 
   function updateFieldSync (field: string, target: EventTarget, isFromClipboard = false) {
     const input = target as HTMLInputElement // eslint-disable-line @typescript-eslint/consistent-type-assertions
-    const value = input.type === 'checkbox' ? input.checked : input.value
+    let value = input.type === 'checkbox' ? input.checked : input.value
+    if (input.role === 'option') value = input.textContent ?? '' // handle autocomplete target
     logger.debug('updateField', { field, value })
     const actualField = form.fields[field]
     if (actualField === undefined) throw new Error(`field "${field}" not found in form`)
@@ -73,16 +76,11 @@ export function AppForm<FormType extends Form> ({ error: parentError = '', initi
 
   return (
     <form autoComplete="off" className={`grid w-full gap-6 ${gridClass(form.columns)}`} noValidate onSubmit={onFormSubmit} spellCheck={false}>{ }
-      {Object.entries(form.fields).map(([field, { columns, isRequired, isValid, label, options, type, unit, value }]) => (
-        <div className={`grid w-full ${colSpanClass(columns)}`} key={field}>{/* @ts-expect-error typing issue */}
-          {type === 'text' && <TextField error={Boolean(form.isTouched) && !isValid} id={field} InputProps={{ endAdornment: unit.length > 0 && <InputAdornment position="end">{unit}</InputAdornment> }} label={label} onChange={event => { void updateField(field, event.target) }} required={isRequired} value={value} variant="standard" />}{/* eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access */}
-          {type === 'checkbox' && <FormControlLabel control={<Checkbox checked={Boolean(value)} />} id={field} label={label} onChange={event => { void updateField(field, event.target) }} required={isRequired} />}
-          {type === 'select' && <FormControl fullWidth variant="standard">
-            <InputLabel id={field}>{label}</InputLabel>
-            <Select label={label} labelId={field} onChange={event => { if (event.target !== null) void updateField(field, event.target) }} value={value}>{/* @ts-expect-error typing issue */}
-              {options.map(({ label: optionLabel, value: optionValue }) => <MenuItem key={optionValue} value={optionValue}>{optionLabel}</MenuItem>)}
-            </Select>
-          </FormControl>}
+      {Object.entries(form.fields).map(([field, { columns, isRequired, isValid, label, options, type, value }]) => (
+        <div className={`grid w-full ${colSpanClass(columns)}`} key={field}>{/* @ts-expect-error typing issue */}{/* eslint-disable-next-line react/jsx-props-no-spreading, @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access */}
+          {type === 'text' && <Autocomplete freeSolo id={field} onChange={event => { logger.info(event); void updateField(field, event.target) }} options={suggestions[field] ?? []} renderInput={(parameters) => <TextField {...parameters} error={Boolean(form.isTouched) && !isValid} label={label} onChange={event => { logger.info(event); void updateField(field, event.target) }} required={isRequired} value={value} variant="standard" />} />}{/* eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access */}
+          {type === 'checkbox' && <FormControlLabel control={<Checkbox checked={Boolean(value)} />} id={field} label={label} onChange={event => { void updateField(field, event.target) }} required={isRequired} />}{/* @ts-expect-error typing issue */}{/* eslint-disable-next-line react/jsx-props-no-spreading, @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access */}
+          {type === 'select' && <Autocomplete id={field} onChange={event => { logger.info(event); void updateField(field, event.target) }} options={options?.map(option => option.label) ?? []} renderInput={(parameters) => <TextField {...parameters} error={Boolean(form.isTouched) && !isValid} label={label} onChange={event => { logger.info(event); void updateField(field, event.target) }} required={isRequired} value={value} variant="standard" />} />}
         </div>
       ))}
       <div className="order-last flex flex-col md:col-span-full">
