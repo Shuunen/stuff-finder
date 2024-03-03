@@ -122,13 +122,14 @@ exports[`getOneItem A success result 1`] = `
 
 exports[`itemToForm A mocked item 1`] = `
 {
-  "columns": 5,
+  "columns": 10,
   "errorMessage": "",
   "fields": {
     "barcode": {
-      "columns": 1,
+      "columns": 4,
       "isRequired": false,
       "isValid": false,
+      "isVisible": true,
       "label": "Barcode",
       "link": "",
       "regex": /\\^\\[\\\\d\\\\p\\{L\\}\\\\s/&\\]\\{3,30\\}\\$/u,
@@ -137,9 +138,10 @@ exports[`itemToForm A mocked item 1`] = `
       "value": "barcode B",
     },
     "box": {
-      "columns": 1,
+      "columns": 4,
       "isRequired": false,
       "isValid": false,
+      "isVisible": true,
       "label": "Box",
       "link": "",
       "options": [],
@@ -149,9 +151,10 @@ exports[`itemToForm A mocked item 1`] = `
       "value": "box B",
     },
     "brand": {
-      "columns": 1,
+      "columns": 2,
       "isRequired": false,
       "isValid": false,
+      "isVisible": true,
       "label": "Brand",
       "link": "",
       "regex": /\\^\\[\\\\d\\\\p\\{L\\}\\\\s/&\\]\\{3,100\\}\\$/u,
@@ -160,9 +163,10 @@ exports[`itemToForm A mocked item 1`] = `
       "value": "brand B",
     },
     "category": {
-      "columns": 1,
+      "columns": 3,
       "isRequired": false,
       "isValid": false,
+      "isVisible": true,
       "label": "Category",
       "link": "",
       "options": [],
@@ -172,9 +176,10 @@ exports[`itemToForm A mocked item 1`] = `
       "value": "category B",
     },
     "details": {
-      "columns": 2,
+      "columns": 4,
       "isRequired": false,
       "isValid": false,
+      "isVisible": true,
       "label": "Details",
       "link": "",
       "regex": /\\^\\[\\\\d\\\\p\\{L\\}\\\\s/&\\]\\{3,200\\}\\$/u,
@@ -183,9 +188,10 @@ exports[`itemToForm A mocked item 1`] = `
       "value": "details B",
     },
     "drawer": {
-      "columns": 1,
+      "columns": 3,
       "isRequired": false,
       "isValid": false,
+      "isVisible": true,
       "label": "Drawer",
       "link": "",
       "options": [
@@ -231,6 +237,7 @@ exports[`itemToForm A mocked item 1`] = `
       "columns": 1,
       "isRequired": false,
       "isValid": false,
+      "isVisible": false,
       "label": "Printed",
       "link": "",
       "regex": /\\^\\[\\\\d\\\\p\\{L\\}\\\\s/&\\]\\{3,100\\}\\$/u,
@@ -239,9 +246,10 @@ exports[`itemToForm A mocked item 1`] = `
       "value": false,
     },
     "location": {
-      "columns": 1,
+      "columns": 3,
       "isRequired": false,
       "isValid": false,
+      "isVisible": true,
       "label": "Location",
       "link": "",
       "options": [],
@@ -251,9 +259,10 @@ exports[`itemToForm A mocked item 1`] = `
       "value": "location B",
     },
     "name": {
-      "columns": 2,
+      "columns": 4,
       "isRequired": true,
       "isValid": false,
+      "isVisible": true,
       "label": "Name",
       "link": "",
       "regex": /\\^\\[\\\\d\\\\p\\{L\\}\\\\s/&\\]\\{3,100\\}\\$/u,
@@ -262,9 +271,10 @@ exports[`itemToForm A mocked item 1`] = `
       "value": "name B",
     },
     "photo": {
-      "columns": 1,
+      "columns": 4,
       "isRequired": false,
       "isValid": false,
+      "isVisible": true,
       "label": "Photo",
       "link": "",
       "regex": /\\^https\\?:\\\\/\\\\/\\\\S\\+\\$/u,
@@ -273,9 +283,10 @@ exports[`itemToForm A mocked item 1`] = `
       "value": "https://picsum.photos/seed/unknown-name/200/200",
     },
     "price": {
-      "columns": 1,
+      "columns": 3,
       "isRequired": false,
       "isValid": false,
+      "isVisible": true,
       "label": "Price",
       "link": "",
       "regex": /\\^\\\\d\\{1,5\\}\\$/u,
@@ -284,9 +295,10 @@ exports[`itemToForm A mocked item 1`] = `
       "value": "undefined",
     },
     "reference": {
-      "columns": 1,
+      "columns": 3,
       "isRequired": true,
       "isValid": false,
+      "isVisible": true,
       "label": "Reference",
       "link": "",
       "regex": /\\^\\[\\\\w-\\]\\{3,50\\}\\$/u,
@@ -295,9 +307,10 @@ exports[`itemToForm A mocked item 1`] = `
       "value": "reference B",
     },
     "status": {
-      "columns": 1,
+      "columns": 3,
       "isRequired": false,
       "isValid": false,
+      "isVisible": true,
       "label": "Status",
       "link": "",
       "options": [
@@ -343,13 +356,14 @@ exports[`itemToForm A mocked item 1`] = `
 
 exports[`itemToForm C no item 1`] = `
 {
-  "columns": 5,
+  "columns": 10,
   "errorMessage": "",
   "fields": {
     "barcode": {
-      "columns": 1,
+      "columns": 4,
       "isRequired": false,
       "isValid": false,
+      "isVisible": true,
       "label": "Barcode",
       "link": "",
       "regex": /\\^\\[\\\\d\\\\p\\{L\\}\\\\s/&\\]\\{3,30\\}\\$/u,
@@ -358,9 +372,10 @@ exports[`itemToForm C no item 1`] = `
       "value": "",
     },
     "box": {
-      "columns": 1,
+      "columns": 4,
       "isRequired": false,
       "isValid": false,
+      "isVisible": true,
       "label": "Box",
       "link": "",
       "options": [],
@@ -370,9 +385,10 @@ exports[`itemToForm C no item 1`] = `
       "value": "",
     },
     "brand": {
-      "columns": 1,
+      "columns": 2,
       "isRequired": false,
       "isValid": false,
+      "isVisible": true,
       "label": "Brand",
       "link": "",
       "regex": /\\^\\[\\\\d\\\\p\\{L\\}\\\\s/&\\]\\{3,100\\}\\$/u,
@@ -381,9 +397,10 @@ exports[`itemToForm C no item 1`] = `
       "value": "",
     },
     "category": {
-      "columns": 1,
+      "columns": 3,
       "isRequired": false,
       "isValid": false,
+      "isVisible": true,
       "label": "Category",
       "link": "",
       "options": [],
@@ -393,9 +410,10 @@ exports[`itemToForm C no item 1`] = `
       "value": "",
     },
     "details": {
-      "columns": 2,
+      "columns": 4,
       "isRequired": false,
       "isValid": false,
+      "isVisible": true,
       "label": "Details",
       "link": "",
       "regex": /\\^\\[\\\\d\\\\p\\{L\\}\\\\s/&\\]\\{3,200\\}\\$/u,
@@ -404,9 +422,10 @@ exports[`itemToForm C no item 1`] = `
       "value": "",
     },
     "drawer": {
-      "columns": 1,
+      "columns": 3,
       "isRequired": false,
       "isValid": false,
+      "isVisible": true,
       "label": "Drawer",
       "link": "",
       "options": [
@@ -452,6 +471,7 @@ exports[`itemToForm C no item 1`] = `
       "columns": 1,
       "isRequired": false,
       "isValid": false,
+      "isVisible": false,
       "label": "Printed",
       "link": "",
       "regex": /\\^\\[\\\\d\\\\p\\{L\\}\\\\s/&\\]\\{3,100\\}\\$/u,
@@ -460,9 +480,10 @@ exports[`itemToForm C no item 1`] = `
       "value": false,
     },
     "location": {
-      "columns": 1,
+      "columns": 3,
       "isRequired": false,
       "isValid": false,
+      "isVisible": true,
       "label": "Location",
       "link": "",
       "options": [],
@@ -472,9 +493,10 @@ exports[`itemToForm C no item 1`] = `
       "value": "",
     },
     "name": {
-      "columns": 2,
+      "columns": 4,
       "isRequired": true,
       "isValid": false,
+      "isVisible": true,
       "label": "Name",
       "link": "",
       "regex": /\\^\\[\\\\d\\\\p\\{L\\}\\\\s/&\\]\\{3,100\\}\\$/u,
@@ -483,9 +505,10 @@ exports[`itemToForm C no item 1`] = `
       "value": "",
     },
     "photo": {
-      "columns": 1,
+      "columns": 4,
       "isRequired": false,
       "isValid": false,
+      "isVisible": true,
       "label": "Photo",
       "link": "",
       "regex": /\\^https\\?:\\\\/\\\\/\\\\S\\+\\$/u,
@@ -494,9 +517,10 @@ exports[`itemToForm C no item 1`] = `
       "value": "",
     },
     "price": {
-      "columns": 1,
+      "columns": 3,
       "isRequired": false,
       "isValid": false,
+      "isVisible": true,
       "label": "Price",
       "link": "",
       "regex": /\\^\\\\d\\{1,5\\}\\$/u,
@@ -505,9 +529,10 @@ exports[`itemToForm C no item 1`] = `
       "value": "",
     },
     "reference": {
-      "columns": 1,
+      "columns": 3,
       "isRequired": true,
       "isValid": false,
+      "isVisible": true,
       "label": "Reference",
       "link": "",
       "regex": /\\^\\[\\\\w-\\]\\{3,50\\}\\$/u,
@@ -516,9 +541,10 @@ exports[`itemToForm C no item 1`] = `
       "value": "",
     },
     "status": {
-      "columns": 1,
+      "columns": 3,
       "isRequired": false,
       "isValid": false,
+      "isVisible": true,
       "label": "Status",
       "link": "",
       "options": [

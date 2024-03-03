@@ -120,15 +120,16 @@ export function PageItemAddEdit ({ id = '', isEdit = false }: { readonly id?: st
       <div className="flex flex-col">
         {Boolean(isEdit) && <p>Please fill in the form below to edit the item, you can change any field you want 🔄</p>}
         {!isEdit && <p>Please fill in the form below to add a new item, no worry, you will be able to edit it later if needed ✏️</p>}
-        <div className="flex">{/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
-          <img alt="item visual" className="w-1/4" data-id={itemId} onError={onItemImageError} ref={photoReference} src={initialForm.fields.photo.value || defaultImage} />
-          <div className="w-3/4">
+        <div className="flex w-full flex-col md:flex-row">{/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
+          <img alt="item visual" className="w-1/2 md:w-1/4" data-id={itemId} onError={onItemImageError} ref={photoReference} src={initialForm.fields.photo.value || defaultImage} />
+          <div className="w-full md:w-3/4">
             <AppForm error={error} initialForm={initialForm} onChange={onChange} suggestions={suggestions} />
           </div>
         </div>
         <div className="flex">
-          <Button disabled={!canSubmit} onClick={() => { void onSubmit(lastForm) }} variant="contained">{isEdit ? 'Edit' : 'Create'}</Button>
-          <Button disabled={itemId === ''} onClick={() => { route(`/item/details/${itemId}`) }} variant="outlined">{isEdit ? 'Cancel' : 'View'}</Button>
+          <Button disabled={!canSubmit} onClick={() => { void onSubmit(lastForm) }} variant="contained">{isEdit ? 'Save' : 'Create'}</Button>
+          <Button disabled={itemId === ''} onClick={() => { route(`/item/details/${itemId}`) }} variant="outlined">View</Button>
+          {!isEdit && <Button disabled={itemId === ''} onClick={() => { route(`/item/print/${itemId}`) }} variant="outlined">Print</Button>}
         </div>
       </div>
     </AppPageCard>

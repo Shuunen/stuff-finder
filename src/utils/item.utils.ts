@@ -115,22 +115,25 @@ export async function onItemImageError (event: Event) {
 }
 
 export const itemForm = {
-  columns: 5,
+  columns: 10,
   errorMessage: '',
   fields: { /* eslint-disable perfectionist/sort-objects */
-    name: createTextField({ columns: 2, isRequired: true, label: 'Name' }),
-    brand: createTextField({ label: 'Brand' }),
-    details: createTextField({ columns: 2, label: 'Details', maxLength: 200 }),
-    status: createSelectField({ label: 'Status', options: optionsFor('statuses'), value: 'acheté' }),
-    reference: createTextField({ isRequired: true, label: 'Reference', maxLength: 30, regex: /^[\w-]{3,50}$/u }),
-    barcode: createTextField({ label: 'Barcode', maxLength: 30 }),
-    photo: createTextField({ label: 'Photo', regex: /^https?:\/\/\S+$/u }),
-    category: createSelectField({ label: 'Category', options: optionsFor('categories') }),
-    location: createSelectField({ label: 'Location', options: optionsFor('locations') }),
-    box: createSelectField({ label: 'Box', options: optionsFor('boxes'), regex: /^[\p{L}\s&()]{3,100}$/u }),
-    drawer: createSelectField({ label: 'Drawer', options: optionsFor('drawers'), regex: /\d/u }),
-    price: createTextField({ label: 'Price', regex: /^\d{1,5}$/u, unit: '€' }),
-    isPrinted: createCheckboxField({ label: 'Printed' }),
+    name: createTextField({ columns: 4, isRequired: true, label: 'Name' }),
+    brand: createTextField({ columns: 2, label: 'Brand' }),
+    details: createTextField({ columns: 4, label: 'Details', maxLength: 200 }),
+    // line
+    status: createSelectField({ columns: 3, label: 'Status', options: optionsFor('statuses'), value: 'acheté' }),
+    reference: createTextField({ columns: 3, isRequired: true, label: 'Reference', maxLength: 30, regex: /^[\w-]{3,50}$/u }),
+    barcode: createTextField({ columns: 4, label: 'Barcode', maxLength: 30 }),
+    // line
+    category: createSelectField({ columns: 3, label: 'Category', options: optionsFor('categories') }),
+    photo: createTextField({ columns: 4, label: 'Photo', regex: /^https?:\/\/\S+$/u }),
+    price: createTextField({ columns: 3, label: 'Price', regex: /^\d{1,5}$/u, unit: '€' }),
+    // line
+    location: createSelectField({ columns: 3, label: 'Location', options: optionsFor('locations') }),
+    box: createSelectField({ columns: 4, label: 'Box', options: optionsFor('boxes'), regex: /^[\p{L}\s&()]{3,100}$/u }),
+    drawer: createSelectField({ columns: 3, label: 'Drawer', options: optionsFor('drawers'), regex: /\d/u }),
+    isPrinted: createCheckboxField({ label: 'Printed', isVisible: false }),
   }, /* eslint-enable perfectionist/sort-objects */
   isTouched: false,
   isValid: false,
