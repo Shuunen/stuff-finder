@@ -1,6 +1,6 @@
 import { defineConfig } from 'vitest/config'
 
-// eslint-disable-next-line import/no-anonymous-default-export, import/no-unused-modules
+// eslint-disable-next-line import/no-anonymous-default-export
 export default defineConfig({
   test: {
     coverage: {

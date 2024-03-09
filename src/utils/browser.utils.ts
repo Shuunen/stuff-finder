@@ -35,7 +35,6 @@ export async function get (url: string) {
   return await request('GET', url)
 }
 
-// eslint-disable-next-line import/no-unused-modules
 export function valuesToOptions (array: readonly string[], selected?: string) {
   return array.map(value => `<option value="${value}" ${selected === value ? 'selected' : ''}>${value}</option>`).join('')
 }

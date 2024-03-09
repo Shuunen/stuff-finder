@@ -1,7 +1,7 @@
 {
   "env": {
     "browser": true,
-    "es6": false,
+    "es6": true,
     "node": false
   },
   "extends": [
@@ -91,7 +91,9 @@
       "multi"
     ],
     "eslint-comments/no-use": "off",
+    "etc/no-const-enum": "off",
     "etc/no-deprecated": "off",
+    "etc/no-enum": "off",
     "etc/no-internal": "off",
     "etc/no-misused-generics": "off",
     "etc/prefer-interface": "off",
@@ -110,15 +112,31 @@
       }
     ],
     "import/default": "off",
+    "import/export": "off",
     "import/extensions": "off",
+    "import/first": "off",
     "import/named": "off",
     "import/namespace": "off",
     "import/newline-after-import": "off",
-    "import/no-cycle": "off", // slow, handled by dependency-cruiser
+    "import/no-absolute-path": "off",
+    "import/no-amd": "off",
+    "import/no-cycle": "off",
     "import/no-deprecated": "off",
+    "import/no-duplicates": "off",
+    "import/no-dynamic-require:": "off",
+    "import/no-extraneous-dependencies": "off",
+    "import/no-import-module-exports": "off",
+    "import/no-mutable-exports": "off",
     "import/no-named-as-default": "off",
     "import/no-named-as-default-member": "off",
+    "import/no-named-default": "off",
+    "import/no-relative-packages": "off",
+    "import/no-self-import": "off",
+    "import/no-unassigned-import": "off",
     "import/no-unresolved": "off",
+    "import/no-unused-modules": "off",
+    "import/no-useless-path-segments": "off",
+    "import/no-webpack-loader-syntax": "off",
     "import/order": "off",
     "import/prefer-default-export": "off",
     "indent": "off",
