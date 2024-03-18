@@ -2,8 +2,6 @@
 
 exports[`airtableSingleResponseSchema A empty object 1`] = `
 {
-  "data": {},
-  "error": [ValiError: Invalid type: Expected string but received undefined],
   "issues": [
     {
       "abortEarly": undefined,
@@ -80,12 +78,6 @@ exports[`airtableSingleResponseSchema A empty object 1`] = `
 
 exports[`airtableSingleResponseSchema B missing fields 1`] = `
 {
-  "data": {
-    "createdTime": "2021-01-01T00:00:00.000Z",
-    "fields": undefined,
-    "id": "rec1234567890",
-  },
-  "error": [ValiError: Invalid type: Expected Object but received undefined],
   "issues": [
     {
       "abortEarly": undefined,
@@ -126,25 +118,6 @@ exports[`airtableSingleResponseSchema B missing fields 1`] = `
 
 exports[`airtableSingleResponseSchema C valid 1`] = `
 {
-  "data": {
-    "createdTime": "2021-01-01T00:00:00.000Z",
-    "fields": {
-      "barcode": "1234567890",
-      "box": "A",
-      "brand": "Brand",
-      "category": "Category",
-      "details": "Details",
-      "drawer": "Drawer",
-      "location": "Location",
-      "name": "Name",
-      "ref-printed": true,
-      "reference": "Reference",
-      "status": "acheté",
-      "updated-on": "2021-01-01T00:00:00.000Z",
-    },
-    "id": "rec1234567890",
-  },
-  "error": undefined,
   "issues": undefined,
   "output": {
     "createdTime": "2021-01-01T00:00:00.000Z",
