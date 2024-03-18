@@ -36,7 +36,7 @@
     "postcss": "8",
     "repo-check": "1.35",
     "tailwindcss": "3",
-    "typescript": "5.3",
+    "typescript": "5.4",
     "vite": "5.1",
     "vitest": "1.4"
   },
