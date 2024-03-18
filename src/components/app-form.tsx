@@ -8,7 +8,7 @@ import { useSignalEffect } from '@preact/signals'
 import { useState } from 'preact/hooks'
 import { debounce, off, on, parseJson, readClipboard } from 'shuutils'
 import { delays, voidFunction } from '../constants'
-import { validateForm, type Form } from '../utils/forms.utils'
+import { optionsToLabels, validateForm, type Form } from '../utils/forms.utils'
 import { logger } from '../utils/logger.utils'
 import { state } from '../utils/state.utils'
 import { colSpanClass, gridClass } from '../utils/theme.utils'
@@ -80,7 +80,7 @@ export function AppForm<FormType extends Form> ({ error: parentError = '', initi
         <div className={`grid w-full ${isVisible ? '' : 'hidden'} ${colSpanClass(columns)}`} key={field}>{/* @ts-expect-error typing issue */}{/* eslint-disable-next-line react/jsx-props-no-spreading, @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access */}
           {type === 'text' && <Autocomplete freeSolo id={field} onChange={event => { logger.info(event); void updateField(field, event.target) }} options={suggestions[field] ?? []} renderInput={(parameters) => <TextField {...parameters} error={Boolean(form.isTouched) && !isValid} label={label} onChange={event => { logger.info(event); void updateField(field, event.target) }} required={isRequired} value={value} variant="standard" />} value={value} />}{/* eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access */}
           {type === 'checkbox' && <FormControlLabel control={<Checkbox checked={Boolean(value)} />} id={field} label={label} onChange={event => { void updateField(field, event.target) }} required={isRequired} />}{/* @ts-expect-error typing issue */}{/* eslint-disable-next-line react/jsx-props-no-spreading, @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access */}
-          {type === 'select' && <Autocomplete id={field} onChange={event => { logger.info(event); void updateField(field, event.target) }} options={options?.map(option => option.label) ?? []} renderInput={(parameters) => <TextField {...parameters} error={Boolean(form.isTouched) && !isValid} label={label} onChange={event => { logger.info(event); void updateField(field, event.target) }} required={isRequired} value={value} variant="standard" />} value={value} />}
+          {type === 'select' && <Autocomplete id={field} onChange={event => { logger.info(event); void updateField(field, event.target) }} options={optionsToLabels(options)} renderInput={(parameters) => <TextField {...parameters} error={Boolean(form.isTouched) && !isValid} label={label} onChange={event => { logger.info(event); void updateField(field, event.target) }} required={isRequired} value={value} variant="standard" />} value={value} />}
         </div>
       ))}
       <div className="order-last flex flex-col md:col-span-full">

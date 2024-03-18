@@ -57,3 +57,7 @@ export function createSelectField (parameters: Partial<Pick<FormFieldSelect, 'co
   const { columns = 1, isRequired = false, isValid = false, isVisible = true, label = '', link = '', options, regex, value = '' } = parameters
   return { columns, isRequired, isValid, isVisible, label, link, options, regex: fieldRegex(regex), type: 'select', unit: '', value } satisfies FormFieldSelect
 }
+
+export function optionsToLabels (values?: FormFieldOptions) {
+  return values?.map(({ label }) => label) ?? []
+}

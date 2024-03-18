@@ -1,5 +1,5 @@
 import { expect, it } from 'vitest'
-import { createCheckboxField, createSelectField, validateForm } from '../src/utils/forms.utils'
+import { createCheckboxField, createSelectField, optionsToLabels, validateForm } from '../src/utils/forms.utils'
 import { settingsForm } from '../src/utils/settings.utils'
 
 it('validateForm A invalid field value', () => {
@@ -35,4 +35,12 @@ it('createCheckboxField A with a link', () => {
 
 it('createSelectField A with a link', () => {
   expect(createSelectField({ label: 'label', link: 'https://example.com', options: [] })).toMatchSnapshot()
+})
+
+it('optionsToLabels A empty', () => {
+  expect(optionsToLabels()).toEqual([])
+})
+
+it('optionsToLabels B with values', () => {
+  expect(optionsToLabels([{ label: 'labelUp', value: 'value' }])).toEqual(['labelUp'])
 })
