@@ -1,0 +1,170 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`airtableSingleResponseSchema A empty object 1`] = `
+{
+  "data": {},
+  "error": [ValiError: Invalid type: Expected string but received undefined],
+  "issues": [
+    {
+      "abortEarly": undefined,
+      "abortPipeEarly": undefined,
+      "context": "string",
+      "expected": "string",
+      "input": undefined,
+      "issues": undefined,
+      "lang": undefined,
+      "message": "Invalid type: Expected string but received undefined",
+      "path": [
+        {
+          "input": {},
+          "key": "createdTime",
+          "origin": "value",
+          "type": "object",
+          "value": undefined,
+        },
+      ],
+      "reason": "type",
+      "received": "undefined",
+      "skipPipe": undefined,
+    },
+    {
+      "abortEarly": undefined,
+      "abortPipeEarly": undefined,
+      "context": "object",
+      "expected": "Object",
+      "input": undefined,
+      "issues": undefined,
+      "lang": undefined,
+      "message": "Invalid type: Expected Object but received undefined",
+      "path": [
+        {
+          "input": {},
+          "key": "fields",
+          "origin": "value",
+          "type": "object",
+          "value": undefined,
+        },
+      ],
+      "reason": "type",
+      "received": "undefined",
+      "skipPipe": undefined,
+    },
+    {
+      "abortEarly": undefined,
+      "abortPipeEarly": undefined,
+      "context": "string",
+      "expected": "string",
+      "input": undefined,
+      "issues": undefined,
+      "lang": undefined,
+      "message": "Invalid type: Expected string but received undefined",
+      "path": [
+        {
+          "input": {},
+          "key": "id",
+          "origin": "value",
+          "type": "object",
+          "value": undefined,
+        },
+      ],
+      "reason": "type",
+      "received": "undefined",
+      "skipPipe": undefined,
+    },
+  ],
+  "output": {},
+  "success": false,
+  "typed": false,
+}
+`;
+
+exports[`airtableSingleResponseSchema B missing fields 1`] = `
+{
+  "data": {
+    "createdTime": "2021-01-01T00:00:00.000Z",
+    "fields": undefined,
+    "id": "rec1234567890",
+  },
+  "error": [ValiError: Invalid type: Expected Object but received undefined],
+  "issues": [
+    {
+      "abortEarly": undefined,
+      "abortPipeEarly": undefined,
+      "context": "object",
+      "expected": "Object",
+      "input": undefined,
+      "issues": undefined,
+      "lang": undefined,
+      "message": "Invalid type: Expected Object but received undefined",
+      "path": [
+        {
+          "input": {
+            "createdTime": "2021-01-01T00:00:00.000Z",
+            "fields": undefined,
+            "id": "rec1234567890",
+          },
+          "key": "fields",
+          "origin": "value",
+          "type": "object",
+          "value": undefined,
+        },
+      ],
+      "reason": "type",
+      "received": "undefined",
+      "skipPipe": undefined,
+    },
+  ],
+  "output": {
+    "createdTime": "2021-01-01T00:00:00.000Z",
+    "fields": undefined,
+    "id": "rec1234567890",
+  },
+  "success": false,
+  "typed": false,
+}
+`;
+
+exports[`airtableSingleResponseSchema C valid 1`] = `
+{
+  "data": {
+    "createdTime": "2021-01-01T00:00:00.000Z",
+    "fields": {
+      "barcode": "1234567890",
+      "box": "A",
+      "brand": "Brand",
+      "category": "Category",
+      "details": "Details",
+      "drawer": "Drawer",
+      "location": "Location",
+      "name": "Name",
+      "ref-printed": true,
+      "reference": "Reference",
+      "status": "acheté",
+      "updated-on": "2021-01-01T00:00:00.000Z",
+    },
+    "id": "rec1234567890",
+  },
+  "error": undefined,
+  "issues": undefined,
+  "output": {
+    "createdTime": "2021-01-01T00:00:00.000Z",
+    "fields": {
+      "barcode": "1234567890",
+      "box": "A",
+      "brand": "Brand",
+      "category": "Category",
+      "details": "Details",
+      "drawer": "Drawer",
+      "location": "Location",
+      "name": "Name",
+      "ref-printed": true,
+      "reference": "Reference",
+      "status": "acheté",
+      "updated-on": "2021-01-01T00:00:00.000Z",
+    },
+    "id": "rec1234567890",
+  },
+  "success": true,
+  "typed": true,
+}
+`;
