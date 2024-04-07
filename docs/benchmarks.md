@@ -4,15 +4,17 @@
 
 `hyperfine --runs 3 --warmup 1 'npx eslint --ext .js,.ts,.tsx .'`
 
-|     date     | delay | node  |      machine      | comment                           |
-| :----------: | :---: | :---: | :---------------: | --------------------------------- |
-| 2024-01-27#1 |  25s  | 20.11 | romain nzxl win11 | initial mesure, see note 0        |
-| 2024-02-16#1 |  25s  | 20.11 | romain nzxl win11 | stable                            |
-| 2024-02-16#2 |  15s  | 20.11 | romain nzxl win11 | removed some import rules... lol  |
-| 2024-03-18#1 |  10s  | 20.10 | romain gram zorin | did nothing but the cpu is better |
-| 2024-04-06#1 |  16s  | 20.10 | romain nzxl win11 | bump deps                         |
-| 2024-04-07#1 |  18s  | 20.10 | romain nzxl win11 | + hc/react-performance + hc/fp    |
-| 2024-04-07#2 |  20s  | 20.10 | romain nzxl win11 | without overrides only (standard) |
+|     date     | delay | node  |      machine      | comment                                     |
+| :----------: | :---: | :---: | :---------------: | ------------------------------------------- |
+| 2024-01-27#1 |  25s  | 20.11 | romain nzxl win11 | initial mesure, see note 0                  |
+| 2024-02-16#1 |  25s  | 20.11 | romain nzxl win11 | stable                                      |
+| 2024-02-16#2 |  15s  | 20.11 | romain nzxl win11 | removed some import rules... lol            |
+| 2024-03-18#1 |  10s  | 20.10 | romain gram zorin | did nothing but the cpu is better           |
+| 2024-04-06#1 |  16s  | 20.10 | romain nzxl win11 | bump deps                                   |
+| 2024-04-07#1 |  18s  | 20.10 | romain nzxl win11 | + hc/react-performance + hc/fp              |
+| 2024-04-07#2 |  20s  | 20.10 | romain nzxl win11 | override .js (standard)                     |
+| 2024-04-07#3 |  18s  | 20.10 | romain nzxl win11 | override .ts, .tsx / override .js           |
+| 2024-04-07#4 |  16s  | 20.10 | romain nzxl win11 | override .ts / override .tsx / override .js |
 
 Note 0 : with plugin:tailwindcss/recommended,  plugin:unicorn/all, hardcore, hardcore/react, hardcore/ts
 Note 1 : to show time taken by rules : `TIMING=1 npx eslint --ext .js,.ts,.tsx .`

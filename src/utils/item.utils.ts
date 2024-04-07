@@ -73,7 +73,6 @@ function pushItemLocally (item: Item, currentState = state) {
 }
 
 function getCoreData (item: Item) {
-  // eslint-disable-next-line @typescript-eslint/no-shadow
   const { barcode, box, brand, category, details, drawer, location, name, photo, price, 'ref-printed': isPrinted, reference, status } = item
   return { barcode, box, brand, category, details, drawer, location, name, 'photo': photo?.[0]?.url ?? '', price, 'ref-printed': isPrinted, reference, status } satisfies Omit<Item, 'id' | 'photo' | 'updated-on'> & { 'photo': string }
 }
@@ -140,7 +139,6 @@ export const itemForm = {
 } as const satisfies Form
 
 export function formToItem (form: typeof itemForm, id = '') {
-  // eslint-disable-next-line @typescript-eslint/no-shadow
   const { barcode, box, brand, category, details, drawer, isPrinted, location, name, photo, price, reference, status } = form.fields
   return {
     ...emptyItem,
