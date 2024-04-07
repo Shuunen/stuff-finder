@@ -19,7 +19,7 @@ type FormFieldCheckbox = FormFieldBase & { type: 'checkbox'; value: boolean } //
 type FormField<Type extends FormFieldType> = Type extends 'text' ? FormFieldText : Type extends 'select' ? FormFieldSelect : FormFieldCheckbox
 
 function fieldRegex (regex?: RegExp, minLength = 3, maxLength = 100) {
-  return regex ?? new RegExp(`^[\\d\\p{L}\\s/&]{${minLength},${maxLength}}$`, 'u') // eslint-disable-line security/detect-non-literal-regexp
+  return regex ?? new RegExp(`^[,\\d\\p{L}\\s/&]{${minLength},${maxLength}}$`, 'u') // eslint-disable-line security/detect-non-literal-regexp
 }
 
 export type Form = {
@@ -31,7 +31,7 @@ export type Form = {
 }
 
 export function validateForm<FormType extends Form> (form: FormType) {
-  let errorMessage = ''
+  let errorMessage = '' // eslint-disable-line functional/no-let
   const updatedFields = Object.entries(form.fields).reduce((accumulator, [field, { isRequired, label, regex, value }]) => { // eslint-disable-line unicorn/no-array-reduce
     const isValid = (!isRequired && (typeof value === 'string' && value === '')) || (typeof value === 'string' && regex.test(value)) || (typeof value === 'boolean')
     if (!isValid) errorMessage = value === '' ? `${label} is required` : `${label} is invalid, "${String(value)}" should match ${String(regex)}`
@@ -61,3 +61,6 @@ export function createSelectField (parameters: Partial<Pick<FormFieldSelect, 'co
 export function optionsToLabels (values?: FormFieldOptions) {
   return values?.map(({ label }) => label) ?? []
 }
+
+export type { FormFieldCheckbox, FormFieldSelect, FormFieldText }
+

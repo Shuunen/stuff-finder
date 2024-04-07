@@ -6,14 +6,14 @@ import DialogContent from '@mui/material/DialogContent'
 import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
 import IconButton from '@mui/material/IconButton'
-import { useState } from 'preact/hooks'
+import { useCallback, useState } from 'preact/hooks'
 
-export function AppDeleteRessource ({ onDelete }: { readonly onDelete: () => void }) {
+export function AppDeleteRessource ({ onDelete }: Readonly<{ onDelete: () => void }>) {
 
   const [isOpen, setIsOpen] = useState(false)
-  function openDialog () { setIsOpen(true) }
-  function closeDialog () { setIsOpen(false) }
-  function doDelete () { onDelete(); closeDialog() }
+  const openDialog = useCallback(() => { setIsOpen(true) }, [])
+  const closeDialog = useCallback(() => { setIsOpen(false) }, [])
+  const doDelete = useCallback(() => { onDelete(); closeDialog() }, [closeDialog, onDelete])
 
   return (
     <>

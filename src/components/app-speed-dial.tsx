@@ -9,7 +9,7 @@ import Fade from '@mui/material/Fade'
 import SpeedDial from '@mui/material/SpeedDial'
 import SpeedDialAction from '@mui/material/SpeedDialAction'
 import { route } from 'preact-router'
-import { useState } from 'preact/hooks'
+import { useCallback, useMemo, useState } from 'preact/hooks'
 import { scout } from '../utils/browser.utils'
 import { logger } from '../utils/logger.utils'
 
@@ -21,19 +21,22 @@ const actions = [
   { handleClick: () => route('/scan'), icon: <QrCodeScannerIcon />, name: 'Scan' },
 ]
 
-export function AppSpeedDial ({ isLoading }: { readonly isLoading: boolean }) {
+export function AppSpeedDial ({ isLoading }: Readonly<{ isLoading: boolean }>) {
 
   const [isOpen, setOpen] = useState(false)
-  function toggleOpen (reason = 'unknown') { logger.debug('toggle cause', reason); setOpen(!isOpen) }
-  function onMouse (status: 'enter' | 'leave') { if (!scout.isMobile) { logger.debug('open cause mouse', status); setOpen(status === 'enter') } }
-
+  const toggleOpen = useCallback(() => { setOpen(!isOpen) }, [isOpen])
+  const onMouse = useCallback((status: 'enter' | 'leave') => { if (!scout.isMobile) { logger.debug('open cause mouse', status); setOpen(status === 'enter') } }, [])
+  const onMouseEnter = useCallback(() => { onMouse('enter') }, [onMouse])
+  const onMouseLeave = useCallback(() => { onMouse('leave') }, [onMouse])
+  const options = useMemo(() => ({ color: isLoading ? 'warning' : 'primary' } as const), [isLoading])
+  const icon = useMemo(() => isLoading ? <HourglassTop /> : <SpeedDialIcon />, [isLoading])
   return (
     <>
       <Fade in={isOpen}>
-        <div className="absolute bottom-0 right-0 z-10 size-full bg-black/30" data-component="speed-dial-backdrop" onClick={() => toggleOpen('click on div backdrop')} />
+        <div className="absolute bottom-0 right-0 z-10 size-full bg-black/30" data-component="speed-dial-backdrop" onClick={toggleOpen} />
       </Fade>
       <div className="fixed bottom-10 right-10 z-20 print:hidden" data-component="speed-dial">
-        <SpeedDial ariaLabel='Actions' FabProps={{ color: isLoading ? 'warning' : 'primary' }} icon={isLoading ? <HourglassTop /> : <SpeedDialIcon />} onClick={() => toggleOpen('click on dial')} onMouseEnter={() => onMouse('enter')} onMouseLeave={() => onMouse('leave')} open={isOpen}>
+        <SpeedDial ariaLabel='Actions' FabProps={options} icon={icon} onClick={toggleOpen} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} open={isOpen}>
           {actions.map((action) => (
             <SpeedDialAction icon={action.icon} key={action.name} onClick={action.handleClick} tooltipTitle={action.name} />
           ))}

@@ -1,3 +1,5 @@
+/* eslint-disable functional/immutable-data */
+/* eslint-disable functional/no-this-expressions */
 import { emit, on, sleep } from 'shuutils'
 import { delays } from '../constants'
 import type { AppSpeechStartEvent, AppStatusEvent, RecognitionErrorEvent, SearchStartEvent } from '../types/events.types'
@@ -6,7 +8,7 @@ import { logger } from '../utils/logger.utils'
 import { playErrorSound, playInfoSound } from '../utils/sound.utils'
 import { state } from '../utils/state.utils'
 
-// eslint-disable-next-line no-restricted-syntax
+// eslint-disable-next-line no-restricted-syntax, functional/no-classes
 class AppSpeech {
 
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition

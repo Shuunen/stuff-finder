@@ -2,7 +2,7 @@ import PestControlIcon from '@mui/icons-material/PestControl'
 import { AppPageCard } from '../components/app-page-card'
 import { logger } from '../utils/logger.utils'
 
-export function PageError ({ code, ...properties }: { readonly code: string; readonly [key: string]: unknown }) {
+export function PageError ({ code, ...properties }: Readonly<{ [key: string]: unknown; code: string }>) {
   logger.debug('PageError', { code, properties })
   return (
     <AppPageCard cardTitle="Error" icon={PestControlIcon} pageCode="error" pageTitle={`Error ${code}`}>

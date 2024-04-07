@@ -12,6 +12,7 @@ function airtableHeaders (token: string) {
 
 async function request (method: 'DELETE' | 'GET' | 'PATCH' | 'POST', url: string, data?: Record<string, unknown>) {
   const options: RequestInit = { headers: airtableHeaders(state.credentials.token), method }
+  // eslint-disable-next-line functional/immutable-data
   if (data) options.body = JSON.stringify(data)
   const response = await fetch(url, options).catch((error: unknown) => { logger.showError(error) })
   if (!response) throw new Error('no response')
@@ -42,5 +43,6 @@ export function valuesToOptions (array: readonly string[], selected?: string) {
 export { scout }
 
 export function setPageTitle (title: string) {
+  // eslint-disable-next-line functional/immutable-data
   document.title = `${title} - Stuff Finder`
 }

@@ -1,3 +1,5 @@
+/* eslint-disable functional/immutable-data */
+/* eslint-disable functional/no-let */
 /* eslint-disable @typescript-eslint/naming-convention */
 import { capitalize, clone } from 'shuutils'
 import { emptyItemSuggestions } from '../constants'

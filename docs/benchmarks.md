@@ -11,6 +11,7 @@
 | 2024-02-16#2 |  15s  | 20.11 | romain nzxl win11 | removed some import rules... lol  |
 | 2024-03-18#1 |  10s  | 20.10 | romain gram zorin | did nothing but the cpu is better |
 | 2024-04-06#1 |  16s  | 20.10 | romain nzxl win11 | bump deps                         |
+| 2024-04-07#1 |  18s  | 20.10 | romain nzxl win11 | + hc/react-performance + hc/fp    |
 
 Note 0 : with plugin:tailwindcss/recommended,  plugin:unicorn/all, hardcore, hardcore/react, hardcore/ts
 Note 1 : to show time taken by rules : `TIMING=1 npx eslint --ext .js,.ts,.tsx .`

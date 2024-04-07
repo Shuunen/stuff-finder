@@ -1,3 +1,4 @@
+/* eslint-disable functional/immutable-data */
 import { safeParse } from 'valibot'
 import { emptyItem } from '../constants'
 import { del, get, patch, post } from './browser.utils'

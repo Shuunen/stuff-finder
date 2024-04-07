@@ -2,7 +2,7 @@ import SearchIcon from '@mui/icons-material/Search'
 import { useSignalEffect } from '@preact/signals'
 import Fuse from 'fuse.js'
 import { route } from 'preact-router'
-import { useState } from 'preact/hooks'
+import { useCallback, useState } from 'preact/hooks'
 import { debounce, ellipsis, sanitize } from 'shuutils'
 import { AppItemList } from '../components/app-item-list'
 import { AppPageCard } from '../components/app-page-card'
@@ -22,20 +22,20 @@ function search (input: string) {
   return { header, results }
 }
 
-export function PageSearch ({ input = '', ...properties }: { readonly input?: string; readonly [key: string]: unknown }) {
+export function PageSearch ({ input = '', ...properties }: Readonly<{ [key: string]: unknown; input?: string }>) {
   logger.debug('PageSearch rendering', { input, properties })
   const [items, setItems] = useState(defaultItems)
   const [title, setTitle] = useState('Searching...')
 
-  function triggerSearchSync () {
+  const triggerSearchSync = useCallback(() => {
     const { header, results } = search(input)
     setItems(results)
     setTitle(header)
-  }
+  }, [input])
 
   const triggerSearch = debounce(triggerSearchSync, delays.large)
 
-  useSignalEffect(() => { triggerSearchSync() })
+  useSignalEffect(useCallback(() => { void triggerSearch() }, [triggerSearch]))
 
   if (items.length === 1) route(`/item/details/${items[0]?.id ?? ''}/single`)
   else watchState('items', () => { void triggerSearch() })

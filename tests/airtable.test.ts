@@ -1,3 +1,4 @@
+/* eslint-disable functional/no-let */
 import { sleep } from 'shuutils'
 import { expect, it } from 'vitest'
 import { airtableRecordToItem, getAllItems, getItemFieldsToPush, isLocalAndRemoteSync } from '../src/utils/airtable.utils'
