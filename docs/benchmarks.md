@@ -2,24 +2,27 @@
 
 ## Eslint
 
-`hyperfine --runs 3 --warmup 1 'npx eslint --ext .js,.ts,.tsx .'`
+`hyperfine --runs 3 --warmup 1 'npx eslint .'`
 
-|     date     | delay | node  |      machine      | comment                                     |
-| :----------: | :---: | :---: | :---------------: | ------------------------------------------- |
-| 2024-01-27#1 |  25s  | 20.11 | romain nzxl win11 | initial mesure, see note 0                  |
-| 2024-02-16#1 |  25s  | 20.11 | romain nzxl win11 | stable                                      |
-| 2024-02-16#2 |  15s  | 20.11 | romain nzxl win11 | removed some import rules... lol            |
-| 2024-03-18#1 |  10s  | 20.10 | romain gram zorin | did nothing but the cpu is better           |
-| 2024-04-06#1 |  16s  | 20.10 | romain nzxl win11 | bump deps                                   |
-| 2024-04-07#1 |  18s  | 20.10 | romain nzxl win11 | + hc/react-performance + hc/fp              |
-| 2024-04-07#2 |  20s  | 20.10 | romain nzxl win11 | override .js (standard)                     |
-| 2024-04-07#3 |  18s  | 20.10 | romain nzxl win11 | override .ts, .tsx / override .js           |
-| 2024-04-07#4 |  16s  | 20.10 | romain nzxl win11 | override .ts / override .tsx / override .js |
+|     date     | delay | node  |      machine      | comment                                          |
+| :----------: | :---: | :---: | :---------------: | ------------------------------------------------ |
+| 2024-01-27#1 |  25s  | 20.11 | romain nzxl win11 | initial mesure, see note 0                       |
+| 2024-02-16#1 |  25s  | 20.11 | romain nzxl win11 | stable                                           |
+| 2024-02-16#2 |  15s  | 20.11 | romain nzxl win11 | removed some import rules... lol                 |
+| 2024-03-18#1 |  10s  | 20.10 | romain gram zorin | did nothing but the cpu is better                |
+| 2024-04-06#1 |  16s  | 20.10 | romain nzxl win11 | bump deps                                        |
+| 2024-04-07#1 |  18s  | 20.10 | romain nzxl win11 | + hc/react-performance + hc/fp                   |
+| 2024-04-07#2 |  20s  | 20.10 | romain nzxl win11 | override .js (standard)                          |
+| 2024-04-07#3 |  18s  | 20.10 | romain nzxl win11 | override .ts, .tsx / override .js                |
+| 2024-04-07#4 |  16s  | 20.10 | romain nzxl win11 | override .ts / override .tsx / override .js      |
+| 2024-04-07#5 |  16s  | 20.10 | romain nzxl win11 | avoid "**/*" in files specifiers                 |
+| 2024-04-07#6 |  14s  | 20.10 | romain nzxl win11 | targeting only src directory instead of "."      |
+| 2024-04-07#7 |  14s  | 20.10 | romain nzxl win11 | targeting only src directory + no --ext .ts,.tsx |
 
 Note 0 : with plugin:tailwindcss/recommended,  plugin:unicorn/all, hardcore, hardcore/react, hardcore/ts
-Note 1 : to show time taken by rules : `TIMING=1 npx eslint --ext .js,.ts,.tsx .`
+Note 1 : to show time taken by rules : `TIMING=1 npx eslint .`
 Note 2 : to view final config : `npx eslint --print-config src/utils/parsers.utils.ts > eslint.config.json`
-Note 3 : to list eslint scanned files : `DEBUG=eslint:cli-engine npx eslint --ext .js,.ts,.tsx .`
+Note 3 : to list eslint scanned files : `DEBUG=eslint:cli-engine npx eslint .`
 
 ## Eslint on a single file
 

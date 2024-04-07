@@ -446,15 +446,16 @@
         "hardcore/ts-for-js"
       ],
       "files": [
+        "*.cjs",
         "*.js"
       ],
       "parserOptions": {
         "project": "tsconfig.js.json"
       },
       "rules": {
-        "etc/no-commented-out-code": "off", // we want to ^^
-        "etc/no-deprecated": "off", // slow
-        "etc/no-internal": "off" // slow
+        "etc/no-commented-out-code": "off",
+        "etc/no-deprecated": "off",
+        "etc/no-internal": "off"
       }
     }
   ],
