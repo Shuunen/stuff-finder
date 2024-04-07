@@ -1,5 +1,7 @@
-/* eslint-disable max-lines */
-/* eslint-disable no-useless-escape */
+'use strict'
+
+/* eslint-disable max-lines, no-useless-escape, @typescript-eslint/naming-convention */
+
 /** @type {import('dependency-cruiser').IConfiguration} */
 module.exports = {
   forbidden: [
@@ -456,3 +458,5 @@ module.exports = {
   },
 }
 // generated: dependency-cruiser@11.18.0 on 2022-11-09T09:53:38.188Z
+
+/* eslint-enable max-lines, no-useless-escape, @typescript-eslint/naming-convention */

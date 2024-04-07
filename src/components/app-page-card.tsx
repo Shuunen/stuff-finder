@@ -5,7 +5,7 @@ import { AppButtonBack } from './app-button-back'
 import { AppPageBottom } from './app-page-bottom'
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
-export function AppPageCard ({ cardTitle, children, icon: Icon, nextLabel = 'Home', nextUrl = '/', pageCode, pageTitle, stepsBack = 1 }: { readonly cardTitle: string; readonly children: VNode; readonly icon: MuiIcon; readonly nextLabel?: string; readonly nextUrl?: string; readonly pageCode: string; readonly pageTitle: string; readonly stepsBack?: number }) {
+export function AppPageCard ({ cardTitle, children, icon: Icon, nextLabel = 'Home', nextUrl = '/', pageCode, pageTitle, stepsBack = 1 }: Readonly<{ cardTitle: string; children: VNode; icon: MuiIcon; nextLabel?: string; nextUrl?: string; pageCode: string; pageTitle: string; stepsBack?: number }>) {
   setPageTitle(pageTitle)
   return (
     <div className="flex max-h-full w-full grow flex-col print:hidden" data-component="page-card" data-page={pageCode}>

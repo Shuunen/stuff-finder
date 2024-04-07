@@ -6,7 +6,7 @@ import type Exception from '@zxing/library/es2015/core/Exception'
 import notFoundException from '@zxing/library/es2015/core/NotFoundException'
 import type Result from '@zxing/library/es2015/core/Result'
 import { route } from 'preact-router'
-import { useRef } from 'preact/hooks'
+import { useCallback, useRef } from 'preact/hooks'
 import { sleep } from 'shuutils'
 import { AppPageCard } from '../components/app-page-card'
 import { delays } from '../constants'
@@ -28,6 +28,7 @@ function onDecodeSuccess (result: Result) {
  * @returns {void} nothing
  */
 async function onDecode (result: Result | null, sound: HTMLAudioElement | null, error?: Exception) {
+  // eslint-disable-next-line functional/immutable-data
   if (state.status !== 'ready') state.status = 'ready'
   if (error && !(error instanceof notFoundException)) { logger.showError(error.message, error); return }
   if (result === null) return // if no result was found, do nothing
@@ -36,7 +37,7 @@ async function onDecode (result: Result | null, sound: HTMLAudioElement | null, 
   onDecodeSuccess(result)
 }
 
-export function PageScan ({ ...properties }: { readonly [key: string]: unknown }) {
+export function PageScan ({ ...properties }: Readonly<{ [key: string]: unknown }>) {
 
   logger.debug('PageScan', { properties })
   const videoReference = useRef<HTMLVideoElement>(null)
@@ -44,14 +45,15 @@ export function PageScan ({ ...properties }: { readonly [key: string]: unknown }
   const soundReference = useRef<HTMLAudioElement>(null)
   const sound = signal(soundReference)
 
-  useSignalEffect(() => {
+  useSignalEffect(useCallback(() => {
     // this run once, when the component is mounted
     if (video.value.current === null) throw new Error('video element is null')
+    // eslint-disable-next-line functional/immutable-data
     if (state.status !== 'loading') state.status = 'loading'
     logger.debug('starting video stream decoding...')
     void reader.decodeFromVideoDevice(null, video.value.current, (result, error) => { void onDecode(result, sound.value.current, error) } /* eslint-disable-line unicorn/no-null */)
     return () => { reader.reset() } // this run once, when the component is about to unmount
-  })
+  }, [sound.value, video.value]))
 
   return (
     <AppPageCard cardTitle="Scan" icon={QrCodeScannerIcon} pageCode="scan" pageTitle="Scan QR Code or Barcode">

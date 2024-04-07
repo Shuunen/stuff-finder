@@ -1,9 +1,12 @@
+/* eslint-disable functional/immutable-data */
+/* eslint-disable functional/no-this-expressions */
+/* eslint-disable functional/functional-parameters */
 import { Logger, debounce } from 'shuutils'
 import { delays } from '../constants'
 import { state } from './state.utils'
 
 /* c8 ignore start */
-// eslint-disable-next-line no-restricted-syntax
+// eslint-disable-next-line no-restricted-syntax, functional/no-classes
 class CustomLogger extends Logger {
 
   // eslint-disable-next-line unicorn/consistent-function-scoping

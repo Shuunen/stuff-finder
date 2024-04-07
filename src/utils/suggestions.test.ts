@@ -1,12 +1,12 @@
+/* eslint-disable functional/immutable-data */
 /* eslint-disable @typescript-eslint/naming-convention */
 import { clone } from 'shuutils'
 import { expect, it, vi } from 'vitest'
-import { emptyItemSuggestions } from '../src/constants'
-import { get } from '../src/utils/browser.utils'
-import { mockItem } from '../src/utils/mock.utils'
-import { state } from '../src/utils/state.utils'
-import { addSuggestionsFromAliEx, addSuggestionsFromAngbo, addSuggestionsFromCampo, addSuggestionsFromDeyes, addSuggestionsFromWrap, cleanSuggestions, getSuggestions } from '../src/utils/suggestions.utils'
-
+import { emptyItemSuggestions } from '../constants'
+import { get } from './browser.utils'
+import { mockItem } from './mock.utils'
+import { state } from './state.utils'
+import { addSuggestionsFromAliEx, addSuggestionsFromAngbo, addSuggestionsFromCampo, addSuggestionsFromDeyes, addSuggestionsFromWrap, cleanSuggestions, getSuggestions } from './suggestions.utils'
 
 it('cleanSuggestions A', () => { expect(cleanSuggestions({ keyA: ['a', 'b', 'c'], keyB: ['a', 'b', 'c'] })).toEqual({ keyA: ['a', 'b', 'c'], keyB: ['a', 'b', 'c'] }) })
 it('cleanSuggestions B', () => { expect(cleanSuggestions({})).toEqual({}) })

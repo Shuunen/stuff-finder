@@ -7,7 +7,10 @@ import type { Item } from './parsers.utils'
  * @returns the generated name
  */
 function itemToPrintText (item: Item) {
-  return [item.name, item.brand, item.details].join(' ').replace(/\s{2,}/gu, ' ').trim()
+  return [item.name, item.brand, item.details]
+    .join(' ')
+    .replace(/\s{2,}/gu, ' ')
+    .trim()
 }
 
 function itemToPrintCode (item: Item) {
@@ -26,10 +29,10 @@ function itemToPrintLocation (input: Item) {
 }
 
 export function itemToPrintData (item: Item) {
-  return ({
+  return {
     location: itemToPrintLocation(item),
     text: itemToPrintText(item),
     value: itemToPrintCode(item),
-  })
+  }
 }
 

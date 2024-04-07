@@ -101,19 +101,21 @@ export const fuseOptions: IFuseOptions<Item> = {
     return value
   },
   ignoreLocation: true, // eslint-disable-line @typescript-eslint/naming-convention
-  keys: [{
-    name: 'name',
-    weight: 4,
-  }, {
-    name: 'brand',
-    weight: 2,
-  }, {
-    name: 'details',
-    weight: 4,
-  }, {
-    name: 'category',
-    weight: 1,
-  }], // this is not generic ^^"
+  keys: [
+    {
+      name: 'name',
+      weight: 4,
+    }, {
+      name: 'brand',
+      weight: 2,
+    }, {
+      name: 'details',
+      weight: 4,
+    }, {
+      name: 'category',
+      weight: 1,
+    },
+  ], // this is not generic ^^"
   threshold: 0.35, // 0 is perfect match
 }
 

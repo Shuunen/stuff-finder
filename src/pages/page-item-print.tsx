@@ -4,15 +4,15 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import Switch from '@mui/material/Switch'
 import ToggleButton from '@mui/material/ToggleButton'
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup'
-import { useState } from 'preact/hooks'
+import { useCallback, useMemo, useState } from 'preact/hooks'
 import { AppBarcode } from '../components/app-barcode'
 import { AppPageCard } from '../components/app-page-card'
+import { delays } from '../constants'
 import { printSizes, type PrintSize } from '../types/print.types'
 import { itemToImageUrl, onItemImageError, pushItem } from '../utils/item.utils'
 import { logger } from '../utils/logger.utils'
 import { itemToPrintData } from '../utils/print.utils'
 import { state } from '../utils/state.utils'
-import { delays } from '../constants'
 
 // if qr code size need to be adjusted, use this old block of code :
 // async function adjustQrCode () {
@@ -32,7 +32,7 @@ import { delays } from '../constants'
 // }
 
 // eslint-disable-next-line max-statements
-export function PageItemPrint ({ ...properties }: { readonly [key: string]: unknown }) {
+export function PageItemPrint ({ ...properties }: Readonly<{ [key: string]: unknown }>) {
 
   if (typeof properties.id !== 'string') throw new Error('An id in the url is required')
   const item = state.items.find(one => one.id === properties.id)
@@ -40,26 +40,25 @@ export function PageItemPrint ({ ...properties }: { readonly [key: string]: unkn
 
   const { value } = itemToPrintData(item)
   const [size, setSize] = useState<PrintSize>('40x20')
-  const [isHighlighted, setHighlight] = useState<boolean>(false)
+  const [isHighlighted, setIsHighlighted] = useState<boolean>(false)
   logger.debug('PageItemPrint', { item })
-
-  async function doPrint () {
+  const onSizeChange = useCallback((_event: unknown, selectedSize: PrintSize) => { setSize(selectedSize) }, []) // eslint-disable-line no-underscore-dangle, @typescript-eslint/naming-convention
+  const onHighlightChange = useCallback((_event: unknown, isChecked: boolean) => { setIsHighlighted(isChecked) }, []) // eslint-disable-line no-underscore-dangle, @typescript-eslint/naming-convention
+  const highlightSwitch = useMemo(() => <Switch checked={isHighlighted} onChange={onHighlightChange} />, [isHighlighted, onHighlightChange])
+  const onPrint = useCallback(async () => {
     window.print()
-    if (item === undefined || item['ref-printed']) return
-    item['ref-printed'] = true
+    if (item['ref-printed']) return
+    item['ref-printed'] = true // eslint-disable-line functional/immutable-data
     const result = await pushItem(item)
+    // eslint-disable-next-line functional/immutable-data
     state.message = { content: `${result.success ? 'updated' : 'failed updating'} item as printed`, delay: delays.seconds, type: result.success ? 'success' : 'error' }
     if (!result.success) logger.error('pushItem failed', result)
-  }
-
-  function onSizeChange (_event: unknown, selectedSize: PrintSize) { setSize(selectedSize) } // eslint-disable-line no-underscore-dangle, @typescript-eslint/naming-convention
-  function onHighlightChange (_event: unknown, isChecked: boolean) { setHighlight(isChecked) } // eslint-disable-line no-underscore-dangle, @typescript-eslint/naming-convention
+  }, [item])
 
   return (
     <>
       <AppPageCard cardTitle="Print" icon={Print} pageCode="item-print" pageTitle={`${item.name} - Print`}>
         <div className="flex flex-col md:flex-row">
-          {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
           <img alt={item.name} className="mx-auto max-h-64 object-contain" data-id={item.id} onError={onItemImageError} src={itemToImageUrl(item)} />
           <div className="flex flex-col gap-3 text-center md:items-start md:text-left">
             <h1 className="w-full">{item.name}</h1>
@@ -70,8 +69,8 @@ export function PageItemPrint ({ ...properties }: { readonly [key: string]: unkn
                 <ToggleButtonGroup aria-label="Size" color="primary" exclusive onChange={onSizeChange} size="small" value={size}>
                   {Object.keys(printSizes).map(one => <ToggleButton key={one} value={one}>{one}</ToggleButton>)}
                 </ToggleButtonGroup>
-                <FormControlLabel control={<Switch checked={isHighlighted} onChange={onHighlightChange} />} label="Highlight zones" />
-                <Button onClick={() => { void doPrint() }} variant="contained">Print</Button>
+                <FormControlLabel control={highlightSwitch} label="Highlight zones" />
+                <Button onClick={onPrint} variant="contained">Print</Button>
               </div>
             </div>
           </div>

@@ -1,8 +1,7 @@
-/* eslint-disable jsx-a11y/no-autofocus, react/no-unknown-property, react-form-fields/no-only-value-prop */
 import Button from '@mui/material/Button'
 import { signal, useSignalEffect } from '@preact/signals'
 import { route } from 'preact-router'
-import { useRef } from 'preact/hooks'
+import { useCallback, useRef } from 'preact/hooks'
 import { off, on } from 'shuutils'
 import { AppPrompter } from '../components/app-prompter'
 import { delays } from '../constants'
@@ -15,23 +14,21 @@ const triggerButtonStyle = { fontSize: '1rem', height: '2.7rem', textTransform: 
 
 function onSearch (event: KeyboardEvent) {
   const { key, target } = event
-  // azerty state.message = { content: `key pressed : ${key}`, delay: delays.seconds, type: 'info' }
   if (key !== 'Enter') return
   const { value } = target as HTMLInputElement // eslint-disable-line @typescript-eslint/consistent-type-assertions
   if (value === '') return
   logger.debug('onSearch', { value })
-  state.status = 'loading'
   route(`/search/${value}`)
 }
 
-export function PageHome ({ ...properties }: { readonly [key: string]: unknown }) {
+export function PageHome ({ ...properties }: Readonly<{ [key: string]: unknown }>) {
   logger.debug('PageHome', { properties })
   setPageTitle('Home')
 
   const searchReference = useRef<HTMLInputElement>(null)
   const search = signal(searchReference)
 
-  useSignalEffect(() => {
+  useSignalEffect(useCallback(() => {
     const handler = on('focus', () => {
       logger.debug('PageHome is focused')
       setTimeout(() => { search.value.current?.focus() }, delays.small)
@@ -40,8 +37,12 @@ export function PageHome ({ ...properties }: { readonly [key: string]: unknown }
       if (handler !== false) off(handler)
       logger.debug('PageHome is unfocused')
     }
-  })
+  }, [search.value]))
 
+  // eslint-disable-next-line functional/immutable-data
+  const onSpeech = useCallback(() => { state.message = { content: 'Speech not available currently', delay: delays.second, type: 'warning' } }, [])
+
+  /* eslint-disable jsx-a11y/no-autofocus, react/no-unknown-property */
   return (
     <div data-page="home">
       {/* new good code */}
@@ -56,13 +57,13 @@ export function PageHome ({ ...properties }: { readonly [key: string]: unknown }
           <svg className="h-8" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg"><path d="M108 48H68c12-13-12-27 0-40h-8c-12 13 12 27 0 40H20c-9 0-16 7-16 16v40c0 9 7 16 16 16h88c9 0 16-7 16-16V64c0-9-7-16-16-16zm8 56c0 4-4 8-8 8H20c-4 0-8-4-8-8V64c0-4 4-8 8-8h88c4 0 8 4 8 8v40z" fill="currentColor" /></svg>
         </div>
         <div className={triggerColumnClasses}>
-          <Button color="primary" fullWidth onClick={() => { state.message = { content: 'Speech not available currently', delay: delays.second, type: 'warning' } }} sx={triggerButtonStyle} variant="contained">Speech</Button>
+          <Button color="primary" fullWidth onClick={onSpeech} sx={triggerButtonStyle} variant="contained">Speech</Button>
           <svg className="h-8" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg"><path d="M108 68a4 4 0 10-8 0 36 36 0 01-72 0 4 4 0 10-8 0c0 23 18 42 40 44v8H40a4 4 0 100 8h48a4 4 0 100-8H68v-8c22-2 40-21 40-44z" fill="currentColor" /><path d="M64 8c11 0 20 9 20 20v40a20 20 0 01-40 0V28c0-11 9-20 20-20m0-8C49 0 36 13 36 28v40a28 28 0 0056 0V28C92 13 79 0 64 0z" fill="currentColor" /></svg>
         </div>
       </div>
       {/* old code to migrate */}
       <app-modal class="hidden" data-title="Add item" name="add-item">
-        <div className="content overflow-auto">
+        <div className="overflow-auto">
           <app-form allow-submit class="justify-center" hide-actions-on-submit inline="true" name="search-item" no-hid save="app-search-item"
             save-label="Search">
             <label>Search online by name or reference : <input autoFocus maxLength={150} minLength={3} name="input" type="text" /></label>
@@ -72,27 +73,6 @@ export function PageHome ({ ...properties }: { readonly [key: string]: unknown }
       </app-modal>
       <app-modal class="hidden" data-title="Settings" name="settings">
         <app-form class="md:grid-cols-1" close="app-modal--settings--close" name="settings">
-          <label>
-            <a href="https://airtable.com/api" rel="noreferrer" target="_blank">Airtable api base</a>
-            <input autoFocus multi-paste name="base" pattern="^app\w{14}$" placeholder="your api base" required type="text" />
-          </label>
-          <label>
-            <a href="https://airtable.com/create/tokens" rel="noreferrer" target="_blank">Airtable personal access token</a>
-            <input maxLength={100} name="token" pattern="^pat[\w\.]{50,100}$" placeholder="your pat" required type="text" />
-          </label>
-          <label>
-            Airtable table name
-            <input name="table" pattern="\S+" placeholder="your table name" required type="text" value="stuff-finder" />
-          </label>
-          <label>
-            Airtable view name
-            <input name="view" pattern="\S+" placeholder="your table name" required type="text" value="stuff-finder" />
-          </label>
-          <label>
-            <a href="https://wrapapi.com/user/api" rel="noreferrer" target="_blank">Wrap Api key (optional)</a>
-            <input maxLength={32} name="wrap" pattern="\w{32}" placeholder="your wrap api key" type="text" />
-          </label>
-
           <details>
             <summary>What this app do with my credentials ?</summary>
             <small>
@@ -137,3 +117,4 @@ export function PageHome ({ ...properties }: { readonly [key: string]: unknown }
     </div>
   )
 }
+/* eslint-enable jsx-a11y/no-autofocus, react/no-unknown-property */

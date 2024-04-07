@@ -1,3 +1,6 @@
+/* eslint-disable functional/no-let */
+/* eslint-disable functional/immutable-data */
+/* eslint-disable functional/no-this-expressions */
 import type { AppCredentials } from './types/settings.types'
 import { airtableRecordToItem, getAllItems, isLocalAndRemoteSync } from './utils/airtable.utils'
 import { getCommonListsFromItems } from './utils/item.utils'
@@ -5,7 +8,7 @@ import { logger } from './utils/logger.utils'
 import { state } from './utils/state.utils'
 import { coolAscii } from './utils/strings.utils'
 
-// eslint-disable-next-line no-restricted-syntax
+// eslint-disable-next-line no-restricted-syntax, functional/no-classes
 class App {
 
   public constructor () {
@@ -14,6 +17,7 @@ class App {
   }
 
   private checkExistingSettings () {
+    logger.info('checkExistingSettings', { credentials: state.credentials })
     if (!state.credentials.base) { this.settingsActionRequired(true); return }
     void this.onSettingsSave(state.credentials)
   }
@@ -53,6 +57,7 @@ class App {
       logger.showLog('no updates from airtable, cache seems up to date')
       return true
     }
+    // eslint-disable-next-line functional/no-loop-statements
     while ((offset?.length ?? 0) > 0) {
       result = await getAllItems(offset) // eslint-disable-line no-await-in-loop
       offset = result.offset // eslint-disable-line unicorn/consistent-destructuring

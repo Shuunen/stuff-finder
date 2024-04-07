@@ -1,6 +1,6 @@
 import { expect, it } from 'vitest'
-import { createCheckboxField, createSelectField, optionsToLabels, validateForm } from '../src/utils/forms.utils'
-import { settingsForm } from '../src/utils/settings.utils'
+import { createCheckboxField, createSelectField, optionsToLabels, validateForm } from './forms.utils'
+import { settingsForm } from './settings.utils'
 
 it('validateForm A invalid field value', () => {
   const form = { ...settingsForm, fields: { ...settingsForm.fields, base: { ...settingsForm.fields.base, value: 'azerty' } } }

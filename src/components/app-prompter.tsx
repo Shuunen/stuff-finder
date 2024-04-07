@@ -1,7 +1,7 @@
 import { signal, useSignalEffect } from '@preact/signals'
 // @ts-expect-error missing types
 import { type } from '@camwiegert/typical'
-import { useRef } from 'preact/hooks'
+import { useCallback, useRef } from 'preact/hooks'
 import { delays } from '../constants'
 import { coolAscii } from '../utils/strings.utils'
 
@@ -17,10 +17,10 @@ export function AppPrompter () {
   const prompterReference = useRef<HTMLHeadingElement>(null)
   const prompter = signal(prompterReference)
 
-  useSignalEffect(() => {
+  useSignalEffect(useCallback(() => {
     if (prompter.value.current === null) return
     type(prompter.value.current, ...sequence) // eslint-disable-line @typescript-eslint/no-unsafe-call
-  })
+  }, [prompter.value]))
 
   return (
     <h1 className="mb-12 mt-8 h-20 whitespace-pre text-center print:hidden" data-component="prompter" ref={prompterReference}>Hey ^^</h1>

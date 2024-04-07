@@ -1,3 +1,4 @@
+/* eslint-disable functional/immutable-data */
 import { clone, objectSum } from 'shuutils'
 import { defaultCommonLists, defaultImage, emptyItem, type CommonLists } from '../constants'
 import { airtableMaxRequestPerSecond, deleteItemRemotely, getOneItem, pushItemRemotely } from './airtable.utils'
@@ -72,9 +73,8 @@ function pushItemLocally (item: Item, currentState = state) {
 }
 
 function getCoreData (item: Item) {
-  // eslint-disable-next-line @typescript-eslint/no-shadow
   const { barcode, box, brand, category, details, drawer, location, name, photo, price, 'ref-printed': isPrinted, reference, status } = item
-  return { barcode, box, brand, category, details, drawer, location, name, 'photo': photo?.[0]?.url ?? '', price, 'ref-printed': isPrinted, reference, status } satisfies Omit<Item, 'id' | 'photo' | 'updated-on'> & { 'photo': string }
+  return { barcode, box, brand, category, details, drawer, location, name, 'photo': photo?.[0]?.url ?? '', price, 'ref-printed': isPrinted, reference, status } satisfies Omit<Item, 'id' | 'photo' | 'updated-on'> & { photo: string }
 }
 
 // eslint-disable-next-line @typescript-eslint/max-params
@@ -91,15 +91,14 @@ export async function deleteItem (id: Item['id'], currentState = state, delMetho
 }
 
 export function getCommonListsFromItems (items: Item[]) {
-  let list = clone(defaultCommonLists)
+  const list = clone(defaultCommonLists)
   items.forEach(item => {
     if (shouldAddToList(item.location, list.locations)) list.locations.push(item.location)
     if (shouldAddToList(item.box, list.boxes)) list.boxes.push(item.box)
     if (shouldAddToList(item.status, list.statuses)) list.statuses.push(item.status)
     if (shouldAddToList(item.category, list.categories)) list.categories.push(item.category)
   })
-  list = sortListsEntries(list)
-  return list
+  return sortListsEntries(list)
 }
 
 /* c8 ignore next 10 */
@@ -140,7 +139,6 @@ export const itemForm = {
 } as const satisfies Form
 
 export function formToItem (form: typeof itemForm, id = '') {
-  // eslint-disable-next-line @typescript-eslint/no-shadow
   const { barcode, box, brand, category, details, drawer, isPrinted, location, name, photo, price, reference, status } = form.fields
   return {
     ...emptyItem,

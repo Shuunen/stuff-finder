@@ -5,7 +5,7 @@ import { logger } from '../utils/logger.utils'
 import type { Item } from '../utils/parsers.utils'
 import { itemToPrintData } from '../utils/print.utils'
 
-export function AppBarcode ({ isHighlighted = false, item, size }: { readonly isHighlighted?: boolean; readonly item: Item; readonly size: PrintSize }) {
+export function AppBarcode ({ isHighlighted = false, item, size }: Readonly<{ isHighlighted?: boolean; item: Item; size: PrintSize }>) {
 
   const { location: printLocation, text: printText, value } = itemToPrintData(item)
   logger.debug('AppBarcode', { isHighlighted, item })

@@ -2,7 +2,7 @@ import { useSignalEffect } from '@preact/signals'
 import { SnackbarProvider, enqueueSnackbar } from 'notistack'
 import { Router, route } from 'preact-router'
 import { Suspense, lazy } from 'preact/compat'
-import { useState } from 'preact/hooks'
+import { useCallback, useMemo, useState } from 'preact/hooks'
 import { debounce } from 'shuutils'
 import { AppLoader } from './components/app-loader'
 import { AppSpeedDial } from './components/app-speed-dial'
@@ -49,16 +49,15 @@ export function App () {
 
   const onStatusChange = debounce(onStatusChangeSync, delays.large)
 
-  useSignalEffect(() => {
+  useSignalEffect(useCallback(() => {
     watchState('status', () => { void onStatusChange(state.status) })
     watchState('message', () => { if (state.message) onMessage(state.message) })
-  })
+  }, [onStatusChange]))
 
-  void onStatusChange(state.status)
-
+  const fallback = useMemo(() => <AppLoader isLoading />, [])
   return (
     <>
-      <Suspense fallback={<AppLoader isLoading />}>
+      <Suspense fallback={fallback}>
         <Router>
           <PageHome path="/" />
           <AsyncPageItemAddEdit path="/item/add" />

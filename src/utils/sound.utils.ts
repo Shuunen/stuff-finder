@@ -1,3 +1,4 @@
+/* eslint-disable functional/immutable-data */
 /* eslint-disable @typescript-eslint/no-magic-numbers */
 import { sleep } from 'shuutils'
 import { logger } from './logger.utils'
@@ -24,7 +25,7 @@ type Sequence = ReadonlyArray<SequenceItem>
 
 export async function playSequence (sequence: Sequence) {
   logger.debug('playing sequence', JSON.stringify(sequence))
-  // eslint-disable-next-line no-await-in-loop
+  // eslint-disable-next-line no-await-in-loop, functional/no-loop-statements
   for (const item of sequence) await (typeof item === 'number' ? sleep(item) : playTone(item[0], item[1]))
 }
 
