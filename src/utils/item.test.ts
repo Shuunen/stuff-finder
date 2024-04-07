@@ -2,9 +2,9 @@
 /* eslint-disable functional/no-let */
 import { clone, sleep } from 'shuutils'
 import { expect, it } from 'vitest'
-import { addOrUpdateItems, areItemsEquivalent, deleteItem, formToItem, getCommonListsFromItems, getOneItem, itemForm, itemToForm, itemToImageUrl, pushItem } from '../src/utils/item.utils'
-import { mockItem, mockRecord, mockState } from '../src/utils/mock.utils'
-import type { ItemPhoto, ItemStatus } from '../src/utils/parsers.utils'
+import { addOrUpdateItems, areItemsEquivalent, deleteItem, formToItem, getCommonListsFromItems, getOneItem, itemForm, itemToForm, itemToImageUrl, pushItem } from './item.utils'
+import { mockItem, mockRecord, mockState } from './mock.utils'
+import type { ItemPhoto, ItemStatus } from './parsers.utils'
 
 const recordA = mockRecord(undefined, { 'reference': '', 'updated-on': '' })
 

@@ -1,5 +1,5 @@
 import { expect, it } from 'vitest'
-import { colSpanClass, gridClass, theme } from '../src/utils/theme.utils'
+import { colSpanClass, gridClass, theme } from './theme.utils'
 
 it('theme A primary palette', () => {
   expect(theme.palette.primary).toMatchInlineSnapshot(`

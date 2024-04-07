@@ -1,9 +1,9 @@
 /* eslint-disable functional/no-let */
 import { sleep } from 'shuutils'
 import { expect, it } from 'vitest'
-import { airtableRecordToItem, getAllItems, getItemFieldsToPush, isLocalAndRemoteSync } from '../src/utils/airtable.utils'
-import { mockItem, mockRecord, mockState } from '../src/utils/mock.utils'
-import type { Item, ItemPhoto } from '../src/utils/parsers.utils'
+import { airtableRecordToItem, getAllItems, getItemFieldsToPush, isLocalAndRemoteSync } from './airtable.utils'
+import { mockItem, mockRecord, mockState } from './mock.utils'
+import type { Item, ItemPhoto } from './parsers.utils'
 
 it('isLocalAndRemoteSync A is not in sync', () => {
   const record = mockRecord()

@@ -1,7 +1,7 @@
 import { expect, it } from 'vitest'
-import { emptyItemPhoto } from '../src/constants'
-import { mockItem } from '../src/utils/mock.utils'
-import { itemToPrintData } from '../src/utils/print.utils'
+import { emptyItemPhoto } from '../constants'
+import { mockItem } from './mock.utils'
+import { itemToPrintData } from './print.utils'
 
 const itemA = mockItem({
   barcode: '  barcode',

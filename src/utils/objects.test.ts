@@ -1,5 +1,5 @@
-import { expect, it } from 'vitest'  
-import { sortListsEntries } from '../src/utils/objects.utils'
+import { expect, it } from 'vitest'
+import { sortListsEntries } from './objects.utils'
 
 it('sortListsEntries A', () => { expect(sortListsEntries({ key: ['c', 'a', 'b'] })).toEqual({ key: ['', 'a', 'b', 'c'] }) })
 it('sortListsEntries B', () => { expect(sortListsEntries({ key: ['c', 'a', 'b'], key2: ['c', 'a', 'b'] })).toEqual({ key: ['', 'a', 'b', 'c'], key2: ['', 'a', 'b', 'c'] }) })

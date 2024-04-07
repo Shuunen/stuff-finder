@@ -1,6 +1,6 @@
 import { expect, it } from 'vitest'
-import { validateForm } from '../src/utils/forms.utils'
-import { settingsForm } from '../src/utils/settings.utils'
+import { validateForm } from './forms.utils'
+import { settingsForm } from './settings.utils'
 
 it('validateForm A default settingsForm is not changed & not valid', () => {
   const { hasChanged, updatedForm } = validateForm(settingsForm)
