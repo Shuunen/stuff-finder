@@ -51,6 +51,8 @@
   "include": [
     "src",
     "tests",
+    ".*.cjs",
+    "*.js",
     "*.ts"
   ],
   "references": [

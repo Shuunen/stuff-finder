@@ -20,6 +20,7 @@
 | 2024-04-07#7 |  14s  | 20.10 | romain nzxl win11 | targeting only src directory + no --ext .ts,.tsx  |
 | 2024-04-07#8 |  14s  | 20.10 | romain nzxl win11 | targeting . + --ext .ts,.tsx +  no ignorePatterns |
 | 2024-04-07#9 |  14s  | 20.10 | romain nzxl win11 | targeting src + no ignorePatterns                 |
+| 2024-04-07#a |  14s  | 20.10 | romain nzxl win11 | .eslintrc.json => .eslintrc.cjs                   |
 
 Note 0 : with plugin:tailwindcss/recommended,  plugin:unicorn/all, hardcore, hardcore/react, hardcore/ts
 Note 1 : to show time taken by rules : `TIMING=1 npx eslint src`
