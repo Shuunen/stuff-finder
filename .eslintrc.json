@@ -226,6 +226,9 @@
         "unicorn/switch-case-braces": "off"
       },
       "settings": {
+        "react": {
+          "version": "18"
+        },
         "tailwindcss": {
           "cssFiles": [
             "src/assets/*.css"
