@@ -44,7 +44,7 @@ export function PageItemPrint ({ ...properties }: Readonly<{ [key: string]: unkn
   logger.debug('PageItemPrint', { item })
   const onSizeChange = useCallback((_event: unknown, selectedSize: PrintSize) => { setSize(selectedSize) }, []) // eslint-disable-line no-underscore-dangle, @typescript-eslint/naming-convention
   const onHighlightChange = useCallback((_event: unknown, isChecked: boolean) => { setIsHighlighted(isChecked) }, []) // eslint-disable-line no-underscore-dangle, @typescript-eslint/naming-convention
-  const highlightSwitch = useMemo(() => (<Switch checked={isHighlighted} onChange={onHighlightChange} />), [isHighlighted, onHighlightChange])
+  const highlightSwitch = useMemo(() => <Switch checked={isHighlighted} onChange={onHighlightChange} />, [isHighlighted, onHighlightChange])
   const onPrint = useCallback(async () => {
     window.print()
     if (item['ref-printed']) return

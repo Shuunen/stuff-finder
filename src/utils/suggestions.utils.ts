@@ -20,8 +20,8 @@ function priceParse (price?: number | string) {
 
 function isNullish (value: unknown) {
   if (value === undefined || value === null) return true
-  if (typeof value === 'number') return (value <= 0) || (value === 0)
-  if (typeof value === 'string') return (value === '') || (value === '0')
+  if (typeof value === 'number') return value <= 0 || value === 0
+  if (typeof value === 'string') return value === '' || value === '0'
   return true
 }
 
@@ -84,10 +84,13 @@ export function cleanSuggestions (suggestionsInput: Record<string, string[] | un
   Object.keys(suggestions).forEach((key) => {
     /* c8 ignore next */
     let values = suggestions[key] ?? []
-    if (keysToCapitalize.has(key)) values = values.map(value => isNullish(value) ? value : capitalize(value, true))
+    if (keysToCapitalize.has(key)) values = values.map(value => {
+      if (isNullish(value)) return value
+      return capitalize(value, true)
+    })
     // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
     if (values.length === 0) delete suggestions[key] // clear empty fields
-    else suggestions[key] = values.filter((value, index, array) => (array.indexOf(value) === index) && !isNullish(value)) // remove duplicates & nullish
+    else suggestions[key] = values.filter((value, index, array) => array.indexOf(value) === index && !isNullish(value)) // remove duplicates & nullish
   })
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
   return suggestions as Record<string, string[]>

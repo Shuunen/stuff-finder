@@ -31,7 +31,7 @@ export function AppItemDetailsChip ({ color = 'default', icon: Icon, label, link
     state.message = { content: `${tooltip} copied to clipboard`, delay: delays.second, type: 'success' }
   }, [link, tooltip])
 
-  const attributes: Record<string, unknown> = Icon === undefined ? {} : { className: 'reverse', icon: <Icon /> }  // eslint-disable-line unicorn/no-keyword-prefix
+  const attributes: Record<string, unknown> = Icon === undefined ? {} : { className: 'reverse', icon: <Icon /> } // eslint-disable-line unicorn/no-keyword-prefix
 
   return <Tooltip data-component="item-details-chip" title={tooltip}>
     {/* eslint-disable-next-line react/jsx-props-no-spreading */}

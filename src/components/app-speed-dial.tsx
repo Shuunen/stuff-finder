@@ -29,7 +29,7 @@ export function AppSpeedDial ({ isLoading }: Readonly<{ isLoading: boolean }>) {
   const onMouseEnter = useCallback(() => { onMouse('enter') }, [onMouse])
   const onMouseLeave = useCallback(() => { onMouse('leave') }, [onMouse])
   const options = useMemo(() => ({ color: isLoading ? 'warning' : 'primary' } as const), [isLoading])
-  const icon = useMemo(() => isLoading ? <HourglassTop /> : <SpeedDialIcon />, [isLoading])
+  const icon = useMemo(() => (isLoading ? <HourglassTop /> : <SpeedDialIcon />), [isLoading]) // eslint-disable-line @stylistic/no-extra-parens
   return (
     <>
       <Fade in={isOpen}>
@@ -37,9 +37,7 @@ export function AppSpeedDial ({ isLoading }: Readonly<{ isLoading: boolean }>) {
       </Fade>
       <div className="fixed bottom-10 right-10 z-20 print:hidden" data-component="speed-dial">
         <SpeedDial ariaLabel='Actions' FabProps={options} icon={icon} onClick={toggleOpen} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} open={isOpen}>
-          {actions.map((action) => (
-            <SpeedDialAction icon={action.icon} key={action.name} onClick={action.handleClick} tooltipTitle={action.name} />
-          ))}
+          {actions.map((action) => <SpeedDialAction icon={action.icon} key={action.name} onClick={action.handleClick} tooltipTitle={action.name} />)}
         </SpeedDial>
       </div>
     </>

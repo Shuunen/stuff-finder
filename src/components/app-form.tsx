@@ -51,7 +51,9 @@ export function AppForm<FormType extends Form> ({ error: parentError = '', initi
 
   const checkDataInClipboard = useCallback(async () => {
     const clip = await readClipboard()
-    const clean = clip.replace(/""/gu, '"').replace('"{', '{').replace('}"', '}') // need to replace double double quotes with single double quotes (Google Sheet issue -.-'''''')
+    const clean = clip.replace(/""/gu, '"')
+      .replace('"{', '{')
+      .replace('}"', '}') // need to replace double double quotes with single double quotes (Google Sheet issue -.-'''''')
     const { error, value: data } = parseJson(clean)
     if (error !== '' || typeof data !== 'object' || data === null) { logger.debug('error or data not an object', { data, error }); return }
     const futureForm = structuredClone(form)
@@ -76,13 +78,11 @@ export function AppForm<FormType extends Form> ({ error: parentError = '', initi
 
   return (
     <form autoComplete="off" className={`grid w-full gap-6 ${gridClass(form.columns)}`} noValidate onSubmit={onFormSubmit} spellCheck={false}>
-      {Object.entries(form.fields).map(([id, field]) => (
-        <div className={`grid w-full ${field.isVisible ? '' : 'hidden'} ${colSpanClass(field.columns)}`} key={id}>{/* @ts-expect-error typing issue */}
-          {field.type === 'text' && <AppFormFieldText field={field} form={form} id={id} suggestions={suggestions} updateField={updateField} />}
-          {field.type === 'checkbox' && <AppFormFieldCheckbox field={field} id={id} updateField={updateField} />}
-          {field.type === 'select' && <AppFormFieldSelect field={field} form={form} id={id} updateField={updateField} />}
-        </div>
-      ))}
+      {Object.entries(form.fields).map(([id, field]) => <div className={`grid w-full ${field.isVisible ? '' : 'hidden'} ${colSpanClass(field.columns)}`} key={id}>{/* @ts-expect-error typing issue */}
+        {field.type === 'text' && <AppFormFieldText field={field} form={form} id={id} suggestions={suggestions} updateField={updateField} />}
+        {field.type === 'checkbox' && <AppFormFieldCheckbox field={field} id={id} updateField={updateField} />}
+        {field.type === 'select' && <AppFormFieldSelect field={field} form={form} id={id} updateField={updateField} />}
+      </div>)}
       <div className="order-last flex flex-col md:col-span-full">
         {Boolean(errorMessage) && Boolean(form.isTouched) && <p className="text-red-500">{errorMessage}</p>}
         {onSubmit !== undefined && <Button disabled={!canSubmit} type="submit" variant="contained">Save</Button>}

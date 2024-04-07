@@ -54,7 +54,7 @@ export function App () {
     watchState('message', () => { if (state.message) onMessage(state.message) })
   }, [onStatusChange]))
 
-  const fallback = useMemo(() => (<AppLoader isLoading />), [])
+  const fallback = useMemo(() => <AppLoader isLoading />, [])
   return (
     <>
       <Suspense fallback={fallback}>

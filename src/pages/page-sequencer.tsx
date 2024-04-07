@@ -83,9 +83,9 @@ export function PageSequencer ({ ...properties }: Readonly<{ [key: string]: unkn
   function onChange (index: number, type: 'tone-delay' | 'tone-value' | 'wait-delay') {
     return (_event: Event, value: number[] | number) => { // eslint-disable-line no-underscore-dangle, @typescript-eslint/naming-convention
       if (typeof value !== 'number') throw new Error('Weird case where value is not a number')
-      if (type === 'wait-delay') setSequence(sequence.map((item, itemIndex) => (itemIndex === index ? value : item))) /* @ts-expect-error typings issue */
-      else if (type === 'tone-delay') setSequence(sequence.map((item, itemIndex) => (itemIndex === index ? [item[0], value] : item))) /* @ts-expect-error typings issue */
-      else setSequence(sequence.map((item, itemIndex) => (itemIndex === index ? [value, item[1]] : item)))
+      if (type === 'wait-delay') setSequence(sequence.map((item, itemIndex) => (itemIndex === index ? value : item))) /* @ts-expect-error typings issue */ // eslint-disable-line @stylistic/no-extra-parens
+      else if (type === 'tone-delay') setSequence(sequence.map((item, itemIndex) => (itemIndex === index ? [item[0], value] : item))) /* @ts-expect-error typings issue */ // eslint-disable-line @stylistic/no-extra-parens
+      else setSequence(sequence.map((item, itemIndex) => (itemIndex === index ? [value, item[1]] : item))) // eslint-disable-line @stylistic/no-extra-parens
     }
   }
 
@@ -97,9 +97,9 @@ export function PageSequencer ({ ...properties }: Readonly<{ [key: string]: unkn
   useEffect(() => { void playSequenceDebounced(sequence) }, [sequence])
   useSignalEffect(useCallback(() => { logger.debug('PageSequencer mount', { properties: Object.keys(properties) }) }, [properties]))
 
-  const playIcon = useMemo(() => (<PlayCircleFilledWhiteOutlinedIcon />), [])
-  const resetIcon = useMemo(() => (<RestartAltIcon />), [])
-  const copyIcon = useMemo(() => (<ContentCopyIcon />), [])
+  const playIcon = useMemo(() => <PlayCircleFilledWhiteOutlinedIcon />, [])
+  const resetIcon = useMemo(() => <RestartAltIcon />, [])
+  const copyIcon = useMemo(() => <ContentCopyIcon />, [])
   return (
     <AppPageCard cardTitle="Sequencer" icon={AddCircleOutlineIcon} pageCode="sequencer" pageTitle="Sequencer">
       <div className="flex w-[50rem] flex-col">
