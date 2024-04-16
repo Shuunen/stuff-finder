@@ -12,6 +12,7 @@ import { logger } from '../utils/logger.utils'
 import type { Item } from '../utils/parsers.utils'
 import { state } from '../utils/state.utils'
 import { getSuggestions } from '../utils/suggestions.utils'
+import { normalizePhotoUrl } from '../utils/url.utils'
 
 function onImageError (image: HTMLImageElement) {
   // eslint-disable-next-line functional/immutable-data
@@ -85,8 +86,10 @@ export function PageItemAddEdit ({ id = '', isEdit = false }: Readonly<{ id?: st
   const handlePhoto = useCallback((form: Form) => {
     const field = form.fields.photo
     if (field.value === '' || !field.isValid) return
-    logger.debug('setting photo to', field.value, photo.value.current)
-    photo.value.current?.setAttribute('src', field.value)
+    const finalUrl = normalizePhotoUrl(field.value)
+    form.fields.photo.value = finalUrl // eslint-disable-line functional/immutable-data, no-param-reassign
+    logger.debug('setting photo to', finalUrl, photo.value.current)
+    photo.value.current?.setAttribute('src', finalUrl)
   }, [photo.value])
 
   const findSuggestions = useCallback(async (item: Item) => {

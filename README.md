@@ -22,7 +22,6 @@
 - [ ] features to recover :
   - [ ] clone item
   - [ ] search retry when scan, search, or speech fail
-  - [ ] reduce image size via `normalizePhotoUrl`
   - [ ] speech recognition
   - [ ] settings action required
   - [ ] print un-printed items

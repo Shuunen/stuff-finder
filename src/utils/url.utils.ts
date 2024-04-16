@@ -22,8 +22,9 @@ export function getAsin (url: string) {
  */
 export function normalizePhotoUrl (url: string, size = 500) {
   return url
-    .replace(/._AC.+\.jpg|._S[XY]\d+_.jpg/u, `._SL${size}_.jpg`) // Amazon
+    .replace(/._AC.+\.jpg|._S\w\d+_.jpg/u, `._SL${size}_.jpg`) // Amazon
     .replace(/\/w\/\d+\//u, `/w/${size}/`) // KwCdn Temu
     .replace(/\bf=\d+x\d+/u, `f=${size}x${size}`) // Decathlon
+    .replace(/_\d+x\d+\.jpg/u, `_${size}x${size}.jpg`) // AliExpress
 }
 
