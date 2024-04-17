@@ -96,7 +96,7 @@ export const fuseOptions: IFuseOptions<Item> = {
   distance: 200, // see the tip at https://fusejs.io/concepts/scoring-theory.html#scoring-theory
   getFn: (object: Item, path: string[] | string) => {
     const value = Fuse.config.getFn(object, path)
-    if (Array.isArray(value)) return value.map((element: string) => sanitize(element))
+    if (Array.isArray(value)) return value.map(sanitize)
     if (typeof value === 'string') return [sanitize(value)]
     return value
   },

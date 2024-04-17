@@ -63,7 +63,7 @@ class App {
       offset = result.offset // eslint-disable-line unicorn/consistent-destructuring
       records = [...records, ...result.records] // eslint-disable-line unicorn/consistent-destructuring
     }
-    state.items = records.map(record => airtableRecordToItem(record))
+    state.items = records.map(airtableRecordToItem)
     state.lists = getCommonListsFromItems(state.items)
     logger.showLog(`${state.items.length} item(s) freshly loaded ${coolAscii()}`)
     return true

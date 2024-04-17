@@ -185,6 +185,7 @@ const rules = {
   'ssr-friendly/no-dom-globals-in-module-scope': 'off',
   'total-functions/no-partial-division': 'off',
   'total-functions/no-unsafe-readonly-mutable-assignment': 'off',
+  'unicorn/no-array-callback-reference': 'off',
   'unicorn/no-array-for-each': 'off',
   'unicorn/no-process-exit': 'off',
   'unicorn/prefer-module': 'off',
