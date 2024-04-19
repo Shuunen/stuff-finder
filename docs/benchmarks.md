@@ -23,6 +23,7 @@
 | 2024-04-07#a |  15s  | 20.11 | romain nzxl win11 | .eslintrc.json => .eslintrc.cjs                   |
 | 2024-04-07#b |  16s  | 20.11 | romain nzxl win11 | use new @stylistic/eslint-plugin                  |
 | 2024-04-17#1 |  10s  | 20.10 | romain gram zorin | did nothing but the cpu is better ^^              |
+| 2024-04-19#1 |  12s  | 20.12 | romain nzxl fedo39 | nice improvement on Fedora ^^              |
 
 Note 0 : with plugin:tailwindcss/recommended,  plugin:unicorn/all, hardcore, hardcore/react, hardcore/ts
 Note 1 : to show time taken by rules : `TIMING=1 npx eslint src`
