@@ -9,7 +9,7 @@
     "@mui/icons-material": "5.15",
     "@mui/material": "5.15",
     "@preact/signals": "1.2",
-    "@zxing/library": "0.20",
+    "@zxing/library": "0.21",
     "fuse.js": "7.0",
     "notistack": "3.0",
     "preact": "10.21",
