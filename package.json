@@ -12,7 +12,7 @@
     "@zxing/library": "0.20",
     "fuse.js": "7.0",
     "notistack": "3.0",
-    "preact": "10.20",
+    "preact": "10.21",
     "preact-router": "4.1",
     "shuutils": "7.7",
     "valibot": "0.30",
