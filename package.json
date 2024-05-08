@@ -24,7 +24,7 @@
     "@babel/plugin-syntax-decorators": "*",
     "@babel/plugin-syntax-jsx": "*",
     "@preact/preset-vite": "2.8",
-    "@stylistic/eslint-plugin": "1.8",
+    "@stylistic/eslint-plugin": "2.0",
     "@types/dom-speech-recognition": "0",
     "@types/node": "20",
     "@vitest/coverage-v8": "1.6",
