@@ -31,7 +31,7 @@
     "autoprefixer": "10",
     "dependency-cruiser": "latest",
     "eslint": "8.57",
-    "eslint-config-hardcore": "45.4",
+    "eslint-config-hardcore": "45.6",
     "eslint-plugin-tailwindcss": "3",
     "eslint-plugin-unicorn": "52",
     "postcss": "8",
