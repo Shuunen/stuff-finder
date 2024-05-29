@@ -45,6 +45,6 @@ h3 {
   @apply justify-center;
 }
 
-synology-download-content {
-  @apply print:hidden;
+#synology-download-content-root, synology-download-content {
+  @apply hidden;
 }
