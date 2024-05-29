@@ -11,6 +11,7 @@ import { PageError } from './pages/page-error'
 import { PageHome } from './pages/page-home'
 import type { AppMessage } from './types/messages.types'
 import type { AppStatus } from './types/status.types'
+import { clearElementsForPrint } from './utils/browser.utils'
 import { logger } from './utils/logger.utils'
 import { state, watchState } from './utils/state.utils'
 
@@ -39,6 +40,8 @@ function onMessage (message: AppMessage) {
 export function App () {
 
   const [isLoading, setLoading] = useState(true)
+
+  clearElementsForPrint()
 
   function onStatusChangeSync (status: AppStatus) {
     logger.info(`status is now : ${status}`)

@@ -46,3 +46,7 @@ export function setPageTitle (title: string) {
   // eslint-disable-next-line functional/immutable-data
   document.title = `${title} - Stuff Finder`
 }
+
+export function clearElementsForPrint () {
+  document.querySelector('synology-download-content')?.remove()
+}

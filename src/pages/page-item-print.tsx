@@ -13,6 +13,7 @@ import { itemToImageUrl, onItemImageError, pushItem } from '../utils/item.utils'
 import { logger } from '../utils/logger.utils'
 import { itemToPrintData } from '../utils/print.utils'
 import { state } from '../utils/state.utils'
+import { clearElementsForPrint } from '../utils/browser.utils'
 
 // if qr code size need to be adjusted, use this old block of code :
 // async function adjustQrCode () {
@@ -46,6 +47,7 @@ export function PageItemPrint ({ ...properties }: Readonly<{ [key: string]: unkn
   const onHighlightChange = useCallback((_event: unknown, isChecked: boolean) => { setIsHighlighted(isChecked) }, []) // eslint-disable-line no-underscore-dangle, @typescript-eslint/naming-convention
   const highlightSwitch = useMemo(() => <Switch checked={isHighlighted} onChange={onHighlightChange} />, [isHighlighted, onHighlightChange])
   const onPrint = useCallback(async () => {
+    clearElementsForPrint()
     window.print()
     if (item['ref-printed']) return
     item['ref-printed'] = true // eslint-disable-line functional/immutable-data
