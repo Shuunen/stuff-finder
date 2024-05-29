@@ -48,3 +48,7 @@ h3 {
 #synology-download-content-root, synology-download-content {
   @apply hidden;
 }
+
+.notistack-SnackbarContainer {
+  @apply print:hidden;
+}
