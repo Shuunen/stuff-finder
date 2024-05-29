@@ -44,3 +44,7 @@ h3 {
 .flex:not(.justify-start):not(.justify-between):not(.justify-end) {
   @apply justify-center;
 }
+
+synology-download-content {
+  @apply print:hidden;
+}
