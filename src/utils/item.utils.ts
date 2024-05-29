@@ -130,7 +130,7 @@ export const itemForm = {
     price: createTextField({ columns: 3, label: 'Price', regex: /^\d{1,5}$/u, unit: '€' }),
     // line
     location: createSelectField({ columns: 3, label: 'Location', options: optionsFor('locations') }),
-    box: createSelectField({ columns: 4, label: 'Box', options: optionsFor('boxes'), regex: /^[\p{L}\s&()]{3,100}$/u }),
+    box: createSelectField({ columns: 4, label: 'Box', options: optionsFor('boxes'), regex: /^[\p{L}\s&()]{3,100}$/u }), // eslint-disable-line regexp/unicode-property
     drawer: createSelectField({ columns: 3, label: 'Drawer', options: optionsFor('drawers'), regex: /\d/u }),
     isPrinted: createCheckboxField({ label: 'Printed', isVisible: false }),
   }, /* eslint-enable perfectionist/sort-objects */

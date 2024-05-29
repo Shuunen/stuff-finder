@@ -23,6 +23,7 @@ const rules = {
       },
     },
   ],
+  '@stylistic/multiline-comment-style': 'off', // not needed
   '@stylistic/multiline-ternary': 'off',
   '@stylistic/object-curly-spacing': [
     'error',
@@ -241,7 +242,7 @@ module.exports = {
         },
         tailwindcss: {
           cssFiles: ['src/assets/*.css'],
-          whitelist: ['app-[a-z\\d-]+'],
+          whitelist: [String.raw`app-[a-z\d-]+`],
         },
       },
     },
