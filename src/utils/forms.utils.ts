@@ -35,6 +35,7 @@ export function validateForm<FormType extends Form> (form: FormType) {
   const updatedFields = Object.entries(form.fields).reduce((accumulator, [field, { isRequired, label, regex, value }]) => { // eslint-disable-line unicorn/no-array-reduce
     const isValid = !isRequired && (typeof value === 'string' && value === '') || typeof value === 'string' && regex.test(value) || typeof value === 'boolean'
     if (!isValid) errorMessage = value === '' ? `${label} is required` : `${label} is invalid, "${String(value)}" should match ${String(regex)}`
+    // biome-ignore lint/performance/noAccumulatingSpread: this whole validation is a joke, we should use a proper library
     return { ...accumulator, [field]: { ...form.fields[field], isValid } }
   }, {})
   const isFormValid = errorMessage === ''

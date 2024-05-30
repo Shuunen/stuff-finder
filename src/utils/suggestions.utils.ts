@@ -58,30 +58,31 @@ export async function addSuggestionsFromAliEx (suggestions: ItemSuggestions, str
   const { data, success } = await addSuggestionsFromWrap<WrapApiAliExResponse>(`aliex/search/0.0.1?str=${str}`, getMethod)
   if (!success) return
   logger.debug('AliEx data', data)
-  data.items.forEach(item => {
+  for (const item of data.items) {
     suggestions.name.push(item.title)
     suggestions.photo.push(item.photo)
     suggestions.price.push(priceParse(item.price))
     suggestions.reference.push(item.reference)
-  })
+  }
 }
 
 export async function addSuggestionsFromCampo (suggestions: ItemSuggestions, str: string, getMethod = get) {
   const { data, success } = await addSuggestionsFromWrap<WrapApiCampoResponse>(`alcampo/search/0.0.3?str=${str}`, getMethod)
   if (!success) return
   logger.debug('campo data', data)
-  data.items.forEach(item => {
+  for (const item of data.items) {
     suggestions.brand.push(item.brand)
     suggestions.name.push(item.title)
     suggestions.photo.push(item.photo)
     if (item.price !== undefined) suggestions.price.push(priceParse(item.price))
     suggestions.reference.push(item.uuid)
-  })
+  }
 }
 
 export function cleanSuggestions (suggestionsInput: Record<string, string[] | undefined>) {
   const suggestions = clone(suggestionsInput)
-  Object.keys(suggestions).forEach((key) => {
+  const keys = Object.keys(suggestions)
+  for (const key of keys) {
     /* c8 ignore next */
     let values = suggestions[key] ?? []
     if (keysToCapitalize.has(key)) values = values.map(value => {
@@ -91,7 +92,7 @@ export function cleanSuggestions (suggestionsInput: Record<string, string[] | un
     // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
     if (values.length === 0) delete suggestions[key] // clear empty fields
     else suggestions[key] = values.filter((value, index, array) => array.indexOf(value) === index && !isNullish(value)) // remove duplicates & nullish
-  })
+  }
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
   return suggestions as Record<string, string[]>
 }

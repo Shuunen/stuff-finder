@@ -1,5 +1,3 @@
-'use strict'
-
 const rules = {
   '@stylistic/array-element-newline': 'off',
   '@stylistic/arrow-parens': 'off',
@@ -92,6 +90,7 @@ const rules = {
     'error',
     'always',
   ],
+  'functional/no-loop-statements': 'off',
   'id-length': [
     'error',
     {
@@ -184,6 +183,7 @@ const rules = {
     'always',
   ],
   'ssr-friendly/no-dom-globals-in-module-scope': 'off',
+  'strict': 'off',
   'total-functions/no-partial-division': 'off',
   'total-functions/no-unsafe-readonly-mutable-assignment': 'off',
   'unicorn/no-array-callback-reference': 'off',

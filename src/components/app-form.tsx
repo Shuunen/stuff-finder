@@ -49,6 +49,7 @@ export function AppForm<FormType extends Form> ({ error: parentError = '', initi
 
   const updateField = debounce(updateFieldSync, delays.small)
 
+  // eslint-disable-next-line max-statements
   const checkDataInClipboard = useCallback(async () => {
     const clip = await readClipboard()
     const clean = clip.replace(/""/gu, '"')
@@ -58,12 +59,13 @@ export function AppForm<FormType extends Form> ({ error: parentError = '', initi
     if (error !== '' || typeof data !== 'object' || data === null) { logger.debug('error or data not an object', { data, error }); return }
     const futureForm = structuredClone(form)
     futureForm.isTouched = true // eslint-disable-line functional/immutable-data
-    Object.entries(data).forEach(([key, value]) => {
+    const entries = Object.entries(data)
+    for (const [key, value] of entries) {
       if (typeof key !== 'string' || typeof value !== 'string' || key === '' || value === '') return
       const actualField = futureForm.fields[key]
       if (actualField === undefined) return // @ts-expect-error typing issue
       futureForm.fields[key] = { ...actualField, value } // eslint-disable-line functional/immutable-data
-    })
+    }
     setForm(futureForm)
   }, [form])
 

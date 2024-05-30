@@ -92,12 +92,12 @@ export async function deleteItem (id: Item['id'], currentState = state, delMetho
 
 export function getCommonListsFromItems (items: Item[]) {
   const list = clone(defaultCommonLists)
-  items.forEach(item => {
+  for (const item of items) {
     if (shouldAddToList(item.location, list.locations)) list.locations.push(item.location)
     if (shouldAddToList(item.box, list.boxes)) list.boxes.push(item.box)
     if (shouldAddToList(item.status, list.statuses)) list.statuses.push(item.status)
     if (shouldAddToList(item.category, list.categories)) list.categories.push(item.category)
-  })
+  }
   return sortListsEntries(list)
 }
 

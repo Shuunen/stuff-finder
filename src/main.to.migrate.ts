@@ -57,7 +57,6 @@ class App {
       logger.showLog('no updates from airtable, cache seems up to date')
       return true
     }
-    // eslint-disable-next-line functional/no-loop-statements
     while ((offset?.length ?? 0) > 0) {
       result = await getAllItems(offset) // eslint-disable-line no-await-in-loop
       offset = result.offset // eslint-disable-line unicorn/consistent-destructuring

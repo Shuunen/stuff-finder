@@ -33,6 +33,7 @@ export function AppSpeedDial ({ isLoading }: Readonly<{ isLoading: boolean }>) {
   return (
     <>
       <Fade in={isOpen}>
+        {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
         <div className="absolute bottom-0 right-0 z-10 size-full bg-black/30" data-component="speed-dial-backdrop" onClick={toggleOpen} />
       </Fade>
       <div className="fixed bottom-10 right-10 z-20 print:hidden" data-component="speed-dial">

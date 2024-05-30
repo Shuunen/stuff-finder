@@ -14,6 +14,7 @@ class AppSpeech {
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   private readonly isMobile = window.orientation !== undefined
 
+  // biome-ignore lint/correctness/noUndeclaredVariables: it's a global variable
   private recognition!: SpeechRecognition
 
   private hasRecognitionSucceed = false
@@ -30,6 +31,7 @@ class AppSpeech {
     recognition.lang = navigator.language
     recognition.interimResults = false
     recognition.maxAlternatives = 1
+    // biome-ignore lint/correctness/noUndeclaredVariables: it's a global variable
     recognition.onresult = (event: SpeechRecognitionEvent) => {
       logger.info('recognition results', event.results)
       const [result] = Array.from(event.results.item(event.resultIndex))

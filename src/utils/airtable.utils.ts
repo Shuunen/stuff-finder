@@ -10,8 +10,8 @@ const airtableBaseUrl = 'https://api.airtable.com/v0'
 
 export const airtableMaxRequestPerSecond = 5
 
-// eslint-disable-next-line max-statements, complexity, sonarjs/cognitive-complexity
-export function getItemFieldsToPush (data: Item, currentState = state) {
+// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: <explanation>
+export function getItemFieldsToPush (data: Item, currentState = state) { // eslint-disable-line max-statements, complexity, sonarjs/cognitive-complexity
   const fields: Partial<AirtableSingleRecordResponse['fields']> = {}
   if (data.barcode.length > 0) fields.barcode = data.barcode
   if (data.box.length > 0) fields.box = data.box
@@ -34,14 +34,14 @@ export function getItemFieldsToPush (data: Item, currentState = state) {
     if (!existing) throw new Error('existing item not found locally')
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     const dataFields = Object.keys(fields) as ItemField[]
-    dataFields.forEach((field) => {
+    for (const field of dataFields) {
       /* c8 ignore next 2 */
-      if (field === 'id') return
+      if (field === 'id') continue // eslint-disable-line no-continue
       const hasSamePhoto = (field === 'photo' && existing.photo && existing.photo[0]?.url === fields.photo?.[0]?.url) ?? false
       const hasSameValue = existing[field] === fields[field]
       // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
       if (hasSamePhoto || hasSameValue) delete fields[field]
-    })
+    }
   }
   return fields
 }

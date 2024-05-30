@@ -5,12 +5,14 @@ import { useCallback, useRef } from 'preact/hooks'
 import { delays } from '../constants'
 import { coolAscii } from '../utils/strings.utils'
 
+type TypicalArguments = (number | string)[]
+
 const sequence = [
   'Stuff Finder',
   delays.medium,
   `Stuff Finder\n${coolAscii()}`, delays.large * 2, // eslint-disable-line @typescript-eslint/no-magic-numbers
   `Stuff Finder\n${coolAscii()}`,
-]
+] satisfies TypicalArguments
 
 export function AppPrompter () {
 

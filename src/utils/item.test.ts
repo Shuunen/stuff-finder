@@ -10,8 +10,7 @@ const recordA = mockRecord(undefined, { 'reference': '', 'updated-on': '' })
 
 // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
 const itemA = mockItem({ id: 'itemA', status: 'new surprise status' as ItemStatus })
-// eslint-disable-next-line @typescript-eslint/naming-convention
-const itemAA = { ...itemA }
+const itemAa = { ...itemA }
 const itemB = mockItem({ id: 'itemB', location: 'location A' })
 
 const stateA = mockState({ items: [itemA] })
@@ -156,11 +155,11 @@ it('formToItem B itemForm with some values', () => {
 it('formToItem C status mapping', () => {
   const form = clone(itemForm)
   const statuses = ['acheté', 'donné', 'jeté', 'à donner', 'à vendre', 'vendu', 'renvoyé', 'vendu'] satisfies ItemStatus[]
-  statuses.forEach((status) => {
+  for (const status of statuses) {
     form.fields.status.value = status
     const item = formToItem(form)
     expect(item.status).toBe(status)
-  })
+  }
   // empty status default map to 'acheté'
   form.fields.status.value = ''
   const item = formToItem(form)
@@ -170,12 +169,12 @@ it('formToItem C status mapping', () => {
 it('deleteItem A delete an item in state', async () => {
   let urlCalled = ''
   let nbCalls = 0
-  const result = await deleteItem(itemAA.id, stateA, async (url) => {
+  const result = await deleteItem(itemAa.id, stateA, async (url) => {
     urlCalled = url
     nbCalls += 1
     await sleep(1)
     // eslint-disable-next-line @typescript-eslint/naming-convention
-    return { deleted: true, id: itemAA.id }
+    return { deleted: true, id: itemAa.id }
   })
   expect(result).toMatchSnapshot()
   expect(urlCalled).toMatchInlineSnapshot('"https://api.airtable.com/v0/baseA/tableA/itemA"') // `${airtableBaseUrl}/${base}/${table}/` but base and table are empty

@@ -21,11 +21,11 @@ function playTone (frequency = 400, milliseconds = 1000) {
 type SequenceItemTone = readonly [number, number]
 type SequenceItemWait = number // eslint-disable-line sonar/redundant-type-aliases
 type SequenceItem = SequenceItemTone | SequenceItemWait
-type Sequence = ReadonlyArray<SequenceItem>
+type Sequence = readonly SequenceItem[]
 
 export async function playSequence (sequence: Sequence) {
   logger.debug('playing sequence', JSON.stringify(sequence))
-  // eslint-disable-next-line no-await-in-loop, functional/no-loop-statements
+  // eslint-disable-next-line no-await-in-loop
   for (const item of sequence) await (typeof item === 'number' ? sleep(item) : playTone(item[0], item[1]))
 }
 

@@ -6,8 +6,8 @@ const scout = new BrowserScout()
 logger.info('browser scout', scout)
 
 function airtableHeaders (token: string) {
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  return { 'Accept': 'application/json', 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }
+  // biome-ignore lint/style/useNamingConvention: <explanation>
+  return { 'Accept': 'application/json', 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' } // eslint-disable-line @typescript-eslint/naming-convention
 }
 
 async function request (method: 'DELETE' | 'GET' | 'PATCH' | 'POST', url: string, data?: Record<string, unknown>) {
