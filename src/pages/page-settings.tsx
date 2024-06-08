@@ -13,7 +13,7 @@ export function PageSettings ({ ...properties }: Readonly<{ [key: string]: unkno
   const onSubmit = useCallback((form: Form) => {
     logger.debug('onSubmit', { form })
     // eslint-disable-next-line functional/immutable-data
-    state.credentials = { base: form.fields.base.value, table: form.fields.table.value, token: form.fields.token.value, view: form.fields.view.value, wrap: form.fields.wrap.value }
+    state.credentials = { ant: form.fields.ant.value, base: form.fields.base.value, table: form.fields.table.value, token: form.fields.token.value, view: form.fields.view.value, wrap: form.fields.wrap.value }
     logger.showLog('credentials saved, reloading...', { credentials: state.credentials })
     document.location.reload()
   }, [])

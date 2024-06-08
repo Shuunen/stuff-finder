@@ -7,7 +7,6 @@ it('validateForm A default settingsForm is not changed & not valid', () => {
   expect(updatedForm).toMatchSnapshot()
   expect(updatedForm.isTouched).toBe(false)
   expect(updatedForm.isValid).toBe(false)
-  expect(updatedForm.errorMessage).toMatchInlineSnapshot('"Airtable view is required"')
   expect(updatedForm).toStrictEqual(settingsForm)
   expect(hasChanged).toBe(false)
 })

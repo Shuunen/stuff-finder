@@ -1,7 +1,7 @@
 /* eslint-disable functional/no-let */
 /* eslint-disable functional/immutable-data */
 /* eslint-disable functional/no-this-expressions */
-import type { AppCredentials } from './types/settings.types'
+import type { AppCredentials } from './constants'
 import { airtableRecordToItem, getAllItems, isLocalAndRemoteSync } from './utils/airtable.utils'
 import { getCommonListsFromItems } from './utils/item.utils'
 import { logger } from './utils/logger.utils'

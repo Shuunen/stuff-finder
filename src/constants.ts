@@ -1,6 +1,5 @@
 import Fuse, { type IFuseOptions } from 'fuse.js'
 import { sanitize } from 'shuutils'
-import type { AppCredentials } from './types/settings.types'
 import type { Item, ItemField, ItemPhoto, ItemStatus } from './utils/parsers.utils'
 
 export interface CommonLists {
@@ -29,13 +28,16 @@ export const defaultCommonLists: CommonLists = {
   ],
 } satisfies CommonLists
 
-export const defaultCredentials: AppCredentials = {
+export const defaultCredentials = {
+  ant: '',
   base: '',
   table: '',
   token: '',
   view: '',
   wrap: '',
-} satisfies AppCredentials
+} satisfies Record<string, string>
+
+export type AppCredentials = typeof defaultCredentials
 
 export const emptyItem: Item = {
   'barcode': '',
