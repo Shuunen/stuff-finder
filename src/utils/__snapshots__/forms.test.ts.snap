@@ -35,18 +35,6 @@ exports[`validateForm A invalid field value 1`] = `
 {
   "errorMessage": "Airtable personal access token is required",
   "fields": {
-    "ant": {
-      "columns": 1,
-      "isRequired": false,
-      "isValid": true,
-      "isVisible": true,
-      "label": "ScrappingAnt api key",
-      "link": "https://app.scrapingant.com/",
-      "regex": /\\^\\\\w\\{32\\}\\$/u,
-      "type": "text",
-      "unit": "",
-      "value": "",
-    },
     "base": {
       "columns": 1,
       "isRequired": true,

@@ -48,7 +48,7 @@ export function mockItem (data: Partial<Item> = {}) {
 
 export function mockState (data: Partial<State> = {}) {
   return {
-    credentials: { ant: 'antA', base: 'baseA', table: 'tableA', token: 'tokenA', view: 'viewA', wrap: 'wrapA' },
+    credentials: { base: 'baseA', table: 'tableA', token: 'tokenA', view: 'viewA', wrap: 'wrapA' },
     items: defaultItems,
     lists: defaultCommonLists,
     message: undefined,

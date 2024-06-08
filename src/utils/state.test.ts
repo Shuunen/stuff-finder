@@ -5,7 +5,6 @@ it('state A default', () => {
   expect(state).toMatchInlineSnapshot(`
     {
       "credentials": {
-        "ant": "",
         "base": "",
         "table": "",
         "token": "",

@@ -29,7 +29,6 @@ export const defaultCommonLists: CommonLists = {
 } satisfies CommonLists
 
 export const defaultCredentials = {
-  ant: '',
   base: '',
   table: '',
   token: '',

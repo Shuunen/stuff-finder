@@ -10,7 +10,6 @@ export const settingsForm = {
     view: createTextField({ isRequired: true, label: 'Airtable view', regex: /^[\w-]{3,100}$/u, value: state.credentials.view }),
     token: createTextField({ isRequired: true, label: 'Airtable personal access token', link: 'https://airtable.com/create/tokens', regex: /^pat[\w.]{50,100}$/u, value: state.credentials.token }),
     wrap: createTextField({ isValid: true, label: 'Wrap api key', link: 'https://wrapapi.com/user/api', regex: /^\w{32}$/u, value: state.credentials.wrap }),
-    ant: createTextField({ isValid: true, label: 'ScrappingAnt api key', link: 'https://app.scrapingant.com/', regex: /^\w{32}$/u, value: state.credentials.ant }),
     /* eslint-enable perfectionist/sort-objects */
   },
   isTouched: false,
