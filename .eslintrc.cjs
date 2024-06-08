@@ -23,6 +23,7 @@ const rules = {
   ],
   '@stylistic/multiline-comment-style': 'off', // not needed
   '@stylistic/multiline-ternary': 'off',
+  '@stylistic/no-extra-parens': 'off', // not needed
   '@stylistic/object-curly-spacing': [
     'error',
     'always',

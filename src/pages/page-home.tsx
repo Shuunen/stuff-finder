@@ -1,15 +1,16 @@
 import Button from '@mui/material/Button'
 import { signal, useSignalEffect } from '@preact/signals'
 import { route } from 'preact-router'
-import { useCallback, useRef } from 'preact/hooks'
+import type { CSSProperties } from 'preact/compat'
+import { useCallback, useMemo, useRef, useState } from 'preact/hooks'
 import { off, on } from 'shuutils'
 import { AppPrompter } from '../components/app-prompter'
 import { delays } from '../constants'
 import { setPageTitle } from '../utils/browser.utils'
 import { logger } from '../utils/logger.utils'
-import { state } from '../utils/state.utils'
+import { state, watchState } from '../utils/state.utils'
 
-const triggerColumnClasses = 'flex w-full flex-col gap-3 text-gray-400 transition-colors hover:text-purple-600 duration-400'
+const triggerColumnClasses = 'flex w-full flex-col gap-3 text-gray-400 transition-colors hover:text-purple-600 duration-400 disabled:opacity-50 disabled:pointer-events-none'
 const triggerButtonStyle = { fontSize: '1rem', height: '2.7rem', textTransform: 'none' }
 
 function onSearch (event: KeyboardEvent) {
@@ -27,17 +28,19 @@ export function PageHome ({ ...properties }: Readonly<{ [key: string]: unknown }
 
   const searchReference = useRef<HTMLInputElement>(null)
   const search = signal(searchReference)
+  const [isUsable, setIsUsable] = useState(state.status !== 'settings-required')
+  const ctaStyle = useMemo(() => (isUsable ? {} : { filter: 'grayscale(1)', opacity: 0.5, pointerEvents: 'none' } satisfies CSSProperties), [isUsable])
+
+  watchState('status', () => { setIsUsable(state.status !== 'settings-required') })
 
   useSignalEffect(useCallback(() => {
+    logger.debug('useSignalEffect', { isUsable })
     const handler = on('focus', () => {
-      logger.debug('PageHome is focused')
+      if (!isUsable) return
       setTimeout(() => { search.value.current?.focus() }, delays.small)
     }, window)
-    return () => {
-      if (handler !== false) off(handler)
-      logger.debug('PageHome is unfocused')
-    }
-  }, [search.value]))
+    return () => { if (handler !== false) off(handler) }
+  }, [search.value, isUsable]))
 
   // eslint-disable-next-line functional/immutable-data
   const onSpeech = useCallback(() => { state.message = { content: 'Speech not available currently', delay: delays.second, type: 'warning' } }, [])
@@ -47,7 +50,7 @@ export function PageHome ({ ...properties }: Readonly<{ [key: string]: unknown }
     <div data-page="home">
       {/* new good code */}
       <AppPrompter />
-      <div className="grid gap-8 md:grid-cols-3 md:gap-6">
+      <div className="grid gap-8 md:grid-cols-3 md:gap-6" style={ctaStyle}>
         <div className={triggerColumnClasses}>
           <Button color="primary" fullWidth href="/scan" sx={triggerButtonStyle} variant="contained">Scan it</Button>
           <svg className="h-8" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><title>Scan icon</title><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2"><path d="M2 10V6h4M30 10V6h-4M2 22v4h4M30 22v4h-4M6 9v6M11 9v6M26 9v6M21 9v6M16 9v6M2 18h28M6 21v2M11 21v1M26 21v2M21 21v1M16 21v1" /></g></svg>

@@ -40,12 +40,14 @@ function onMessage (message: AppMessage) {
 export function App () {
 
   const [isLoading, setLoading] = useState(true)
+  const [isSettingsRequired, setSettingsRequired] = useState(state.status === 'settings-required')
 
   clearElementsForPrint()
 
   function onStatusChangeSync (status: AppStatus) {
     logger.info(`status is now : ${status}`)
     setLoading(status === 'loading')
+    setSettingsRequired(status === 'settings-required')
     if (status === 'settings-required') route('/settings')
     if (status === 'ready' && document.location.pathname.includes('/settings')) route('/')
   }
@@ -56,6 +58,8 @@ export function App () {
     watchState('status', () => { void onStatusChange(state.status) })
     watchState('message', () => { if (state.message) onMessage(state.message) })
   }, [onStatusChange]))
+
+  void onStatusChange(state.status)
 
   const fallback = useMemo(() => <AppLoader isLoading />, [])
   return (
@@ -74,7 +78,7 @@ export function App () {
           <PageError code="page-not-found" default />
         </Router>
       </Suspense>
-      <AppSpeedDial isLoading={isLoading} />
+      <AppSpeedDial isLoading={isLoading} isSettingsRequired={isSettingsRequired} />
       <SnackbarProvider />
     </>
   )
