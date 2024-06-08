@@ -10,7 +10,6 @@ import { colSpanClass, gridClass } from '../utils/theme.utils'
 import { AppFormFieldCheckbox } from './app-form-field-checkbox'
 import { AppFormFieldSelect } from './app-form-field-select'
 import { AppFormFieldText } from './app-form-field-text'
-
 type Properties<FormType extends Form> = Readonly<{
   error?: string
   initialForm: FormType
@@ -63,7 +62,7 @@ export function AppForm<FormType extends Form> ({ error: parentError = '', initi
     for (const [key, value] of entries) {
       if (typeof key !== 'string' || typeof value !== 'string' || key === '' || value === '') return
       const actualField = futureForm.fields[key]
-      if (actualField === undefined) return // @ts-expect-error typing issue
+      if (actualField === undefined) continue /* eslint-disable-line no-continue */// @ts-expect-error typing issue
       futureForm.fields[key] = { ...actualField, value } // eslint-disable-line functional/immutable-data
     }
     setForm(futureForm)
