@@ -8,7 +8,7 @@ it('validateForm A invalid field value', () => {
   expect(updatedForm).toMatchSnapshot()
   expect(hasChanged).toBe(false)
   expect(updatedForm.isValid).toBe(false)
-  expect(updatedForm.errorMessage).toMatchInlineSnapshot(`"Airtable personal access token is required"`)
+  expect(updatedForm.errorMessage).toMatchInlineSnapshot('"Airtable personal access token is required"')
 })
 
 it('validateForm B valid form', () => {
