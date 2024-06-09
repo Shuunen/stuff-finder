@@ -38,11 +38,11 @@ function getSuggestionId (item?: Item) {
 export function PageItemAddEdit ({ id = '', isEdit = false }: Readonly<{ id?: string; isEdit?: boolean }>) {
   logger.debug('PageItemAddEdit', { id, isEdit })
   const initialItem = state.items.find(one => one.id === id)
-  const [initialSum, setInitialSum] = useState(initialItem ? objectSum(initialItem) : 0)
+  const [initialSum] = useState(initialItem ? objectSum(initialItem) : 0)
   const initialForm = itemToForm(initialItem)
   const [error, setError] = useState('')
   const [canSubmit, setCanSubmit] = useState(false)
-  const [itemId, setItemId] = useState(initialItem?.id ?? '')
+  const [itemId] = useState(initialItem?.id ?? '')
   const [suggestionId, setSuggestionId] = useState(getSuggestionId(initialItem))
   const [suggestions, setSuggestions] = useState({})
   const [lastForm, setLastForm] = useState(initialForm)
@@ -63,14 +63,9 @@ export function PageItemAddEdit ({ id = '', isEdit = false }: Readonly<{ id?: st
   const onSubmitSuccess = useCallback((item: Item) => {
     // eslint-disable-next-line functional/immutable-data
     state.message = { content: `item ${isEdit ? 'updated' : 'added'} successfully`, delay: delays.second, type: 'success' }
-    if (isEdit) {
-      setInitialSum(objectSum(item))
-      setCanSubmit(false)
-    } else {
-      setItemId(item.id)
-      checkExistingSetError(item)
-    }
-  }, [checkExistingSetError, isEdit])
+    if (isEdit) route(`/item/details/${item.id}`)
+    else route(`/item/print/${item.id}`)
+  }, [isEdit])
 
   const onSubmit = useCallback(async () => {
     const item = formToItem(lastForm, itemId)
