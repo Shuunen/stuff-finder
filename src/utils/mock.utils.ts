@@ -29,13 +29,13 @@ export function mockRecord (id = 'rec123', fields: Partial<AirtableSingleRecordR
 export function mockItem (data: Partial<Item> = {}) {
   return {
     'barcode': 'barcode B',
-    'box': 'box B',
+    'box': 'G (brico & sport)',
     'brand': 'brand B',
     'category': 'category B',
     'details': 'details B',
-    'drawer': 'drawer B',
+    'drawer': '2',
     'id': 'rec234',
-    'location': 'location B',
+    'location': 'Salon',
     'name': 'name B',
     'photo': [{ ...emptyItemPhoto, url: `https://picsum.photos/seed/${data.name ?? 'unknown-name'}/200/200` }],
     'ref-printed': false,

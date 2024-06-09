@@ -60,7 +60,7 @@ exports[`getCommonListsFromItems A 1`] = `
 {
   "boxes": [
     "",
-    "box B",
+    "G (brico & sport)",
   ],
   "categories": [
     "",
@@ -79,7 +79,7 @@ exports[`getCommonListsFromItems A 1`] = `
   "locations": [
     "",
     "location A",
-    "location B",
+    "Salon",
   ],
   "statuses": [
     "",
@@ -143,7 +143,7 @@ exports[`itemToForm A mocked item 1`] = `
       "regex": /\\^\\[\\\\p\\{L\\}\\\\s&\\(\\)\\]\\{3,100\\}\\$/u,
       "type": "select",
       "unit": "",
-      "value": "box B",
+      "value": "G (brico & sport)",
     },
     "brand": {
       "columns": 2,
@@ -226,7 +226,7 @@ exports[`itemToForm A mocked item 1`] = `
       "regex": /\\\\d/u,
       "type": "select",
       "unit": "",
-      "value": "drawer B",
+      "value": "2",
     },
     "isPrinted": {
       "columns": 1,
@@ -251,7 +251,7 @@ exports[`itemToForm A mocked item 1`] = `
       "regex": /\\^\\[,\\\\d\\\\p\\{L\\}\\\\s/&\\]\\{3,100\\}\\$/u,
       "type": "select",
       "unit": "",
-      "value": "location B",
+      "value": "Salon",
     },
     "name": {
       "columns": 4,
@@ -613,12 +613,12 @@ exports[`pushItem A item with no id should post remotely & push locally 3`] = `
 {
   "fields": {
     "barcode": "barcode B",
-    "box": "box B",
+    "box": "G (brico & sport)",
     "brand": "brand B",
     "category": "category B",
     "details": "details B",
-    "drawer": "drawer B",
-    "location": "location B",
+    "drawer": "2",
+    "location": "Salon",
     "name": "name B",
     "photo": [
       {
