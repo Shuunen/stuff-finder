@@ -2,7 +2,7 @@
 /* eslint-disable functional/no-let */
 import { clone, sleep } from 'shuutils'
 import { expect, it } from 'vitest'
-import { addOrUpdateItems, areItemsEquivalent, deleteItem, formToItem, getCommonListsFromItems, getOneItem, itemForm, itemToForm, itemToImageUrl, pushItem } from './item.utils'
+import { addOrUpdateItems, areItemsEquivalent, deleteItem, formToItem, getCommonListsFromItems, getOneItem, itemForm, itemToForm, itemToImageUrl, itemToLocation, pushItem } from './item.utils'
 import { mockItem, mockRecord, mockState } from './mock.utils'
 import type { ItemPhoto, ItemStatus } from './parsers.utils'
 
@@ -230,4 +230,23 @@ it('itemToForm B mocked item without photo', () => {
 it('itemToForm C no item', () => {
   const form = itemToForm()
   expect(form).toMatchSnapshot()
+})
+
+it('itemToLocation A complete data', () => {
+  expect(itemToLocation(mockItem())).toMatchInlineSnapshot('"Salon G‧2 (brico & sport)"')
+})
+
+it('itemToLocation B no box', () => {
+  const item = mockItem({ box: '' })
+  expect(itemToLocation(item)).toMatchInlineSnapshot('"Salon"')
+})
+
+it('itemToLocation C partial box without details', () => {
+  const item = mockItem({ box: 'G' })
+  expect(itemToLocation(item)).toMatchInlineSnapshot('"Salon G‧2"')
+})
+
+it('itemToLocation D no drawer', () => {
+  const item = mockItem({ drawer: '' })
+  expect(itemToLocation(item)).toMatchInlineSnapshot('"Salon G (brico & sport)"')
 })

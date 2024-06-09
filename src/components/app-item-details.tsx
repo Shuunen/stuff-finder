@@ -1,8 +1,8 @@
 import LocationOnIcon from '@mui/icons-material/LocationOn'
 import PrintIcon from '@mui/icons-material/Print'
-import { useCallback } from 'preact/hooks'
+import { useCallback, useMemo } from 'preact/hooks'
 import { delays } from '../constants'
-import { deleteItem, itemToImageUrl, onItemImageError } from '../utils/item.utils'
+import { deleteItem, itemToImageUrl, itemToLocation, onItemImageError } from '../utils/item.utils'
 import { logger } from '../utils/logger.utils'
 import type { Item } from '../utils/parsers.utils'
 import { state } from '../utils/state.utils'
@@ -21,6 +21,8 @@ export function AppItemDetails ({ item }: Readonly<{ item: Item }>) {
     if (isOk) window.history.back()
   }, [item])
 
+  const itemLocation = useMemo(() => itemToLocation(item), [item])
+
   return (
     <div className="flex flex-row">
       <div className="absolute right-5 top-5 opacity-50 transition-opacity hover:opacity-85">
@@ -34,7 +36,7 @@ export function AppItemDetails ({ item }: Readonly<{ item: Item }>) {
         <h2>{item.brand}{item.category ? ' - ' : ''}{item.category}</h2>
         {Boolean(item.details) && <p className="first-letter:uppercase">{item.details}</p>}
         <div className="my-2 flex gap-3">{/* eslint-disable-next-line react/forbid-component-props */}
-          <LocationOnIcon className="text-purple-600" /><div className="font-medium">{item.location || 'unknown'} {item.box} {item.drawer}</div>
+          <LocationOnIcon className="text-purple-600" /><div className="font-medium">{itemLocation || 'Unknown'}</div>
         </div>
         <div className="flex flex-wrap justify-start gap-3">
           {Boolean(item.brand) && <AppItemDetailsChip label={item.brand} link={`/search/${item.brand}`} tooltip="Brand, click to search" />}

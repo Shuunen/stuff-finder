@@ -179,6 +179,21 @@ export function itemToForm (item?: Item) {
   return form
 }
 
+/**
+ * Converts an item to its corresponding location string.
+ * @param input - The item to convert.
+ * @returns The location string like 'Salon B 2'.
+ */
+export function itemToLocation (input: Item) {
+  const box = (input.box.trim()[0] ?? '').toUpperCase()
+  if (box.length === 0) return input.location.trim()
+  const drawerNumber = (input.drawer[0] ?? '').toUpperCase()
+  const drawer = drawerNumber.length === 0 ? '' : `‧${drawerNumber}` // '‧2' or ''
+  const details = input.box.split(' (')[1] // 'brico & sport)'
+  const infos = details === undefined ? '' : ` (${details}` // ' (brico & sport)'
+  return `${input.location} ${box}${drawer} ${infos}`.trim().replace(/ {2,}/gu, ' ') // 'Salon G‧2 (brico & sport)' or 'Salon G‧2'
+}
+
 export function areItemsEquivalent (itemA: Item, itemB: Item) {
   return objectSum(getCoreData(itemA)) === objectSum(getCoreData(itemB))
 }
