@@ -38,6 +38,10 @@ export function PageHome ({ ...properties }: Readonly<{ [key: string]: unknown }
       if (!isUsable) return
       setTimeout(() => { search.value.current?.focus() }, delays.small)
     }, window)
+    const keypressHandler = on('keypress', (event: KeyboardEvent) => {
+      const isInSearchInput = event.target instanceof HTMLElement && event.target.className === search.value.current?.className
+      if (!isInSearchInput) search.value.current?.focus()
+    })
     return () => {
       off(focusHandler)
       off(keypressHandler)
