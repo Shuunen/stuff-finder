@@ -1,5 +1,6 @@
 import Fuse, { type IFuseOptions } from 'fuse.js'
 import { sanitize } from 'shuutils'
+import type { Display } from './types/theme.types'
 import type { Item, ItemField, ItemPhoto, ItemStatus } from './utils/parsers.utils'
 
 export interface CommonLists {
@@ -123,3 +124,5 @@ export const fuseOptions: IFuseOptions<Item> = {
 export function voidFunction () { /* empty */ }
 
 export const defaultItems: Item[] = []
+
+export const defaultDisplay: Display = 'list'

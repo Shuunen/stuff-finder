@@ -49,6 +49,7 @@ export function mockItem (data: Partial<Item> = {}) {
 export function mockState (data: Partial<State> = {}) {
   return {
     credentials: { base: 'baseA', table: 'tableA', token: 'tokenA', view: 'viewA', wrap: 'wrapA' },
+    display: 'list',
     items: defaultItems,
     lists: defaultCommonLists,
     message: undefined,

@@ -11,6 +11,7 @@ it('state A default', () => {
         "view": "",
         "wrap": "",
       },
+      "display": "list",
       "items": [],
       "lists": {
         "boxes": [],

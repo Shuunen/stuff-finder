@@ -4,6 +4,8 @@ import Fuse from 'fuse.js'
 import { route } from 'preact-router'
 import { useCallback, useState } from 'preact/hooks'
 import { debounce, ellipsis, sanitize } from 'shuutils'
+import { AppButtonNext } from '../components/app-button-next'
+import { AppDisplayToggle } from '../components/app-display-toggle'
 import { AppItemList } from '../components/app-item-list'
 import { AppPageCard } from '../components/app-page-card'
 import { defaultItems, delays, fuseOptions } from '../constants'
@@ -44,6 +46,7 @@ export function PageSearch ({ input = '', ...properties }: Readonly<{ [key: stri
     <AppPageCard cardTitle="Search" icon={SearchIcon} pageCode="search" pageTitle={`Search for “${ellipsis(input, maxNameLength)}”`}>
       <div className="flex h-5/6 grow flex-col justify-start">
         <h2>{title}</h2>
+        <div className="absolute right-7"><AppDisplayToggle /></div>
         <AppItemList items={items} />
         {items.length === 0 && <AppButtonNext label='Add a product' url={`/item/add/${input}`} />}
       </div>
