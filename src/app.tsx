@@ -67,7 +67,7 @@ export function App () {
       <Suspense fallback={fallback}>
         <Router>
           <PageHome path="/" />
-          <AsyncPageItemAddEdit path="/item/add" />
+          <AsyncPageItemAddEdit path="/item/add/:id?" />
           <AsyncPageItemAddEdit isEdit path="/item/edit/:id" />
           <AsyncPageItemDetails path="/item/details/:id/:context?" />
           <AsyncPageItemPrint path="/item/print/:id" />

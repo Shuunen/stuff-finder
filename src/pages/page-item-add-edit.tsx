@@ -124,6 +124,7 @@ export function PageItemAddEdit ({ id = '', isEdit = false }: Readonly<{ id?: st
       <div className="flex flex-col">
         {Boolean(isEdit) && <p>Please fill in the form below to edit the item, you can change any field you want 🔄</p>}
         {!isEdit && <p>Please fill in the form below to add a new item, no worry, you will be able to edit it later if needed ✏️</p>}
+        {id !== '' && initialForm.fields.reference.value === '' && <p>Here is the keyword you search previously : {id}</p>}
         <div className="flex w-full flex-col md:flex-row">
           <img alt="item visual" className="w-1/2 md:w-1/4" data-id={itemId} onError={onItemImageError} ref={photoReference} src={initialForm.fields.photo.value || defaultImage} />
           <div className="w-full md:w-3/4">

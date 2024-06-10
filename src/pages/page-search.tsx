@@ -45,6 +45,7 @@ export function PageSearch ({ input = '', ...properties }: Readonly<{ [key: stri
       <div className="flex h-5/6 grow flex-col justify-start">
         <h2>{title}</h2>
         <AppItemList items={items} />
+        {items.length === 0 && <AppButtonNext label='Add a product' url={`/item/add/${input}`} />}
       </div>
     </AppPageCard>
   )
