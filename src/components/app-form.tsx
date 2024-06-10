@@ -51,7 +51,7 @@ export function AppForm<FormType extends Form> ({ error: parentError = '', initi
   // eslint-disable-next-line max-statements
   const checkDataInClipboard = useCallback(async () => {
     const clip = await readClipboard()
-    const clean = clip.replace(/""/gu, '"')
+    const clean = clip /* .replace(/""/gu, '"') */ // can't use this because it will replace "details": "" with "details": " which is not valid JSON
       .replace('"{', '{')
       .replace('}"', '}') // need to replace double double quotes with single double quotes (Google Sheet issue -.-'''''')
     const { error, value: data } = parseJson(clean)
