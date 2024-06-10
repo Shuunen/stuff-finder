@@ -4,16 +4,17 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import Switch from '@mui/material/Switch'
 import ToggleButton from '@mui/material/ToggleButton'
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup'
+import { useSignalEffect } from '@preact/signals'
 import { useCallback, useMemo, useState } from 'preact/hooks'
 import { AppBarcode } from '../components/app-barcode'
 import { AppPageCard } from '../components/app-page-card'
 import { delays } from '../constants'
 import { printSizes, type PrintSize } from '../types/print.types'
+import { clearElementsForPrint } from '../utils/browser.utils'
 import { itemToImageUrl, onItemImageError, pushItem } from '../utils/item.utils'
 import { logger } from '../utils/logger.utils'
 import { itemToPrintData } from '../utils/print.utils'
 import { state } from '../utils/state.utils'
-import { clearElementsForPrint } from '../utils/browser.utils'
 
 // if qr code size need to be adjusted, use this old block of code :
 // async function adjustQrCode () {
@@ -56,6 +57,8 @@ export function PageItemPrint ({ ...properties }: Readonly<{ [key: string]: unkn
     state.message = { content: `${result.success ? 'updated' : 'failed updating'} item as printed`, delay: delays.seconds, type: result.success ? 'success' : 'error' }
     if (!result.success) logger.error('pushItem failed', result)
   }, [item])
+  // trigger print directly on page load
+  useSignalEffect(useCallback(() => { void onPrint() }, [onPrint]))
 
   return (
     <>
