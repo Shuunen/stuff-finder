@@ -1,9 +1,5 @@
-import { BrowserScout } from 'shuutils'
 import { logger } from './logger.utils'
 import { state } from './state.utils'
-
-const scout = new BrowserScout()
-logger.info('browser scout', scout)
 
 function airtableHeaders (token: string) {
   // biome-ignore lint/style/useNamingConvention: <explanation>
@@ -39,8 +35,6 @@ export async function get (url: string) {
 export function valuesToOptions (array: readonly string[], selected?: string) {
   return array.map(value => `<option value="${value}" ${selected === value ? 'selected' : ''}>${value}</option>`).join('')
 }
-
-export { scout }
 
 export function setPageTitle (title: string) {
   // eslint-disable-next-line functional/immutable-data

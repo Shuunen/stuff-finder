@@ -10,7 +10,7 @@ import SpeedDial from '@mui/material/SpeedDial'
 import SpeedDialAction from '@mui/material/SpeedDialAction'
 import { route } from 'preact-router'
 import { useCallback, useMemo, useState } from 'preact/hooks'
-import { scout } from '../utils/browser.utils'
+import { isMobile } from 'shuutils'
 import { logger } from '../utils/logger.utils'
 
 const actions = [
@@ -25,7 +25,7 @@ export function AppSpeedDial ({ isLoading, isSettingsRequired }: Readonly<{ isLo
 
   const [isOpen, setOpen] = useState(false)
   const toggleOpen = useCallback(() => { setOpen(!isOpen) }, [isOpen])
-  const onMouse = useCallback((status: 'enter' | 'leave') => { if (!scout.isMobile) { logger.debug('open cause mouse', status); setOpen(status === 'enter') } }, [])
+  const onMouse = useCallback((status: 'enter' | 'leave') => { if (!isMobile()) { logger.debug('open cause mouse', status); setOpen(status === 'enter') } }, [])
   const onMouseEnter = useCallback(() => { onMouse('enter') }, [onMouse])
   const onMouseLeave = useCallback(() => { onMouse('leave') }, [onMouse])
   const options = useMemo(() => ({ color: isLoading ? 'warning' : 'primary' } as const), [isLoading])

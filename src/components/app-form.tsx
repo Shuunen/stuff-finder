@@ -71,7 +71,7 @@ export function AppForm<FormType extends Form> ({ error: parentError = '', initi
   useSignalEffect(useCallback(() => {
     const handler = on('focus', () => { void checkDataInClipboard() }, window)
     void checkDataInClipboard()
-    return () => { if (handler !== false) off(handler) }
+    return () => off(handler)
   }, [checkDataInClipboard]))
 
   const errorMessage = parentError.length > 0 ? parentError : form.errorMessage

@@ -14,7 +14,7 @@
     "notistack": "3.0",
     "preact": "10.22",
     "preact-router": "4.1",
-    "shuutils": "7.7",
+    "shuutils": "8.0",
     "valibot": "0.30",
     "webcomponent-qr-code": "1.2"
   },
@@ -63,7 +63,7 @@
     "check": "pnpm install && repo-check && pnpm build && pnpm lint && pnpm test && echo check success",
     "dev": "vite",
     "lint": "pnpm lint:tsc && pnpm lint:biome && pnpm lint:eslint && pnpm lint:dep && echo lint success",
-    "lint:biome": "biome lint --error-on-warnings --apply-unsafe src",
+    "lint:biome": "biome lint --error-on-warnings --apply-unsafe src && echo lint:biome success",
     "lint:dep": "depcruise src --config && echo lint:dep success",
     "lint:eslint": "eslint --cache --max-warnings 0 --ext .ts,.tsx src && echo lint:eslint success",
     "lint:tsc": "tsc --noEmit && echo lint:tsc success",

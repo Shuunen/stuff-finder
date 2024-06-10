@@ -34,12 +34,14 @@ export function PageHome ({ ...properties }: Readonly<{ [key: string]: unknown }
   watchState('status', () => { setIsUsable(state.status !== 'settings-required') })
 
   useSignalEffect(useCallback(() => {
-    logger.debug('useSignalEffect', { isUsable })
-    const handler = on('focus', () => {
+    const focusHandler = on('focus', () => {
       if (!isUsable) return
       setTimeout(() => { search.value.current?.focus() }, delays.small)
     }, window)
-    return () => { if (handler !== false) off(handler) }
+    return () => {
+      off(focusHandler)
+      off(keypressHandler)
+    }
   }, [search.value, isUsable]))
 
   // eslint-disable-next-line functional/immutable-data
