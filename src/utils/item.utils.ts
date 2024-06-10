@@ -1,6 +1,6 @@
 /* eslint-disable functional/immutable-data */
 import { clone, objectSum } from 'shuutils'
-import { defaultCommonLists, defaultImage, emptyItem, type CommonLists } from '../constants'
+import { defaultCommonLists, defaultImage, delays, emptyItem, type CommonLists } from '../constants'
 import { airtableMaxRequestPerSecond, deleteItemRemotely, getOneItem, pushItemRemotely } from './airtable.utils'
 import { del, patch, post } from './browser.utils'
 import { createCheckboxField, createSelectField, createTextField, type Form } from './forms.utils'
@@ -31,12 +31,15 @@ function addOrUpdateItems (input: Item[], itemTouched: Item) {
   return items
 }
 
-/* c8 ignore next 7 */
-async function updateItemImage (id: string, image: HTMLImageElement) {
+/* c8 ignore next 10 */
+async function updateItemImage (id?: string, image?: HTMLImageElement) {
+  if (id === undefined) throw new Error('no id found on image')
+  if (image === undefined) throw new Error('no image found')
   logger.debug('image url for item', id, 'has been deprecated, fetching fresh data from server...')
   const item = await getOneItem(id)
   // eslint-disable-next-line no-param-reassign
   image.src = itemToImageUrl(item)
+  image.classList.remove('animate-pulse')
   state.items = addOrUpdateItems(state.items, item)
 }
 
@@ -101,16 +104,17 @@ export function getCommonListsFromItems (items: Item[]) {
   return sortListsEntries(list)
 }
 
-/* c8 ignore next 10 */
+/* c8 ignore next 11 */
 export async function onItemImageError (event: Event) {
   const image = event.target as HTMLImageElement // eslint-disable-line @typescript-eslint/consistent-type-assertions
   image.src = itemToImageUrl()
   image.classList.add('animate-pulse')
-  if (document.querySelectorAll('img[data-id]').length > airtableMaxRequestPerSecond) { void logger.debouncedDebug('prevent too many requests to airtable'); return }
-  const { id } = image.dataset
-  if (id === undefined) throw new Error('no id found on image')
-  await updateItemImage(id, image)
-  image.classList.remove('animate-pulse')
+  // load in parallel
+  if (document.querySelectorAll('img[data-id]').length <= airtableMaxRequestPerSecond) { await updateItemImage(image.dataset.id, image); return }
+  // load in series with one second delay between each
+  setTimeout(async () => {
+    await updateItemImage(image.dataset.id, image)// @ts-expect-error t exists
+  }, event.t * delays.second)
 }
 
 export const itemForm = {
