@@ -114,7 +114,7 @@ export function PageItemAddEdit ({ id = '', isEdit = false }: Readonly<{ id?: st
   useSignalEffect(useCallback(() => {
     if (photo.value.current === null) throw new Error('photo not found')
     const handler = on('error', () => { onImageError(photo.value.current ?? dom('img')) }, photo.value.current)
-    return () => { if (handler !== false) off(handler) }
+    return () => off(handler)
   }, [photo.value]))
 
   if (isEdit && initialItem === undefined) return <>Cannot edit, item with id &quot;{id}&quot; not found ;(</>
