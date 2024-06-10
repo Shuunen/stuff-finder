@@ -86,8 +86,8 @@ devDependencies:
     specifier: '8.57'
     version: 8.57.0
   eslint-config-hardcore:
-    specifier: '45.7'
-    version: 45.7.0(@babel/core@7.24.6)(@babel/eslint-parser@7.24.6)(eslint@8.57.0)(prettier@3.2.5)(typescript@5.4.5)(vue-eslint-parser@9.4.2)
+    specifier: '45.8'
+    version: 45.8.0(@babel/core@7.24.6)(@babel/eslint-parser@7.24.6)(eslint@8.57.0)(prettier@3.2.5)(typescript@5.4.5)(vue-eslint-parser@9.4.2)
   eslint-plugin-tailwindcss:
     specifier: '3'
     version: 3.17.0(tailwindcss@3.4.3)
@@ -4735,8 +4735,8 @@ packages:
       semver: 7.6.2
     dev: true
 
-  /eslint-config-hardcore@45.7.0(@babel/core@7.24.6)(@babel/eslint-parser@7.24.6)(eslint@8.57.0)(prettier@3.2.5)(typescript@5.4.5)(vue-eslint-parser@9.4.2):
-    resolution: {integrity: sha512-7V/YHcintmooGyQ5Unk/NFI3RbbetkECZ2fkQ5IlP3xOLxIH58UF6DJ1ZKyWPW8C6ViOLQ3S31eExxyOOLwGdQ==}
+  /eslint-config-hardcore@45.8.0(@babel/core@7.24.6)(@babel/eslint-parser@7.24.6)(eslint@8.57.0)(prettier@3.2.5)(typescript@5.4.5)(vue-eslint-parser@9.4.2):
+    resolution: {integrity: sha512-8nxnx3zyypFA91SMsU2pgQvo7mW4fgh1wv30Bb/PLLpR2GpyOPHqf9XSouEJZFpd8A5AS/ihZu2n03Kg4UeeCw==}
     peerDependencies:
       eslint: ^8.57.0
       typescript: '>=4.0.0'
@@ -4750,6 +4750,7 @@ packages:
       '@microsoft/eslint-plugin-sdl': 0.2.2(eslint@8.57.0)
       '@putout/plugin-apply-shorthand-properties': 3.0.2(putout@30.7.0)
       '@shopify/eslint-plugin': 44.0.0(@babel/core@7.24.6)(eslint-import-resolver-typescript@3.6.1)(eslint@8.57.0)(prettier@3.2.5)(typescript@5.4.5)
+      '@stylistic/eslint-plugin': 2.1.0(eslint@8.57.0)(typescript@5.4.5)
       '@typescript-eslint/eslint-plugin': 6.21.0(@typescript-eslint/parser@6.21.0)(eslint@8.57.0)(typescript@5.4.5)
       '@typescript-eslint/parser': 6.21.0(eslint@8.57.0)(typescript@5.4.5)
       eslint: 8.57.0
@@ -4882,7 +4883,7 @@ packages:
       eslint-plugin-import: '*'
     dependencies:
       debug: 4.3.4
-      enhanced-resolve: 5.16.1
+      enhanced-resolve: 5.17.0
       eslint: 8.57.0
       eslint-module-utils: 2.8.1(@typescript-eslint/parser@6.21.0)(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1)(eslint@8.57.0)
       eslint-plugin-import: 2.29.1(@typescript-eslint/parser@6.21.0)(eslint-import-resolver-typescript@3.6.1)(eslint@8.57.0)
