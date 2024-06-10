@@ -60,7 +60,7 @@ export function AppForm<FormType extends Form> ({ error: parentError = '', initi
     futureForm.isTouched = true // eslint-disable-line functional/immutable-data
     const entries = Object.entries(data)
     for (const [key, value] of entries) {
-      if (typeof key !== 'string' || typeof value !== 'string' || key === '' || value === '') return
+      if (typeof key !== 'string' || typeof value !== 'string' || key === '' || value === '') continue // eslint-disable-line no-continue
       const actualField = futureForm.fields[key]
       if (actualField === undefined) continue /* eslint-disable-line no-continue */// @ts-expect-error typing issue
       futureForm.fields[key] = { ...actualField, value } // eslint-disable-line functional/immutable-data
