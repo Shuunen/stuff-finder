@@ -95,6 +95,7 @@ export function PageSequencer ({ ...properties }: Readonly<{ [key: string]: unkn
   }
 
   useEffect(() => { void playSequenceDebounced(sequence) }, [sequence])
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useSignalEffect(useCallback(() => { logger.debug('PageSequencer mount', { properties: Object.keys(properties) }) }, [properties]))
 
   const playIcon = useMemo(() => <PlayCircleFilledWhiteOutlinedIcon />, [])

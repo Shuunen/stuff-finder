@@ -12,7 +12,8 @@ const rules = {
     'error',
     2, // eslint-disable-line no-magic-numbers
   ],
-  '@stylistic/lines-around-comment': 'off',
+  '@stylistic/lines-around-comment': 'off', // not needed
+  '@stylistic/max-len': 'off', // not needed
   '@stylistic/member-delimiter-style': [
     'error',
     {
@@ -28,8 +29,9 @@ const rules = {
     'error',
     'always',
   ],
-  '@stylistic/object-property-newline': 'off',
-  '@stylistic/padded-blocks': 'off',
+  '@stylistic/object-property-newline': 'off', // not needed
+  '@stylistic/padded-blocks': 'off', // not needed
+  '@stylistic/padding-line-between-statements': 'off', // not needed
   '@stylistic/quote-props': [
     'error',
     'consistent-as-needed',
