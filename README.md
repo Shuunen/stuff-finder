@@ -23,7 +23,6 @@
   - [ ] clone item
   - [ ] search retry when scan, search, or speech fail
   - [ ] speech recognition
-  - [ ] settings action required
   - [ ] print un-printed items
 
 ## Build sizes
