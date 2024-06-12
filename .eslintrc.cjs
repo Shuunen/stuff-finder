@@ -59,6 +59,7 @@ const rules = {
   '@typescript-eslint/no-confusing-void-expression': 'off',
   '@typescript-eslint/no-misused-promises': 'off',
   '@typescript-eslint/no-type-alias': 'off',
+  '@typescript-eslint/no-unsafe-assignment': 'off', // tsc already checks this
   '@typescript-eslint/no-unused-vars': [
     'error',
     {
@@ -140,6 +141,7 @@ const rules = {
   'max-len': 'off',
   'max-statements-per-line': 'off',
   'no-console': 'error',
+  'no-explicit-type-exports/no-explicit-type-exports': 'off', // only needed in library
   'no-inline-comments': 'off',
   'no-restricted-imports': [
     'error',
@@ -187,8 +189,10 @@ const rules = {
   ],
   'ssr-friendly/no-dom-globals-in-module-scope': 'off',
   'strict': 'off',
+  'total-functions/no-nested-fp-ts-effects': 'off', // not sure what this prevents
   'total-functions/no-partial-division': 'off',
   'total-functions/no-unsafe-readonly-mutable-assignment': 'off',
+  'typescript-compat/compat': 'off', // not needed when targeting recent browsers
   'unicorn/no-array-callback-reference': 'off',
   'unicorn/no-array-for-each': 'off',
   'unicorn/no-process-exit': 'off',

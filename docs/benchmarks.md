@@ -25,6 +25,7 @@
 | 2024-04-17#1 |  10s  | 20.10 | romain gram zorin | did nothing but the cpu is better ^^                |
 | 2024-04-19#1 |  12s  | 20.12 | romain nzxl fed39 | nice improvement on Fedora for the same hardware ^^ |
 | 2024-04-20#1 |  8s   | 20.12 | romain duc win11  | better (new) hardware ^^                            |
+| 2024-06-12#1 |  8s   | 20.14 | romain duc win11  | bigger codebase                                     |
 
 Note 0 : with plugin:tailwindcss/recommended,  plugin:unicorn/all, hardcore, hardcore/react, hardcore/ts
 Note 1 : to show time taken by rules : `TIMING=1 npx eslint src`
@@ -45,6 +46,7 @@ Note 3 : to list eslint scanned files : `DEBUG=eslint:cli-engine npx eslint src`
 | 2024-04-07#1 | 8.3s  | 20.11 | romain nzxl win11 | before @stylistic/eslint-plugin      |
 | 2024-04-07#2 | 8.9s  | 20.11 | romain nzxl win11 | after @stylistic/eslint-plugin       |
 | 2024-04-17#1 | 4.3s  | 20.10 | romain gram zorin | did nothing but the cpu is better ^^ |
+| 2024-06-12#1 | 5.0s  | 20.14 | romain duc win11  | not sure why it's longer than gram   |
 
 Note 0 : with eslint-config-preact, plugin:tailwindcss/recommended,  plugin:unicorn/all, hardcore, hardcore/react, hardcore/ts
 Note 1 : to show time taken by rules : `TIMING=1 npx eslint src/utils/parsers.utils.ts`

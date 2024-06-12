@@ -36,6 +36,7 @@
 - 1.1.0 :  6KB html + 27KB css + 445KB js (added mui + mui icons)
 - 1.2.0 :  3KB html + 26KB css + 622KB js (added notistack + preact-router)
 - 1.3.0 :  3KB html + 16KB css + 683KB js
+- 2.0.0 :  3KB html + 18KB css + 720KB js (more components, better design)
 
 Check build stats in details by adding `--metafile=meta.json` to the esbuild command and use a tool like [Bundle Buddy](https://bundle-buddy.com/)
 
