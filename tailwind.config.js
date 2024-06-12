@@ -1,12 +1,17 @@
+/* eslint-disable import/no-anonymous-default-export */
 /** @type {import('tailwindcss').Config} */
-// eslint-disable-next-line import/no-anonymous-default-export
+// biome-ignore lint/style/noDefaultExport: <explanation>
 export default {
   content: [
     './index.html',
     './src/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
-    extend: {},
+    extend: {
+      screens: {
+        xs: '360px',
+      },
+    },
   },
 }
 
