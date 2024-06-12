@@ -1,16 +1,14 @@
 import SearchIcon from '@mui/icons-material/Search'
-import { useSignalEffect } from '@preact/signals'
 import Fuse from 'fuse.js'
 import { route } from 'preact-router'
-import { useCallback, useState } from 'preact/hooks'
-import { debounce, ellipsis, sanitize } from 'shuutils'
+import { ellipsis, sanitize } from 'shuutils'
 import { AppButtonNext } from '../components/app-button-next'
 import { AppDisplayToggle } from '../components/app-display-toggle'
 import { AppItemList } from '../components/app-item-list'
 import { AppPageCard } from '../components/app-page-card'
-import { defaultItems, delays, fuseOptions } from '../constants'
+import { fuseOptions } from '../constants'
 import { logger } from '../utils/logger.utils'
-import { state, watchState } from '../utils/state.utils'
+import { state } from '../utils/state.utils'
 
 const maxNameLength = 20
 
@@ -24,31 +22,17 @@ function search (input: string) {
   return { header, results }
 }
 
-export function PageSearch ({ input = '', ...properties }: Readonly<{ [key: string]: unknown; input?: string }>) {
-  logger.debug('PageSearch rendering', { input, properties })
-  const [items, setItems] = useState(defaultItems)
-  const [title, setTitle] = useState('Searching...')
-
-  const triggerSearchSync = useCallback(() => {
-    const { header, results } = search(input)
-    setItems(results)
-    setTitle(header)
-  }, [input])
-
-  const triggerSearch = debounce(triggerSearchSync, delays.large)
-
-  useSignalEffect(useCallback(() => { void triggerSearch() }, [triggerSearch]))
-
-  if (items.length === 1) route(`/item/details/${items[0]?.id ?? ''}/single`)
-  else watchState('items', () => { void triggerSearch() })
-
+export function PageSearch ({ input = '' }: Readonly<{ [key: string]: unknown; input?: string }>) {
+  const { header, results } = search(input)
+  logger.debug(`PageSearch found ${results.length} results`)
+  if (results.length === 1) route(`/item/details/${results[0]?.id ?? ''}/single`)
   return (
     <AppPageCard cardTitle="Search" icon={SearchIcon} pageCode="search" pageTitle={`Search for “${ellipsis(input, maxNameLength)}”`}>
       <div className="flex h-5/6 grow flex-col justify-start">
-        <h2>{title}</h2>
+        <h2>{header}</h2>
         <div className="absolute right-7"><AppDisplayToggle /></div>
-        <AppItemList items={items} />
-        {items.length === 0 && <AppButtonNext label='Add a product' url={`/item/add/${input}`} />}
+        <AppItemList items={results} />
+        {results.length === 0 && <AppButtonNext label='Add a product' url={`/item/add/${input}`} />}
       </div>
     </AppPageCard>
   )
