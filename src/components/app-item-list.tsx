@@ -11,7 +11,7 @@ export function AppItemList ({ items }: Readonly<{ items: Item[] }>) {
 
   return (
     <nav aria-label="item list" className="overflow-y-auto overflow-x-hidden md:min-w-[34rem]" data-component="item-list">
-      <div className={`grid grid-cols-1 bg-gray-100 ${display === 'list' ? '' : 'gap-5 p-5 xs:grid-cols-2 sm:grid-cols-3'}`} data-type="list">
+      <div className={`grid grid-cols-1 bg-gray-100 ${display === 'list' ? '' : 'gap-3 p-3 xs:grid-cols-2 sm:grid-cols-3 sm:gap-5 sm:p-5'}`} data-type="list">
         {items.map(item => <AppItemListEntry display={display} item={item} key={item.id} />)}
       </div>
     </nav>

@@ -16,11 +16,11 @@ export function AppItemListEntry ({ display, item }: Readonly<{ display: Display
   const titleStyle = useMemo(() => ({ fontSize: 18, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }), [])
   const drawer = `${item.box.split(' ')[0] ?? ''}${item.drawer}`.trim()
   const subtitle = `${item.category}${drawer.length > 0 ? ' - ' : ''}${drawer}`
-  const subtitleStyle = useMemo(() => ({ color: display === 'card' ? '#333' : 'grey', fontSize: 16 }), [display])
+  const subtitleStyle = useMemo(() => ({ color: display === 'card' ? '#333' : 'grey', fontSize: 16, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }), [display])
   const listStyle = useMemo(() => ({ background: 'white', transition: 'filter 0.3s' }), [])
   const cardStyle = useMemo(() => ({ ':hover': { boxShadow: '0 0 20px 0 rgba(0, 0, 0, 0.5)' }, 'cursor': 'pointer', 'height': '100%', 'position': 'relative', 'width': '100%' }), [])
   const imgStyle = useMemo(() => ({ aspectRatio: 1, objectFit: 'contain', padding: '1vw 1vw 0 1vw', width: '100%' }), [])
-  const floatingHeaderStyle = useMemo(() => ({ background: 'whitesmoke', color: 'black', fontSize: 18, marginBottom: 0, paddingX: 2, paddingY: 1, width: '100%' }), [])
+  const floatingHeaderStyle = useMemo(() => ({ background: 'whitesmoke', color: 'black', fontSize: 18, height: '100%', marginBottom: 0, paddingX: 2, paddingY: 1, width: '100%' }), [])
   const goToDetails = useCallback(() => route(`/item/details/${item.id}`), [item.id])
   return (
     <ListItem data-type="list-item" disablePadding key={item.id} sx={listStyle}>{/* @ts-expect-error typings issue */}
