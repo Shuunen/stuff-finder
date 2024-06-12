@@ -9,7 +9,6 @@ import { state } from '../utils/state.utils'
 import { AppDeleteRessource } from './app-delete-ressource'
 import { AppItemDetailsChip } from './app-item-details-chip'
 
-// eslint-disable-next-line complexity
 export function AppItemDetails ({ item }: Readonly<{ item: Item }>) {
 
   const onDelete = useCallback(async () => {
@@ -32,8 +31,8 @@ export function AppItemDetails ({ item }: Readonly<{ item: Item }>) {
         <img alt={item.name} className="absolute top-0 size-full object-contain md:p-4" data-id={item.id} onError={onItemImageError} src={itemToImageUrl(item)} />
       </div>
       <div className="mr-6 flex min-w-80 flex-col items-start justify-start gap-3 md:w-2/3">
-        <h1>{item.name}</h1>
-        <h2>{item.brand}{item.category ? ' - ' : ''}{item.category}</h2>
+        <h1>{item.name} {item.brand}</h1>
+        <h2>{item.category}</h2>
         {Boolean(item.details) && <p className="first-letter:uppercase">{item.details}</p>}
         <div className="my-2 flex gap-3">{/* eslint-disable-next-line react/forbid-component-props */}
           <LocationOnIcon className="text-purple-600" /><div className="font-medium">{itemLocation || 'Unknown'}</div>
