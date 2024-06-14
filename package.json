@@ -34,7 +34,7 @@
     "eslint": "8.57",
     "eslint-config-hardcore": "46.0",
     "eslint-plugin-tailwindcss": "3",
-    "eslint-plugin-unicorn": "53",
+    "eslint-plugin-unicorn": "54",
     "postcss": "8",
     "repo-check": "1.35",
     "tailwindcss": "3",
