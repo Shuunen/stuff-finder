@@ -19,7 +19,7 @@ type FormFieldCheckbox = FormFieldBase & { type: 'checkbox'; value: boolean } //
 type FormField<Type extends FormFieldType> = Type extends 'text' ? FormFieldText : Type extends 'select' ? FormFieldSelect : FormFieldCheckbox
 
 function fieldRegex (regex?: RegExp, minLength = 3, maxLength = 100) {
-  return regex ?? new RegExp(`^[,\\d\\p{L}\\s/&]{${minLength},${maxLength}}$`, 'u') // eslint-disable-line security/detect-non-literal-regexp
+  return regex ?? new RegExp(`^[-,\\d\\p{L}\\s/&]{${minLength},${maxLength}}$`, 'u') // eslint-disable-line security/detect-non-literal-regexp
 }
 
 export type Form = {
