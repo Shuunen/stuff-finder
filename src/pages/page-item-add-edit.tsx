@@ -61,10 +61,9 @@ export function PageItemAddEdit ({ id = '', isEdit = false }: Readonly<{ id?: st
   }, [isEdit])
 
   const onSubmitSuccess = useCallback((item: Item) => {
-    // eslint-disable-next-line functional/immutable-data
-    state.message = { content: `item ${isEdit ? 'updated' : 'added'} successfully`, delay: delays.second, type: 'success' }
-    if (isEdit) route(`/item/details/${item.id}`)
-    else route(`/item/print/${item.id}`)
+    if (!isEdit) { route(`/item/print/${item.id}`); return } // eslint-disable-next-line functional/immutable-data
+    state.message = { content: 'item updated successfully', delay: delays.second, type: 'success' }
+    route(`/item/details/${item.id}`)
   }, [isEdit])
 
   const onSubmit = useCallback(async () => {
