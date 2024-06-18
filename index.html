@@ -20,39 +20,6 @@
 
   <span class="absolute w-full bottom-0 text-center text-sm font-mono opacity-30 pb-4 print:hidden" id="unique-mark"></span>
 
-  <template id="edit-item">
-    <app-form class="items-center sm:grid-cols-2 sm:gap-4 md:grid-cols-4" close="app-modal--edit-item--close" data-id="{{ id }}" name="edit-item">
-      <input name=id type=hidden />
-      <div class="mb-6 max-h-72 sm:row-span-4 sm:mb-0 md:row-span-5">
-        <img alt="no visual" class="mx-auto w-3/4" src="assets/no-visual.svg" />
-        <div class="relative mt-3 mb-6 flex flex-col justify-evenly">
-          <input name=photo onchange="window.dispatchEvent(new CustomEvent('app-form--edit-item--set', { detail: { photo: this.value } }))"
-            type=text />
-          <a class="mx-auto mt-2 mb-7" data-action="clear" href="#"
-            onclick="window.dispatchEvent(new CustomEvent('app-form--edit-item--set', { detail: { photo: '' } }))">Clear image</a>
-        </div>
-      </div>
-      <label>Name<input autofocus maxlength=50 minlength=3 name=name required type=text /></label>
-      <label>Brand<input name=brand type=text /></label>
-      <label>Details<input name=details type=text /></label>
-      <label>Reference<input maxlength=20 minlength=5 name=reference required type=text /></label>
-      <label>Barcode<input name=barcode required type=text /></label>
-      <label>Status<select name=status>{{ statuses }}</select></label>
-      <label>Location <select name=location>{{ locations }}</select></label>
-      <label>Box <select name=box>{{ boxes }}</select></label>
-      <label>Drawer <select name=drawer>{{ drawers }}</select></label>
-      <label>Category <select name=category>{{ categories }}</select></label>
-      <label>Price <input name=price pattern="\d+" step=1 type=number /></label>
-      <div class="flex flex-wrap lg:flex-nowrap">
-        <label>Printed ?<input name="ref-printed" type=checkbox /></label>
-        <button class="self-end" data-action="app-modal--print-one--open" data-id="{{ id }}" data-payload="" disabled type="button">
-          Print this item
-        </button>
-        <a class="mx-auto self-end" data-action="app-clone-item" data-payload="{{ id }}" href="#">Clone this item</a>
-      </div>
-    </app-form>
-  </template>
-
   <script src="/src/main.tsx" type="module"></script>
 
 </body>
