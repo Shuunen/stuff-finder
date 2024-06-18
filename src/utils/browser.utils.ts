@@ -42,6 +42,11 @@ export function setPageTitle (title: string) {
 }
 
 export function clearElementsForPrint () {
-  document.querySelector('synology-download-content')?.remove()
-  document.querySelector('[at-magnifier-wrapper]')?.remove()
+  const selector = [
+    '#synology-download-notification-stack',
+    'synology-download-content',
+    '[at-magnifier-wrapper]',
+  ]
+  const elements = document.querySelectorAll(selector.join(','))
+  for (const element of elements) element.remove()
 }
