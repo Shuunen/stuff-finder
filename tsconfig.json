@@ -52,8 +52,7 @@
     "src",
     "tests",
     ".*.cjs",
-    "*.js",
-    "*.ts"
+    "*.js"
   ],
   "references": [
     {

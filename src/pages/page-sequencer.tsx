@@ -63,7 +63,8 @@ function AppSequenceItem ({ index, item, onChange, onDelete }: Readonly<{ index:
       <p className="font-mono">{id}</p>
       <p className="w-1/3">{label}</p>
       {typeof item === 'number' && <AppSequenceItemWait index={index} item={item} onChange={onChange} />}
-      {typeof item !== 'number' && <AppSequenceItemTone index={index} item={item} onChange={onChange} />}{/* @ts-expect-error typings issue */}
+      {typeof item !== 'number' && <AppSequenceItemTone index={index} item={item} onChange={onChange} />}{/* eslint-disable-next-line @typescript-eslint/ban-ts-comment, @typescript-eslint/prefer-ts-expect-error */}
+      {/* @ts-ignore */}
       <IconButton aria-label="delete" onClick={onDelete(index)}><DeleteIcon /></IconButton>
       <p className="font-mono">{id}</p>
     </div>

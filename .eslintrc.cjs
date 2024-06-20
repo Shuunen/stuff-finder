@@ -266,6 +266,21 @@ module.exports = {
       ],
       rules,
     },
+    {
+      extends: [
+        'plugin:unicorn/all',
+        'hardcore/node',
+        'plugin:@stylistic/all-extends',
+      ],
+      files: [
+        'vite.config.ts',
+        'vitest.config.ts',
+      ],
+      parserOptions: {
+        project: 'tsconfig.node.json',
+      },
+      rules,
+    },
   ],
   parserOptions: {
     project: true, // eslint-disable-line @typescript-eslint/naming-convention
