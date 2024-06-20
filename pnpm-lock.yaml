@@ -98,8 +98,8 @@ devDependencies:
     specifier: '8'
     version: 8.4.38
   repo-check:
-    specifier: '1.35'
-    version: 1.35.1
+    specifier: '1.36'
+    version: 1.36.0
   tailwindcss:
     specifier: '3'
     version: 3.4.4
@@ -9038,12 +9038,12 @@ packages:
     engines: {node: '>=16'}
     dev: true
 
-  /repo-check@1.35.1:
-    resolution: {integrity: sha512-aB6SHcQONYOALH4uoU/ULfwKaryb+lTCY33jJjAMz2nlt+eTk0cWaig7aarY+KfPqZQlYc5y8TnOn8T2ZcNMLw==}
+  /repo-check@1.36.0:
+    resolution: {integrity: sha512-U0BmkVwNNw6O2FHPy7p0fyMy1qdHB/xNxRX9U6lsKgd8cMUF3SSgFiyR+tXEaUqEb/3WLaV+SON4Jizj0dw+0g==}
     hasBin: true
     dependencies:
       arg: 5.0.2
-      shuutils: 7.7.0
+      shuutils: 8.0.0
       sort-json: 2.0.1
     dev: true
 
@@ -9279,19 +9279,11 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
-  /shuutils@7.7.0:
-    resolution: {integrity: sha512-ultnGsBIR9zdHCFDxqWO9YlUBfDa5+oXSi5Gi45o5ne30cNunDzr6sKRntks73VhmgBXQG4IhlbxW3t3cIpfLw==}
-    hasBin: true
-    dependencies:
-      tiny-glob: 0.2.9
-    dev: true
-
   /shuutils@8.0.0:
     resolution: {integrity: sha512-dXfLqTOxYh1eugoidZ/5TyuDWqd7pfPaUFV1WzPvDs53UPya9BYifN8lc2YaDRzOXAcGMeMjpivOy4czUNduJw==}
     hasBin: true
     dependencies:
       tiny-glob: 0.2.9
-    dev: false
 
   /side-channel@1.0.6:
     resolution: {integrity: sha512-fDW/EZ6Q9RiO8eFG8Hj+7u/oW+XrPTIChwCOM2+th2A6OblDtYYIpve9m+KvI9Z4C9qSEXlaGR6bTEYHReuglA==}
