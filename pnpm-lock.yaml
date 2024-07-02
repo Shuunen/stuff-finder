@@ -42,8 +42,8 @@ dependencies:
     specifier: '8.0'
     version: 8.0.0
   valibot:
-    specifier: '0.30'
-    version: 0.30.0
+    specifier: '0.35'
+    version: 0.35.0
   webcomponent-qr-code:
     specifier: '1.2'
     version: 1.2.0
@@ -10171,8 +10171,8 @@ packages:
     hasBin: true
     dev: true
 
-  /valibot@0.30.0:
-    resolution: {integrity: sha512-5POBdbSkM+3nvJ6ZlyQHsggisfRtyT4tVTo1EIIShs6qCdXJnyWU5TJ68vr8iTg5zpOLjXLRiBqNx+9zwZz/rA==}
+  /valibot@0.35.0:
+    resolution: {integrity: sha512-+i2aCRkReTrd5KBN/dW2BrPOvFnU5LXTV2xjZnjnqUIO8YUx6P2+MgRrkwF2FhkexgyKq/NIZdPdknhHf5A/Ww==}
     dev: false
 
   /validate-html-nesting@1.2.2:
