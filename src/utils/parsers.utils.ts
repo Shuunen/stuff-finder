@@ -1,4 +1,4 @@
-import { type Output, array, boolean, fallback, literal, merge, number, object, optional, string, union } from 'valibot'
+import { type InferOutput, array, boolean, fallback, literal, number, object, optional, string, union } from 'valibot'
 
 const itemStatusSchema = union([
   literal('acheté'),
@@ -54,18 +54,16 @@ const itemBaseSchema = object({
   'updated-on': string(),
 })
 
-const itemSchema = merge([
-  itemBaseSchema,
-  object({
-    id: idSchema,
-  }),
-])
+const itemSchema = object({
+  ...itemBaseSchema.entries,
+  id: idSchema,
+})
 
-export type ItemStatus = Output<typeof itemStatusSchema>
+export type ItemStatus = InferOutput<typeof itemStatusSchema>
 
-export type ItemPhoto = Output<typeof itemPhotoSchema>
+export type ItemPhoto = InferOutput<typeof itemPhotoSchema>
 
-export type Item = Output<typeof itemSchema>
+export type Item = InferOutput<typeof itemSchema>
 
 export type ItemField = keyof Item
 
@@ -76,7 +74,7 @@ export const airtableSingleResponseSchema = object({
   id: idSchema,
 })
 
-export type AirtableSingleRecordResponse = Output<typeof airtableSingleResponseSchema>
+export type AirtableSingleRecordResponse = InferOutput<typeof airtableSingleResponseSchema>
 
 export const airtableMultipleResponseSchema = object({
   error: optional(airtableErrorSchema),
