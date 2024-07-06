@@ -68,3 +68,11 @@ export function optionsToLabels (values?: FormFieldOptions) {
 
 export type { FormFieldCheckbox, FormFieldSelect, FormFieldText }
 
+
+export function alignClipboard (text: string) {
+  return text.replace(/: ""(?<thing>[,\n])/gu, ': "__EMPTY__"$<thing>')
+    .replace(/""/gu, '"')
+    .replace(/"__EMPTY__"/gu, '""')
+    .replace('"{', '{')
+    .replace('}"', '}') // need to replace double double quotes with single double quotes (Google Sheet issue -.-'''''')
+}

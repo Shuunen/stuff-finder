@@ -4,7 +4,7 @@ import { useSignalEffect } from '@preact/signals'
 import { useCallback, useState } from 'preact/hooks'
 import { debounce, off, on, parseJson, readClipboard } from 'shuutils'
 import { delays, voidFunction } from '../constants'
-import { type Form, validateForm } from '../utils/forms.utils'
+import { type Form, alignClipboard, validateForm } from '../utils/forms.utils'
 import { logger } from '../utils/logger.utils'
 import { state } from '../utils/state.utils'
 import { colSpanClass, gridClass } from '../utils/theme.utils'
@@ -52,11 +52,8 @@ export function AppForm<FormType extends Form> ({ error: parentError = '', initi
 
   // eslint-disable-next-line max-statements, complexity
   const checkDataInClipboard = useCallback(async () => {
-    const clip = await readClipboard()
-    const clean = clip /* .replace(/""/gu, '"') */ // can't use this because it will replace "details": "" with "details": " which is not valid JSON
-      .replace('"{', '{')
-      .replace('}"', '}') // need to replace double double quotes with single double quotes (Google Sheet issue -.-'''''')
-    const { error, value: data } = parseJson(clean)
+    const clip = alignClipboard(await readClipboard())
+    const { error, value: data } = parseJson(clip)
     if (error !== '' || typeof data !== 'object' || data === null) { logger.debug('error or data not an object', { data, error }); return }
     const futureForm = structuredClone(form)
     futureForm.isTouched = true

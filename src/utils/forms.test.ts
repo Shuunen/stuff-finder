@@ -1,5 +1,5 @@
 import { expect, it } from 'vitest'
-import { createCheckboxField, createSelectField, optionsToLabels, validateForm } from './forms.utils'
+import { alignClipboard, createCheckboxField, createSelectField, optionsToLabels, validateForm } from './forms.utils'
 import { settingsForm } from './settings.utils'
 
 it('validateForm A invalid field value', () => {
@@ -43,4 +43,34 @@ it('optionsToLabels A empty', () => {
 
 it('optionsToLabels B with values', () => {
   expect(optionsToLabels([{ label: 'labelUp', value: 'value' }])).toEqual(['labelUp'])
+})
+
+it('alignClipboard A Google Shit edition :(', () => {
+  expect(alignClipboard(`"{
+  ""base"": ""app123456"",
+  ""token"": ""pat123456"",
+  ""table"": ""stuff-finder"",
+  ""view"": ""stuff-finder"",
+  ""wrap"": ""123456""
+}"`)).toBe(`{
+  "base": "app123456",
+  "token": "pat123456",
+  "table": "stuff-finder",
+  "view": "stuff-finder",
+  "wrap": "123456"
+}`)
+})
+
+it('alignClipboard B empty fields', () => {
+  expect(alignClipboard(`{
+    "details": "",
+    name: "Jojo",
+    age: "",
+    golden: ""
+  }`)).toBe(`{
+    "details": "",
+    name: "Jojo",
+    age: "",
+    golden: ""
+  }`)
 })
