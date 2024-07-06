@@ -10,9 +10,9 @@ import type { Display } from '../types/theme.types'
 import { itemToImageUrl, onItemImageError } from '../utils/item.utils'
 import type { Item } from '../utils/parsers.utils'
 
-// eslint-disable-next-line max-statements
+// eslint-disable-next-line max-statements, @typescript-eslint/prefer-readonly-parameter-types
 export function AppItemListEntry ({ display, item }: Readonly<{ display: Display; item: Item }>) {
-  const title = `${item.name}${item.brand ? ` - ${item.brand.trim()}` : ''}` // eslint-disable-line sonarjs/no-nested-template-literals
+  const title = `${item.name}${item.brand ? ` - ${item.brand.trim()}` : ''}`
   const titleStyle = useMemo(() => ({ fontSize: 18, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }), [])
   const drawer = `${item.box.split(' ')[0] ?? ''}${item.drawer}`.trim()
   const subtitle = `${item.category}${drawer.length > 0 ? ' - ' : ''}${drawer}`

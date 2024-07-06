@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/prefer-readonly-parameter-types */
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 import Button from '@mui/material/Button'
 import { signal, useSignalEffect } from '@preact/signals'
@@ -7,7 +8,7 @@ import { dom, objectSum, off, on } from 'shuutils'
 import { AppForm } from '../components/app-form'
 import { AppPageCard } from '../components/app-page-card'
 import { defaultImage, delays } from '../constants'
-import { areItemsEquivalent, formToItem, itemToForm, onItemImageError, pushItem, type itemForm } from '../utils/item.utils'
+import { areItemsEquivalent, formToItem, type itemForm, itemToForm, onItemImageError, pushItem } from '../utils/item.utils'
 import { logger } from '../utils/logger.utils'
 import type { Item } from '../utils/parsers.utils'
 import { state } from '../utils/state.utils'
@@ -15,7 +16,6 @@ import { getSuggestions } from '../utils/suggestions.utils'
 import { normalizePhotoUrl } from '../utils/url.utils'
 
 function onImageError (image: HTMLImageElement) {
-  // eslint-disable-next-line functional/immutable-data
   state.message = { content: 'error loading image, setting default image', delay: delays.seconds, type: 'error' }
   image.setAttribute('src', defaultImage)
 }
@@ -34,7 +34,7 @@ function getSuggestionId (item?: Item) {
   return ''
 }
 
-// eslint-disable-next-line max-statements, complexity
+// eslint-disable-next-line max-statements, complexity, max-lines-per-function
 export function PageItemAddEdit ({ id = '', isEdit = false }: Readonly<{ id?: string; isEdit?: boolean }>) {
   logger.debug('PageItemAddEdit', { id, isEdit })
   const initialItem = state.items.find(one => one.id === id)
@@ -61,7 +61,7 @@ export function PageItemAddEdit ({ id = '', isEdit = false }: Readonly<{ id?: st
   }, [isEdit])
 
   const onSubmitSuccess = useCallback((item: Item) => {
-    if (!isEdit) { route(`/item/print/${item.id}`); return } // eslint-disable-next-line functional/immutable-data
+    if (!isEdit) { route(`/item/print/${item.id}`); return }
     state.message = { content: 'item updated successfully', delay: delays.second, type: 'success' }
     route(`/item/details/${item.id}`)
   }, [isEdit])
@@ -72,7 +72,6 @@ export function PageItemAddEdit ({ id = '', isEdit = false }: Readonly<{ id?: st
     if (!isEdit && checkExistingSetError(item).isDuplicate) return
     const result = await pushItem(item)
     if (result.success) { onSubmitSuccess({ ...item, id: result.output.id }); return }
-    // eslint-disable-next-line functional/immutable-data
     state.message = { content: `error ${isEdit ? 'updating' : 'adding'} item`, delay: delays.seconds, type: 'error' }
     logger.error('onSubmit failed', result)
   }, [checkExistingSetError, isEdit, lastForm, onSubmitSuccess, itemId])
@@ -81,7 +80,7 @@ export function PageItemAddEdit ({ id = '', isEdit = false }: Readonly<{ id?: st
     const field = form.fields.photo
     if (field.value === '' || !field.isValid) return
     const finalUrl = normalizePhotoUrl(field.value)
-    form.fields.photo.value = finalUrl // eslint-disable-line functional/immutable-data, no-param-reassign
+    form.fields.photo.value = finalUrl
     logger.debug('setting photo to', finalUrl, photo.value.current)
     photo.value.current?.setAttribute('src', finalUrl)
   }, [photo.value])
@@ -113,7 +112,7 @@ export function PageItemAddEdit ({ id = '', isEdit = false }: Readonly<{ id?: st
   useSignalEffect(useCallback(() => {
     if (photo.value.current === null) throw new Error('photo not found')
     const handler = on('error', () => { onImageError(photo.value.current ?? dom('img')) }, photo.value.current)
-    return () => off(handler)
+    return () => { off(handler) }
   }, [photo.value]))
 
   if (isEdit && initialItem === undefined) return <>Cannot edit, item with id &quot;{id}&quot; not found ;(</>

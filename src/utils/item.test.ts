@@ -1,12 +1,9 @@
-/* eslint-disable functional/immutable-data */
-/* eslint-disable functional/no-let */
+/* eslint-disable @typescript-eslint/prefer-readonly-parameter-types */
 import { clone, sleep } from 'shuutils'
 import { expect, it } from 'vitest'
-import { addOrUpdateItems, areItemsEquivalent, deleteItem, formToItem, getCommonListsFromItems, getOneItem, itemForm, itemToForm, itemToImageUrl, itemToLocation, pushItem } from './item.utils'
+import { addOrUpdateItems, areItemsEquivalent, deleteItem, formToItem, getCommonListsFromItems, itemForm, itemToForm, itemToImageUrl, itemToLocation, pushItem } from './item.utils'
 import { mockItem, mockRecord, mockState } from './mock.utils'
 import type { ItemPhoto, ItemStatus } from './parsers.utils'
-
-const recordA = mockRecord(undefined, { 'reference': '', 'updated-on': '' })
 
 // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
 const itemA = mockItem({ id: 'itemA', status: 'new surprise status' as ItemStatus })
@@ -26,26 +23,6 @@ it('mockItem A', () => {
   expect(item.photo).toHaveLength(1)
 })
 
-it('getOneItem A success result', async () => {
-  let urlCalled = ''
-  let nbCalls = 0
-  const item = await getOneItem('rec123', async (url) => {
-    urlCalled = url
-    nbCalls += 1
-    await sleep(1)
-    return recordA
-  })
-  expect(item).toMatchSnapshot()
-  expect(urlCalled).toMatchInlineSnapshot('"https://api.airtable.com/v0///rec123"') // `${airtableBaseUrl}/${base}/${table}/${id}` but base and table are empty
-  expect(nbCalls).toBe(1)
-})
-
-it('getOneItem B error result', () => {
-  void expect(async () => await getOneItem('rec123', async () => {
-    await sleep(1)
-    return { id: 'malformed-item' }
-  })).rejects.toThrowErrorMatchingInlineSnapshot('[Error: failed to fetch item, issue(s) : Invalid type: Expected string but received undefined, Invalid type: Expected Object but received undefined]')
-})
 
 it('addOrUpdateItems A update existing item', () => {
   const itemsInput = [itemA, itemB]
@@ -182,12 +159,12 @@ it('deleteItem A delete an item in state', async () => {
 })
 
 it('deleteItem B delete an item not in state', () => {
-  // eslint-disable-next-line no-underscore-dangle, @typescript-eslint/naming-convention, unused-imports/no-unused-vars, unicorn/consistent-function-scoping
+  // eslint-disable-next-line jsdoc/require-jsdoc, unicorn/consistent-function-scoping, @typescript-eslint/naming-convention, @typescript-eslint/no-unused-vars
   async function deleteMethodMock (_url: string) {
     await sleep(1) // eslint-disable-next-line @typescript-eslint/naming-convention
     return { deleted: true, id: itemB.id }
   }
-  void expect(async () => await deleteItem(itemB.id, stateA, deleteMethodMock))
+  void expect(async () => deleteItem(itemB.id, stateA, deleteMethodMock))
     .rejects.toThrowErrorMatchingInlineSnapshot('[Error: item not found in state]')
 })
 

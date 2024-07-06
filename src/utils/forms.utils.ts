@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/prefer-readonly-parameter-types */
+/* eslint-disable jsdoc/require-jsdoc */
 import { objectEqual } from 'shuutils'
 
 type FormFieldType = 'checkbox' | 'select' | 'text'
@@ -13,13 +15,13 @@ type FormFieldBase = {
   regex: RegExp
   unit: string
 }
-type FormFieldText = FormFieldBase & { type: 'text'; value: string }
-type FormFieldSelect = FormFieldBase & { options: FormFieldOptions; type: 'select'; value: string }
-type FormFieldCheckbox = FormFieldBase & { type: 'checkbox'; value: boolean } // eslint-disable-line @typescript-eslint/naming-convention
+type FormFieldText = { type: 'text'; value: string } & FormFieldBase
+type FormFieldSelect = { options: FormFieldOptions; type: 'select'; value: string } & FormFieldBase
+type FormFieldCheckbox = { type: 'checkbox'; value: boolean } & FormFieldBase // eslint-disable-line @typescript-eslint/naming-convention
 type FormField<Type extends FormFieldType> = Type extends 'text' ? FormFieldText : Type extends 'select' ? FormFieldSelect : FormFieldCheckbox
 
 function fieldRegex (regex?: RegExp, minLength = 3, maxLength = 100) {
-  return regex ?? new RegExp(`^[-,\\d\\p{L}\\s/&]{${minLength},${maxLength}}$`, 'u') // eslint-disable-line security/detect-non-literal-regexp
+  return regex ?? new RegExp(`^[-,\\d\\p{L}\\s/&]{${minLength},${maxLength}}$`, 'u')
 }
 
 export type Form = {
@@ -31,7 +33,7 @@ export type Form = {
 }
 
 export function validateForm<FormType extends Form> (form: FormType) {
-  let errorMessage = '' // eslint-disable-line functional/no-let
+  let errorMessage = ''
   const updatedFields = Object.entries(form.fields).reduce((accumulator, [field, { isRequired, label, regex, value }]) => { // eslint-disable-line unicorn/no-array-reduce
     const isValid = !isRequired && (typeof value === 'string' && value === '') || typeof value === 'string' && regex.test(value) || typeof value === 'boolean'
     if (!isValid) errorMessage = value === '' ? `${label} is required` : `${label} is invalid, "${String(value)}" should match ${String(regex)}`
@@ -44,7 +46,8 @@ export function validateForm<FormType extends Form> (form: FormType) {
   return { hasChanged, updatedForm }
 }
 
-export function createTextField (parameters: Partial<Pick<FormFieldText, 'columns' | 'isRequired' | 'isValid' | 'isVisible' | 'link' | 'regex' | 'unit' | 'value'>> & Pick<FormFieldText, 'label'> & { maxLength?: number; minLength?: number }) {
+// eslint-disable-next-line complexity
+export function createTextField (parameters: { maxLength?: number; minLength?: number } & Partial<Pick<FormFieldText, 'columns' | 'isRequired' | 'isValid' | 'isVisible' | 'link' | 'regex' | 'unit' | 'value'>> & Pick<FormFieldText, 'label'>) {
   const { columns = 1, isRequired = false, isValid = false, isVisible = true, label = '', link = '', maxLength = 100, minLength = 3, regex, unit = '', value = '' } = parameters
   return { columns, isRequired, isValid, isVisible, label, link, regex: fieldRegex(regex, minLength, maxLength), type: 'text', unit, value } satisfies FormFieldText
 }

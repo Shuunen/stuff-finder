@@ -1,9 +1,10 @@
-/* eslint-disable functional/immutable-data */
+/* eslint-disable @typescript-eslint/prefer-readonly-parameter-types */
+/* eslint-disable jsdoc/require-jsdoc */
 import { clone, objectSum } from 'shuutils'
-import { defaultCommonLists, defaultImage, delays, emptyItem, type CommonLists } from '../constants'
+import { type CommonLists, defaultCommonLists, defaultImage, delays, emptyItem } from '../constants'
 import { airtableMaxRequestPerSecond, deleteItemRemotely, getOneItem, pushItemRemotely } from './airtable.utils'
 import { del, patch, post } from './browser.utils'
-import { createCheckboxField, createSelectField, createTextField, type Form } from './forms.utils'
+import { type Form, createCheckboxField, createSelectField, createTextField } from './forms.utils'
 import { logger } from './logger.utils'
 import { sortListsEntries } from './objects.utils'
 import type { Item, ItemPhoto } from './parsers.utils'
@@ -37,7 +38,7 @@ async function updateItemImage (id?: string, image?: HTMLImageElement) {
   if (image === undefined) throw new Error('no image found')
   logger.debug('image url for item', id, 'has been deprecated, fetching fresh data from server...')
   const item = await getOneItem(id)
-  // eslint-disable-next-line no-param-reassign
+  // eslint-disable-next-line require-atomic-updates
   image.src = itemToImageUrl(item)
   image.classList.remove('animate-pulse')
   state.items = addOrUpdateItems(state.items, item)
@@ -61,9 +62,9 @@ function optionsFor (type: keyof CommonLists) {
 function deleteItemLocally (id: Item['id'], currentState = state) {
   const items = clone(currentState.items)
   const index = items.findIndex(item => item.id === id)
-  if (index === -1) throw new Error('item not found in state') // eslint-disable-line @typescript-eslint/no-magic-numbers
+  if (index === -1) throw new Error('item not found in state')
   items.splice(index, 1)
-  currentState.items = items // eslint-disable-line no-param-reassign
+  currentState.items = items
 }
 
 function pushItemLocally (item: Item, currentState = state) {
@@ -71,13 +72,13 @@ function pushItemLocally (item: Item, currentState = state) {
   const index = items.findIndex(one => one.id === item.id)
   if (index >= 0) items[index] = item // update existing item
   else items.push(item) // new item with id
-  // eslint-disable-next-line no-param-reassign
+
   currentState.items = items
 }
 
 function getCoreData (item: Item) {
   const { barcode, box, brand, category, details, drawer, location, name, photo, price, 'ref-printed': isPrinted, reference, status } = item
-  return { barcode, box, brand, category, details, drawer, location, name, 'photo': photo?.[0]?.url ?? '', price, 'ref-printed': isPrinted, reference, status } satisfies Omit<Item, 'id' | 'photo' | 'updated-on'> & { photo: string }
+  return { barcode, box, brand, category, details, drawer, location, name, 'photo': photo?.[0]?.url ?? '', price, 'ref-printed': isPrinted, reference, status } satisfies { photo: string } & Omit<Item, 'id' | 'photo' | 'updated-on'>
 }
 
 // eslint-disable-next-line @typescript-eslint/max-params
@@ -104,7 +105,7 @@ export function getCommonListsFromItems (items: Item[]) {
   return sortListsEntries(list)
 }
 
-/* c8 ignore next 11 */
+/* c8 ignore next 12 */
 export async function onItemImageError (event: Event) {
   const image = event.target as HTMLImageElement // eslint-disable-line @typescript-eslint/consistent-type-assertions
   image.src = itemToImageUrl()
@@ -112,6 +113,7 @@ export async function onItemImageError (event: Event) {
   // load in parallel
   if (document.querySelectorAll('img[data-id]').length <= airtableMaxRequestPerSecond) { await updateItemImage(image.dataset.id, image); return }
   // load in series with one second delay between each
+  // eslint-disable-next-line @typescript-eslint/no-misused-promises
   setTimeout(async () => {
     await updateItemImage(image.dataset.id, image)// @ts-expect-error t exists
   }, event.t * delays.second)
@@ -134,7 +136,7 @@ export const itemForm = {
     price: createTextField({ columns: 3, label: 'Price', regex: /^\d{1,5}$/u, unit: '€' }),
     // line
     location: createSelectField({ columns: 3, label: 'Location', options: optionsFor('locations') }),
-    box: createSelectField({ columns: 4, label: 'Box', options: optionsFor('boxes'), regex: /^[\p{L}\s&()]{3,100}$/u }), // eslint-disable-line regexp/unicode-property
+    box: createSelectField({ columns: 4, label: 'Box', options: optionsFor('boxes'), regex: /^[\p{L}\s&()]{3,100}$/u }),
     drawer: createSelectField({ columns: 3, label: 'Drawer', options: optionsFor('drawers'), regex: /\d/u }),
     isPrinted: createCheckboxField({ label: 'Printed', isVisible: false }),
   }, /* eslint-enable perfectionist/sort-objects */
@@ -202,5 +204,4 @@ export function areItemsEquivalent (itemA: Item, itemB: Item) {
   return objectSum(getCoreData(itemA)) === objectSum(getCoreData(itemB))
 }
 
-export { addOrUpdateItems, getOneItem, itemToImageUrl }
-
+export { addOrUpdateItems, itemToImageUrl }

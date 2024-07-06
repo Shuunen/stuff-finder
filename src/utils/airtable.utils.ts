@@ -1,9 +1,10 @@
-/* eslint-disable functional/immutable-data */
+/* eslint-disable @typescript-eslint/prefer-readonly-parameter-types */
+/* eslint-disable jsdoc/require-jsdoc */
 import { safeParse } from 'valibot'
 import { emptyItem } from '../constants'
 import { del, get, patch, post } from './browser.utils'
 import { logger } from './logger.utils'
-import { airtableDeleteResponseSchema, airtableMultipleResponseSchema, airtableSingleResponseSchema, type AirtableSingleRecordResponse, type Item, type ItemField, type ItemPhoto } from './parsers.utils'
+import { type AirtableSingleRecordResponse, type Item, type ItemField, type ItemPhoto, airtableDeleteResponseSchema, airtableMultipleResponseSchema, airtableSingleResponseSchema } from './parsers.utils'
 import { state } from './state.utils'
 
 const airtableBaseUrl = 'https://api.airtable.com/v0'
@@ -11,7 +12,7 @@ const airtableBaseUrl = 'https://api.airtable.com/v0'
 export const airtableMaxRequestPerSecond = 5
 
 // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: <explanation>
-export function getItemFieldsToPush (data: Item, currentState = state) { // eslint-disable-line max-statements, complexity, sonarjs/cognitive-complexity
+export function getItemFieldsToPush (data: Item, currentState = state) { // eslint-disable-line max-statements, complexity
   const fields: Partial<AirtableSingleRecordResponse['fields']> = {}
   if (data.barcode.length > 0) fields.barcode = data.barcode
   if (data.box.length > 0) fields.box = data.box
@@ -24,7 +25,6 @@ export function getItemFieldsToPush (data: Item, currentState = state) { // esli
   /* c8 ignore next 2 */
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
   if (data.photo !== undefined && data.photo.length > 0 && fields.photo?.[0]?.url !== data.photo[0]?.url) fields.photo = [{ url: data.photo[0]?.url } as unknown as ItemPhoto] // we don't need the whole object
-  // eslint-disable-next-line @typescript-eslint/no-magic-numbers
   if (data.price !== undefined && data.price > -1) fields.price = data.price
   if (data.reference.length > 0) fields.reference = data.reference
   if (data.status.length > 0) fields.status = data.status
@@ -36,7 +36,7 @@ export function getItemFieldsToPush (data: Item, currentState = state) { // esli
     const dataFields = Object.keys(fields) as ItemField[]
     for (const field of dataFields) {
       /* c8 ignore next 2 */
-      if (field === 'id') continue // eslint-disable-line no-continue
+      if (field === 'id') continue
       const hasSamePhoto = (field === 'photo' && existing.photo && existing.photo[0]?.url === fields.photo?.[0]?.url) ?? false
       const hasSameValue = existing[field] === fields[field]
       // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
@@ -61,7 +61,7 @@ export function isLocalAndRemoteSync (records: AirtableSingleRecordResponse[], c
   const localFirst = currentState.items.at(0)
   const isFirst = localFirst === undefined ? false : remoteFirst.id === localFirst.id && remoteFirst['updated-on'] === localFirst['updated-on']
   if (isFirst) return true
-  const localLast = currentState.items.at(-1) // eslint-disable-line @typescript-eslint/no-magic-numbers
+  const localLast = currentState.items.at(-1)
   return localLast === undefined ? false : remoteFirst.id === localLast.id && remoteFirst['updated-on'] === localLast['updated-on']
 }
 

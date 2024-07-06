@@ -153,15 +153,3 @@ exports[`addSuggestionsFromDeyes A with working get 1`] = `
   "updated-on": [],
 }
 `;
-
-exports[`addSuggestionsFromWrap B with wrapApiKey 1`] = `
-{
-  "errTypes": [
-    "noAPIKey",
-  ],
-  "messages": [
-    "A 32-character API key is required; include it as wrapAPIKey=... in the query string or POST body or generate it within the "My account" section of the website",
-  ],
-  "success": false,
-}
-`;

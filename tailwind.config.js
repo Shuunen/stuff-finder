@@ -1,4 +1,3 @@
-/* eslint-disable import/no-anonymous-default-export */
 /** @type {import('tailwindcss').Config} */
 // biome-ignore lint/style/noDefaultExport: <explanation>
 export default {

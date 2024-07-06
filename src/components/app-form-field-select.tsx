@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/prefer-readonly-parameter-types */
 import Autocomplete, { type AutocompleteRenderInputParams } from '@mui/material/Autocomplete'
 import TextField from '@mui/material/TextField'
 import { useCallback } from 'preact/hooks'
-import { optionsToLabels, type Form, type FormFieldSelect } from '../utils/forms.utils'
+import { type Form, type FormFieldSelect, optionsToLabels } from '../utils/forms.utils'
 
 type Properties = Readonly<{
   field: FormFieldSelect
@@ -17,7 +18,7 @@ export function AppFormFieldSelect ({ field, form, id, updateField }: Properties
   // eslint-disable-next-line arrow-body-style
   const renderInput = useCallback((parameters: AutocompleteRenderInputParams) => {
     // @ts-expect-error typing issue
-    return <TextField // eslint-disable-next-line react/jsx-props-no-spreading
+    return <TextField
       {...parameters}
       error={Boolean(form.isTouched) && !field.isValid}
       label={field.label}

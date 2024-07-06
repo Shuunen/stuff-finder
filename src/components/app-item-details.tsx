@@ -9,13 +9,13 @@ import { state } from '../utils/state.utils'
 import { AppDeleteRessource } from './app-delete-ressource'
 import { AppItemDetailsChip } from './app-item-details-chip'
 
+// eslint-disable-next-line complexity, @typescript-eslint/prefer-readonly-parameter-types
 export function AppItemDetails ({ item }: Readonly<{ item: Item }>) {
 
   const onDelete = useCallback(async () => {
     logger.debug('deleting item', item)
     const result = await deleteItem(item.id)
     const isOk = result.success
-    // eslint-disable-next-line functional/immutable-data
     state.message = { content: isOk ? 'Item deleted' : 'Item deletion failed', delay: isOk ? delays.second : delays.seconds, type: isOk ? 'success' : 'error' }
     if (isOk) window.history.back()
   }, [item])
@@ -34,7 +34,7 @@ export function AppItemDetails ({ item }: Readonly<{ item: Item }>) {
         <h1>{item.name} {item.brand}</h1>
         <h2>{item.category}</h2>
         {Boolean(item.details) && <p className="first-letter:uppercase">{item.details}</p>}
-        <div className="my-2 flex gap-3">{/* eslint-disable-next-line react/forbid-component-props */}
+        <div className="my-2 flex gap-3">
           <LocationOnIcon className="text-purple-600" /><div className="font-medium">{itemLocation || 'Unknown'}</div>
         </div>
         <div className="flex flex-wrap justify-start gap-3">

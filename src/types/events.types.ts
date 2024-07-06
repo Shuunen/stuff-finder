@@ -1,4 +1,3 @@
-/* eslint-disable sonar/redundant-type-aliases */
 import type { AppStatus } from './status.types'
 
 type SearchOrigin = 'default' | 'scan' | 'search-results' | 'speech' | 'type' | 'url'

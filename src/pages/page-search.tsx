@@ -15,8 +15,10 @@ const maxNameLength = 20
 function search (input: string) {
   logger.debug('search, input', { input })
   const fuse = new Fuse(state.items, fuseOptions)
+  // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
   const result = state.items.find(item => item.reference === input || item.barcode === input)
   if (result !== undefined) { route(`/item/details/${result.id}/single`); return { header: '', results: [] } }
+  // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
   const results = fuse.search(sanitize(input)).map(item => item.item)
   const header = `${results.length} results found for “${input}”`
   return { header, results }

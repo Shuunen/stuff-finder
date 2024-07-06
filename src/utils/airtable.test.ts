@@ -1,7 +1,6 @@
-/* eslint-disable functional/no-let */
 import { sleep } from 'shuutils'
 import { expect, it } from 'vitest'
-import { airtableRecordToItem, getAllItems, getItemFieldsToPush, isLocalAndRemoteSync } from './airtable.utils'
+import { airtableRecordToItem, getAllItems, getItemFieldsToPush, getOneItem, isLocalAndRemoteSync } from './airtable.utils'
 import { mockItem, mockRecord, mockState } from './mock.utils'
 import type { Item, ItemPhoto } from './parsers.utils'
 
@@ -73,7 +72,7 @@ it('getAllItems B with offset', async () => {
 })
 
 it('getAllItems C error result', () => {
-  void expect(async () => await getAllItems(undefined, async () => {
+  void expect(async () => getAllItems(undefined, async () => {
     await sleep(1)
     return { records: [{}] }
   })).rejects.toThrowErrorMatchingInlineSnapshot('[Error: failed to fetch item, issue(s) : Invalid type: Expected string but received undefined, Invalid type: Expected Object but received undefined, Invalid type: Expected string but received undefined]')
@@ -115,4 +114,27 @@ it('getItemFieldsToPush D item not found locally', () => {
   const item = mockItem({ id: 'not found' })
   const state = mockState({ items: [mockItem({ id: '1' })] })
   expect(() => getItemFieldsToPush(item, state)).toThrowErrorMatchingInlineSnapshot('[Error: existing item not found locally]')
+})
+
+
+it('getOneItem A success result', async () => {
+  let urlCalled = ''
+  let nbCalls = 0
+  const recordA = mockRecord(undefined, { 'reference': '', 'updated-on': '' })
+  const item = await getOneItem('rec123', async (url) => {
+    urlCalled = url
+    nbCalls += 1
+    await sleep(1)
+    return recordA
+  })
+  expect(item).toMatchSnapshot()
+  expect(urlCalled).toMatchInlineSnapshot('"https://api.airtable.com/v0///rec123"') // `${airtableBaseUrl}/${base}/${table}/${id}` but base and table are empty
+  expect(nbCalls).toBe(1)
+})
+
+it('getOneItem B error result', () => {
+  void expect(async () => getOneItem('rec123', async () => {
+    await sleep(1)
+    return { id: 'malformed-item' }
+  })).rejects.toThrowErrorMatchingInlineSnapshot('[Error: failed to fetch item, issue(s) : Invalid type: Expected string but received undefined, Invalid type: Expected Object but received undefined]')
 })

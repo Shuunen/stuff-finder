@@ -96,9 +96,16 @@ export const delays = {
 // https://fusejs.io/
 export const fuseOptions: IFuseOptions<Item> = {
   distance: 200, // see the tip at https://fusejs.io/concepts/scoring-theory.html#scoring-theory
-  getFn: (object: Item, path: string[] | string) => {
+  /**
+   * Function to get... ?
+   * @param object the item
+   * @param path the path
+   * @returns a value ^^'
+   */
+  // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
+  getFn: (object: Item, path: string | string[]) => {
     const value = Fuse.config.getFn(object, path)
-    if (Array.isArray(value)) return value.map(sanitize)
+    if (Array.isArray(value)) return value.map((element: string) => sanitize(element))
     if (typeof value === 'string') return [sanitize(value)]
     return value
   },
@@ -121,6 +128,9 @@ export const fuseOptions: IFuseOptions<Item> = {
   threshold: 0.35, // 0 is perfect match
 }
 
+/**
+ *
+ */
 export function voidFunction () { /* empty */ }
 
 export const defaultItems: Item[] = []

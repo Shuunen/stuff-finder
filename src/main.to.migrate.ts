@@ -1,6 +1,4 @@
-/* eslint-disable functional/no-let */
-/* eslint-disable functional/immutable-data */
-/* eslint-disable functional/no-this-expressions */
+/* eslint-disable jsdoc/require-jsdoc */
 import type { AppCredentials } from './constants'
 import { airtableRecordToItem, getAllItems, isLocalAndRemoteSync } from './utils/airtable.utils'
 import { getCommonListsFromItems } from './utils/item.utils'
@@ -8,7 +6,7 @@ import { logger } from './utils/logger.utils'
 import { state } from './utils/state.utils'
 import { coolAscii } from './utils/strings.utils'
 
-// eslint-disable-next-line no-restricted-syntax, functional/no-classes
+// eslint-disable-next-line no-restricted-syntax
 class App {
 
   public constructor () {
@@ -22,24 +20,10 @@ class App {
     void this.onSettingsSave(state.credentials)
   }
 
+  // eslint-disable-next-line @typescript-eslint/class-methods-use-this
   private isLoading (isActive: boolean, reason: string) {
     logger.info('isLoading active ?', isActive, 'reason ?', reason)
     state.status = isActive ? 'loading' : 'ready'
-  }
-
-  private settingsActionRequired (isActionRequired: boolean, errorMessage = '') {
-    logger.info('settingsActionRequired', { errorMessage, isActionRequired })
-    state.status = isActionRequired ? 'settings-required' : 'ready'
-  }
-
-  private async onSettingsSave (settings: AppCredentials) {
-    state.credentials = settings
-    const areItemsLoaded = await this.loadItems()
-    if (!areItemsLoaded) {
-      this.settingsActionRequired(true, 'failed to use api settings')
-      return
-    }
-    this.settingsActionRequired(false)
   }
 
   // eslint-disable-next-line max-statements
@@ -62,10 +46,28 @@ class App {
       offset = result.offset // eslint-disable-line unicorn/consistent-destructuring
       records = [...records, ...result.records] // eslint-disable-line unicorn/consistent-destructuring
     }
-    state.items = records.map(airtableRecordToItem)
+    // eslint-disable-next-line require-atomic-updates, @typescript-eslint/prefer-readonly-parameter-types
+    state.items = records.map((element) => airtableRecordToItem(element))
     state.lists = getCommonListsFromItems(state.items)
     logger.showLog(`${state.items.length} item(s) freshly loaded ${coolAscii()}`)
     return true
+  }
+
+  // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
+  private async onSettingsSave (settings: AppCredentials) {
+    state.credentials = settings
+    const areItemsLoaded = await this.loadItems()
+    if (!areItemsLoaded) {
+      this.settingsActionRequired(true, 'failed to use api settings')
+      return
+    }
+    this.settingsActionRequired(false)
+  }
+
+  // eslint-disable-next-line @typescript-eslint/class-methods-use-this
+  private settingsActionRequired (isActionRequired: boolean, errorMessage = '') {
+    logger.info('settingsActionRequired', { errorMessage, isActionRequired })
+    state.status = isActionRequired ? 'settings-required' : 'ready'
   }
 }
 

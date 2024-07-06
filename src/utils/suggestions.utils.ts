@@ -1,5 +1,5 @@
-/* eslint-disable functional/immutable-data */
-/* eslint-disable functional/no-let */
+/* eslint-disable @typescript-eslint/prefer-readonly-parameter-types */
+/* eslint-disable jsdoc/require-jsdoc */
 /* eslint-disable @typescript-eslint/naming-convention */
 import { capitalize, clone } from 'shuutils'
 import { emptyItemSuggestions } from '../constants'
@@ -44,8 +44,8 @@ export async function addSuggestionsFromDeyes (suggestions: ItemSuggestions, cod
   suggestions.reference.push(data.gtin13)
 }
 
-export async function addSuggestionsFromAngbo (suggestions: ItemSuggestions, str: string, getMethod = get) {
-  const { data, success } = await addSuggestionsFromWrap<WrapApiAngboResponse>(`angbo/search/0.0.3?id=${str}`, getMethod)
+export async function addSuggestionsFromAngbo (suggestions: ItemSuggestions, string_: string, getMethod = get) {
+  const { data, success } = await addSuggestionsFromWrap<WrapApiAngboResponse>(`angbo/search/0.0.3?id=${string_}`, getMethod)
   if (!success) return
   logger.debug('angbo data', data)
   suggestions.name.push(data.title)
@@ -54,8 +54,8 @@ export async function addSuggestionsFromAngbo (suggestions: ItemSuggestions, str
   suggestions.reference.push(data.asin)
 }
 
-export async function addSuggestionsFromAliEx (suggestions: ItemSuggestions, str: string, getMethod = get) {
-  const { data, success } = await addSuggestionsFromWrap<WrapApiAliExResponse>(`aliex/search/0.0.1?str=${str}`, getMethod)
+export async function addSuggestionsFromAliEx (suggestions: ItemSuggestions, string_: string, getMethod = get) {
+  const { data, success } = await addSuggestionsFromWrap<WrapApiAliExResponse>(`aliex/search/0.0.1?str=${string_}`, getMethod)
   if (!success) return
   logger.debug('AliEx data', data)
   for (const item of data.items) {
@@ -66,8 +66,8 @@ export async function addSuggestionsFromAliEx (suggestions: ItemSuggestions, str
   }
 }
 
-export async function addSuggestionsFromCampo (suggestions: ItemSuggestions, str: string, getMethod = get) {
-  const { data, success } = await addSuggestionsFromWrap<WrapApiCampoResponse>(`alcampo/search/0.0.3?str=${str}`, getMethod)
+export async function addSuggestionsFromCampo (suggestions: ItemSuggestions, string_: string, getMethod = get) {
+  const { data, success } = await addSuggestionsFromWrap<WrapApiCampoResponse>(`alcampo/search/0.0.3?str=${string_}`, getMethod)
   if (!success) return
   logger.debug('campo data', data)
   for (const item of data.items) {
@@ -97,12 +97,12 @@ export function cleanSuggestions (suggestionsInput: Record<string, string[] | un
   return suggestions as Record<string, string[]>
 }
 
-export async function getSuggestions (str: string) {
-  const asin = getAsin(str)
+export async function getSuggestions (string_: string) {
+  const asin = getAsin(string_)
   const suggestionsBase = clone(emptyItemSuggestions)
   if (asin !== undefined) await addSuggestionsFromAngbo(suggestionsBase, asin)
-  if (suggestionsBase.name.length === 0) await addSuggestionsFromDeyes(suggestionsBase, str)
-  if (suggestionsBase.name.length === 0) await addSuggestionsFromAliEx(suggestionsBase, str)
-  await addSuggestionsFromCampo(suggestionsBase, str)
+  if (suggestionsBase.name.length === 0) await addSuggestionsFromDeyes(suggestionsBase, string_)
+  if (suggestionsBase.name.length === 0) await addSuggestionsFromAliEx(suggestionsBase, string_)
+  await addSuggestionsFromCampo(suggestionsBase, string_)
   return cleanSuggestions(suggestionsBase)
 }

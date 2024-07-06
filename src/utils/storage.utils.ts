@@ -1,5 +1,6 @@
-import { storage } from 'shuutils' // eslint-disable-line no-restricted-imports
+import { storage } from 'shuutils'
 
-storage.prefix = '@shuunen/stuff-finder_' // eslint-disable-line functional/immutable-data
+storage.prefix = '@shuunen/stuff-finder_'
 
+// eslint-disable-next-line unicorn/prefer-export-from
 export { storage }

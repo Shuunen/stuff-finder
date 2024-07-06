@@ -1,6 +1,6 @@
 import { safeParse } from 'valibot'
 import { expect, it } from 'vitest'
-import { airtableSingleResponseSchema, type AirtableSingleRecordResponse } from './parsers.utils'
+import { type AirtableSingleRecordResponse, airtableSingleResponseSchema } from './parsers.utils'
 
 const validSingleResponse = {
   createdTime: '2021-01-01T00:00:00.000Z',

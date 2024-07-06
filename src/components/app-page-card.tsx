@@ -4,7 +4,7 @@ import { setPageTitle } from '../utils/browser.utils'
 import { AppButtonBack } from './app-button-back'
 import { AppPageBottom } from './app-page-bottom'
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
+// eslint-disable-next-line @typescript-eslint/naming-convention, @typescript-eslint/prefer-readonly-parameter-types
 export function AppPageCard ({ cardTitle, children, icon: Icon, nextLabel = 'Home', nextUrl = '/', pageCode, pageTitle, stepsBack = 1 }: Readonly<{ cardTitle: string; children: VNode; icon: MuiIcon; nextLabel?: string; nextUrl?: string; pageCode: string; pageTitle: string; stepsBack?: number }>) {
   setPageTitle(pageTitle)
   return (

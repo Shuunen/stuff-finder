@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/prefer-readonly-parameter-types */
 import AddIcon from '@mui/icons-material/Add'
 import SpeedDialIcon from '@mui/icons-material/EjectOutlined'
 import HomeIcon from '@mui/icons-material/Home'
@@ -38,7 +39,7 @@ export function AppSpeedDial ({ isLoading, isSettingsRequired }: Readonly<{ isLo
         <div className="absolute bottom-0 right-0 z-10 size-full bg-black/30" data-component="speed-dial-backdrop" onClick={toggleOpen} />
       </Fade>
       <div className="fixed bottom-10 right-10 z-20 print:hidden" data-component="speed-dial">
-        <SpeedDial ariaLabel='Actions' FabProps={options} icon={icon} onClick={toggleOpen} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} open={isOpen}>
+        <SpeedDial FabProps={options} ariaLabel='Actions' icon={icon} onClick={toggleOpen} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} open={isOpen}>
           {availableActions.map((action) => <SpeedDialAction icon={action.icon} key={action.name} onClick={action.handleClick} tooltipTitle={action.name} />)}
         </SpeedDial>
       </div>

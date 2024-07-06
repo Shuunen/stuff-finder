@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/prefer-readonly-parameter-types */
 import Button from '@mui/material/Button'
 import { signal, useSignalEffect } from '@preact/signals'
 import { route } from 'preact-router'
@@ -22,7 +23,8 @@ function onSearch (event: KeyboardEvent) {
   route(`/search/${value}`)
 }
 
-export function PageHome ({ ...properties }: Readonly<{ [key: string]: unknown }>) {
+// eslint-disable-next-line max-lines-per-function
+export function PageHome ({ ...properties }: Readonly<Record<string, unknown>>) {
   logger.debug('PageHome', { properties })
   setPageTitle('Home')
 
@@ -48,10 +50,8 @@ export function PageHome ({ ...properties }: Readonly<{ [key: string]: unknown }
     }
   }, [search.value, isUsable]))
 
-  // eslint-disable-next-line functional/immutable-data
   const onSpeech = useCallback(() => { state.message = { content: 'Speech not available currently', delay: delays.second, type: 'warning' } }, [])
 
-  /* eslint-disable react/no-unknown-property */
   return (
     <div data-page="home">
       {/* new good code */}
@@ -126,4 +126,3 @@ export function PageHome ({ ...properties }: Readonly<{ [key: string]: unknown }
     </div>
   )
 }
-/* eslint-enable react/no-unknown-property */

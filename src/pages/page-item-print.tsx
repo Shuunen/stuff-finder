@@ -9,7 +9,7 @@ import { useCallback, useMemo, useState } from 'preact/hooks'
 import { AppBarcode } from '../components/app-barcode'
 import { AppPageCard } from '../components/app-page-card'
 import { delays } from '../constants'
-import { printSizes, type PrintSize } from '../types/print.types'
+import { type PrintSize, printSizes } from '../types/print.types'
 import { clearElementsForPrint } from '../utils/browser.utils'
 import { itemToImageUrl, onItemImageError, pushItem } from '../utils/item.utils'
 import { logger } from '../utils/logger.utils'
@@ -33,10 +33,10 @@ import { state } from '../utils/state.utils'
 // wc.setAttribute('modulesize', '2')
 // }
 
-// eslint-disable-next-line max-statements
-export function PageItemPrint ({ ...properties }: Readonly<{ [key: string]: unknown }>) {
-
+// eslint-disable-next-line max-statements, max-lines-per-function
+export function PageItemPrint ({ ...properties }: Readonly<Record<string, unknown>>) {
   if (typeof properties.id !== 'string') throw new Error('An id in the url is required')
+  // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
   const item = state.items.find(one => one.id === properties.id)
   if (item === undefined) throw new Error('Item with id &quot;{properties.id}&quot; not found ;(')
 
@@ -44,16 +44,15 @@ export function PageItemPrint ({ ...properties }: Readonly<{ [key: string]: unkn
   const [size, setSize] = useState<PrintSize>('40x20')
   const [isHighlighted, setIsHighlighted] = useState<boolean>(false)
   logger.debug('PageItemPrint', { item })
-  const onSizeChange = useCallback((_event: unknown, selectedSize: PrintSize) => { setSize(selectedSize) }, []) // eslint-disable-line no-underscore-dangle, @typescript-eslint/naming-convention
-  const onHighlightChange = useCallback((_event: unknown, isChecked: boolean) => { setIsHighlighted(isChecked) }, []) // eslint-disable-line no-underscore-dangle, @typescript-eslint/naming-convention
+  const onSizeChange = useCallback((_event: unknown, selectedSize: PrintSize) => { setSize(selectedSize) }, []) // eslint-disable-line @typescript-eslint/naming-convention
+  const onHighlightChange = useCallback((_event: unknown, isChecked: boolean) => { setIsHighlighted(isChecked) }, []) // eslint-disable-line @typescript-eslint/naming-convention
   const highlightSwitch = useMemo(() => <Switch checked={isHighlighted} onChange={onHighlightChange} />, [isHighlighted, onHighlightChange])
   const onPrint = useCallback(async () => {
     clearElementsForPrint()
     window.print()
     if (item['ref-printed']) return
-    item['ref-printed'] = true // eslint-disable-line functional/immutable-data
+    item['ref-printed'] = true
     const result = await pushItem(item)
-    // eslint-disable-next-line functional/immutable-data
     state.message = { content: `${result.success ? 'updated' : 'failed updating'} item as printed`, delay: delays.seconds, type: result.success ? 'success' : 'error' }
     if (!result.success) logger.error('pushItem failed', result)
   }, [item])

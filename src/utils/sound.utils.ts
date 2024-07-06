@@ -1,4 +1,4 @@
-/* eslint-disable functional/immutable-data */
+/* eslint-disable jsdoc/require-jsdoc */
 /* eslint-disable @typescript-eslint/no-magic-numbers */
 import { sleep } from 'shuutils'
 import { logger } from './logger.utils'
@@ -19,13 +19,13 @@ function playTone (frequency = 400, milliseconds = 1000) {
 }
 
 type SequenceItemTone = readonly [number, number]
-type SequenceItemWait = number // eslint-disable-line sonar/redundant-type-aliases
+type SequenceItemWait = number
 type SequenceItem = SequenceItemTone | SequenceItemWait
 type Sequence = readonly SequenceItem[]
 
 export async function playSequence (sequence: Sequence) {
   logger.debug('playing sequence', JSON.stringify(sequence))
-  // eslint-disable-next-line no-await-in-loop
+  // eslint-disable-next-line no-await-in-loop, @typescript-eslint/no-confusing-void-expression
   for (const item of sequence) await (typeof item === 'number' ? sleep(item) : playTone(item[0], item[1]))
 }
 

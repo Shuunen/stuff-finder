@@ -29,7 +29,7 @@ export function AppDeleteRessource ({ onDelete }: Readonly<{ onDelete: () => voi
         </DialogContent>
         <DialogActions>
           <div className="mr-2">
-            <Button onClick={closeDialog}>Cancel</Button>{/* eslint-disable-next-line jsx-a11y/no-autofocus */}
+            <Button onClick={closeDialog}>Cancel</Button>
             <Button autoFocus onClick={doDelete}>Delete</Button>
           </div>
         </DialogActions>

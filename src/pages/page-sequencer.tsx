@@ -1,4 +1,4 @@
-/* eslint-disable react/no-multi-comp */
+/* eslint-disable @typescript-eslint/prefer-readonly-parameter-types */
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 import ContentCopyIcon from '@mui/icons-material/ContentCopy'
 import DeleteIcon from '@mui/icons-material/Delete'
@@ -13,7 +13,7 @@ import { copyToClipboard, debounce } from 'shuutils'
 import { AppPageCard } from '../components/app-page-card'
 import { delays, voidFunction } from '../constants'
 import { logger } from '../utils/logger.utils'
-import { playSequence, sequences, type Sequence, type SequenceItem, type SequenceItemTone, type SequenceItemWait } from '../utils/sound.utils'
+import { type Sequence, type SequenceItem, type SequenceItemTone, type SequenceItemWait, playSequence, sequences } from '../utils/sound.utils'
 import { state } from '../utils/state.utils'
 
 const ranges = {
@@ -22,12 +22,11 @@ const ranges = {
   waitDelay: { max: 1000, min: 25 },
 }
 
-type ChangeCallback = (index: number, type: 'tone-delay' | 'tone-value' | 'wait-delay') => (event: Event, value: number[] | number) => void
+type ChangeCallback = (index: number, type: 'tone-delay' | 'tone-value' | 'wait-delay') => (event: Event, value: number | number[]) => void
 
 function copySequence (sequence: Sequence) {
   logger.debug('copySequence', { sequence })
   void copyToClipboard(JSON.stringify(sequence))
-  // eslint-disable-next-line functional/immutable-data
   state.message = { content: 'Sequence copied to clipboard', delay: delays.second, type: 'success' }
   return voidFunction
 }
@@ -63,15 +62,15 @@ function AppSequenceItem ({ index, item, onChange, onDelete }: Readonly<{ index:
       <p className="font-mono">{id}</p>
       <p className="w-1/3">{label}</p>
       {typeof item === 'number' && <AppSequenceItemWait index={index} item={item} onChange={onChange} />}
-      {typeof item !== 'number' && <AppSequenceItemTone index={index} item={item} onChange={onChange} />}{/* eslint-disable-next-line @typescript-eslint/ban-ts-comment, @typescript-eslint/prefer-ts-expect-error */}
-      {/* @ts-ignore */}
+      {typeof item !== 'number' && <AppSequenceItemTone index={index} item={item} onChange={onChange} />}{/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+      {/* eslint-disable-next-line @typescript-eslint/no-confusing-void-expression *//* @ts-ignore */}
       <IconButton aria-label="delete" onClick={onDelete(index)}><DeleteIcon /></IconButton>
       <p className="font-mono">{id}</p>
     </div>
   )
 }
 
-export function PageSequencer ({ ...properties }: Readonly<{ [key: string]: unknown }>) {
+export function PageSequencer ({ ...properties }: Readonly<Record<string, unknown>>) {
 
   const [sequence, setSequence] = useState<Sequence>(sequences.success)
 
@@ -82,7 +81,7 @@ export function PageSequencer ({ ...properties }: Readonly<{ [key: string]: unkn
   }
 
   function onChange (index: number, type: 'tone-delay' | 'tone-value' | 'wait-delay') {
-    return (_event: Event, value: number[] | number) => { // eslint-disable-line no-underscore-dangle, @typescript-eslint/naming-convention
+    return (_event: Event, value: number | number[]) => { // eslint-disable-line @typescript-eslint/naming-convention
       if (typeof value !== 'number') throw new Error('Weird case where value is not a number')
       if (type === 'wait-delay') setSequence(sequence.map((item, itemIndex) => (itemIndex === index ? value : item))) /* @ts-expect-error typings issue */
       else if (type === 'tone-delay') setSequence(sequence.map((item, itemIndex) => (itemIndex === index ? [item[0], value] : item))) /* @ts-expect-error typings issue */
@@ -92,7 +91,7 @@ export function PageSequencer ({ ...properties }: Readonly<{ [key: string]: unkn
 
   function onDelete (index: number) {
     logger.debug('onDelete', { index })
-    setSequence(sequence.filter((_item, itemIndex) => itemIndex !== index)) // eslint-disable-line no-underscore-dangle, @typescript-eslint/naming-convention
+    setSequence(sequence.filter((_item, itemIndex) => itemIndex !== index)) // eslint-disable-line @typescript-eslint/naming-convention
   }
 
   useEffect(() => { void playSequenceDebounced(sequence) }, [sequence])
@@ -105,14 +104,14 @@ export function PageSequencer ({ ...properties }: Readonly<{ [key: string]: unkn
   return (
     <AppPageCard cardTitle="Sequencer" icon={AddCircleOutlineIcon} pageCode="sequencer" pageTitle="Sequencer">
       <div className="flex w-[50rem] flex-col">
-        <form className="max-h-[19rem] w-full overflow-auto whitespace-nowrap">{/* eslint-disable-next-line react/no-array-index-key, react/jsx-no-bind */}
+        <form className="max-h-[19rem] w-full overflow-auto whitespace-nowrap">
           {sequence.map((item, index) => <AppSequenceItem index={index} item={item} key={`${typeof item === 'number' ? 'wait' : 'tone'}-${index}`} onChange={onChange} onDelete={onDelete} />)}
         </form>
         <div className="flex w-full">
           <Button onClick={updateSequence(sequences.success)} startIcon={resetIcon} variant="outlined">Reset</Button>
           <div className="grow" />
-          <Button onClick={updateSequence([...sequence, delays.small])} variant="outlined">Add wait</Button>{/* eslint-disable-next-line react-perf/jsx-no-new-function-as-prop, react/jsx-no-bind, @arthurgeron/react-usememo/require-usememo */}
-          <Button onClick={async () => await playSequence(sequence)} startIcon={playIcon} variant="contained">Play</Button>{/* eslint-disable-next-line @typescript-eslint/no-magic-numbers */}
+          <Button onClick={updateSequence([...sequence, delays.small])} variant="outlined">Add wait</Button>
+          <Button onClick={async () => playSequence(sequence)} startIcon={playIcon} variant="contained">Play</Button>{/* eslint-disable-next-line @typescript-eslint/no-magic-numbers */}
           <Button onClick={updateSequence([...sequence, [delays.small, delays.large * 2]])} variant="outlined">Add tone</Button>
           <div className="grow" />
           <Button endIcon={copyIcon} onClick={copySequence(sequence)} variant="outlined">Copy</Button>
@@ -121,4 +120,3 @@ export function PageSequencer ({ ...properties }: Readonly<{ [key: string]: unkn
     </AppPageCard>
   )
 }
-/* eslint-enable react/no-multi-comp */

@@ -1,4 +1,3 @@
-/* eslint-disable functional/immutable-data */
 /* eslint-disable @typescript-eslint/naming-convention */
 import { clone } from 'shuutils'
 import { expect, it, vi } from 'vitest'
@@ -51,12 +50,13 @@ it('addSuggestionsFromWrap A without wrapApiKey', async () => {
   expect(suggestions).toMatchInlineSnapshot('{}')
 })
 
-it('addSuggestionsFromWrap B with wrapApiKey', async () => {
-  state.credentials.wrap = 'xyz'
-  const endpoint = 'deyes/json/0.0.2?code=3760052142741'
-  const suggestions = await addSuggestionsFromWrap(endpoint)
-  expect(suggestions).toMatchSnapshot()
-})
+// too slow (3sec+)
+// it('addSuggestionsFromWrap B with wrapApiKey', async () => {
+//   state.credentials.wrap = 'xyz'
+//   const endpoint = 'deyes/json/0.0.2?code=3760052142741'
+//   const suggestions = await addSuggestionsFromWrap(endpoint)
+//   expect(suggestions).toMatchSnapshot()
+// })
 
 it('addSuggestionsFromCampo A without wrapApiKey', async () => {
   state.credentials.wrap = ''

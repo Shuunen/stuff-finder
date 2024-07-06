@@ -95,26 +95,6 @@ exports[`getCommonListsFromItems A 1`] = `
 }
 `;
 
-exports[`getOneItem A success result 1`] = `
-{
-  "barcode": "",
-  "box": "box A",
-  "brand": "",
-  "category": "category A",
-  "details": "",
-  "drawer": "",
-  "id": "rec123",
-  "location": "location A",
-  "name": "item A",
-  "photo": [],
-  "price": 0,
-  "ref-printed": false,
-  "reference": "",
-  "status": "acheté",
-  "updated-on": "",
-}
-`;
-
 exports[`itemToForm A mocked item 1`] = `
 {
   "columns": 10,

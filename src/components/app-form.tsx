@@ -1,15 +1,17 @@
+/* eslint-disable @typescript-eslint/prefer-readonly-parameter-types */
 import Button from '@mui/material/Button'
 import { useSignalEffect } from '@preact/signals'
 import { useCallback, useState } from 'preact/hooks'
 import { debounce, off, on, parseJson, readClipboard } from 'shuutils'
 import { delays, voidFunction } from '../constants'
-import { validateForm, type Form } from '../utils/forms.utils'
+import { type Form, validateForm } from '../utils/forms.utils'
 import { logger } from '../utils/logger.utils'
 import { state } from '../utils/state.utils'
 import { colSpanClass, gridClass } from '../utils/theme.utils'
 import { AppFormFieldCheckbox } from './app-form-field-checkbox'
 import { AppFormFieldSelect } from './app-form-field-select'
 import { AppFormFieldText } from './app-form-field-text'
+
 type Properties<FormType extends Form> = Readonly<{
   error?: string
   initialForm: FormType
@@ -18,7 +20,7 @@ type Properties<FormType extends Form> = Readonly<{
   suggestions?: Record<string, string[]>
 }>
 
-// eslint-disable-next-line max-statements, unicorn/no-useless-undefined
+// eslint-disable-next-line max-statements, unicorn/no-useless-undefined, max-lines-per-function, complexity
 export function AppForm<FormType extends Form> ({ error: parentError = '', initialForm, onChange = voidFunction, onSubmit = undefined, suggestions }: Properties<FormType>) {
 
   const [form, setForm] = useState(initialForm)
@@ -35,12 +37,12 @@ export function AppForm<FormType extends Form> ({ error: parentError = '', initi
   function updateFieldSync (field: string, target: EventTarget | null, isFromClipboard = false) {
     if (target === null) throw new Error(`target for field "${field}" is null`)
     const input = target as HTMLInputElement // eslint-disable-line @typescript-eslint/consistent-type-assertions
-    let value = input.type === 'checkbox' ? input.checked : input.value // eslint-disable-line functional/no-let
+    let value = input.type === 'checkbox' ? input.checked : input.value
     if (input.role === 'option') value = input.textContent ?? '' // handle autocomplete target
     logger.debug('updateField', { field, value })
     const actualField = form.fields[field]
     if (actualField === undefined) throw new Error(`field "${field}" not found in form`)
-    if (isFromClipboard) state.message = { content: `Pasted "${field}" field value`, delay: delays.second, type: 'success' } // eslint-disable-line functional/immutable-data
+    if (isFromClipboard) state.message = { content: `Pasted "${field}" field value`, delay: delays.second, type: 'success' }
     const updated = { ...form, fields: { ...form.fields, [field]: { ...actualField, value } }, isTouched: true }
     setForm(updated)
     onChange(updated)
@@ -48,7 +50,7 @@ export function AppForm<FormType extends Form> ({ error: parentError = '', initi
 
   const updateField = debounce(updateFieldSync, delays.small)
 
-  // eslint-disable-next-line max-statements
+  // eslint-disable-next-line max-statements, complexity
   const checkDataInClipboard = useCallback(async () => {
     const clip = await readClipboard()
     const clean = clip /* .replace(/""/gu, '"') */ // can't use this because it will replace "details": "" with "details": " which is not valid JSON
@@ -57,13 +59,13 @@ export function AppForm<FormType extends Form> ({ error: parentError = '', initi
     const { error, value: data } = parseJson(clean)
     if (error !== '' || typeof data !== 'object' || data === null) { logger.debug('error or data not an object', { data, error }); return }
     const futureForm = structuredClone(form)
-    futureForm.isTouched = true // eslint-disable-line functional/immutable-data
+    futureForm.isTouched = true
     const entries = Object.entries(data)
     for (const [key, value] of entries) {
-      if (typeof key !== 'string' || typeof value !== 'string' || key === '' || value === '') continue // eslint-disable-line no-continue
+      if (typeof key !== 'string' || typeof value !== 'string' || key === '' || value === '') continue
       const actualField = futureForm.fields[key]
-      if (actualField === undefined) continue /* eslint-disable-line no-continue */// @ts-expect-error typing issue
-      futureForm.fields[key] = { ...actualField, value } // eslint-disable-line functional/immutable-data
+      if (actualField === undefined) continue  // @ts-expect-error typing issue
+      futureForm.fields[key] = { ...actualField, value }
     }
     setForm(futureForm)
   }, [form])
@@ -71,7 +73,7 @@ export function AppForm<FormType extends Form> ({ error: parentError = '', initi
   useSignalEffect(useCallback(() => {
     const handler = on('focus', () => { void checkDataInClipboard() }, window)
     void checkDataInClipboard()
-    return () => off(handler)
+    return () => { off(handler) }
   }, [checkDataInClipboard]))
 
   const errorMessage = parentError.length > 0 ? parentError : form.errorMessage

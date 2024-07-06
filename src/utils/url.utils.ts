@@ -1,10 +1,20 @@
 
+/**
+ * Transform and url to uuid
+ * @param url the url
+ * @returns the uuid
+ */
 export function urlToUuid (url: string) {
   // in: https://wrapapi.com/use/jojo/deyes/json/0.0.2?code=3760052142741&wrapAPIKey=xyz
   // out: wrapapicomusejojodeyesjson002code3760052142741
   return url.replace(/https?|\W|wrapAPIKey.+/gu, '')
 }
 
+/**
+ * Get the asin from an Amazon url
+ * @param url the url
+ * @returns the asin
+ */
 export function getAsin (url: string) {
   // in: https://www.amazon.fr/dp/B07V7GZQJ2 or B07V7GZQJ2
   // out: B07V7GZQJ2

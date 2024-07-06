@@ -1,4 +1,4 @@
-import { array, boolean, fallback, literal, merge, number, object, optional, string, union, type Output } from 'valibot'
+import { type Output, array, boolean, fallback, literal, merge, number, object, optional, string, union } from 'valibot'
 
 const itemStatusSchema = union([
   literal('acheté'),

@@ -1,4 +1,4 @@
-import { createTextField, type Form } from './forms.utils'
+import { type Form, createTextField } from './forms.utils'
 import { state } from './state.utils'
 
 export const settingsForm = {

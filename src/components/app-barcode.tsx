@@ -1,10 +1,11 @@
 
 import 'webcomponent-qr-code'
-import { printSizes, type PrintSize } from '../types/print.types'
+import { type PrintSize, printSizes } from '../types/print.types'
 import { logger } from '../utils/logger.utils'
 import type { Item } from '../utils/parsers.utils'
 import { itemToPrintData } from '../utils/print.utils'
 
+// eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
 export function AppBarcode ({ isHighlighted = false, item, size }: Readonly<{ isHighlighted?: boolean; item: Item; size: PrintSize }>) {
 
   const { location: printLocation, text: printText, value } = itemToPrintData(item)

@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/prefer-readonly-parameter-types */
+/* eslint-disable jsdoc/require-jsdoc */
 import { logger } from './logger.utils'
 import { state } from './state.utils'
 
@@ -8,7 +10,6 @@ function airtableHeaders (token: string) {
 
 async function request (method: 'DELETE' | 'GET' | 'PATCH' | 'POST', url: string, data?: Record<string, unknown>) {
   const options: RequestInit = { headers: airtableHeaders(state.credentials.token), method }
-  // eslint-disable-next-line functional/immutable-data
   if (data) options.body = JSON.stringify(data)
   const response = await fetch(url, options).catch((error: unknown) => { logger.showError(error) })
   if (!response) throw new Error('no response')
@@ -16,20 +17,24 @@ async function request (method: 'DELETE' | 'GET' | 'PATCH' | 'POST', url: string
   return await response.json() as unknown
 }
 
+// biome-ignore lint/suspicious/useAwait: <explanation>
 export async function del (url: string) {
-  return await request('DELETE', url)
+  return request('DELETE', url)
 }
 
+// biome-ignore lint/suspicious/useAwait: <explanation>
 export async function patch (url: string, data: Record<string, unknown>) {
-  return await request('PATCH', url, data)
+  return request('PATCH', url, data)
 }
 
+// biome-ignore lint/suspicious/useAwait: <explanation>
 export async function post (url: string, data: Record<string, unknown>) {
-  return await request('POST', url, data)
+  return request('POST', url, data)
 }
 
+// biome-ignore lint/suspicious/useAwait: <explanation>
 export async function get (url: string) {
-  return await request('GET', url)
+  return request('GET', url)
 }
 
 export function valuesToOptions (array: readonly string[], selected?: string) {
@@ -37,7 +42,6 @@ export function valuesToOptions (array: readonly string[], selected?: string) {
 }
 
 export function setPageTitle (title: string) {
-  // eslint-disable-next-line functional/immutable-data
   document.title = `${title} - Stuff Finder`
 }
 

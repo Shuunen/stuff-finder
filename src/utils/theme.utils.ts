@@ -1,4 +1,4 @@
-import { createTheme, type ThemeOptions } from '@mui/material/styles'
+import { type ThemeOptions, createTheme } from '@mui/material/styles'
 
 const themeOptions: ThemeOptions = {
   palette: {
@@ -11,6 +11,12 @@ const themeOptions: ThemeOptions = {
 
 export const theme = createTheme(themeOptions)
 
+/**
+ * Get the grid class for the number of columns
+ * @param columns the number of columns
+ * @returns the grid class
+ */
+// eslint-disable-next-line complexity
 export function gridClass (columns = 1) {
   /* eslint-disable @typescript-eslint/no-magic-numbers */
   if (columns === 2) return 'md:grid-cols-2'
@@ -26,6 +32,12 @@ export function gridClass (columns = 1) {
   /* eslint-enable @typescript-eslint/no-magic-numbers */
 }
 
+/**
+ * Get the column span class
+ * @param columns the number of columns
+ * @returns the column span class
+ */
+// eslint-disable-next-line complexity
 export function colSpanClass (columns: number) {
   /* eslint-disable @typescript-eslint/no-magic-numbers */
   if (columns === 2) return 'md:col-span-2'

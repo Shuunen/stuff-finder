@@ -17,7 +17,7 @@ import { state, watchState } from './utils/state.utils'
 
 type Component = typeof PageHome
 
-/* eslint-disable @typescript-eslint/promise-function-async, @typescript-eslint/naming-convention, promise/prefer-await-to-then */
+/* eslint-disable @typescript-eslint/promise-function-async, @typescript-eslint/naming-convention, @typescript-eslint/prefer-readonly-parameter-types */
 const AsyncPageScan = lazy<Component>(() => import('./pages/page-scan').then(({ PageScan }) => ({ default: PageScan })))
 const AsyncPageItemAddEdit = lazy<Component>(() => import('./pages/page-item-add-edit').then(({ PageItemAddEdit }) => ({ default: PageItemAddEdit })))
 const AsyncPageItemDetails = lazy<Component>(() => import('./pages/page-item-details').then(({ PageItemDetails }) => ({ default: PageItemDetails })))
@@ -25,10 +25,10 @@ const AsyncPageItemPrint = lazy<Component>(() => import('./pages/page-item-print
 const AsyncPageSearch = lazy<Component>(() => import('./pages/page-search').then(({ PageSearch }) => ({ default: PageSearch })))
 const AsyncPageSettings = lazy<Component>(() => import('./pages/page-settings').then(({ PageSettings }) => ({ default: PageSettings })))
 const AsyncPageSequencer = lazy<Component>(() => import('./pages/page-sequencer').then(({ PageSequencer }) => ({ default: PageSequencer })))
-/* eslint-enable @typescript-eslint/promise-function-async, @typescript-eslint/naming-convention, promise/prefer-await-to-then */
+/* eslint-enable @typescript-eslint/promise-function-async, @typescript-eslint/naming-convention, @typescript-eslint/prefer-readonly-parameter-types */
 
 
-function onMessage (message: AppMessage) {
+function onMessage (message: Readonly<AppMessage>) {
   enqueueSnackbar(message.content, {
     anchorOrigin: { horizontal: 'center', vertical: 'bottom' },
     autoHideDuration: message.delay,
