@@ -34,7 +34,7 @@
     "eslint": "*",
     "eslint-plugin-shuunen": "0.1",
     "postcss": "8.4",
-    "repo-check": "1.36",
+    "repo-check": "1.37",
     "tailwindcss": "3.4",
     "typescript": "5.5.3",
     "vite": "5.3",
