@@ -4,8 +4,8 @@
   "bugs": "https://github.com/Shuunen/stuff-finder/issues",
   "dependencies": {
     "@camwiegert/typical": "0.1",
-    "@emotion/react": "11.11",
-    "@emotion/styled": "11.11",
+    "@emotion/react": "11.12",
+    "@emotion/styled": "11.12",
     "@mui/icons-material": "5.16",
     "@mui/material": "5.16",
     "@preact/signals": "1.3",
