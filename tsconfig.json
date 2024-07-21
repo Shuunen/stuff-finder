@@ -52,11 +52,7 @@
     "src",
     "tests",
     ".*.cjs",
-    "*.js"
-  ],
-  "references": [
-    {
-      "path": "./tsconfig.node.json"
-    }
+    "*.js",
+    "*.ts"
   ]
 }

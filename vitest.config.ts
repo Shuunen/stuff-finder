@@ -1,6 +1,6 @@
 import { defineConfig } from 'vitest/config'
 
-// eslint-disable-next-line import/no-anonymous-default-export
+// biome-ignore lint/style/noDefaultExport: <explanation>
 export default defineConfig({
   test: {
     coverage: {

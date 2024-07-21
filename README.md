@@ -15,7 +15,6 @@
 
 ## Todo
 
-- [ ] try [voice activity detector (VAD) for the browser](https://github.com/ricky0123/vad)
 - [ ] remove `eslint-disable-next-line no-restricted-syntax` in `main.to-migrate.ts` & `speech.service.ts`
 - [ ] nicer colorful identity ([something like this ?](https://www.iconfinder.com/icons/44859/cube_icon))
 - [ ] detect user in/activity to refresh data
