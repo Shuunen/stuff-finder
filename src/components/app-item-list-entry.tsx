@@ -23,12 +23,12 @@ export function AppItemListEntry ({ display, item }: Readonly<{ display: Display
   const floatingHeaderStyle = useMemo(() => ({ background: 'whitesmoke', color: 'black', fontSize: 18, height: '100%', marginBottom: 0, paddingX: 2, paddingY: 1, width: '100%' }), [])
   const goToDetails = useCallback(() => route(`/item/details/${item.id}`), [item.id])
   return (
-    <ListItem data-type="list-item" disablePadding key={item.id} sx={listStyle}>{/* @ts-expect-error typings issue */}
+    <ListItem data-type="list-item" disablePadding key={item.id} sx={listStyle}>
       {display === 'list' && <ListItemButton component="a" href={`/item/details/${item.id}`}>
         <img alt={title} className="mr-4 size-12 rounded-full object-contain" data-id={item.id} onError={onItemImageError} src={itemToImageUrl(item)} />
         <ListItemText primary={title} primaryTypographyProps={titleStyle} secondary={subtitle} secondaryTypographyProps={subtitleStyle} />
       </ListItemButton>}
-      {display === 'card' && <Card onClick={goToDetails} sx={cardStyle}>{/* @ts-expect-error typings issue */}
+      {display === 'card' && <Card onClick={goToDetails} sx={cardStyle}>
         <CardMedia alt={title} component="img" image={itemToImageUrl(item)} onError={onItemImageError} sx={imgStyle} />
         <ListItemText primary={title} primaryTypographyProps={titleStyle} secondary={subtitle} secondaryTypographyProps={subtitleStyle} sx={floatingHeaderStyle} />
       </Card>}
