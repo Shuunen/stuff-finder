@@ -15,7 +15,7 @@
     "preact": "10.23",
     "preact-router": "4.1",
     "shuutils": "8.1",
-    "valibot": "0.36",
+    "valibot": "0.37",
     "webcomponent-qr-code": "1.2"
   },
   "description": "Sorting things is pointless if you can't find them afterwards",
