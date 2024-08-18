@@ -138,6 +138,6 @@ exports[`airtableSingleResponseSchema C valid 1`] = `
     "id": "rec1234567890",
   },
   "success": true,
-  "typed": false,
+  "typed": true,
 }
 `;

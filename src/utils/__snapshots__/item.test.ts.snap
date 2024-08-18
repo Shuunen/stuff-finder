@@ -585,7 +585,7 @@ exports[`pushItem A item with no id should post remotely & push locally 1`] = `
     "id": "freshly-created",
   },
   "success": true,
-  "typed": false,
+  "typed": true,
 }
 `;
 
@@ -634,7 +634,7 @@ exports[`pushItem B item with id should patch remotely & update locally 1`] = `
     "id": "existing",
   },
   "success": true,
-  "typed": false,
+  "typed": true,
 }
 `;
 
