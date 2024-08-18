@@ -2,7 +2,6 @@
 
 [![GitHub license](https://img.shields.io/github/license/shuunen/stuff-finder.svg?color=informational)](https://github.com/Shuunen/stuff-finder/blob/master/LICENSE)
 [![Code Climate maintainability](https://img.shields.io/codeclimate/maintainability/Shuunen/stuff-finder?style=flat)](https://codeclimate.com/github/Shuunen/stuff-finder)
-[![Scrutinizer Score](https://scrutinizer-ci.com/g/Shuunen/stuff-finder/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Shuunen/stuff-finder)
 [![Website](https://img.shields.io/website/https/shuunen-goals.netlify.app.svg)](https://stuff-finder.netlify.app)
 
 ![banner](docs/banner.svg)
