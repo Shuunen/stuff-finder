@@ -20,6 +20,9 @@
       "style": {
         "noImplicitBoolean": "off",
         "useBlockStatements": "off"
+      },
+      "suspicious": {
+        "noReactSpecificProps": "off"
       }
     }
   },

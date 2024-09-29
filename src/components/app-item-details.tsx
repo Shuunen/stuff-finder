@@ -35,7 +35,7 @@ export function AppItemDetails ({ item }: Readonly<{ item: Item }>) {
         <h2>{item.category}</h2>
         {Boolean(item.details) && <p class="first-letter:uppercase">{item.details}</p>}
         <div class="my-2 flex gap-3">
-          <LocationOnIcon class="text-purple-600" /><div class="font-medium">{itemLocation || 'Unknown'}</div>
+          <LocationOnIcon className="text-purple-600" /><div class="font-medium">{itemLocation || 'Unknown'}</div>
         </div>
         <div class="flex flex-wrap justify-start gap-3">
           {Boolean(item.brand) && <AppItemDetailsChip label={item.brand} link={`/search/${item.brand}`} tooltip="Brand, click to search" />}

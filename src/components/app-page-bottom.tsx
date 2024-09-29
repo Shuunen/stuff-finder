@@ -5,11 +5,11 @@ import { AppButtonNext } from './app-button-next'
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export function AppPageBottom ({ icon: Icon, nextLabel = 'Home', nextUrl = '/', stepsBack = 1 }: Readonly<{ icon: MuiIcon; nextLabel?: string; nextUrl?: string; stepsBack?: number }>) {
-  const style = useMemo(() => ({ fontSize: 60 }), [])
+  const style = useMemo(() => ({ fill: 'currentColor', fontSize: 60 }), [])
   return (
     <div class="mx-auto flex">
       <AppButtonBack stepsBack={stepsBack} />
-      <Icon class="text-purple-600/40" sx={style} />
+      <Icon className="text-purple-600/40" sx={style} />
       <AppButtonNext label={nextLabel} url={nextUrl} />
     </div>
   )
