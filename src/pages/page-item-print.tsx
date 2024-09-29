@@ -6,6 +6,7 @@ import ToggleButton from '@mui/material/ToggleButton'
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup'
 import { useSignalEffect } from '@preact/signals'
 import { useCallback, useMemo, useState } from 'preact/hooks'
+import { sleep } from 'shuutils'
 import { AppBarcode } from '../components/app-barcode'
 import { AppPageCard } from '../components/app-page-card'
 import { delays } from '../constants'
@@ -24,6 +25,7 @@ export function PageItemPrint ({ ...properties }: Readonly<Record<string, unknow
 
   const { value } = itemToPrintData(item)
   const [size, setSize] = useState<PrintSize>('40x20')
+  const [isPrintMode, setIsPrintMode] = useState<boolean>(false)
   const [isHighlighted, setIsHighlighted] = useState<boolean>(false)
   logger.debug('PageItemPrint', { item })
   const onSizeChange = useCallback((_event: unknown, selectedSize: PrintSize) => { setSize(selectedSize) }, []) // eslint-disable-line @typescript-eslint/naming-convention
@@ -31,7 +33,10 @@ export function PageItemPrint ({ ...properties }: Readonly<Record<string, unknow
   const highlightSwitch = useMemo(() => <Switch checked={isHighlighted} onChange={onHighlightChange} />, [isHighlighted, onHighlightChange])
   const onPrint = useCallback(async () => {
     clearElementsForPrint()
+    setIsPrintMode(true)
+    await sleep(delays.medium)
     window.print()
+    setIsPrintMode(false)
     if (item['ref-printed']) return
     item['ref-printed'] = true
     const result = await pushItem(item)
@@ -39,7 +44,7 @@ export function PageItemPrint ({ ...properties }: Readonly<Record<string, unknow
     if (!result.success) logger.error('pushItem failed', result)
   }, [item])
   // trigger print directly on page load
-  useSignalEffect(useCallback(() => { void onPrint() }, [onPrint]))
+  useSignalEffect(() => { void sleep(delays.medium).then(async () => onPrint()) })
 
   return (
     <>
@@ -62,9 +67,7 @@ export function PageItemPrint ({ ...properties }: Readonly<Record<string, unknow
           </div>
         </div>
       </AppPageCard >
-      <div class="hidden print:block">
-        <AppBarcode item={item} size={size} />
-      </div>
+      {isPrintMode && <AppBarcode item={item} size={size} />}
     </>
   )
 }
