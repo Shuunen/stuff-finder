@@ -1,21 +1,39 @@
-
+import { useSignalEffect } from '@preact/signals'
+import { createRef } from 'preact'
 import 'webcomponent-qr-code'
 import { type PrintSize, printSizes } from '../types/print.types'
 import { logger } from '../utils/logger.utils'
 import type { Item } from '../utils/parsers.utils'
 import { itemToPrintData } from '../utils/print.utils'
 
-// eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
-export function AppBarcode ({ isHighlighted = false, item, size }: Readonly<{ isHighlighted?: boolean; item: Item; size: PrintSize }>) {
+function resizeCode (wrapper: HTMLDivElement, wc: HTMLDivElement) {
+  const margin = 5
+  const maxHeight = wrapper.scrollHeight - margin
+  const height = wc.shadowRoot?.firstElementChild?.scrollHeight
+  if (height === undefined) {
+    logger.showError('failed to get qr code height')
+    return
+  }
+  if (height <= maxHeight) return
+  logger.info('resizing down qr code', wc)
+  wc.setAttribute('modulesize', '2')
+}
 
+export function AppBarcode ({ isHighlighted = false, item, size, willResize = true }: Readonly<{ isHighlighted?: boolean; item: Item; size: PrintSize, willResize?: boolean }>) {
   const { location: printLocation, text: printText, value } = itemToPrintData(item)
   logger.debug('AppBarcode', { isHighlighted, item })
+  const wcReference = createRef<HTMLDivElement>()
+  const wrapperReference = createRef<HTMLDivElement>()
+
+  useSignalEffect(() => {
+    if (wrapperReference.current === null || wcReference.current === null || !willResize) return
+    resizeCode(wrapperReference.current, wcReference.current)
+  })
 
   return (
-    <div className="box-content flex items-center gap-0 overflow-hidden rounded border border-black px-1 transition-all print:rounded-none print:border-0 print:px-0" data-component="barcode" style={printSizes[size].styles}>
-      <div className={`mt-1 ${isHighlighted ? 'bg-green-400' : ''}`}>
-        {/* @ts-expect-error missing types */}
-        <qr-code data={value} margin={0} modulesize={3} />
+    <div className="box-content flex items-center gap-0 overflow-hidden rounded border border-black px-1 transition-all print:rounded-none print:border-0 print:px-0" data-component="barcode" ref={wrapperReference} style={printSizes[size].styles}>
+      <div className={`mt-1 ${isHighlighted ? 'bg-green-400' : ''}`}>{/* @ts-expect-error missing types */}
+        <qr-code data={value} margin={0} modulesize={3} ref={wcReference} />
       </div>
       <div className="overflow-hidden pl-1.5 pt-1 text-center">
         <div className={`mb-1 line-clamp-3 font-sans text-[12px] leading-4 tracking-[-0.5px] ${isHighlighted ? 'bg-red-400' : ''}`} >{printText}</div>
