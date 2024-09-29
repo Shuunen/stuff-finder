@@ -2,14 +2,8 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
     "allowImportingTsExtensions": true,
-    "allowJs": true,
-    "allowUnreachableCode": false,
-    "allowUnusedLabels": false,
-    "checkJs": true,
-    "esModuleInterop": true,
-    "exactOptionalPropertyTypes": true,
+    "exactOptionalPropertyTypes": false,
     "forceConsistentCasingInFileNames": true,
-    "isolatedModules": true,
     "jsx": "react-jsx",
     "jsxImportSource": "preact",
     "lib": [
@@ -20,14 +14,8 @@
     "module": "ESNext",
     "moduleResolution": "bundler",
     "noEmit": true,
-    "noFallthroughCasesInSwitch": true,
     "noImplicitAny": true,
-    "noImplicitOverride": true,
-    "noImplicitReturns": true,
     "noPropertyAccessFromIndexSignature": false,
-    "noUncheckedIndexedAccess": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
     "outDir": "./dist",
     "paths": {
       "react": [
@@ -38,8 +26,6 @@
       ]
     },
     "resolveJsonModule": true,
-    "skipLibCheck": true,
-    "strict": true,
     "strictNullChecks": true,
     "target": "ES2020",
     "types": [
@@ -48,9 +34,15 @@
     "useDefineForClassFields": true,
     "verbatimModuleSyntax": true
   },
+  "exclude": [
+    "node_modules",
+    "dist",
+    "tmp",
+    "coverage"
+  ],
+  "extends": "@tsconfig/strictest/tsconfig.json",
   "include": [
     "src",
-    "tests",
     ".*.cjs",
     "*.js",
     "*.ts"
