@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/prefer-readonly-parameter-types */
 /* eslint-disable jsdoc/require-jsdoc */
 import { safeParse } from 'valibot'
 import { emptyItem } from '../constants'

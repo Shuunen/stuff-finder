@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/prefer-readonly-parameter-types */
 /* eslint-disable jsdoc/require-jsdoc */
 import { defaultCommonLists, defaultItems, emptyItemPhoto } from '../constants'
 import { defaultStatus } from '../types/status.types'

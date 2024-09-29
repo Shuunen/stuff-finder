@@ -102,7 +102,6 @@ export const fuseOptions: IFuseOptions<Item> = {
    * @param path the path
    * @returns a value ^^'
    */
-  // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
   getFn: (object: Item, path: string | string[]) => {
     const value = Fuse.config.getFn(object, path)
     if (Array.isArray(value)) return value.map((element: string) => sanitize(element))

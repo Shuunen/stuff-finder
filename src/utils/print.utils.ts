@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/prefer-readonly-parameter-types */
 /* c8 ignore next */
 import type { Item } from './parsers.utils'
 

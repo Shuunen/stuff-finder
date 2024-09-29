@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/prefer-readonly-parameter-types */
 /* eslint-disable jsdoc/require-jsdoc */
 import { logger } from './logger.utils'
 import { state } from './state.utils'

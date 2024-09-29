@@ -10,10 +10,17 @@ export default [
   // ...shuunen.configs.browser,
   ...shuunen.configs.typescript,
   {
+    files: ["**/*.ts", "**/*.tsx"],
+    name: "stuff-finder-overrides",
+    rules: {
+      '@typescript-eslint/prefer-readonly-parameter-types': 'off', // annoying
+    },
+  },
+  {
     files: ["**/*.tsx"],
+    name: "stuff-finder-tsx-overrides",
     rules: {
       "@typescript-eslint/no-misused-promises": "off", // annoying
-      '@typescript-eslint/prefer-readonly-parameter-types': 'off', // annoying
       "jsdoc/require-jsdoc": "off", // no thanks :p
     },
   },

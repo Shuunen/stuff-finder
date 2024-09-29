@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/prefer-readonly-parameter-types */
 /* eslint-disable jsdoc/require-jsdoc */
 /* eslint-disable @typescript-eslint/naming-convention */
 import { capitalize, clone } from 'shuutils'

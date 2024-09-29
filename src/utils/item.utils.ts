@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/prefer-readonly-parameter-types */
 /* eslint-disable jsdoc/require-jsdoc */
 import { clone, objectSum } from 'shuutils'
 import { type CommonLists, defaultCommonLists, defaultImage, delays, emptyItem } from '../constants'

@@ -46,14 +46,13 @@ class App {
       offset = result.offset // eslint-disable-line unicorn/consistent-destructuring
       records = [...records, ...result.records] // eslint-disable-line unicorn/consistent-destructuring
     }
-    // eslint-disable-next-line require-atomic-updates, @typescript-eslint/prefer-readonly-parameter-types
+    // eslint-disable-next-line require-atomic-updates
     state.items = records.map((element) => airtableRecordToItem(element))
     state.lists = getCommonListsFromItems(state.items)
     logger.showLog(`${state.items.length} item(s) freshly loaded ${coolAscii()}`)
     return true
   }
 
-  // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
   private async onSettingsSave (settings: AppCredentials) {
     state.credentials = settings
     const areItemsLoaded = await this.loadItems()

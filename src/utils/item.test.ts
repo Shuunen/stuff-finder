@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/prefer-readonly-parameter-types */
 import { clone, sleep } from 'shuutils'
 import { expect, it } from 'vitest'
 import { addOrUpdateItems, areItemsEquivalent, deleteItem, formToItem, getCommonListsFromItems, itemForm, itemToForm, itemToImageUrl, itemToLocation, pushItem } from './item.utils'
