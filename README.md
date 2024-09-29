@@ -14,14 +14,12 @@
 
 ## Todo
 
-- [ ] remove `eslint-disable-next-line no-restricted-syntax` in `main.to-migrate.ts` & `speech.service.ts`
 - [ ] nicer colorful identity ([something like this ?](https://www.iconfinder.com/icons/44859/cube_icon))
 - [ ] detect user in/activity to refresh data
 - [ ] show given/thrown items with a different color/display, also they're no more in box/room
 - [ ] features to recover :
   - [ ] clone item
   - [ ] search retry when scan, search, or speech fail
-  - [ ] speech recognition
   - [ ] print un-printed items
 
 ## Build sizes

@@ -8,6 +8,8 @@ import { AppPrompter } from '../components/app-prompter'
 import { delays } from '../constants'
 import { setPageTitle } from '../utils/browser.utils'
 import { logger } from '../utils/logger.utils'
+import { playInfoSound } from '../utils/sound.utils'
+import { listenUserSpeech } from '../utils/speech.utils'
 import { state, watchState } from '../utils/state.utils'
 
 const triggerColumnClasses = 'flex w-full flex-col gap-3 text-gray-400 transition-colors hover:text-purple-600 duration-400 disabled:opacity-50 disabled:pointer-events-none'
@@ -49,7 +51,14 @@ export function PageHome ({ ...properties }: Readonly<Record<string, unknown>>) 
     }
   }, [search.value, isUsable]))
 
-  const onSpeech = useCallback(() => { state.message = { content: 'Speech not available currently', delay: delays.second, type: 'warning' } }, [])
+  const onSpeech = useCallback(() => {
+    state.status = 'listening'
+    playInfoSound()
+    listenUserSpeech((transcript: string) => {
+      logger.showLog(`searching for "${transcript}"`)
+      route(`/search/${transcript}`)
+    })
+  }, [])
 
   return (
     <div data-page="home">
