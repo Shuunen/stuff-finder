@@ -63,7 +63,7 @@ function AppSequenceItem ({ index, item, onChange, onDelete }: Readonly<{ index:
       {typeof item === 'number' && <AppSequenceItemWait index={index} item={item} onChange={onChange} />}
       {typeof item !== 'number' && <AppSequenceItemTone index={index} item={item} onChange={onChange} />}{/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
       {/* eslint-disable-next-line @typescript-eslint/no-confusing-void-expression *//* @ts-ignore */}
-      <IconButton aria-label="delete" onClick={onDelete(index)}><DeleteIcon /></IconButton>
+      <IconButton aria-label="delete" onClick={() => onDelete(index)}><DeleteIcon /></IconButton>
       <p class="font-mono">{id}</p>
     </div>
   )
@@ -71,7 +71,7 @@ function AppSequenceItem ({ index, item, onChange, onDelete }: Readonly<{ index:
 
 export function PageSequencer ({ ...properties }: Readonly<Record<string, unknown>>) {
 
-  const [sequence, setSequence] = useState<Sequence>(sequences.success)
+  const [sequence, setSequence] = useState<Sequence>(sequences.beethoven)
 
   function updateSequence (updatedSequence: Sequence) {
     logger.debug('updateSequence', { updatedSequence })
@@ -107,13 +107,13 @@ export function PageSequencer ({ ...properties }: Readonly<Record<string, unknow
           {sequence.map((item, index) => <AppSequenceItem index={index} item={item} key={`${typeof item === 'number' ? 'wait' : 'tone'}-${index}`} onChange={onChange} onDelete={onDelete} />)}
         </form>
         <div class="flex w-full">
-          <Button onClick={updateSequence(sequences.success)} startIcon={resetIcon} variant="outlined">Reset</Button>
+          <Button onClick={() => updateSequence(sequences.success)} startIcon={resetIcon} variant="outlined">Reset</Button>
           <div class="grow" />
-          <Button onClick={updateSequence([...sequence, delays.small])} variant="outlined">Add wait</Button>
+          <Button onClick={() => updateSequence([...sequence, delays.small])} variant="outlined">Add wait</Button>
           <Button onClick={async () => playSequence(sequence)} startIcon={playIcon} variant="contained">Play</Button>{/* eslint-disable-next-line @typescript-eslint/no-magic-numbers */}
-          <Button onClick={updateSequence([...sequence, [delays.small, delays.large * 2]])} variant="outlined">Add tone</Button>
+          <Button onClick={() => updateSequence([...sequence, [delays.small, delays.large * 2]])} variant="outlined">Add tone</Button>
           <div class="grow" />
-          <Button endIcon={copyIcon} onClick={copySequence(sequence)} variant="outlined">Copy</Button>
+          <Button endIcon={copyIcon} onClick={() => copySequence(sequence)} variant="outlined">Copy</Button>
         </div>
       </div>
     </AppPageCard>
