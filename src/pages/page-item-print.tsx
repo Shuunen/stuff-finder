@@ -16,27 +16,9 @@ import { logger } from '../utils/logger.utils'
 import { itemToPrintData } from '../utils/print.utils'
 import { state } from '../utils/state.utils'
 
-// if qr code size need to be adjusted, use this old block of code :
-// async function adjustQrCode () {
-// // sometimes some qr code are too big and need to be resized to fit the barcode
-// const preview = find.one('.app-barcode', this.previewElement)
-// const margin = 5
-// const maxHeight = preview.scrollHeight - margin
-// await sleep(delays.medium)
-// const wc = find.one<HTMLElement>('qr-code', this.previewElement)
-// // reducing the module size do the trick & reduce their display size
-// if (!wc.shadowRoot) { logger.showError('no shadowRoot for qr-code custom element', wc); return }
-// if (!wc.shadowRoot.firstElementChild) { logger.showError('no firstElementChild for qr-code custom element shadowRoot', wc.shadowRoot); return }
-// const height = wc.shadowRoot.firstElementChild.scrollHeight
-// if (height <= maxHeight) { logger.info(`qr code size is ok (${height}px <= ${maxHeight}px)`); return }
-// logger.info(`qr code size has been reduced, it was too big (${height}px > ${maxHeight}px)`)
-// wc.setAttribute('modulesize', '2')
-// }
-
 // eslint-disable-next-line max-statements, max-lines-per-function
 export function PageItemPrint ({ ...properties }: Readonly<Record<string, unknown>>) {
   if (typeof properties.id !== 'string') throw new Error('An id in the url is required')
-  // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
   const item = state.items.find(one => one.id === properties.id)
   if (item === undefined) throw new Error('Item with id &quot;{properties.id}&quot; not found ;(')
 
