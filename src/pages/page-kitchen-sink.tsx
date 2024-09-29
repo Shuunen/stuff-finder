@@ -20,8 +20,8 @@ export function PageKitchenSink () {
     <div class="flex flex-col">
       <h1>Kitchen Sink</h1>
       <h2>Barcodes</h2>
-      <div className="grid grid-cols-3 gap-6 w-3/4">
-        {items.map((item) => <div className="flex flex-col items-start gap-0" key={item.reference + item.name}>
+      <div class="grid grid-cols-3 gap-6 w-3/4">
+        {items.map((item) => <div class="flex flex-col items-start gap-0" key={item.reference + item.name}>
           <AppBarcode isHighlighted={isHighlighted} item={item} size={size} willResize={!item.name.includes('NOK')} />
           <p class="font-mono break-all text-xs mt-1">
             reference : {item.reference}<br />

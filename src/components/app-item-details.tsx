@@ -23,21 +23,21 @@ export function AppItemDetails ({ item }: Readonly<{ item: Item }>) {
   const itemLocation = useMemo(() => itemToLocation(item), [item])
 
   return (
-    <div className="flex flex-col sm:flex-row">
-      <div className="absolute right-5 top-5 opacity-50 transition-opacity hover:opacity-85">
+    <div class="flex flex-col sm:flex-row">
+      <div class="absolute right-5 top-5 opacity-50 transition-opacity hover:opacity-85">
         <AppDeleteRessource onDelete={onDelete} />
       </div>
-      <div className="relative flex aspect-square w-full min-w-40 max-w-[30vh] flex-col md:w-1/3 md:min-w-64 md:max-w-[40vh]">
-        <img alt={item.name} className="absolute top-0 size-full object-contain md:p-4" data-id={item.id} onError={onItemImageError} src={itemToImageUrl(item)} />
+      <div class="relative flex aspect-square w-full min-w-40 max-w-[30vh] flex-col md:w-1/3 md:min-w-64 md:max-w-[40vh]">
+        <img alt={item.name} class="absolute top-0 size-full object-contain md:p-4" data-id={item.id} onError={onItemImageError} src={itemToImageUrl(item)} />
       </div>
-      <div className="mb-12 flex min-w-80 flex-col items-start justify-start gap-3 sm:mb-0 sm:mr-6 md:w-2/3">
+      <div class="mb-12 flex min-w-80 flex-col items-start justify-start gap-3 sm:mb-0 sm:mr-6 md:w-2/3">
         <h1>{item.name} {item.brand}</h1>
         <h2>{item.category}</h2>
-        {Boolean(item.details) && <p className="first-letter:uppercase">{item.details}</p>}
-        <div className="my-2 flex gap-3">
-          <LocationOnIcon className="text-purple-600" /><div className="font-medium">{itemLocation || 'Unknown'}</div>
+        {Boolean(item.details) && <p class="first-letter:uppercase">{item.details}</p>}
+        <div class="my-2 flex gap-3">
+          <LocationOnIcon class="text-purple-600" /><div class="font-medium">{itemLocation || 'Unknown'}</div>
         </div>
-        <div className="flex flex-wrap justify-start gap-3">
+        <div class="flex flex-wrap justify-start gap-3">
           {Boolean(item.brand) && <AppItemDetailsChip label={item.brand} link={`/search/${item.brand}`} tooltip="Brand, click to search" />}
           {Boolean(item.price) && <AppItemDetailsChip label={`${item.price ?? '?'} €`} tooltip="Price, click to copy" />}
           {Boolean(item.reference) && <AppItemDetailsChip label={item.reference} tooltip="Reference, click to copy" />}
