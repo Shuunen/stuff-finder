@@ -1,4 +1,12 @@
 
+const asinRegex = /(?<asin>B[\dA-Z]{9}|\d{9}[\dX])/u
+const photoRegex = {
+  aliexpress: /_\d+x\d+\.jpg/u,
+  amazon: /._AC.+\.jpg|._S\w\d+_.jpg/u,
+  decathlon: /\bf=\d+x\d+/u,
+  temu: /\/w\/\d+\//u,
+}
+
 /**
  * Transform and url to uuid
  * @param url the url
@@ -20,8 +28,7 @@ export function getAsin (url: string) {
   // out: B07V7GZQJ2
   const split = url.split('/dp/')
   const check = split[1] ?? url
-  const regex = /(?<asin>B[\dA-Z]{9}|\d{9}[\dX])/u
-  return regex.exec(check)?.groups?.asin
+  return asinRegex.exec(check)?.groups?.asin
 }
 
 /**
@@ -32,9 +39,9 @@ export function getAsin (url: string) {
  */
 export function normalizePhotoUrl (url: string, size = 500) {
   return url
-    .replace(/._AC.+\.jpg|._S\w\d+_.jpg/u, `._SL${size}_.jpg`) // Amazon
-    .replace(/\/w\/\d+\//u, `/w/${size}/`) // KwCdn Temu
-    .replace(/\bf=\d+x\d+/u, `f=${size}x${size}`) // Decathlon
-    .replace(/_\d+x\d+\.jpg/u, `_${size}x${size}.jpg`) // AliExpress
+    .replace(photoRegex.amazon, `._SL${size}_.jpg`)
+    .replace(photoRegex.temu, `/w/${size}/`)
+    .replace(photoRegex.decathlon, `f=${size}x${size}`)
+    .replace(photoRegex.aliexpress, `_${size}x${size}.jpg`)
 }
 

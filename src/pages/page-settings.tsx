@@ -18,7 +18,7 @@ export function PageSettings ({ ...properties }: Readonly<Record<string, unknown
 
   return (
     <AppPageCard cardTitle="Settings" icon={TuneIcon} pageCode="settings" pageTitle="Settings">
-      <div className="flex flex-col">
+      <div class="flex flex-col">
         <p>Stuff-Finder need credentials to access your Airtable base, data will be saved in your browser local storage.</p>
         <AppForm initialForm={settingsForm} onSubmit={onSubmit} />
       </div>

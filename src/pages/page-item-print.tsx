@@ -44,14 +44,14 @@ export function PageItemPrint ({ ...properties }: Readonly<Record<string, unknow
   return (
     <>
       <AppPageCard cardTitle="Print" icon={Print} pageCode="item-print" pageTitle={`${item.name} - Print`}>
-        <div className="flex flex-col md:flex-row">
-          <img alt={item.name} className="mx-auto max-h-64 object-contain" data-id={item.id} onError={onItemImageError} src={itemToImageUrl(item)} />
-          <div className="flex flex-col gap-3 text-center md:items-start md:text-left">
-            <h1 className="w-full">{item.name}</h1>
+        <div class="flex flex-col md:flex-row">
+          <img alt={item.name} class="mx-auto max-h-64 object-contain" data-id={item.id} onError={onItemImageError} src={itemToImageUrl(item)} />
+          <div class="flex flex-col gap-3 text-center md:items-start md:text-left">
+            <h1 class="w-full">{item.name}</h1>
             <p>You are about to print a barcode with the following value : {value}</p>
-            <div className="flex flex-col pt-3 md:flex-row">
+            <div class="flex flex-col pt-3 md:flex-row">
               <AppBarcode isHighlighted={isHighlighted} item={item} size={size} />
-              <div className="flex flex-col gap-3 md:ml-6 md:items-start">
+              <div class="flex flex-col gap-3 md:ml-6 md:items-start">
                 <ToggleButtonGroup aria-label="Size" color="primary" exclusive onChange={onSizeChange} size="small" value={size}>
                   {Object.keys(printSizes).map(one => <ToggleButton key={one} value={one}>{one}</ToggleButton>)}
                 </ToggleButtonGroup>
@@ -62,7 +62,7 @@ export function PageItemPrint ({ ...properties }: Readonly<Record<string, unknow
           </div>
         </div>
       </AppPageCard >
-      <div className="hidden print:block">
+      <div class="hidden print:block">
         <AppBarcode item={item} size={size} />
       </div>
     </>

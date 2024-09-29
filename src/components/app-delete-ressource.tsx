@@ -28,7 +28,7 @@ export function AppDeleteRessource ({ onDelete }: Readonly<{ onDelete: () => voi
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <div className="mr-2">
+          <div class="mr-2">
             <Button onClick={closeDialog}>Cancel</Button>
             <Button autoFocus onClick={doDelete}>Delete</Button>
           </div>

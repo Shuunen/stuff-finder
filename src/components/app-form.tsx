@@ -76,14 +76,14 @@ export function AppForm<FormType extends Form> ({ error: parentError = '', initi
   const canSubmit = form.isValid && form.isTouched && errorMessage.length === 0
 
   return (
-    <form autoComplete="off" className={`grid w-full gap-6 ${gridClass(form.columns)}`} noValidate onSubmit={onFormSubmit} spellCheck={false}>
-      {Object.entries(form.fields).map(([id, field]) => <div className={`grid w-full ${field.isVisible ? '' : 'hidden'} ${colSpanClass(field.columns)}`} key={id}>{/* @ts-expect-error typing issue */}
+    <form autoComplete="off" class={`grid w-full gap-6 ${gridClass(form.columns)}`} noValidate onSubmit={onFormSubmit} spellcheck={false}>
+      {Object.entries(form.fields).map(([id, field]) => <div class={`grid w-full ${field.isVisible ? '' : 'hidden'} ${colSpanClass(field.columns)}`} key={id}>{/* @ts-expect-error typing issue */}
         {field.type === 'text' && <AppFormFieldText field={field} form={form} id={id} suggestions={suggestions} updateField={updateField} />}
         {field.type === 'checkbox' && <AppFormFieldCheckbox field={field} id={id} updateField={updateField} />}
         {field.type === 'select' && <AppFormFieldSelect field={field} form={form} id={id} updateField={updateField} />}
       </div>)}
-      <div className="order-last flex flex-col md:col-span-full">
-        {Boolean(errorMessage) && Boolean(form.isTouched) && <p className="text-red-500">{errorMessage}</p>}
+      <div class="order-last flex flex-col md:col-span-full">
+        {Boolean(errorMessage) && Boolean(form.isTouched) && <p class="text-red-500">{errorMessage}</p>}
         {onSubmit !== undefined && <Button disabled={!canSubmit} type="submit" variant="contained">Save</Button>}
       </div>
     </form>

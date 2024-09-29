@@ -25,7 +25,7 @@ export function AppItemListEntry ({ display, item }: Readonly<{ display: Display
   return (
     <ListItem data-type="list-item" disablePadding key={item.id} sx={listStyle}>
       {display === 'list' && <ListItemButton component="a" href={`/item/details/${item.id}`}>
-        <img alt={title} className="mr-4 size-12 rounded-full object-contain" data-id={item.id} onError={onItemImageError} src={itemToImageUrl(item)} />
+        <img alt={title} class="mr-4 size-12 rounded-full object-contain" data-id={item.id} onError={onItemImageError} src={itemToImageUrl(item)} />
         <ListItemText primary={title} primaryTypographyProps={titleStyle} secondary={subtitle} secondaryTypographyProps={subtitleStyle} />
       </ListItemButton>}
       {display === 'card' && <Card onClick={goToDetails} sx={cardStyle}>

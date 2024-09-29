@@ -56,11 +56,11 @@ export function PageScan ({ ...properties }: Readonly<Record<string, unknown>>) 
 
   return (
     <AppPageCard cardTitle="Scan" icon={QrCodeScannerIcon} pageCode="scan" pageTitle="Scan QR Code or Barcode">
-      <div className="flex flex-col">
-        <h2 className="text-center">Scan a QR Code or a barcode to search for it 👀</h2>
-        <div className="relative flex aspect-video h-44 flex-col overflow-hidden rounded-xl shadow-lg">
-          <Skeleton className="absolute left-0 top-0 size-full" height={176} variant="rounded" />
-          <video className="w-full object-cover" ref={videoReference} />
+      <div class="flex flex-col">
+        <h2 class="text-center">Scan a QR Code or a barcode to search for it 👀</h2>
+        <div class="relative flex aspect-video h-44 flex-col overflow-hidden rounded-xl shadow-lg">
+          <Skeleton class="absolute left-0 top-0 size-full" height={176} variant="rounded" />
+          <video class="w-full object-cover" ref={videoReference} />
           <audio preload="auto" ref={soundReference} src="/assets/barcode-scan-beep-09.mp3" />
         </div>
       </div>
