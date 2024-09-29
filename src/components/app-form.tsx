@@ -77,7 +77,7 @@ export function AppForm<FormType extends Form> ({ error: parentError = '', initi
 
   return (
     <form autoComplete="off" class={`grid w-full gap-6 ${gridClass(form.columns)}`} noValidate onSubmit={onFormSubmit} spellcheck={false}>
-      {Object.entries(form.fields).map(([id, field]) => <div class={`grid w-full ${field.isVisible ? '' : 'hidden'} ${colSpanClass(field.columns)}`} key={id}>{/* @ts-expect-error typing issue */}
+      {Object.entries(form.fields).map(([id, field]) => <div class={`grid w-full ${field.isVisible ? '' : 'hidden'} ${colSpanClass(field.columns)}`} key={id}>
         {field.type === 'text' && <AppFormFieldText field={field} form={form} id={id} suggestions={suggestions} updateField={updateField} />}
         {field.type === 'checkbox' && <AppFormFieldCheckbox field={field} id={id} updateField={updateField} />}
         {field.type === 'select' && <AppFormFieldSelect field={field} form={form} id={id} updateField={updateField} />}
