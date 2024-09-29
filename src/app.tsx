@@ -25,6 +25,7 @@ const AsyncPageItemPrint = lazy<Component>(() => import('./pages/page-item-print
 const AsyncPageSearch = lazy<Component>(() => import('./pages/page-search').then(({ PageSearch }) => ({ default: PageSearch })))
 const AsyncPageSettings = lazy<Component>(() => import('./pages/page-settings').then(({ PageSettings }) => ({ default: PageSettings })))
 const AsyncPageSequencer = lazy<Component>(() => import('./pages/page-sequencer').then(({ PageSequencer }) => ({ default: PageSequencer })))
+const AsyncPageKitchenSink = lazy<Component>(() => import('./pages/page-kitchen-sink').then(({ PageKitchenSink }) => ({ default: PageKitchenSink })))
 /* eslint-enable @typescript-eslint/promise-function-async, @typescript-eslint/naming-convention */
 
 
@@ -75,6 +76,7 @@ export function App () {
           <AsyncPageSearch path="/search/:input" />
           <AsyncPageSettings path="/settings" />
           <AsyncPageSequencer path="/sequencer" />
+          <AsyncPageKitchenSink path="/kitchen-sink" />
           <PageError code="page-not-found" default />
         </Router>
       </Suspense>
