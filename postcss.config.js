@@ -1,4 +1,4 @@
-// eslint-disable-next-line import/no-anonymous-default-export
+// biome-ignore lint/style/noDefaultExport: it's ok here
 export default {
   plugins: {
     autoprefixer: {},

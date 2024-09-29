@@ -13,6 +13,7 @@ export default [
     files: ["**/*.tsx"],
     rules: {
       "@typescript-eslint/no-misused-promises": "off", // annoying
+      '@typescript-eslint/prefer-readonly-parameter-types': 'off', // annoying
       "jsdoc/require-jsdoc": "off", // no thanks :p
     },
   },

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/prefer-readonly-parameter-types */
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 import ContentCopyIcon from '@mui/icons-material/ContentCopy'
 import DeleteIcon from '@mui/icons-material/Delete'

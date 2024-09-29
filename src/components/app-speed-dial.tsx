@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/prefer-readonly-parameter-types */
 import AddIcon from '@mui/icons-material/Add'
 import SpeedDialIcon from '@mui/icons-material/EjectOutlined'
 import HomeIcon from '@mui/icons-material/Home'

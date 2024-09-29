@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/prefer-readonly-parameter-types */
 import Autocomplete, { type AutocompleteRenderInputParams } from '@mui/material/Autocomplete'
 import TextField from '@mui/material/TextField'
 import { useCallback } from 'preact/hooks'

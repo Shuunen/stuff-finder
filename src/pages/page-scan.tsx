@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/prefer-readonly-parameter-types */
 import QrCodeScannerIcon from '@mui/icons-material/QrCodeScanner'
 import Skeleton from '@mui/material/Skeleton'
 import { signal, useSignalEffect } from '@preact/signals'

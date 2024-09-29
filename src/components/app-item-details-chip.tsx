@@ -18,10 +18,9 @@ type Properties = Readonly<{
 
 const chipsStyle = { height: 28, paddingTop: 0.3 }
 
-// eslint-disable-next-line @typescript-eslint/naming-convention, @typescript-eslint/prefer-readonly-parameter-types
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export function AppItemDetailsChip ({ color = 'default', icon: Icon, label, link, tooltip }: Properties) {
 
-  // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
   const onChipClick = useCallback(async (event: MouseEvent) => {
     event.stopPropagation()
     logger.debug('onChipClick', { event })
