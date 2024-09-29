@@ -10,7 +10,7 @@ import type { Display } from '../types/theme.types'
 import { itemToImageUrl, onItemImageError } from '../utils/item.utils'
 import type { Item } from '../utils/parsers.utils'
 
-// eslint-disable-next-line max-statements, @typescript-eslint/prefer-readonly-parameter-types
+// eslint-disable-next-line max-statements
 export function AppItemListEntry ({ display, item }: Readonly<{ display: Display; item: Item }>) {
   const title = `${item.name}${item.brand ? ` - ${item.brand.trim()}` : ''}`
   const titleStyle = useMemo(() => ({ fontSize: 18, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }), [])

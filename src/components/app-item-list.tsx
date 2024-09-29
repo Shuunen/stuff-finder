@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/prefer-readonly-parameter-types */
 import { useState } from 'preact/hooks'
 import type { Display } from '../types/theme.types'
 import type { Item } from '../utils/parsers.utils'

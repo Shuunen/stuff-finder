@@ -9,7 +9,6 @@ import { state } from '../utils/state.utils'
 export function PageSettings ({ ...properties }: Readonly<Record<string, unknown>>) {
   logger.debug('PageSettings', { properties })
   type Form = typeof settingsForm
-  // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
   const onSubmit = useCallback((form: Form) => {
     logger.debug('onSubmit', { form })
     state.credentials = { base: form.fields.base.value, table: form.fields.table.value, token: form.fields.token.value, view: form.fields.view.value, wrap: form.fields.wrap.value }

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/prefer-readonly-parameter-types */
 import Button from '@mui/material/Button'
 import { signal, useSignalEffect } from '@preact/signals'
 import { route } from 'preact-router'

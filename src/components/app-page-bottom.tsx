@@ -3,7 +3,7 @@ import type { MuiIcon } from '../types/icons.types'
 import { AppButtonBack } from './app-button-back'
 import { AppButtonNext } from './app-button-next'
 
-// eslint-disable-next-line @typescript-eslint/naming-convention, @typescript-eslint/prefer-readonly-parameter-types
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export function AppPageBottom ({ icon: Icon, nextLabel = 'Home', nextUrl = '/', stepsBack = 1 }: Readonly<{ icon: MuiIcon; nextLabel?: string; nextUrl?: string; stepsBack?: number }>) {
   const style = useMemo(() => ({ fontSize: 60 }), [])
   return (

@@ -9,7 +9,7 @@ import { state } from '../utils/state.utils'
 import { AppDeleteRessource } from './app-delete-ressource'
 import { AppItemDetailsChip } from './app-item-details-chip'
 
-// eslint-disable-next-line complexity, @typescript-eslint/prefer-readonly-parameter-types
+// eslint-disable-next-line complexity
 export function AppItemDetails ({ item }: Readonly<{ item: Item }>) {
 
   const onDelete = useCallback(async () => {
