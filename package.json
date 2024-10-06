@@ -14,7 +14,7 @@
     "notistack": "^3.0",
     "preact": "^10.24",
     "preact-router": "^4.1",
-    "shuutils": "^8.1",
+    "shuutils": "^9.0.0",
     "valibot": "^0.42",
     "webcomponent-qr-code": "^1.2"
   },
