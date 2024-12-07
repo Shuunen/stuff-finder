@@ -61,3 +61,11 @@ Check build stats in details by adding `--metafile=meta.json` to the esbuild com
 - [V8](https://github.com/demurgos/v8-coverage) : simple & effective cli for code coverage
 - [Vite](https://github.com/vitejs/vite) : super fast frontend tooling
 - [Vitest](https://github.com/vitest-dev/vitest) : super fast vite-native testing framework
+
+## Stargazers over time
+
+[![Stargazers over time](https://starchart.cc/Shuunen/stuff-finder.svg?variant=adaptive)](https://starchart.cc/Shuunen/stuff-finder)
+
+## Page views
+
+[![Free Website Counter](https://www.websitecounterfree.com/c.php?d=9&id=63927&s=12)](https://www.websitecounterfree.com)
