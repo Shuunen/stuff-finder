@@ -118,17 +118,17 @@ export function PageItemAddEdit ({ id = '', isEdit = false }: Readonly<{ id?: st
 
   return (
     <AppPageCard cardTitle={`${isEdit ? 'Edit' : 'Add'} item`} icon={AddCircleOutlineIcon} pageCode={`item-${isEdit ? 'edit' : 'add'}`} pageTitle={`${isEdit ? 'Edit' : 'Add'} item`}>
-      <div class="flex flex-col">
-        {Boolean(isEdit) && <p>Please fill in the form below to edit the item, you can change any field you want 🔄</p>}
-        {!isEdit && <p>Please fill in the form below to add a new item, no worry, you will be able to edit it later if needed ✏️</p>}
+      <div class="flex flex-col w-100 max-h-[90%] md:max-h-full mb-20 md:mb-0 overflow-y-auto overflow-x-hidden">
+        {Boolean(isEdit) && <p class="text-center">Please fill in the form below to edit the item, you can change any field you want 🔄</p>}
+        {!isEdit && <p class="text-center">Please fill in the form below to add a new item, no worry, you will be able to edit it later if needed ✏️</p>}
         {id !== '' && initialForm.fields.reference.value === '' && <p>Here is the keyword you search previously : {id}</p>}
-        <div class="flex w-full flex-col md:flex-row">
-          <img alt="item visual" class="w-1/2 md:w-1/4" data-id={itemId} onError={onItemImageError} ref={photoReference} src={initialForm.fields.photo.value || defaultImage} />
-          <div class="w-full md:w-3/4">
+        <div class="grid md:grid-cols-3 gap-6 items-end">
+          <img alt="item visual" class="md:max-h-80 md:max-w-80 w-auto" data-id={itemId} onError={onItemImageError} ref={photoReference} src={initialForm.fields.photo.value || defaultImage} />
+          <div class="md:col-span-2">
             <AppForm error={error} initialForm={initialForm} onChange={onChange} suggestions={suggestions} />
           </div>
         </div>
-        <div class="flex">
+        <div class="flex justify-center">
           <Button disabled={!canSubmit} onClick={onSubmit} variant="contained">{isEdit ? 'Save' : 'Create'}</Button>
           <Button disabled={itemId === ''} onClick={onDetails} variant="outlined">View</Button>
           {!isEdit && <Button disabled={itemId === ''} onClick={onPrint} variant="outlined">Print</Button>}

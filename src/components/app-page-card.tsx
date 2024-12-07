@@ -8,10 +8,10 @@ import { AppPageBottom } from './app-page-bottom'
 export function AppPageCard ({ cardTitle, children, icon: Icon, nextLabel = 'Home', nextUrl = '/', pageCode, pageTitle, stepsBack = 1 }: Readonly<{ cardTitle: string; children: VNode; icon: MuiIcon; nextLabel?: string; nextUrl?: string; pageCode: string; pageTitle: string; stepsBack?: number }>) {
   setPageTitle(pageTitle)
   return (
-    <div class="flex max-h-full w-full grow flex-col print:hidden" data-component="page-card" data-page={pageCode}>
+    <div class="flex max-h-full w-full flex-col items-center print:hidden grow md:grow-0" data-component="page-card" data-page={pageCode}>
       <h3 class="hidden sm:block">{cardTitle}</h3>
-      <div class="relative z-10 flex w-full max-w-4xl grow flex-col justify-start gap-3 overflow-auto bg-gradient-to-b from-white/80 to-white p-4 sm:p-6 md:w-auto md:grow-0 md:gap-6 md:rounded-md md:p-8 md:shadow-md">
-        <div class="flex w-full justify-start sm:mb-4 md:hidden">
+      <div class="relative z-10 flex grow flex-col justify-center gap-3 overflow-auto bg-gradient-to-b from-white/80 to-white p-4 sm:p-6 md:grow-0 md:gap-6 md:rounded-md md:shadow-md">
+        <div class="flex w-full sm:mb-4 md:hidden">
           <AppButtonBack />
         </div>
         {children}

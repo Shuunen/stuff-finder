@@ -51,7 +51,7 @@ export function PageItemPrint ({ ...properties }: Readonly<Record<string, unknow
       <AppPageCard cardTitle="Print" icon={Print} pageCode="item-print" pageTitle={`${item.name} - Print`}>
         <div class="flex flex-col md:flex-row">
           <img alt={item.name} class="mx-auto max-h-64 object-contain" data-id={item.id} onError={onItemImageError} src={itemToImageUrl(item)} />
-          <div class="flex flex-col gap-3 text-center md:items-start md:text-left">
+          <div class="flex flex-col gap-4 text-center md:items-start md:text-left">
             <h1 class="w-full">{item.name}</h1>
             <p>You are about to print a barcode with the following value : {value}</p>
             <div class="flex flex-col pt-3 md:flex-row">

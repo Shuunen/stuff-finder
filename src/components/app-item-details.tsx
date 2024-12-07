@@ -23,11 +23,11 @@ export function AppItemDetails ({ item }: Readonly<{ item: Item }>) {
   const itemLocation = useMemo(() => itemToLocation(item), [item])
 
   return (
-    <div class="flex flex-col sm:flex-row">
+    <div class="flex flex-col sm:flex-row mr-4 items-center">
       <div class="absolute right-5 top-5 opacity-50 transition-opacity hover:opacity-85">
         <AppDeleteRessource onDelete={onDelete} />
       </div>
-      <div class="relative flex aspect-square w-full min-w-40 max-w-[30vh] flex-col md:w-1/3 md:min-w-64 md:max-w-[40vh]">
+      <div class="relative flex aspect-square w-full min-w-40 max-w-[40vh] flex-col md:w-1/3 md:min-w-64 md:max-w-[40vh]">
         <img alt={item.name} class="absolute top-0 size-full object-contain md:p-4" data-id={item.id} onError={onItemImageError} src={itemToImageUrl(item)} />
       </div>
       <div class="mb-12 flex min-w-80 flex-col items-start justify-start gap-3 sm:mb-0 sm:mr-6 md:w-2/3">

@@ -33,16 +33,8 @@ h3 {
   -webkit-text-stroke-color: grey;
 }
 
-.flex:not(.gap-3):not(.gap-0) {
+.flex:not([class*='gap-']) {
   @apply gap-6;
-}
-
-.flex:not(.items-start):not(.items-end) {
-  @apply items-center;
-}
-
-.flex:not(.justify-start):not(.justify-between):not(.justify-end) {
-  @apply justify-center;
 }
 
 .notistack-SnackbarContainer {

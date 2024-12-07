@@ -18,7 +18,7 @@ export function AppItemListEntry ({ display, item }: Readonly<{ display: Display
   const subtitle = `${item.category}${drawer.length > 0 ? ' - ' : ''}${drawer}`
   const subtitleStyle = useMemo(() => ({ color: display === 'card' ? '#333' : 'grey', fontSize: 16, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }), [display])
   const listStyle = useMemo(() => ({ background: 'white', transition: 'filter 0.3s' }), [])
-  const cardStyle = useMemo(() => ({ ':hover': { boxShadow: '0 0 20px 0 rgba(0, 0, 0, 0.5)' }, 'cursor': 'pointer', 'height': '100%', 'position': 'relative', 'width': '100%' }), [])
+  const cardStyle = useMemo(() => ({ ':hover': { boxShadow: '0 0 20px 0 rgba(0, 0, 0, 0.5)' }, 'cursor': 'pointer', 'height': '100%', maxWidth: 300, 'position': 'relative', 'width': '100%' }), [])
   const imgStyle = useMemo(() => ({ aspectRatio: 1, objectFit: 'contain', padding: '1vw 1vw 0 1vw', width: '100%' }), [])
   const floatingHeaderStyle = useMemo(() => ({ background: 'whitesmoke', color: 'black', fontSize: 18, height: '100%', marginBottom: 0, paddingX: 2, paddingY: 1, width: '100%' }), [])
   const goToDetails = useCallback(() => route(`/item/details/${item.id}`), [item.id])
@@ -29,7 +29,7 @@ export function AppItemListEntry ({ display, item }: Readonly<{ display: Display
         <ListItemText primary={title} primaryTypographyProps={titleStyle} secondary={subtitle} secondaryTypographyProps={subtitleStyle} />
       </ListItemButton>}
       {display === 'card' && <Card onClick={goToDetails} sx={cardStyle}>
-        <CardMedia alt={title} component="img" image={itemToImageUrl(item)} onError={onItemImageError} sx={imgStyle} />
+        <CardMedia alt={title} component="img" data-id={item.id} image={itemToImageUrl(item)} onError={onItemImageError} sx={imgStyle} />
         <ListItemText primary={title} primaryTypographyProps={titleStyle} secondary={subtitle} secondaryTypographyProps={subtitleStyle} sx={floatingHeaderStyle} />
       </Card>}
     </ListItem>
