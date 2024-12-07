@@ -3,6 +3,8 @@ import { sanitize } from 'shuutils'
 import type { Display } from './types/theme.types'
 import type { Item, ItemField, ItemPhoto, ItemStatus } from './utils/parsers.utils'
 
+const laptopWidth = 1500
+
 export interface CommonLists {
   boxes: string[]
   categories: string[]
@@ -128,10 +130,10 @@ export const fuseOptions: IFuseOptions<Item> = {
 }
 
 /**
- *
+ * Just a void, empty function.
  */
 export function voidFunction () { /* empty */ }
 
 export const defaultItems: Item[] = []
 
-export const defaultDisplay: Display = 'list'
+export const defaultDisplay: Display = globalThis.screen.width < laptopWidth ? 'list' : 'card'
