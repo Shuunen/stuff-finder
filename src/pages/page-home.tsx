@@ -1,11 +1,9 @@
 import Button from '@mui/material/Button'
-import { signal, useSignalEffect } from '@preact/signals'
 import { route } from 'preact-router'
 import type { CSSProperties } from 'preact/compat'
-import { useCallback, useMemo, useRef, useState } from 'preact/hooks'
-import { off, on } from 'shuutils'
+import { useCallback, useMemo, useState } from 'preact/hooks'
 import { AppPrompter } from '../components/app-prompter'
-import { delays } from '../constants'
+import { AppQuickSearch } from '../components/app-quick-search'
 import { setPageTitle } from '../utils/browser.utils'
 import { logger } from '../utils/logger.utils'
 import { playInfoSound } from '../utils/sound.utils'
@@ -15,41 +13,15 @@ import { state, watchState } from '../utils/state.utils'
 const triggerColumnClasses = 'flex w-full flex-col gap-3 text-gray-400 transition-colors hover:text-purple-600 duration-400 disabled:opacity-50 disabled:pointer-events-none'
 const triggerButtonStyle = { fontSize: '1rem', height: '2.7rem', textTransform: 'none' }
 
-function onSearch (event: KeyboardEvent) {
-  const { key, target } = event
-  if (key !== 'Enter') return
-  const { value } = target as HTMLInputElement // eslint-disable-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-unsafe-type-assertion
-  if (value === '') return
-  logger.debug('onSearch', { value })
-  route(`/search/${value}`)
-}
-
 // eslint-disable-next-line max-lines-per-function
 export function PageHome ({ ...properties }: Readonly<Record<string, unknown>>) {
   logger.debug('PageHome', { properties })
   setPageTitle('Home')
 
-  const searchReference = useRef<HTMLInputElement>(null)
-  const search = signal(searchReference)
   const [isUsable, setIsUsable] = useState(state.status !== 'settings-required')
   const ctaStyle = useMemo(() => (isUsable ? {} : { filter: 'grayscale(1)', opacity: 0.5, pointerEvents: 'none' } satisfies CSSProperties), [isUsable])
 
   watchState('status', () => { setIsUsable(state.status !== 'settings-required') })
-
-  useSignalEffect(useCallback(() => {
-    const focusHandler = on('focus', () => {
-      if (!isUsable) return
-      setTimeout(() => { search.value.current?.focus() }, delays.small)
-    })
-    const keypressHandler = on('keypress', (event: KeyboardEvent) => {
-      const isInSearchInput = event.target instanceof HTMLElement && event.target.className === search.value.current?.className
-      if (!isInSearchInput) search.value.current?.focus()
-    })
-    return () => {
-      off(focusHandler)
-      off(keypressHandler)
-    }
-  }, [search.value, isUsable]))
 
   const onSpeech = useCallback(() => {
     state.status = 'listening'
@@ -70,7 +42,7 @@ export function PageHome ({ ...properties }: Readonly<Record<string, unknown>>) 
           <svg class="h-8" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><title>Scan icon</title><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2"><path d="M2 10V6h4M30 10V6h-4M2 22v4h4M30 22v4h-4M6 9v6M11 9v6M26 9v6M21 9v6M16 9v6M2 18h28M6 21v2M11 21v1M26 21v2M21 21v1M16 21v1" /></g></svg>
         </div>
         <div class={triggerColumnClasses}>
-          <input class="h-11 w-full max-w-xs rounded-md border-2 border-purple-500 px-2 text-lg text-purple-900 shadow-md placeholder:text-center hover:shadow-lg md:text-base" onKeyPress={onSearch} placeholder="Type it" ref={searchReference} />
+          <AppQuickSearch placeholder="Type it" />
           <svg class="h-8" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg"><title>Keyboard icon</title><path d="M108 48H68c12-13-12-27 0-40h-8c-12 13 12 27 0 40H20c-9 0-16 7-16 16v40c0 9 7 16 16 16h88c9 0 16-7 16-16V64c0-9-7-16-16-16zm8 56c0 4-4 8-8 8H20c-4 0-8-4-8-8V64c0-4 4-8 8-8h88c4 0 8 4 8 8v40z" fill="currentColor" /></svg>
         </div>
         <div class={triggerColumnClasses}>

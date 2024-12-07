@@ -37,7 +37,7 @@ h3 {
   @apply gap-6;
 }
 
-.flex:not(.items-start) {
+.flex:not(.items-start):not(.items-end) {
   @apply items-center;
 }
 

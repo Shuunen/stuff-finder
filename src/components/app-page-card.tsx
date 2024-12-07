@@ -16,7 +16,7 @@ export function AppPageCard ({ cardTitle, children, icon: Icon, nextLabel = 'Hom
         </div>
         {children}
       </div>
-      <div class="hidden md:block">
+      <div class="hidden md:block mb-8">
         <AppPageBottom icon={Icon} nextLabel={nextLabel} nextUrl={nextUrl} stepsBack={stepsBack} />
       </div>
     </div>

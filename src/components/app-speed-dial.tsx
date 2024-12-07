@@ -8,10 +8,11 @@ import SettingsIcon from '@mui/icons-material/Settings'
 import Fade from '@mui/material/Fade'
 import SpeedDial from '@mui/material/SpeedDial'
 import SpeedDialAction from '@mui/material/SpeedDialAction'
-import { route } from 'preact-router'
-import { useCallback, useMemo, useState } from 'preact/hooks'
+import { route, useRouter } from 'preact-router'
+import { useCallback, useEffect, useMemo, useState } from 'preact/hooks'
 import { isMobile } from 'shuutils'
 import { logger } from '../utils/logger.utils'
+import { AppQuickSearch } from './app-quick-search'
 
 const actions = [
   { handleClick: () => route('/'), icon: <HomeIcon />, name: 'Home' },
@@ -21,8 +22,8 @@ const actions = [
   { handleClick: () => route('/scan'), icon: <QrCodeScannerIcon />, name: 'Scan' },
 ]
 
+// eslint-disable-next-line max-statements
 export function AppSpeedDial ({ isLoading, isSettingsRequired }: Readonly<{ isLoading: boolean; isSettingsRequired: boolean }>) {
-
   const [isOpen, setOpen] = useState(false)
   const toggleOpen = useCallback(() => { setOpen(!isOpen) }, [isOpen])
   const onMouse = useCallback((status: 'enter' | 'leave') => { if (!isMobile()) { logger.debug('open cause mouse', status); setOpen(status === 'enter') } }, [])
@@ -31,13 +32,19 @@ export function AppSpeedDial ({ isLoading, isSettingsRequired }: Readonly<{ isLo
   const options = useMemo(() => ({ color: isLoading ? 'warning' : 'primary' } as const), [isLoading])
   const icon = useMemo(() => (isLoading ? <HourglassTop /> : <SpeedDialIcon />), [isLoading])
   const availableActions = useMemo(() => (isSettingsRequired ? actions.filter((action) => ['Home', 'Settings'].includes(action.name)) : actions), [isSettingsRequired])
+  const [{ path }] = useRouter()
+  const [isQuickSearchAvailable, setQuickSearchAvailability] = useState(false)
+  useEffect(() => { setQuickSearchAvailability(path !== '/') }, [path])
   return (
     <>
       <Fade in={isOpen}>
         {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
         <div class="absolute bottom-0 right-0 z-10 size-full bg-black/30" data-component="speed-dial-backdrop" onClick={toggleOpen} />
       </Fade>
-      <div class="fixed bottom-10 right-10 z-20 print:hidden" data-component="speed-dial">
+      <div class="fixed bottom-10 right-10 z-20 print:hidden flex items-end" data-component="speed-dial">
+        <Fade in={isQuickSearchAvailable}>
+          <div class="mb-2"><AppQuickSearch /></div>
+        </Fade>
         <SpeedDial ariaLabel='Actions' FabProps={options} icon={icon} onClick={toggleOpen} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} open={isOpen}>
           {availableActions.map((action) => <SpeedDialAction icon={action.icon} key={action.name} onClick={action.handleClick} tooltipTitle={action.name} />)}
         </SpeedDial>
