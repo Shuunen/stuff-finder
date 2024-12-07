@@ -54,6 +54,7 @@ const itemBaseSchema = object({
   'updated-on': string(),
 })
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const itemSchema = object({
   ...itemBaseSchema.entries,
   id: idSchema,

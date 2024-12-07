@@ -8,7 +8,7 @@ import { playErrorSound } from './sound.utils'
 export function listenUserSpeech (onSuccess: (transcript: string, confidence: number) => void) {
   let isSuccess = false
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition, @typescript-eslint/strict-boolean-expressions
-  const recognition = new (window.webkitSpeechRecognition || window.SpeechRecognition)()
+  const recognition = new (globalThis.webkitSpeechRecognition || globalThis.SpeechRecognition)()
   recognition.lang = navigator.language
   recognition.interimResults = false
   recognition.maxAlternatives = 1

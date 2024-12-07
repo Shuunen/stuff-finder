@@ -17,7 +17,7 @@ export function AppItemDetails ({ item }: Readonly<{ item: Item }>) {
     const result = await deleteItem(item.id)
     const isOk = result.success
     state.message = { content: isOk ? 'Item deleted' : 'Item deletion failed', delay: isOk ? delays.second : delays.seconds, type: isOk ? 'success' : 'error' }
-    if (isOk) window.history.back()
+    if (isOk) globalThis.history.back()
   }, [item])
 
   const itemLocation = useMemo(() => itemToLocation(item), [item])

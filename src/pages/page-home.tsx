@@ -18,7 +18,7 @@ const triggerButtonStyle = { fontSize: '1rem', height: '2.7rem', textTransform: 
 function onSearch (event: KeyboardEvent) {
   const { key, target } = event
   if (key !== 'Enter') return
-  const { value } = target as HTMLInputElement // eslint-disable-line @typescript-eslint/consistent-type-assertions
+  const { value } = target as HTMLInputElement // eslint-disable-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-unsafe-type-assertion
   if (value === '') return
   logger.debug('onSearch', { value })
   route(`/search/${value}`)
@@ -40,7 +40,7 @@ export function PageHome ({ ...properties }: Readonly<Record<string, unknown>>) 
     const focusHandler = on('focus', () => {
       if (!isUsable) return
       setTimeout(() => { search.value.current?.focus() }, delays.small)
-    }, window)
+    })
     const keypressHandler = on('keypress', (event: KeyboardEvent) => {
       const isInSearchInput = event.target instanceof HTMLElement && event.target.className === search.value.current?.className
       if (!isInSearchInput) search.value.current?.focus()

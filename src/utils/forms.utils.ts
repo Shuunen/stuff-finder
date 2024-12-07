@@ -14,9 +14,9 @@ type FormFieldBase = {
   regex: RegExp
   unit: string
 }
-type FormFieldText = { type: 'text'; value: string } & FormFieldBase
-type FormFieldSelect = { options: FormFieldOptions; type: 'select'; value: string } & FormFieldBase
-type FormFieldCheckbox = { type: 'checkbox'; value: boolean } & FormFieldBase // eslint-disable-line @typescript-eslint/naming-convention
+type FormFieldText = FormFieldBase & { type: 'text'; value: string }
+type FormFieldSelect = FormFieldBase & { options: FormFieldOptions; type: 'select'; value: string }
+type FormFieldCheckbox = FormFieldBase & { type: 'checkbox'; value: boolean } // eslint-disable-line @typescript-eslint/naming-convention
 type FormField<Type extends FormFieldType> = Type extends 'text' ? FormFieldText : Type extends 'select' ? FormFieldSelect : FormFieldCheckbox
 
 function fieldRegex (regex?: RegExp, minLength = 3, maxLength = 100) {
@@ -46,7 +46,7 @@ export function validateForm<FormType extends Form> (form: FormType) {
 }
 
 // eslint-disable-next-line complexity
-export function createTextField (parameters: { maxLength?: number; minLength?: number } & Partial<Pick<FormFieldText, 'columns' | 'isRequired' | 'isValid' | 'isVisible' | 'link' | 'regex' | 'unit' | 'value'>> & Pick<FormFieldText, 'label'>) {
+export function createTextField (parameters: Partial<Pick<FormFieldText, 'columns' | 'isRequired' | 'isValid' | 'isVisible' | 'link' | 'regex' | 'unit' | 'value'>> & Pick<FormFieldText, 'label'> & { maxLength?: number; minLength?: number }) {
   const { columns = 1, isRequired = false, isValid = false, isVisible = true, label = '', link = '', maxLength = 100, minLength = 3, regex, unit = '', value = '' } = parameters
   return { columns, isRequired, isValid, isVisible, label, link, regex: fieldRegex(regex, minLength, maxLength), type: 'text', unit, value } satisfies FormFieldText
 }

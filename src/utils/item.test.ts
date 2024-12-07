@@ -1,10 +1,11 @@
 import { clone, sleep } from 'shuutils'
 import { expect, it } from 'vitest'
 import { addOrUpdateItems, areItemsEquivalent, deleteItem, formToItem, getCommonListsFromItems, itemForm, itemToForm, itemToImageUrl, itemToLocation, pushItem } from './item.utils'
+import { logger } from './logger.utils'
 import { mockItem, mockRecord, mockState } from './mock.utils'
 import type { ItemPhoto, ItemStatus } from './parsers.utils'
 
-// eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+// eslint-disable-next-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-unsafe-type-assertion
 const itemA = mockItem({ id: 'itemA', status: 'new surprise status' as ItemStatus })
 const itemAa = { ...itemA }
 const itemB = mockItem({ id: 'itemB', location: 'location A' })
@@ -24,27 +25,33 @@ it('mockItem A', () => {
 
 
 it('addOrUpdateItems A update existing item', () => {
+  logger.disable()
   const itemsInput = [itemA, itemB]
   const itemTouched = mockItem({ id: itemB.id, location: itemA.location })
   const itemsOutput = addOrUpdateItems(itemsInput, itemTouched)
   expect(itemsOutput).toHaveLength(2)
   expect(itemsOutput[1]?.location).toBe(itemTouched.location)
+  logger.enable()
 })
 
 it('addOrUpdateItems B add new item', () => {
+  logger.disable()
   const itemsInput = [itemA, itemB]
   const itemTouched = mockItem({ id: 'new item' })
   const itemsOutput = addOrUpdateItems(itemsInput, itemTouched)
   expect(itemsOutput).toHaveLength(3)
   expect(itemsOutput[2]?.id).toBe(itemTouched.id)
+  logger.enable()
 })
 
 it('addOrUpdateItems C add new item without id', () => {
+  logger.disable()
   const itemsInput = [itemA, itemB]
   const itemTouched = mockItem()
   itemTouched.id = ''
   const itemsOutput = addOrUpdateItems(itemsInput, itemTouched)
   expect(itemsOutput).toHaveLength(2)
+  logger.enable()
 })
 
 it('itemToImageUrl A', () => {
@@ -53,7 +60,7 @@ it('itemToImageUrl A', () => {
 
 it('itemToImageUrl B', () => {
   const url = 'https://picsum.photos/seed/123/200/200'
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-unsafe-type-assertion
   const item = mockItem({ photo: [{ url } as ItemPhoto] })
   expect(itemToImageUrl(item)).toBe(url)
 })
@@ -104,10 +111,12 @@ it('pushItem B item with id should patch remotely & update locally', async () =>
 })
 
 it('pushItem C itemA with no change should not call api', async () => {
+  logger.disable()
   const item = mockItem({ id: '1' })
   const state = mockState({ items: [item, mockItem({ id: '2' })] }) // here item in state is the same as item
   const result = await pushItem(item, state)
   expect(result.success).toBe(false) // no change, so no call to the api
+  logger.enable()
 })
 
 it('formToItem A default itemForm', () => {
@@ -157,13 +166,13 @@ it('deleteItem A delete an item in state', async () => {
   expect(nbCalls).toBe(1)
 })
 
-it('deleteItem B delete an item not in state', () => {
+it('deleteItem B delete an item not in state', async () => {
   // eslint-disable-next-line jsdoc/require-jsdoc, unicorn/consistent-function-scoping, @typescript-eslint/naming-convention, @typescript-eslint/no-unused-vars
   async function deleteMethodMock (_url: string) {
     await sleep(1) // eslint-disable-next-line @typescript-eslint/naming-convention
     return { deleted: true, id: itemB.id }
   }
-  void expect(async () => deleteItem(itemB.id, stateA, deleteMethodMock))
+  await expect(async () => deleteItem(itemB.id, stateA, deleteMethodMock))
     .rejects.toThrowErrorMatchingInlineSnapshot('[Error: item not found in state]')
 })
 

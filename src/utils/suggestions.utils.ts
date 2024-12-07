@@ -9,7 +9,7 @@ import type { ItemSuggestions } from './parsers.utils'
 import { state } from './state.utils'
 import { getAsin } from './url.utils'
 
-const keysToCapitalize = new Set(['name', 'details'])
+const keysToCapitalize = new Set(['details', 'name'])
 
 function priceParse (price?: number | string) {
   if (price === undefined) return ''
@@ -26,8 +26,8 @@ function isNullish (value: unknown) {
 
 export async function addSuggestionsFromWrap<ResponseType> (endpoint: string, getMethod = get) {
   const wrapApiKey = state.credentials.wrap
-  if (wrapApiKey === '') return {} as ResponseType // eslint-disable-line @typescript-eslint/consistent-type-assertions
-  return await getMethod(`https://wrapapi.com/use/jojo/${endpoint}&wrapAPIKey=${wrapApiKey}`) as ResponseType // eslint-disable-line @typescript-eslint/consistent-type-assertions
+  if (wrapApiKey === '') return {} as ResponseType // eslint-disable-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-unsafe-type-assertion
+  return await getMethod(`https://wrapapi.com/use/jojo/${endpoint}&wrapAPIKey=${wrapApiKey}`) as ResponseType // eslint-disable-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-unsafe-type-assertion
 }
 
 export async function addSuggestionsFromDeyes (suggestions: ItemSuggestions, code: string, getMethod = get) {
@@ -92,7 +92,7 @@ export function cleanSuggestions (suggestionsInput: Record<string, string[] | un
     if (values.length === 0) delete suggestions[key] // clear empty fields
     else suggestions[key] = values.filter((value, index, array) => array.indexOf(value) === index && !isNullish(value)) // remove duplicates & nullish
   }
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-unsafe-type-assertion
   return suggestions as Record<string, string[]>
 }
 

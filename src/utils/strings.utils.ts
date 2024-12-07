@@ -5,5 +5,5 @@ import { pickOne } from 'shuutils'
  * @returns {string} A random cool ascii face
  */
 export function coolAscii () {
-  return pickOne(['( ＾◡＾)', '♥‿♥', '八(＾□＾*)', '(◡ ‿ ◡ ✿)', '(=^ェ^=)', 'ʕ •ᴥ•ʔ', '(*°∀°)', String.raw`\(-ㅂ-)/`, 'ლ(╹◡╹ლ)', 'ლ(o◡oლ)', '＼(＾O＾)／']) /* c8 ignore next */ ?? String.raw`¯\_(ツ)_/¯`
+  return pickOne(['( ＾◡＾)', '♥‿♥', '八(＾□＾*)', '(◡ ‿ ◡ ✿)', '(=^ェ^=)', 'ʕ •ᴥ•ʔ', '(*°∀°)', String.raw`\(-ㅂ-)/`, 'ლ(╹◡╹ლ)', 'ლ(o◡oლ)', '＼(＾O＾)／'])
 }

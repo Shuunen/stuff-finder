@@ -25,7 +25,7 @@ export function AppItemDetailsChip ({ color = 'default', icon: Icon, label, link
     event.stopPropagation()
     logger.debug('onChipClick', { event })
     if (link !== undefined) { route(link); return }
-    const target = event.currentTarget as HTMLElement // eslint-disable-line @typescript-eslint/consistent-type-assertions
+    const target = event.currentTarget as HTMLElement // eslint-disable-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-unsafe-type-assertion
     await copyToClipboard(target.textContent ?? '')
     state.message = { content: `${tooltip} copied to clipboard`, delay: delays.second, type: 'success' }
   }, [link, tooltip])

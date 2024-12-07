@@ -38,7 +38,7 @@ export function AppSpeedDial ({ isLoading, isSettingsRequired }: Readonly<{ isLo
         <div class="absolute bottom-0 right-0 z-10 size-full bg-black/30" data-component="speed-dial-backdrop" onClick={toggleOpen} />
       </Fade>
       <div class="fixed bottom-10 right-10 z-20 print:hidden" data-component="speed-dial">
-        <SpeedDial FabProps={options} ariaLabel='Actions' icon={icon} onClick={toggleOpen} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} open={isOpen}>
+        <SpeedDial ariaLabel='Actions' FabProps={options} icon={icon} onClick={toggleOpen} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} open={isOpen}>
           {availableActions.map((action) => <SpeedDialAction icon={action.icon} key={action.name} onClick={action.handleClick} tooltipTitle={action.name} />)}
         </SpeedDial>
       </div>

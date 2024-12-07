@@ -21,7 +21,7 @@ function itemToImageUrl (item?: Item) {
 function addOrUpdateItems (input: Item[], itemTouched: Item) {
   const items = clone(input)
   const index = items.findIndex(item => item.id === itemTouched.id)
-  if (index >= 0) {
+  if (index !== -1) {
     logger.info('updating item locally', itemTouched)
     items[index] = itemTouched
   } else if (itemTouched.id) {
@@ -69,15 +69,15 @@ function deleteItemLocally (id: Item['id'], currentState = state) {
 function pushItemLocally (item: Item, currentState = state) {
   const items = clone(currentState.items)
   const index = items.findIndex(one => one.id === item.id)
-  if (index >= 0) items[index] = item // update existing item
-  else items.push(item) // new item with id
+  if (index === -1) items.push(item) // new item with id
+  else items[index] = item // update existing item
 
   currentState.items = items
 }
 
 function getCoreData (item: Item) {
   const { barcode, box, brand, category, details, drawer, location, name, photo, price, 'ref-printed': isPrinted, reference, status } = item
-  return { barcode, box, brand, category, details, drawer, location, name, 'photo': photo?.[0]?.url ?? '', price, 'ref-printed': isPrinted, reference, status } satisfies { photo: string } & Omit<Item, 'id' | 'photo' | 'updated-on'>
+  return { barcode, box, brand, category, details, drawer, location, name, 'photo': photo?.[0]?.url ?? '', price, 'ref-printed': isPrinted, reference, status } satisfies Omit<Item, 'id' | 'photo' | 'updated-on'> & { photo: string }
 }
 
 // eslint-disable-next-line @typescript-eslint/max-params
@@ -106,7 +106,7 @@ export function getCommonListsFromItems (items: Item[]) {
 
 /* c8 ignore next 12 */
 export async function onItemImageError (event: Event) {
-  const image = event.target as HTMLImageElement // eslint-disable-line @typescript-eslint/consistent-type-assertions
+  const image = event.target as HTMLImageElement // eslint-disable-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-unsafe-type-assertion
   image.src = itemToImageUrl()
   image.classList.add('animate-pulse')
   // load in parallel
@@ -156,7 +156,7 @@ export function formToItem (form: typeof itemForm, id = '') {
     id,
     'location': location.value,
     'name': name.value,
-    'photo': photo.value === '' ? emptyItem.photo : [{ url: photo.value } as unknown as ItemPhoto], // eslint-disable-line @typescript-eslint/consistent-type-assertions
+    'photo': photo.value === '' ? emptyItem.photo : [{ url: photo.value } as unknown as ItemPhoto], // eslint-disable-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-unsafe-type-assertion
     'price': price.value === '' ? undefined : Number.parseFloat(price.value),
     'ref-printed': isPrinted.value,
     'reference': reference.value,

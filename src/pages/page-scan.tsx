@@ -28,7 +28,7 @@ function onDecodeSuccess (result: Result) {
  * @param error the error that occurred if any
  * @returns {void} nothing
  */
-async function onDecode (result: Result | null, sound: HTMLAudioElement | null, error?: Exception) {
+async function onDecode (result: null | Result, sound: HTMLAudioElement | null, error?: Exception) {
   if (state.status !== 'ready') state.status = 'ready'
   if (error && !(error instanceof notFoundException)) { logger.showError(error.message, error); return }
   if (result === null) return // if no result was found, do nothing

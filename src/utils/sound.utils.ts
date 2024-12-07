@@ -3,7 +3,7 @@
 import { sleep } from 'shuutils'
 import { logger } from './logger.utils'
 
-const audioContext = new window.AudioContext({ latencyHint: 'interactive' })
+const audioContext = new globalThis.AudioContext({ latencyHint: 'interactive' })
 
 function playTone (frequency = 400, milliseconds = 1000) {
   const oscillator = audioContext.createOscillator()

@@ -1,6 +1,7 @@
 import { sleep } from 'shuutils'
 import { expect, it } from 'vitest'
 import { airtableRecordToItem, getAllItems, getItemFieldsToPush, getOneItem, isLocalAndRemoteSync } from './airtable.utils'
+import { logger } from './logger.utils'
 import { mockItem, mockRecord, mockState } from './mock.utils'
 import type { Item, ItemPhoto } from './parsers.utils'
 
@@ -24,7 +25,7 @@ it('isLocalAndRemoteSync C no records', () => {
 
 it('isLocalAndRemoteSync D is in sync (last match)', () => {
   const record = mockRecord()
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-unsafe-type-assertion
   const items = [undefined as unknown as Item, mockItem({ id: 'itemB', location: 'location B' }), airtableRecordToItem(record)]
   const state = mockState({ items })
   expect(isLocalAndRemoteSync([record], state)).toBe(true)
@@ -32,7 +33,7 @@ it('isLocalAndRemoteSync D is in sync (last match)', () => {
 
 it('isLocalAndRemoteSync E first & last are undefined', () => {
   const record = mockRecord()
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-unsafe-type-assertion
   const items = [undefined as unknown as Item, mockItem({ id: 'itemB', location: 'location B' }), undefined as unknown as Item]
   const state = mockState({ items })
   expect(isLocalAndRemoteSync([record], state)).toBe(false)
@@ -71,11 +72,13 @@ it('getAllItems B with offset', async () => {
   expect(nbCalls).toBe(1)
 })
 
-it('getAllItems C error result', () => {
-  void expect(async () => getAllItems(undefined, async () => {
+it('getAllItems C error result', async () => {
+  logger.disable()
+  await expect(async () => getAllItems(undefined, async () => {
     await sleep(1)
     return { records: [{}] }
   })).rejects.toThrowErrorMatchingInlineSnapshot('[Error: failed to fetch item, issue(s) : Invalid type: Expected string but received undefined, Invalid type: Expected Object but received undefined, Invalid type: Expected string but received undefined]')
+  logger.enable()
 })
 
 
@@ -102,7 +105,7 @@ it('getItemFieldsToPush C item updated with also photo & price', () => {
   const url = 'https://picsum.photos/seed/123/200/200'
   const item = mockItem()
   const state = mockState({ items: [item] })
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-unsafe-type-assertion
   const updatedItem = mockItem({ photo: [{ url } as ItemPhoto], price: 42, status: 'donné' })
   const fields = getItemFieldsToPush(updatedItem, state)
   expect(fields.photo?.[0]?.url).toBe(url)
@@ -132,9 +135,11 @@ it('getOneItem A success result', async () => {
   expect(nbCalls).toBe(1)
 })
 
-it('getOneItem B error result', () => {
-  void expect(async () => getOneItem('rec123', async () => {
+it('getOneItem B error result', async () => {
+  logger.disable()
+  await expect(async () => getOneItem('rec123', async () => {
     await sleep(1)
     return { id: 'malformed-item' }
   })).rejects.toThrowErrorMatchingInlineSnapshot('[Error: failed to fetch item, issue(s) : Invalid type: Expected string but received undefined, Invalid type: Expected Object but received undefined]')
+  logger.enable()
 })

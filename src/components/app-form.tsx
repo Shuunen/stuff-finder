@@ -35,7 +35,7 @@ export function AppForm<FormType extends Form> ({ error: parentError = '', initi
   // eslint-disable-next-line max-statements
   function updateFieldSync (field: string, target: EventTarget | null, isFromClipboard = false) {
     if (target === null) throw new Error(`target for field "${field}" is null`)
-    const input = target as HTMLInputElement // eslint-disable-line @typescript-eslint/consistent-type-assertions
+    const input = target as HTMLInputElement // eslint-disable-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-unsafe-type-assertion
     let value = input.type === 'checkbox' ? input.checked : input.value
     if (input.role === 'option') value = input.textContent ?? '' // handle autocomplete target
     logger.debug('updateField', { field, value })
@@ -67,7 +67,7 @@ export function AppForm<FormType extends Form> ({ error: parentError = '', initi
   }, [form])
 
   useSignalEffect(useCallback(() => {
-    const handler = on('focus', () => { void checkDataInClipboard() }, window)
+    const handler = on('focus', () => { void checkDataInClipboard() })
     void checkDataInClipboard()
     return () => { off(handler) }
   }, [checkDataInClipboard]))

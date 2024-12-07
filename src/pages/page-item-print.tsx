@@ -35,7 +35,7 @@ export function PageItemPrint ({ ...properties }: Readonly<Record<string, unknow
     clearElementsForPrint()
     setIsPrintMode(true)
     await sleep(delays.medium)
-    window.print()
+    globalThis.print()
     setIsPrintMode(false)
     if (item['ref-printed']) return
     item['ref-printed'] = true

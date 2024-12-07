@@ -1,6 +1,6 @@
-import { signal, useSignalEffect } from '@preact/signals'
 // @ts-expect-error missing types
 import { type } from '@camwiegert/typical'
+import { signal, useSignalEffect } from '@preact/signals'
 import { useCallback, useRef } from 'preact/hooks'
 import { delays } from '../constants'
 import { coolAscii } from '../utils/strings.utils'
