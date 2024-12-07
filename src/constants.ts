@@ -1,9 +1,11 @@
 import Fuse, { type IFuseOptions } from 'fuse.js'
-import { sanitize } from 'shuutils'
+import { browserContext, sanitize } from 'shuutils'
 import type { Display } from './types/theme.types'
 import type { Item, ItemField, ItemPhoto, ItemStatus } from './utils/parsers.utils'
 
 const laptopWidth = 1500
+
+export const browserScout = browserContext()
 
 export interface CommonLists {
   boxes: string[]
@@ -136,4 +138,4 @@ export function voidFunction () { /* empty */ }
 
 export const defaultItems: Item[] = []
 
-export const defaultDisplay: Display = globalThis.screen.width < laptopWidth ? 'list' : 'card'
+export const defaultDisplay: Display = browserScout.screenWidth < laptopWidth ? 'list' : 'card'
