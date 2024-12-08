@@ -1,7 +1,7 @@
 import { signal, useSignalEffect } from '@preact/signals'
 import { route, useRouter } from 'preact-router'
 import { useCallback, useRef, useState } from 'preact/hooks'
-import { off, on } from 'shuutils'
+import { off, on, tw } from 'shuutils'
 import { delays } from '../constants'
 import { logger } from '../utils/logger.utils'
 import { state, watchState } from '../utils/state.utils'
@@ -17,7 +17,7 @@ function onSearch (event: KeyboardEvent) {
 
 const pagesWithInputs = new Set(['/item/add', '/item/edit/:id'])
 
-export function AppQuickSearch ({ placeholder = 'Quick search...' }: Readonly<{ placeholder?: string }>) {
+export function AppQuickSearch ({ mode, placeholder = 'Quick search...' }: Readonly<{ mode: 'floating' | 'static'; placeholder?: string, }>) {
   const searchReference = useRef<HTMLInputElement>(null)
   const search = signal(searchReference)
   const [isUsable, setIsUsable] = useState(state.status !== 'settings-required')
@@ -46,7 +46,15 @@ export function AppQuickSearch ({ placeholder = 'Quick search...' }: Readonly<{ 
     }
   }, [search.value, isUsable, path]))
 
+  const theme = {
+    common: tw('h-11 border-purple-500 w-full max-w-xs rounded-md border-2 px-3  text-lg text-purple-900 shadow-md hover:shadow-lg md:text-base transition-all'),
+    floating: tw('w-32 focus-within:w-56 opacity-60 pb-1 hover:opacity-100 focus-within:opacity-100  focus-within:bg-white focus-within:outline-purple-500'),
+    static: tw('placeholder:text-center'),
+  }
+
+  const classes = tw(`${theme[mode]} ${theme.common}`)
+
   return (
-    <input class="h-11 w-full max-w-xs rounded-md border-2 border-purple-500 px-2 text-lg text-purple-900 shadow-md placeholder:text-center hover:shadow-lg md:text-base" onKeyPress={onSearch} placeholder={placeholder} ref={searchReference} />
+    <input class={classes} onKeyPress={onSearch} placeholder={placeholder} ref={searchReference} />
   )
 }

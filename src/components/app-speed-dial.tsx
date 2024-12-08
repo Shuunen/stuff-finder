@@ -44,7 +44,7 @@ export function AppSpeedDial ({ isLoading, isSettingsRequired }: Readonly<{ isLo
       <div class="fixed md:bottom-10 pointer-events-none md:right-10 bottom-5 right-5 z-20 print:hidden flex items-end" data-component="speed-dial">
         <Fade in={isQuickSearchAvailable}>
           <div class="mb-2 pointer-events-auto">
-            <AppQuickSearch />
+            <AppQuickSearch mode='floating' />
           </div>
         </Fade>
         <SpeedDial ariaLabel='Actions' FabProps={options} icon={icon} onClick={toggleOpen} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} open={isOpen}>

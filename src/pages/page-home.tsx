@@ -42,11 +42,11 @@ export function PageHome ({ ...properties }: Readonly<Record<string, unknown>>) 
           <svg class="h-8" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><title>Scan icon</title><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2"><path d="M2 10V6h4M30 10V6h-4M2 22v4h4M30 22v4h-4M6 9v6M11 9v6M26 9v6M21 9v6M16 9v6M2 18h28M6 21v2M11 21v1M26 21v2M21 21v1M16 21v1" /></g></svg>
         </div>
         <div class={triggerColumnClasses}>
-          <AppQuickSearch placeholder="Type it" />
+          <AppQuickSearch mode='static' placeholder="Type it" />
           <svg class="h-8" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg"><title>Keyboard icon</title><path d="M108 48H68c12-13-12-27 0-40h-8c-12 13 12 27 0 40H20c-9 0-16 7-16 16v40c0 9 7 16 16 16h88c9 0 16-7 16-16V64c0-9-7-16-16-16zm8 56c0 4-4 8-8 8H20c-4 0-8-4-8-8V64c0-4 4-8 8-8h88c4 0 8 4 8 8v40z" fill="currentColor" /></svg>
         </div>
         <div class={triggerColumnClasses}>
-          <Button color="primary" fullWidth onClick={onSpeech} sx={triggerButtonStyle} variant="contained">Speech</Button>
+          <Button color="primary" fullWidth onClick={onSpeech} sx={triggerButtonStyle} variant="contained">Say it</Button>
           <svg class="h-8" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg"><title>Mic icon</title><path d="M108 68a4 4 0 10-8 0 36 36 0 01-72 0 4 4 0 10-8 0c0 23 18 42 40 44v8H40a4 4 0 100 8h48a4 4 0 100-8H68v-8c22-2 40-21 40-44z" fill="currentColor" /><path d="M64 8c11 0 20 9 20 20v40a20 20 0 01-40 0V28c0-11 9-20 20-20m0-8C49 0 36 13 36 28v40a28 28 0 0056 0V28C92 13 79 0 64 0z" fill="currentColor" /></svg>
         </div>
       </div>
