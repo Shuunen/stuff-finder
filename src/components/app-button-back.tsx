@@ -1,3 +1,4 @@
+import { ArrowBack } from '@mui/icons-material'
 import Button from '@mui/material/Button'
 import { useCallback } from 'preact/hooks'
 
@@ -10,6 +11,13 @@ export function AppButtonBack ({ stepsBack = 1 }: Readonly<{ stepsBack?: number 
   }, [stepsBack])
 
   return (
-    <Button onClick={goBack} type="button" variant="outlined">Back</Button>
+    <Button
+      onClick={goBack}
+      startIcon={<ArrowBack />}
+      type="button"
+      variant="outlined"
+    >
+      Back
+    </Button>
   )
 }
