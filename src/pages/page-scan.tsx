@@ -1,4 +1,5 @@
 import QrCodeScannerIcon from '@mui/icons-material/QrCodeScanner'
+import { Alert, Collapse } from '@mui/material'
 import Skeleton from '@mui/material/Skeleton'
 import { signal, useSignalEffect } from '@preact/signals'
 import { BrowserMultiFormatReader } from '@zxing/library/es2015/browser/BrowserMultiFormatReader'
@@ -6,12 +7,11 @@ import type Exception from '@zxing/library/es2015/core/Exception'
 import notFoundException from '@zxing/library/es2015/core/NotFoundException'
 import type Result from '@zxing/library/es2015/core/Result'
 import { route } from 'preact-router'
-import { useCallback, useRef } from 'preact/hooks'
+import { useCallback, useRef, useState } from 'preact/hooks'
 import { sleep } from 'shuutils'
 import { AppPageCard } from '../components/app-page-card'
 import { delays } from '../constants'
 import { logger } from '../utils/logger.utils'
-import { state } from '../utils/state.utils'
 
 const reader = new BrowserMultiFormatReader()
 
@@ -29,7 +29,6 @@ function onDecodeSuccess (result: Result) {
  * @returns {void} nothing
  */
 async function onDecode (result: null | Result, sound: HTMLAudioElement | null, error?: Exception) {
-  if (state.status !== 'ready') state.status = 'ready'
   if (error && !(error instanceof notFoundException)) { logger.showError(error.message, error); return }
   if (result === null) return // if no result was found, do nothing
   await sound?.play()
@@ -44,25 +43,43 @@ export function PageScan ({ ...properties }: Readonly<Record<string, unknown>>) 
   const video = signal(videoReference)
   const soundReference = useRef<HTMLAudioElement>(null)
   const sound = signal(soundReference)
+  const [status, setStatus] = useState<'error' | 'loading' | 'need-perm' | 'ready'>('loading')
 
   useSignalEffect(useCallback(() => {
     // this run once, when the component is mounted
     if (video.value.current === null) throw new Error('video element is null')
-    if (state.status !== 'loading') state.status = 'loading'
     logger.debug('starting video stream decoding...')
-    void reader.decodeFromVideoDevice(null, video.value.current, (result, error) => { void onDecode(result, sound.value.current, error) } /* eslint-disable-line unicorn/no-null */)
+    void reader.decodeFromVideoDevice(null, video.value.current, (result, error) => { /* eslint-disable-line unicorn/no-null */
+      if (status === 'loading') void sleep(delays.medium).then(() => { setStatus('ready') })
+      void onDecode(result, sound.value.current, error)
+    })
+      .catch((error: unknown) => {
+        const message = error instanceof Error ? error.message.toLowerCase() : String(error).toLowerCase()
+        logger.error('error starting video stream decoding :', error)
+        setStatus(message.includes('permission') ? 'need-perm' : 'error')
+      })
     return () => { reader.reset() } // this run once, when the component is about to unmount
-  }, [sound.value, video.value]))
+  }, [sound.value, video.value, status]))
 
   return (
     <AppPageCard cardTitle="Scan" icon={QrCodeScannerIcon} pageCode="scan" pageTitle="Scan QR Code or Barcode">
-      <div class="flex flex-col">
-        <h2 class="text-center">Scan a QR Code or a barcode to search for it 👀</h2>
-        <div class="relative flex aspect-video h-44 flex-col overflow-hidden rounded-xl shadow-lg">
-          <Skeleton class="absolute left-0 top-0 size-full" height={176} variant="rounded" />
-          <video class="w-full object-cover" ref={videoReference} />
-          <audio preload="auto" ref={soundReference} src="/assets/barcode-scan-beep-09.mp3" />
-        </div>
+      <div class="text-center">
+        <h2 class="mb-6">Scan a QR Code or a barcode to search for it 👀</h2>
+        <Collapse in={status === 'loading'}>
+          <Skeleton animation="wave" height={320} variant="rounded" />
+        </Collapse>
+        <Collapse in={status === 'ready'}>
+          <div class="aspect-video max-h-80 overflow-hidden rounded-xl shadow-lg">
+            <video class="w-full object-cover" ref={videoReference} />
+            <audio preload="auto" ref={soundReference} src="/assets/barcode-scan-beep-09.mp3" />
+          </div>
+        </Collapse>
+        <Collapse in={status === 'need-perm'}>
+          <Alert severity="error">Permission needed, allow access to your camera to scan QR codes and barcodes.</Alert>
+        </Collapse>
+        <Collapse in={status === 'error'}>
+          <Alert severity="error">An unknown error occurred while starting the video stream, check the logs.</Alert>
+        </Collapse>
       </div>
     </AppPageCard>
   )
