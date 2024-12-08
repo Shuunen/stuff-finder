@@ -41,9 +41,11 @@ export function AppSpeedDial ({ isLoading, isSettingsRequired }: Readonly<{ isLo
         {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
         <div class="absolute bottom-0 right-0 z-10 size-full bg-black/30" data-component="speed-dial-backdrop" onClick={toggleOpen} />
       </Fade>
-      <div class="fixed md:bottom-10 md:right-10 bottom-5 right-5 z-20 print:hidden flex items-end" data-component="speed-dial">
+      <div class="fixed md:bottom-10 pointer-events-none md:right-10 bottom-5 right-5 z-20 print:hidden flex items-end" data-component="speed-dial">
         <Fade in={isQuickSearchAvailable}>
-          <div class="mb-2"><AppQuickSearch /></div>
+          <div class="mb-2 pointer-events-auto">
+            <AppQuickSearch />
+          </div>
         </Fade>
         <SpeedDial ariaLabel='Actions' FabProps={options} icon={icon} onClick={toggleOpen} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} open={isOpen}>
           {availableActions.map((action) => <SpeedDialAction icon={action.icon} key={action.name} onClick={action.handleClick} tooltipTitle={action.name} />)}
