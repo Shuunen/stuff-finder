@@ -28,7 +28,7 @@ export function PageSearch ({ input = '' }: Readonly<{ [key: string]: unknown; i
   if (results.length === 1) route(`/item/details/${results[0]?.id ?? ''}/single`)
   return (
     <AppPageCard cardTitle="Search" icon={SearchIcon} pageCode="search" pageTitle={`Search for “${ellipsis(input, maxNameLength)}”`}>
-      <div class="flex max-h-[90%] md:max-h-full flex-col gap-3 sm:gap-5">
+      <div class="flex max-h-[90%] md:max-h-full flex-col gap-3 sm:gap-5 items-center">
         <h2 class="text-center">{header}</h2>
         <div class="absolute right-7 top-7"><AppDisplayToggle /></div>
         <AppItemList items={results} />
