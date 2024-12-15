@@ -12,6 +12,7 @@ import { sleep } from 'shuutils'
 import { AppPageCard } from '../components/app-page-card'
 import { delays } from '../constants'
 import { logger } from '../utils/logger.utils'
+import { state } from '../utils/state.utils'
 
 const reader = new BrowserMultiFormatReader()
 
@@ -24,14 +25,13 @@ function onDecodeSuccess (result: Result) {
 /**
  * This function is called every 25ms by the zxing library, seems to be the result of every decoded frame from the video stream
  * @param result the result of the scan or null if no result was found
- * @param sound the sound element
  * @param error the error that occurred if any
  * @returns {void} nothing
  */
-async function onDecode (result: null | Result, sound: HTMLAudioElement | null, error?: Exception) {
+async function onDecode (result: null | Result, error?: Exception) {
   if (error && !(error instanceof notFoundException)) { logger.showError(error.message, error); return }
   if (result === null) return // if no result was found, do nothing
-  await sound?.play()
+  state.sound = 'barcode'
   await sleep(delays.medium)
   onDecodeSuccess(result)
 }
@@ -41,25 +41,25 @@ export function PageScan ({ ...properties }: Readonly<Record<string, unknown>>) 
   logger.debug('PageScan', { properties })
   const videoReference = useRef<HTMLVideoElement>(null)
   const video = signal(videoReference)
-  const soundReference = useRef<HTMLAudioElement>(null)
-  const sound = signal(soundReference)
   const [status, setStatus] = useState<'error' | 'loading' | 'need-perm' | 'ready'>('loading')
 
   useSignalEffect(useCallback(() => {
     // this run once, when the component is mounted
     if (video.value.current === null) throw new Error('video element is null')
     logger.debug('starting video stream decoding...')
+    state.sound = 'start'
     void reader.decodeFromVideoDevice(null, video.value.current, (result, error) => { /* eslint-disable-line unicorn/no-null */
       if (status === 'loading') void sleep(delays.medium).then(() => { setStatus('ready') })
-      void onDecode(result, sound.value.current, error)
+      void onDecode(result, error)
     })
       .catch((error: unknown) => {
         const message = error instanceof Error ? error.message.toLowerCase() : String(error).toLowerCase()
+        state.sound = 'error'
         logger.error('error starting video stream decoding :', error)
         setStatus(message.includes('permission') ? 'need-perm' : 'error')
       })
     return () => { reader.reset() } // this run once, when the component is about to unmount
-  }, [sound.value, video.value, status]))
+  }, [video.value, status]))
 
   return (
     <AppPageCard cardTitle="Scan" icon={QrCodeScannerIcon} pageCode="scan" pageTitle="Scan QR Code or Barcode">
@@ -71,7 +71,6 @@ export function PageScan ({ ...properties }: Readonly<Record<string, unknown>>) 
         <Collapse in={status === 'ready'}>
           <div class="aspect-video max-h-80 overflow-hidden rounded-xl shadow-lg">
             <video class="w-full object-cover" ref={videoReference} />
-            <audio preload="auto" ref={soundReference} src="/assets/barcode-scan-beep-09.mp3" />
           </div>
         </Collapse>
         <Collapse in={status === 'need-perm'}>

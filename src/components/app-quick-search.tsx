@@ -12,6 +12,7 @@ function onSearch (event: KeyboardEvent) {
   const { value } = target as HTMLInputElement // eslint-disable-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-unsafe-type-assertion
   if (value === '') return
   logger.debug('onSearch', { value })
+  state.sound = 'start'
   route(`/search/${value}`)
 }
 

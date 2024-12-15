@@ -4,7 +4,7 @@ import { defineConfig } from 'vitest/config'
 export default defineConfig({
   test: {
     coverage: {
-      exclude: ['src/utils/browser.utils.ts', 'src/utils/sound.utils.ts', 'src/constants.ts'],
+      exclude: ['src/utils/browser.utils.ts', 'src/utils/speech.utils.ts', 'src/constants.ts'],
       include: ['src/utils/**'],
       reporter: ['text', 'lcov', 'html'],
       thresholds: {

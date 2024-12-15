@@ -6,7 +6,6 @@ import { AppPrompter } from '../components/app-prompter'
 import { AppQuickSearch } from '../components/app-quick-search'
 import { setPageTitle } from '../utils/browser.utils'
 import { logger } from '../utils/logger.utils'
-import { playInfoSound } from '../utils/sound.utils'
 import { listenUserSpeech } from '../utils/speech.utils'
 import { state, watchState } from '../utils/state.utils'
 
@@ -25,7 +24,6 @@ export function PageHome ({ ...properties }: Readonly<Record<string, unknown>>) 
 
   const onSpeech = useCallback(() => {
     state.status = 'listening'
-    playInfoSound()
     listenUserSpeech((transcript: string) => {
       logger.showLog(`searching for "${transcript}"`)
       route(`/search/${transcript}`)

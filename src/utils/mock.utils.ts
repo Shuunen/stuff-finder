@@ -1,5 +1,6 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import { defaultCommonLists, defaultItems, emptyItemPhoto } from '../constants'
+import { defaultSound } from '../types/sounds.types'
 import { defaultStatus } from '../types/status.types'
 import { defaultTheme } from '../types/theme.types'
 import type { AirtableSingleRecordResponse, Item } from './parsers.utils'
@@ -54,6 +55,7 @@ export function mockState (data: Partial<State> = {}) {
     items: defaultItems,
     lists: defaultCommonLists,
     message: undefined,
+    sound: defaultSound,
     status: defaultStatus,
     theme: defaultTheme,
     ...data,

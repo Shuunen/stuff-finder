@@ -38,6 +38,7 @@ it('state A default', () => {
         ],
       },
       "message": undefined,
+      "sound": "",
       "status": "loading",
       "theme": "light",
     }

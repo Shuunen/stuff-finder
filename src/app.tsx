@@ -5,6 +5,7 @@ import { Suspense, lazy } from 'preact/compat'
 import { useCallback, useMemo, useState } from 'preact/hooks'
 import { debounce } from 'shuutils'
 import { AppLoader } from './components/app-loader'
+import { AppSounds } from './components/app-sounds'
 import { AppSpeedDial } from './components/app-speed-dial'
 import { delays } from './constants'
 import { PageError } from './pages/page-error'
@@ -24,7 +25,6 @@ const AsyncPageItemDetails = lazy<Component>(() => import('./pages/page-item-det
 const AsyncPageItemPrint = lazy<Component>(() => import('./pages/page-item-print').then(({ PageItemPrint }) => ({ default: PageItemPrint })))
 const AsyncPageSearch = lazy<Component>(() => import('./pages/page-search').then(({ PageSearch }) => ({ default: PageSearch })))
 const AsyncPageSettings = lazy<Component>(() => import('./pages/page-settings').then(({ PageSettings }) => ({ default: PageSettings })))
-const AsyncPageSequencer = lazy<Component>(() => import('./pages/page-sequencer').then(({ PageSequencer }) => ({ default: PageSequencer })))
 const AsyncPageKitchenSink = lazy<Component>(() => import('./pages/page-kitchen-sink').then(({ PageKitchenSink }) => ({ default: PageKitchenSink })))
 /* eslint-enable @typescript-eslint/promise-function-async, @typescript-eslint/naming-convention */
 
@@ -75,11 +75,12 @@ export function App () {
           <AsyncPageScan path="/scan" />
           <AsyncPageSearch path="/search/:input" />
           <AsyncPageSettings path="/settings" />
-          <AsyncPageSequencer path="/sequencer" />
           <AsyncPageKitchenSink path="/kitchen-sink" />
+          <AppLoader isLoading={true} path="/loading" />
           <PageError code="page-not-found" default />
         </Router>
       </Suspense>
+      <AppSounds />
       <AppSpeedDial isLoading={isLoading} isSettingsRequired={isSettingsRequired} />
       <SnackbarProvider />
     </>

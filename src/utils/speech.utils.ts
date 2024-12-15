@@ -1,5 +1,5 @@
-/* c8 ignore start */
-import { playErrorSound } from './sound.utils'
+import { logger } from './logger.utils'
+import { state } from './state.utils'
 
 /**
  * Listen user speech
@@ -9,7 +9,7 @@ export function listenUserSpeech (onSuccess: (transcript: string, confidence: nu
   let isSuccess = false
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition, @typescript-eslint/strict-boolean-expressions
   const recognition = new (globalThis.webkitSpeechRecognition || globalThis.SpeechRecognition)()
-  recognition.lang = navigator.language
+  recognition.lang = 'fr-FR'
   recognition.interimResults = false
   recognition.maxAlternatives = 1
   /**
@@ -26,13 +26,15 @@ export function listenUserSpeech (onSuccess: (transcript: string, confidence: nu
   /**
    * Called when the speech is not recognized
    */
-  recognition.onnomatch = () => { playErrorSound() }
+  recognition.onnomatch = () => {
+    logger.warn('speech : no match found')
+    state.sound = 'error'
+  }
   /**
    * Called when the speech recognition end
    */
-  recognition.onend = () => {
-    if (isSuccess) return
-    playErrorSound()
-  }
+  recognition.onend = () => { state.sound = isSuccess ? 'stop' : 'error' }
+  // start the speech recognition, listen to the user
+  state.sound = 'start'
   recognition.start()
 }
