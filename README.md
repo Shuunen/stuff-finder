@@ -40,7 +40,7 @@ Check build stats in details by adding `--metafile=meta.json` to the esbuild com
 
 ## Thanks
 
-- [101 Soundboards](https://www.101soundboards.com/sounds/1295599-barcode-scan-beep-09) : for "Barcode Scan Beep 09"
+- [101 Soundboards](https://www.101soundboards.com/sounds/1295599-barcode-scan-beep-09) : for the various sounds used in the app
 - [Add icon](https://www.iconfinder.com/icons/1814113/add_more_plus_icon) by Alexander Madyankin & Roman Shamin
 - [Box icon](https://www.iconfinder.com/icons/2123914/app_box_essential_ui_icon) by Just Icon
 - [Dependency-cruiser](https://github.com/sverweij/dependency-cruiser) : handy tool to validate and visualize dependencies
