@@ -35,6 +35,7 @@
 - 1.3.0 :  3KB html + 16KB css + 683KB js
 - 2.0.0 :  3KB html + 18KB css + 720KB js (more components, better design)
 - 2.1.0 :  1KB html + 18KB css + 726KB js
+- 2.2.0 :  1KB html + 18KB css + 716KB js
 
 Check build stats in details by adding `--metafile=meta.json` to the esbuild command and use a tool like [Bundle Buddy](https://bundle-buddy.com/)
 

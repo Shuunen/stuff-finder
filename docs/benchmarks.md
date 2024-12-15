@@ -1,12 +1,28 @@
 # Benchmarks
 
+## Build
+
+`hyperfine --runs 3 --warmup 1 'npx vite build'`
+
+|     date     | delay | node  |     machine      | comment                            |
+| :----------: | :---: | :---: | :--------------: | ---------------------------------- |
+| 2024-12-15#1 |  9s   | 22.11 | romain duc win11 | initial measure, weirdly long IMHO |
+
+## Tsc no emit
+
+`hyperfine --runs 3 --warmup 1 'npx tsc --noEmit'`
+
+|     date     | delay | node  |     machine      | comment                       |
+| :----------: | :---: | :---: | :--------------: | ----------------------------- |
+| 2024-12-15#1 | 3.5s  | 22.11 | romain duc win11 | initial measure, seems normal |
+
 ## Eslint
 
 `hyperfine --runs 3 --warmup 1 'npx eslint src'`
 
 |     date     | delay | node  |      machine      | comment                                             |
 | :----------: | :---: | :---: | :---------------: | --------------------------------------------------- |
-| 2024-01-27#1 |  25s  | 20.11 | romain nzxl win11 | initial mesure, see note 0                          |
+| 2024-01-27#1 |  25s  | 20.11 | romain nzxl win11 | initial measure, see note 0                         |
 | 2024-02-16#1 |  25s  | 20.11 | romain nzxl win11 | stable                                              |
 | 2024-02-16#2 |  15s  | 20.11 | romain nzxl win11 | removed some import rules... lol                    |
 | 2024-03-18#1 |  10s  | 20.10 | romain gram zorin | did nothing but the cpu is better                   |
@@ -26,6 +42,7 @@
 | 2024-04-19#1 |  12s  | 20.12 | romain nzxl fed39 | nice improvement on Fedora for the same hardware ^^ |
 | 2024-04-20#1 |  8s   | 20.12 | romain duc win11  | better (new) hardware ^^                            |
 | 2024-06-12#1 |  8s   | 20.14 | romain duc win11  | bigger codebase                                     |
+| 2024-12-15#1 |  7s   | 22.11 | romain duc win11  | nothing special                                     |
 
 Note 0 : with plugin:tailwindcss/recommended,  plugin:unicorn/all, hardcore, hardcore/react, hardcore/ts
 Note 1 : to show time taken by rules : `TIMING=1 npx eslint src`
