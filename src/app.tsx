@@ -1,9 +1,9 @@
 import { useSignalEffect } from '@preact/signals'
-import { SnackbarProvider, enqueueSnackbar } from 'notistack'
+import { SnackbarProvider, closeSnackbar, enqueueSnackbar } from 'notistack'
 import { Router, route } from 'preact-router'
 import { Suspense, lazy } from 'preact/compat'
 import { useCallback, useMemo, useState } from 'preact/hooks'
-import { debounce } from 'shuutils'
+import { debounce, on } from 'shuutils'
 import { AppLoader } from './components/app-loader'
 import { AppSounds } from './components/app-sounds'
 import { AppSpeedDial } from './components/app-speed-dial'
@@ -38,6 +38,15 @@ function onMessage (message: Readonly<AppMessage>) {
   })
 }
 
+function onClick (element: HTMLElement | null) {
+  const div = element?.closest('div')
+  if (!div) return
+  const identifier = `${div.id}-${div.className}`
+  if (!identifier.includes('notistack')) return
+  logger.info('click on notistack element, close every notification', { identifier })
+  closeSnackbar()
+}
+
 export function App () {
 
   const [isLoading, setLoading] = useState(true)
@@ -58,6 +67,8 @@ export function App () {
   useSignalEffect(useCallback(() => {
     watchState('status', () => { void onStatusChange(state.status) })
     watchState('message', () => { if (state.message) onMessage(state.message) })
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-unsafe-type-assertion
+    on<MouseEvent>('click', (event) => { onClick(event.target as HTMLElement | null) })
   }, [onStatusChange]))
 
   void onStatusChange(state.status)
@@ -82,7 +93,7 @@ export function App () {
       </Suspense>
       <AppSounds />
       <AppSpeedDial isLoading={isLoading} isSettingsRequired={isSettingsRequired} />
-      <SnackbarProvider />
+      <SnackbarProvider maxSnack={2} />
     </>
   )
 }
