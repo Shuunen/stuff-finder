@@ -1,7 +1,6 @@
 import SearchIcon from '@mui/icons-material/Search'
-import { useSignalEffect } from '@preact/signals'
 import { route } from 'preact-router'
-import { useState } from 'preact/hooks'
+import { useEffect, useState } from 'preact/hooks'
 import { ellipsis } from 'shuutils'
 import { AppButtonNext } from '../components/app-button-next'
 import { AppDisplayToggle } from '../components/app-display-toggle'
@@ -14,13 +13,13 @@ export function PageSearch ({ input = '' }: Readonly<{ [key: string]: unknown; i
   const [header, setHeader] = useState('Loading...')
   const [results, setResults] = useState<Item[]>([])
 
-  useSignalEffect(() => {
+  useEffect(() => {
     void search(input).then((data) => {
       setHeader(data.header)
       setResults(data.results)
       if (data.results.length === 1) route(`/item/details/${data.results[0]?.id ?? ''}/single`)
     })
-  })
+  }, [input])
 
   return (
     <AppPageCard cardTitle="Search" icon={SearchIcon} pageCode="search" pageTitle={`Search for “${ellipsis(input, maxNameLength)}”`}>
