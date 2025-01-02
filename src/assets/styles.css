@@ -37,6 +37,6 @@ h3 {
   @apply gap-6;
 }
 
-.notistack-SnackbarContainer {
+.shu-toast {
   @apply print:hidden;
 }

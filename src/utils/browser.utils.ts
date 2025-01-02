@@ -49,6 +49,7 @@ export function clearElementsForPrint () {
     '#synology-download-notification-stack',
     'synology-download-content',
     '[at-magnifier-wrapper]',
+    '.shu-toast',
   ]
   const elements = document.querySelectorAll(selector.join(','))
   for (const element of elements) element.remove()
