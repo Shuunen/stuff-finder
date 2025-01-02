@@ -1,26 +1,12 @@
 import SearchIcon from '@mui/icons-material/Search'
-import Fuse from 'fuse.js'
 import { route } from 'preact-router'
-import { ellipsis, sanitize } from 'shuutils'
+import { ellipsis } from 'shuutils'
 import { AppButtonNext } from '../components/app-button-next'
 import { AppDisplayToggle } from '../components/app-display-toggle'
 import { AppItemList } from '../components/app-item-list'
 import { AppPageCard } from '../components/app-page-card'
-import { fuseOptions } from '../constants'
 import { logger } from '../utils/logger.utils'
-import { state } from '../utils/state.utils'
-
-const maxNameLength = 20
-
-function search (input: string) {
-  logger.debug('search, input', { input })
-  const fuse = new Fuse(state.items, fuseOptions)
-  const result = state.items.find(item => item.reference === input || item.barcode === input)
-  if (result !== undefined) { route(`/item/details/${result.id}/single`); return { header: '', results: [] } }
-  const results = fuse.search(sanitize(input)).map(item => item.item)
-  const header = `${results.length} results found for “${input}”`
-  return { header, results }
-}
+import { maxNameLength, search } from './page-search.const'
 
 export function PageSearch ({ input = '' }: Readonly<{ [key: string]: unknown; input?: string }>) {
   const { header, results } = search(input)

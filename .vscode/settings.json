@@ -1,4 +1,7 @@
 {
+  "cSpell.ignoreWords": [
+    "camwiegert"
+  ],
   "cSpell.words": [
     "airtable",
     "alcampo",
@@ -30,9 +33,10 @@
     "valibot",
     "zxing"
   ],
-  "cSpell.ignoreWords": [
-    "camwiegert"
-  ],
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "editor.formatOnSave": true,
   "workbench.colorCustomizations": {
     "activityBar.background": "#4C1C3C",
     "titleBar.activeBackground": "#6A2754",

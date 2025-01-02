@@ -1,6 +1,6 @@
 export type AppMessage = {
   content: string
-  delay: number
+  delay?: number
   type: 'error' | 'info' | 'success' | 'warning'
 }
 

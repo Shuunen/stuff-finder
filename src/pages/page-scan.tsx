@@ -10,11 +10,11 @@ import { route } from 'preact-router'
 import { useCallback, useRef, useState } from 'preact/hooks'
 import { sleep } from 'shuutils'
 import { AppPageCard } from '../components/app-page-card'
-import { delays } from '../constants'
 import { logger } from '../utils/logger.utils'
 import { state } from '../utils/state.utils'
 
 const reader = new BrowserMultiFormatReader()
+const waitDelay = 200
 
 function onDecodeSuccess (result: Result) {
   const code = result.getText()
@@ -32,7 +32,7 @@ async function onDecode (result: null | Result, error?: Exception) {
   if (error && !(error instanceof notFoundException)) { logger.showError(error.message, error); return }
   if (result === null) return // if no result was found, do nothing
   state.sound = 'barcode'
-  await sleep(delays.medium)
+  await sleep(waitDelay)
   onDecodeSuccess(result)
 }
 
@@ -49,7 +49,7 @@ export function PageScan ({ ...properties }: Readonly<Record<string, unknown>>) 
     logger.debug('starting video stream decoding...')
     state.sound = 'start'
     void reader.decodeFromVideoDevice(null, video.value.current, (result, error) => { /* eslint-disable-line unicorn/no-null */
-      if (status === 'loading') void sleep(delays.medium).then(() => { setStatus('ready') })
+      if (status === 'loading') void sleep(waitDelay).then(() => { setStatus('ready') })
       void onDecode(result, error)
     })
       .catch((error: unknown) => {

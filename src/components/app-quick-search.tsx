@@ -2,7 +2,6 @@ import { signal, useSignalEffect } from '@preact/signals'
 import { route, useRouter } from 'preact-router'
 import { useCallback, useRef, useState } from 'preact/hooks'
 import { off, on, tw } from 'shuutils'
-import { delays } from '../constants'
 import { logger } from '../utils/logger.utils'
 import { state, watchState } from '../utils/state.utils'
 
@@ -18,6 +17,8 @@ function onSearch (event: KeyboardEvent) {
 
 const pagesWithInputs = new Set(['/item/add', '/item/edit/:id'])
 
+const focusDelay = 100
+
 export function AppQuickSearch ({ mode, placeholder = 'Quick search...' }: Readonly<{ mode: 'floating' | 'static'; placeholder?: string, }>) {
   const searchReference = useRef<HTMLInputElement>(null)
   const search = signal(searchReference)
@@ -31,7 +32,7 @@ export function AppQuickSearch ({ mode, placeholder = 'Quick search...' }: Reado
       const canAutoFocus = path === '/' && isUsable
       if (!canAutoFocus) return
       logger.debug('focus on correct page, will autofocus quick-search', { path })
-      setTimeout(() => { search.value.current?.focus() }, delays.small)
+      setTimeout(() => { search.value.current?.focus() }, focusDelay)
     })
     const keypressHandler = on('keypress', (event: KeyboardEvent) => {
       const canFocus = !pagesWithInputs.has(path ?? '') && isUsable

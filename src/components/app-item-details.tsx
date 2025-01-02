@@ -1,7 +1,6 @@
 import LocationOnIcon from '@mui/icons-material/LocationOn'
 import PrintIcon from '@mui/icons-material/Print'
 import { useCallback, useMemo } from 'preact/hooks'
-import { delays } from '../constants'
 import { deleteItem, itemToImageUrl, itemToLocation, onItemImageError } from '../utils/item.utils'
 import { logger } from '../utils/logger.utils'
 import type { Item } from '../utils/parsers.utils'
@@ -16,7 +15,7 @@ export function AppItemDetails ({ item }: Readonly<{ item: Item }>) {
     logger.debug('deleting item', item)
     const result = await deleteItem(item.id)
     const isOk = result.success
-    state.message = { content: isOk ? 'Item deleted' : 'Item deletion failed', delay: isOk ? delays.second : delays.seconds, type: isOk ? 'success' : 'error' }
+    state.message = { content: isOk ? 'Item deleted' : 'Item deletion failed', type: isOk ? 'success' : 'error' }
     if (isOk) globalThis.history.back()
   }, [item])
 

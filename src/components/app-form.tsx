@@ -2,7 +2,6 @@ import Button from '@mui/material/Button'
 import { useSignalEffect } from '@preact/signals'
 import { useCallback, useState } from 'preact/hooks'
 import { debounce, off, on, parseJson, readClipboard } from 'shuutils'
-import { delays, voidFunction } from '../constants'
 import { type Form, alignClipboard, validateForm } from '../utils/forms.utils'
 import { logger } from '../utils/logger.utils'
 import { state } from '../utils/state.utils'
@@ -10,6 +9,7 @@ import { colSpanClass, gridClass } from '../utils/theme.utils'
 import { AppFormFieldCheckbox } from './app-form-field-checkbox'
 import { AppFormFieldSelect } from './app-form-field-select'
 import { AppFormFieldText } from './app-form-field-text'
+import { voidFunction } from './app-form.const'
 
 type Properties<FormType extends Form> = Readonly<{
   error?: string
@@ -41,13 +41,14 @@ export function AppForm<FormType extends Form> ({ error: parentError = '', initi
     logger.debug('updateField', { field, value })
     const actualField = form.fields[field]
     if (actualField === undefined) throw new Error(`field "${field}" not found in form`)
-    if (isFromClipboard) state.message = { content: `Pasted "${field}" field value`, delay: delays.second, type: 'success' }
+    if (isFromClipboard) state.message = { content: `Pasted "${field}" field value`, type: 'success' }
     const updated = { ...form, fields: { ...form.fields, [field]: { ...actualField, value } }, isTouched: true }
     setForm(updated)
     onChange(updated)
   }
 
-  const updateField = debounce(updateFieldSync, delays.small)
+  const updateDelay = 100
+  const updateField = debounce(updateFieldSync, updateDelay)
 
   // eslint-disable-next-line max-statements, complexity
   const checkDataInClipboard = useCallback(async () => {

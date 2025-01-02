@@ -35,6 +35,7 @@
 - 1.3.0 :  3KB html + 16KB css + 683KB js
 - 2.0.0 :  3KB html + 18KB css + 720KB js (more components, better design)
 - 2.1.0 :  1KB html + 18KB css + 726KB js
+- 2.2.0 :  1KB html + 18KB css + 691KB js (after making everything lazy & optimizing common deps)
 
 Check build stats in details by running `pnpm build:analyze`.
 

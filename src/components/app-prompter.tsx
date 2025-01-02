@@ -2,15 +2,18 @@
 import { type } from '@camwiegert/typical'
 import { signal, useSignalEffect } from '@preact/signals'
 import { useCallback, useRef } from 'preact/hooks'
-import { delays } from '../constants'
 import { coolAscii } from '../utils/strings.utils'
 
 type TypicalArguments = (number | string)[]
 
+const shortDelay = 200
+
+const longDelay = 600
+
 const sequence = [
   'Stuff Finder',
-  delays.medium,
-  `Stuff Finder\n${coolAscii()}`, delays.large * 2, // eslint-disable-line @typescript-eslint/no-magic-numbers
+  shortDelay,
+  `Stuff Finder\n${coolAscii()}`, longDelay,
   `Stuff Finder\n${coolAscii()}`,
 ] satisfies TypicalArguments
 

@@ -6,8 +6,7 @@ import { useCallback, useRef, useState } from 'preact/hooks'
 import { dom, objectSum, off, on } from 'shuutils'
 import { AppForm } from '../components/app-form'
 import { AppPageCard } from '../components/app-page-card'
-import { defaultImage, delays } from '../constants'
-import { areItemsEquivalent, formToItem, type itemForm, itemToForm, onItemImageError, pushItem } from '../utils/item.utils'
+import { areItemsEquivalent, defaultImage, formToItem, type itemForm, itemToForm, onItemImageError, pushItem } from '../utils/item.utils'
 import { logger } from '../utils/logger.utils'
 import type { Item } from '../utils/parsers.utils'
 import { state } from '../utils/state.utils'
@@ -15,7 +14,7 @@ import { getSuggestions } from '../utils/suggestions.utils'
 import { normalizePhotoUrl } from '../utils/url.utils'
 
 function onImageError (image: HTMLImageElement) {
-  state.message = { content: 'error loading image, setting default image', delay: delays.seconds, type: 'error' }
+  state.message = { content: 'error loading image, setting default image', type: 'error' }
   image.setAttribute('src', defaultImage)
 }
 
@@ -61,7 +60,7 @@ export function PageItemAddEdit ({ id = '', isEdit = false }: Readonly<{ id?: st
 
   const onSubmitSuccess = useCallback((item: Item) => {
     if (!isEdit) { route(`/item/print/${item.id}`); return }
-    state.message = { content: 'item updated successfully', delay: delays.second, type: 'success' }
+    state.message = { content: 'item updated successfully', type: 'success' }
     route(`/item/details/${item.id}`)
   }, [isEdit])
 
@@ -71,7 +70,7 @@ export function PageItemAddEdit ({ id = '', isEdit = false }: Readonly<{ id?: st
     if (!isEdit && checkExistingSetError(item).isDuplicate) return
     const result = await pushItem(item)
     if (result.success) { onSubmitSuccess({ ...item, id: result.output.id }); return }
-    state.message = { content: `error ${isEdit ? 'updating' : 'adding'} item`, delay: delays.seconds, type: 'error' }
+    state.message = { content: `error ${isEdit ? 'updating' : 'adding'} item`, type: 'error' }
     logger.error('onSubmit failed', result)
   }, [checkExistingSetError, isEdit, lastForm, onSubmitSuccess, itemId])
 

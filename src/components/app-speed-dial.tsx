@@ -23,7 +23,7 @@ const actions = [
 ]
 
 // eslint-disable-next-line max-statements
-export function AppSpeedDial ({ isLoading, isSettingsRequired }: Readonly<{ isLoading: boolean; isSettingsRequired: boolean }>) {
+export function AppSpeedDial ({ isLoading = false, isSettingsRequired = false }: Readonly<{ isLoading?: boolean; isSettingsRequired?: boolean }>) {
   const [isOpen, setOpen] = useState(false)
   const toggleOpen = useCallback(() => { setOpen(!isOpen) }, [isOpen])
   const onMouse = useCallback((status: 'enter' | 'leave') => { if (!isMobile()) { logger.debug('open cause mouse', status); setOpen(status === 'enter') } }, [])
@@ -48,7 +48,7 @@ export function AppSpeedDial ({ isLoading, isSettingsRequired }: Readonly<{ isLo
           </div>
         </Fade>
         <SpeedDial ariaLabel='Actions' FabProps={options} icon={icon} onClick={toggleOpen} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} open={isOpen}>
-          {availableActions.map((action) => <SpeedDialAction icon={action.icon} key={action.name} onClick={action.handleClick} tooltipTitle={action.name} />)}
+          {availableActions.map((action) => <SpeedDialAction icon={action.icon} key={action.name} onClick={() => { toggleOpen(); action.handleClick() }} tooltipTitle={action.name} />)}
         </SpeedDial>
       </div>
     </>

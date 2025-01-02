@@ -1,6 +1,6 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import { clone, objectSum } from 'shuutils'
-import { type CommonLists, defaultCommonLists, defaultImage, delays, emptyItem } from '../constants'
+import { type CommonLists, defaultCommonLists, emptyItem } from '../constants'
 import { airtableMaxRequestPerSecond, deleteItemRemotely, getOneItem, pushItemRemotely } from './airtable.utils'
 import { del, patch, post } from './browser.utils'
 import { type Form, createCheckboxField, createSelectField, createTextField } from './forms.utils'
@@ -9,6 +9,7 @@ import { sortListsEntries } from './objects.utils'
 import type { Item, ItemPhoto } from './parsers.utils'
 import { state } from './state.utils'
 
+export const defaultImage = '/assets/no-visual.svg'
 
 function shouldAddToList (value = '', list: string[] = []) {
   return value.length > 0 && !list.includes(value)
@@ -106,6 +107,7 @@ export function getCommonListsFromItems (items: Item[]) {
 
 /* c8 ignore next 12 */
 export async function onItemImageError (event: Event) {
+  const waitDelay = 1000
   const image = event.target as HTMLImageElement // eslint-disable-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-unsafe-type-assertion
   image.src = itemToImageUrl()
   image.classList.add('animate-pulse')
@@ -115,7 +117,7 @@ export async function onItemImageError (event: Event) {
   // eslint-disable-next-line @typescript-eslint/no-misused-promises
   setTimeout(async () => {
     await updateItemImage(image.dataset.id, image)// @ts-expect-error t exists
-  }, event.t * delays.second)
+  }, event.t * waitDelay)
 }
 
 export const itemForm = {

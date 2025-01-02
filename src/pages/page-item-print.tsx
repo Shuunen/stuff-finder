@@ -9,13 +9,14 @@ import { useCallback, useMemo, useState } from 'preact/hooks'
 import { sleep } from 'shuutils'
 import { AppBarcode } from '../components/app-barcode'
 import { AppPageCard } from '../components/app-page-card'
-import { delays } from '../constants'
 import { type PrintSize, printSizes } from '../types/print.types'
 import { clearElementsForPrint } from '../utils/browser.utils'
 import { itemToImageUrl, onItemImageError, pushItem } from '../utils/item.utils'
 import { logger } from '../utils/logger.utils'
 import { itemToPrintData } from '../utils/print.utils'
 import { state } from '../utils/state.utils'
+
+const waitDelay = 200
 
 // eslint-disable-next-line max-statements, max-lines-per-function
 export function PageItemPrint ({ ...properties }: Readonly<Record<string, unknown>>) {
@@ -34,17 +35,17 @@ export function PageItemPrint ({ ...properties }: Readonly<Record<string, unknow
   const onPrint = useCallback(async () => {
     clearElementsForPrint()
     setIsPrintMode(true)
-    await sleep(delays.medium)
+    await sleep(waitDelay)
     globalThis.print()
     setIsPrintMode(false)
     if (item['ref-printed']) return
     item['ref-printed'] = true
     const result = await pushItem(item)
-    state.message = { content: `${result.success ? 'updated' : 'failed updating'} item as printed`, delay: delays.seconds, type: result.success ? 'success' : 'error' }
+    state.message = { content: `${result.success ? 'updated' : 'failed updating'} item as printed`, type: result.success ? 'success' : 'error' }
     if (!result.success) logger.error('pushItem failed', result)
   }, [item])
   // trigger print directly on page load
-  useSignalEffect(() => { void sleep(delays.medium).then(async () => onPrint()) })
+  useSignalEffect(() => { void sleep(waitDelay).then(async () => onPrint()) })
 
   return (
     <>

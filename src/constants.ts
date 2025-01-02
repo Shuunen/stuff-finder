@@ -1,11 +1,4 @@
-import Fuse, { type IFuseOptions } from 'fuse.js'
-import { browserContext, sanitize } from 'shuutils'
-import type { Display } from './types/theme.types'
 import type { Item, ItemField, ItemPhoto, ItemStatus } from './utils/parsers.utils'
-
-const laptopWidth = 1500
-
-export const browserScout = browserContext()
 
 export interface CommonLists {
   boxes: string[]
@@ -14,8 +7,6 @@ export interface CommonLists {
   locations: string[]
   statuses: ItemStatus[]
 }
-
-export const defaultImage = '/assets/no-visual.svg'
 
 export const defaultCommonLists: CommonLists = {
   boxes: [],
@@ -89,53 +80,5 @@ export const emptyItemSuggestions = {
   'updated-on': [],
 } satisfies Record<ItemField, string[]>
 
-export const delays = {
-  large: 300,
-  medium: 200,
-  second: 1000,
-  seconds: 2000,
-  small: 100,
-} as const
-
-// https://fusejs.io/
-export const fuseOptions: IFuseOptions<Item> = {
-  distance: 200, // see the tip at https://fusejs.io/concepts/scoring-theory.html#scoring-theory
-  /**
-   * Function to get... ?
-   * @param object the item
-   * @param path the path
-   * @returns a value ^^'
-   */
-  getFn: (object: Item, path: string | string[]) => {
-    const value = Fuse.config.getFn(object, path)
-    if (Array.isArray(value)) return value.map((element: string) => sanitize(element))
-    if (typeof value === 'string') return [sanitize(value)]
-    return value
-  },
-  ignoreLocation: true, // eslint-disable-line @typescript-eslint/naming-convention
-  keys: [
-    {
-      name: 'name',
-      weight: 4,
-    }, {
-      name: 'brand',
-      weight: 2,
-    }, {
-      name: 'details',
-      weight: 4,
-    }, {
-      name: 'category',
-      weight: 1,
-    },
-  ], // this is not generic ^^"
-  threshold: 0.35, // 0 is perfect match
-}
-
-/**
- * Just a void, empty function.
- */
-export function voidFunction () { /* empty */ }
-
 export const defaultItems: Item[] = []
 
-export const defaultDisplay: Display = browserScout.screenWidth < laptopWidth ? 'list' : 'card'
