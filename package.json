@@ -59,6 +59,7 @@
   },
   "scripts": {
     "build": "tsc && echo tsc success && vite build && echo vite build success && pnpm mark && echo build success",
+    "build:analyze": "npx vite-bundle-visualizer",
     "check": "pnpm install && repo-check && pnpm build && pnpm lint && pnpm test && echo check success",
     "dev": "vite",
     "lint": "pnpm lint:tsc && pnpm lint:biome && pnpm lint:eslint && pnpm lint:dep && echo lint success",

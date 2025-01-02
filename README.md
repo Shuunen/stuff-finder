@@ -36,7 +36,7 @@
 - 2.0.0 :  3KB html + 18KB css + 720KB js (more components, better design)
 - 2.1.0 :  1KB html + 18KB css + 726KB js
 
-Check build stats in details by adding `--metafile=meta.json` to the esbuild command and use a tool like [Bundle Buddy](https://bundle-buddy.com/)
+Check build stats in details by running `pnpm build:analyze`.
 
 ## Thanks
 
