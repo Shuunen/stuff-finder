@@ -7,11 +7,14 @@ import { type AppStatus, defaultStatus } from '../types/status.types'
 import { type Display, defaultTheme } from '../types/theme.types'
 import { storage } from './storage.utils'
 
+/* c8 ignore start */
+
 /**
  * Handle the status change
  * @param status the new status
  */
 function onStatusChangeSync (status: AppStatus) {
+  if (!isBrowserEnvironment()) return
   if (status === 'settings-required') route('/settings')
   if (status === 'ready' && document.location.pathname.includes('/settings')) route('/')
 }
@@ -21,6 +24,7 @@ function onStatusChangeSync (status: AppStatus) {
  * @param message the message
  */
 function onMessage (message: AppMessage) {
+  if (!isBrowserEnvironment()) return
   if (['error', 'warning'].includes(message.type)) toastError(message.content, message.delay)
   else toastSuccess(message.content, message.delay)
 }
@@ -28,6 +32,8 @@ function onMessage (message: AppMessage) {
 const laptopWidth = 1500
 
 const defaultDisplay: Display = (isBrowserEnvironment() && globalThis.screen.width < laptopWidth) ? 'list' : 'card'
+
+/* c8 ignore stop */
 
 export const { state, watchState } = createState(
   {

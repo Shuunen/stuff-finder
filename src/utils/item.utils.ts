@@ -105,7 +105,7 @@ export function getCommonListsFromItems (items: Item[]) {
   return sortListsEntries(list)
 }
 
-/* c8 ignore next 12 */
+/* c8 ignore next 13 */
 export async function onItemImageError (event: Event) {
   const waitDelay = 1000
   const image = event.target as HTMLImageElement // eslint-disable-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-unsafe-type-assertion
