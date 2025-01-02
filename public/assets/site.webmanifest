@@ -1,6 +1,8 @@
 {
   "$schema": "https://json.schemastore.org/web-manifest-combined.json",
   "background_color": "#ffffff",
+  "description": "Find your stuff",
+  "dir": "auto",
   "display": "standalone",
   "icons": [
     {
@@ -27,9 +29,11 @@
       "type": "image/png"
     }
   ],
+  "id": "stuff-finder",
+  "lang": "fr",
   "name": "Stuff Finder",
-  "prefer_related_applications": false,
+  "orientation": "any",
   "short_name": "Stuff Finder",
-  "start_url": "/",
-  "theme_color": "#209CEE"
+  "start_url": "https://stuff-finder.netlify.app/",
+  "theme_color": "#209cee"
 }
