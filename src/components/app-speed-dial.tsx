@@ -34,7 +34,7 @@ export function AppSpeedDial ({ isLoading = false, isSettingsRequired = false }:
   const availableActions = useMemo(() => (isSettingsRequired ? actions.filter((action) => ['Home', 'Settings'].includes(action.name)) : actions), [isSettingsRequired])
   const [{ path }] = useRouter()
   const [isQuickSearchAvailable, setQuickSearchAvailability] = useState(false)
-  useEffect(() => { setQuickSearchAvailability(path !== '/') }, [path])
+  useEffect(() => { setQuickSearchAvailability(path !== '/'); setOpen(false) }, [path])
   return (
     <>
       <Fade in={isOpen}>
