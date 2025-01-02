@@ -5,6 +5,7 @@ import { deleteItem, itemToImageUrl, itemToLocation, onItemImageError } from '..
 import { logger } from '../utils/logger.utils'
 import type { Item } from '../utils/parsers.utils'
 import { state } from '../utils/state.utils'
+import { AppButtonEdit } from './app-button-edit'
 import { AppDeleteRessource } from './app-delete-ressource'
 import { AppItemDetailsChip } from './app-item-details-chip'
 
@@ -22,9 +23,10 @@ export function AppItemDetails ({ item }: Readonly<{ item: Item }>) {
   const itemLocation = useMemo(() => itemToLocation(item), [item])
 
   return (
-    <div class="flex flex-col sm:flex-row mr-4 items-center">
-      <div class="absolute right-5 top-5 opacity-50 transition-opacity hover:opacity-85">
+    <div class="flex flex-col sm:flex-row items-center">
+      <div class="absolute flex flex-col items-end gap-1 right-5 top-5 transition-opacity hover:opacity-85">
         <AppDeleteRessource onDelete={onDelete} />
+        <AppButtonEdit itemId={item.id} />
       </div>
       <div class="relative flex aspect-square w-full min-w-40 max-w-[40vh] flex-col md:w-1/3 md:min-w-64 md:max-w-[40vh]">
         <img alt={item.name} class="absolute top-0 size-full object-contain md:p-4" data-id={item.id} onError={onItemImageError} src={itemToImageUrl(item)} />
