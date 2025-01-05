@@ -52,7 +52,7 @@ export function AppForm<FormType extends Form> ({ error: parentError = '', initi
 
   // eslint-disable-next-line max-statements, complexity
   const checkDataInClipboard = useCallback(async () => {
-    const clip = alignClipboard(await readClipboard())
+    const clip = alignClipboard(await readClipboard().catch(() => { logger.info('user denied clipboard access'); return '' }))
     const { error, value: data } = parseJson(clip)
     if (error !== '' || typeof data !== 'object' || data === null) { logger.debug('error or data not an object', { data, error }); return }
     const futureForm = structuredClone(form)
@@ -69,7 +69,6 @@ export function AppForm<FormType extends Form> ({ error: parentError = '', initi
 
   useSignalEffect(useCallback(() => {
     const handler = on('focus', () => { void checkDataInClipboard() })
-    void checkDataInClipboard()
     return () => { off(handler) }
   }, [checkDataInClipboard]))
 
