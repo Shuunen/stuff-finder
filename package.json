@@ -13,7 +13,7 @@
     "fuse.js": "^7.0",
     "preact": "^10.24",
     "preact-router": "^4.1",
-    "shuutils": "^10.1",
+    "shuutils": "^10.2",
     "valibot": "^0.42",
     "webcomponent-qr-code": "^1.2"
   },

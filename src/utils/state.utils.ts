@@ -1,5 +1,5 @@
 import { route } from 'preact-router'
-import { createState, debounce, isBrowserEnvironment, toastError, toastSuccess } from 'shuutils'
+import { createState, debounce, isBrowserEnvironment, isTestEnvironment, toastError, toastSuccess } from 'shuutils'
 import { defaultCommonLists, defaultCredentials, defaultItems } from '../constants'
 import type { AppMessage } from '../types/messages.types'
 import { defaultSound } from '../types/sounds.types'
@@ -14,7 +14,7 @@ import { storage } from './storage.utils'
  * @param status the new status
  */
 function onStatusChangeSync (status: AppStatus) {
-  if (!isBrowserEnvironment()) return
+  if (isTestEnvironment()) return
   if (status === 'settings-required') route('/settings')
   if (status === 'ready' && document.location.pathname.includes('/settings')) route('/')
 }
@@ -24,7 +24,7 @@ function onStatusChangeSync (status: AppStatus) {
  * @param message the message
  */
 function onMessage (message: AppMessage) {
-  if (!isBrowserEnvironment()) return
+  if (isTestEnvironment()) return
   if (['error', 'warning'].includes(message.type)) toastError(message.content, message.delay)
   else toastSuccess(message.content, message.delay)
 }
