@@ -10,7 +10,6 @@ import { areItemsEquivalent, defaultImage, formToItem, type itemForm, itemToForm
 import { logger } from '../utils/logger.utils'
 import type { Item } from '../utils/parsers.utils'
 import { state } from '../utils/state.utils'
-import { getSuggestions } from '../utils/suggestions.utils'
 import { normalizePhotoUrl } from '../utils/url.utils'
 
 function onImageError (image: HTMLImageElement) {
@@ -25,13 +24,6 @@ function checkExisting (item: Item) {
   return { hasSameBarcode, hasSameReference, isDuplicate }
 }
 
-function getSuggestionId (item?: Item) {
-  if (item === undefined) return ''
-  if (item.reference.length > 0) return item.reference
-  if (item.barcode.length > 0) return item.barcode
-  return ''
-}
-
 // eslint-disable-next-line max-statements, complexity, max-lines-per-function
 export function PageItemAddEdit ({ id = '', isEdit = false }: Readonly<{ id?: string; isEdit?: boolean }>) {
   logger.debug('PageItemAddEdit', { id, isEdit })
@@ -41,8 +33,6 @@ export function PageItemAddEdit ({ id = '', isEdit = false }: Readonly<{ id?: st
   const [error, setError] = useState('')
   const [canSubmit, setCanSubmit] = useState(false)
   const [itemId] = useState(initialItem?.id ?? '')
-  const [suggestionId, setSuggestionId] = useState(getSuggestionId(initialItem))
-  const [suggestions, setSuggestions] = useState({})
   const [lastForm, setLastForm] = useState(initialForm)
   const photoReference = useRef<HTMLImageElement>(null)
   const photo = signal(photoReference)
@@ -83,15 +73,6 @@ export function PageItemAddEdit ({ id = '', isEdit = false }: Readonly<{ id?: st
     photo.value.current?.setAttribute('src', finalUrl)
   }, [photo.value])
 
-  const findSuggestions = useCallback(async (item: Item) => {
-    if (isEdit) return // skip suggestions when editing for now
-    const currentId = getSuggestionId(item)
-    if (currentId === suggestionId || currentId === '') return
-    logger.debug('findSuggestions for', currentId)
-    setSuggestionId(currentId)
-    setSuggestions(await getSuggestions(currentId)) // 3245676545517
-  }, [isEdit, suggestionId])
-
   const onChange = useCallback((form: Form) => {
     const item = formToItem(form)
     const isDifferent = initialItem ? !areItemsEquivalent(initialItem, item) : true
@@ -100,9 +81,8 @@ export function PageItemAddEdit ({ id = '', isEdit = false }: Readonly<{ id?: st
     setLastForm(form)
     setCanSubmit(isValid)
     checkExistingSetError(item)
-    void findSuggestions(item)
     handlePhoto(form)
-  }, [checkExistingSetError, error, findSuggestions, initialItem, initialSum, handlePhoto])
+  }, [checkExistingSetError, error, initialItem, initialSum, handlePhoto])
 
   const onDetails = useCallback(() => { route(`/item/details/${itemId}`) }, [itemId])
   const onPrint = useCallback(() => { route(`/item/print/${itemId}`) }, [itemId])
@@ -124,7 +104,7 @@ export function PageItemAddEdit ({ id = '', isEdit = false }: Readonly<{ id?: st
         <div class="grid md:grid-cols-3 gap-6 items-end">
           <img alt="item visual" class="md:max-h-80 md:max-w-80 w-auto" data-id={itemId} onError={onItemImageError} ref={photoReference} src={initialForm.fields.photo.value || defaultImage} />
           <div class="md:col-span-2">
-            <AppForm error={error} initialForm={initialForm} onChange={onChange} suggestions={suggestions} />
+            <AppForm error={error} initialForm={initialForm} onChange={onChange} />
           </div>
         </div>
         <div class="flex justify-center">
