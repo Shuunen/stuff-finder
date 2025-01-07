@@ -42,7 +42,6 @@ export function validateForm<FormType extends Form> (form: FormType) {
     const isUndefinedButNotRequired = !isRequired && value === undefined
     const isValidText = typeof value === 'string' && regex.test(value)
     const isValid = isEmptyButNotRequired || isUndefinedButNotRequired || isValidText || isBoolean
-    if (label === "Barcode") logger.info({ isBoolean, isEmptyButNotRequired, isValid, isValidText, label, regex, value })
     if (!isValid) errorMessage = value === '' ? `${label} is required` : `${label} is invalid, "${String(value)}" should match ${String(regex)}`
     // biome-ignore lint/performance/noAccumulatingSpread: this whole validation is a joke, we should use a proper library
     return { ...accumulator, [field]: { ...form.fields[field], isValid } }
