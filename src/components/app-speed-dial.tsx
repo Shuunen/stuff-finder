@@ -5,6 +5,7 @@ import HourglassTop from '@mui/icons-material/HourglassTop'
 import PrintIcon from '@mui/icons-material/Print'
 import QrCodeScannerIcon from '@mui/icons-material/QrCodeScanner'
 import SettingsIcon from '@mui/icons-material/Settings'
+import type { FabProps } from '@mui/material'
 import Fade from '@mui/material/Fade'
 import SpeedDial from '@mui/material/SpeedDial'
 import SpeedDialAction from '@mui/material/SpeedDialAction'
@@ -29,7 +30,7 @@ export function AppSpeedDial ({ isLoading = false, isSettingsRequired = false }:
   const onMouse = useCallback((status: 'enter' | 'leave') => { if (!isMobile()) { logger.debug('open cause mouse', status); setOpen(status === 'enter') } }, [])
   const onMouseEnter = useCallback(() => { onMouse('enter') }, [onMouse])
   const onMouseLeave = useCallback(() => { onMouse('leave') }, [onMouse])
-  const options = useMemo(() => ({ color: isLoading ? 'warning' : 'primary' } as const), [isLoading])
+  const options: Partial<FabProps> = { color: 'default', sx: { backgroundColor: 'white', color: 'purple', opacity: 0.7 } } as const
   const icon = useMemo(() => (isLoading ? <HourglassTop /> : <SpeedDialIcon />), [isLoading])
   const availableActions = useMemo(() => (isSettingsRequired ? actions.filter((action) => ['Home', 'Settings'].includes(action.name)) : actions), [isSettingsRequired])
   const [{ path }] = useRouter()
@@ -39,7 +40,7 @@ export function AppSpeedDial ({ isLoading = false, isSettingsRequired = false }:
     <>
       <Fade in={isOpen}>
         {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
-        <div class="absolute bottom-0 right-0 z-10 size-full bg-black/30" data-component="speed-dial-backdrop" onClick={toggleOpen} />
+        <div class="absolute bottom-0 right-0 z-10 size-full bg-gradient-to-tl" data-component="speed-dial-backdrop" onClick={toggleOpen} />
       </Fade>
       <div class="fixed md:bottom-10 pointer-events-none md:right-10 bottom-5 right-5 z-20 print:hidden flex items-end" data-component="speed-dial">
         <Fade in={isQuickSearchAvailable}>
