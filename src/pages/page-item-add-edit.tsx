@@ -1,5 +1,6 @@
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
-import Button from '@mui/material/Button'
+import SaveIcon from '@mui/icons-material/Save'
+import LoadingButton from '@mui/lab/LoadingButton'
 import { signal, useSignalEffect } from '@preact/signals'
 import { route } from 'preact-router'
 import { useCallback, useRef, useState } from 'preact/hooks'
@@ -31,6 +32,7 @@ export function PageItemAddEdit ({ id = '', isEdit = false }: Readonly<{ id?: st
   const [initialSum] = useState(initialItem ? objectSum(initialItem) : 0)
   const initialForm = itemToForm(initialItem)
   const [error, setError] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
   const [canSubmit, setCanSubmit] = useState(false)
   const [itemId] = useState(initialItem?.id ?? '')
   const [lastForm, setLastForm] = useState(initialForm)
@@ -54,14 +56,17 @@ export function PageItemAddEdit ({ id = '', isEdit = false }: Readonly<{ id?: st
     route(`/item/details/${item.id}`)
   }, [isEdit])
 
+  // eslint-disable-next-line max-statements
   const onSubmit = useCallback(async () => {
     const item = formToItem(lastForm, itemId)
     logger.debug('onSubmit', { form: lastForm, item })
     if (!isEdit && checkExistingSetError(item).isDuplicate) return
+    setIsLoading(true)
     const result = await pushItem(item)
     if (result.success) { onSubmitSuccess({ ...item, id: result.output.id }); return }
     state.message = { content: `error ${isEdit ? 'updating' : 'adding'} item`, type: 'error' }
     logger.error('onSubmit failed', result)
+    setIsLoading(false)
   }, [checkExistingSetError, isEdit, lastForm, onSubmitSuccess, itemId])
 
   const handlePhoto = useCallback((form: Form) => {
@@ -84,9 +89,6 @@ export function PageItemAddEdit ({ id = '', isEdit = false }: Readonly<{ id?: st
     handlePhoto(form)
   }, [checkExistingSetError, error, initialItem, initialSum, handlePhoto])
 
-  const onDetails = useCallback(() => { route(`/item/details/${itemId}`) }, [itemId])
-  const onPrint = useCallback(() => { route(`/item/print/${itemId}`) }, [itemId])
-
   useSignalEffect(useCallback(() => {
     if (photo.value.current === null) throw new Error('photo not found')
     const handler = on('error', () => { onImageError(photo.value.current ?? dom('img')) }, photo.value.current)
@@ -108,9 +110,16 @@ export function PageItemAddEdit ({ id = '', isEdit = false }: Readonly<{ id?: st
           </div>
         </div>
         <div class="flex justify-center">
-          <Button disabled={!canSubmit} onClick={onSubmit} variant="contained">{isEdit ? 'Save' : 'Create'}</Button>
-          <Button disabled={itemId === ''} onClick={onDetails} variant="outlined">View</Button>
-          {!isEdit && <Button disabled={itemId === ''} onClick={onPrint} variant="outlined">Print</Button>}
+          <LoadingButton
+            disabled={!canSubmit}
+            loading={isLoading}
+            loadingPosition="start"
+            onClick={onSubmit}
+            startIcon={<SaveIcon />}
+            variant="contained"
+          >
+            {isEdit ? 'Save' : 'Create'}
+          </LoadingButton>
         </div>
       </div>
     </AppPageCard>

@@ -7,6 +7,7 @@
     "@emotion/react": "^11.13",
     "@emotion/styled": "^11.13",
     "@mui/icons-material": "^6.1",
+    "@mui/lab": "6.0.0-beta.22",
     "@mui/material": "^6.1",
     "@preact/signals": "^2.0",
     "@zxing/library": "^0.21",
