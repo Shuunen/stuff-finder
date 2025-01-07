@@ -1,5 +1,6 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import { objectEqual } from 'shuutils'
+import { logger } from './logger.utils'
 
 type FormFieldType = 'checkbox' | 'select' | 'text'
 type FormFieldOptions = { label: string; value: string }[]
@@ -33,8 +34,15 @@ export type Form = {
 
 export function validateForm<FormType extends Form> (form: FormType) {
   let errorMessage = ''
+  // eslint-disable-next-line complexity
   const updatedFields = Object.entries(form.fields).reduce((accumulator, [field, { isRequired, label, regex, value }]) => { // eslint-disable-line unicorn/no-array-reduce
-    const isValid = !isRequired && (typeof value === 'string' && value === '') || typeof value === 'string' && regex.test(value) || typeof value === 'boolean'
+    const isBoolean = typeof value === 'boolean'
+    const isEmptyButNotRequired = !isRequired && typeof value === 'string' && value === ''
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    const isUndefinedButNotRequired = !isRequired && value === undefined
+    const isValidText = typeof value === 'string' && regex.test(value)
+    const isValid = isEmptyButNotRequired || isUndefinedButNotRequired || isValidText || isBoolean
+    if (label === "Barcode") logger.info({ isBoolean, isEmptyButNotRequired, isValid, isValidText, label, regex, value })
     if (!isValid) errorMessage = value === '' ? `${label} is required` : `${label} is invalid, "${String(value)}" should match ${String(regex)}`
     // biome-ignore lint/performance/noAccumulatingSpread: this whole validation is a joke, we should use a proper library
     return { ...accumulator, [field]: { ...form.fields[field], isValid } }
@@ -69,7 +77,7 @@ export type { FormFieldCheckbox, FormFieldSelect, FormFieldText }
 
 
 export function alignClipboard (text: string) {
-  return text.replace(/: ""(?<thing>[,\n])/gu, ': "__EMPTY__"$<thing>')
+  return text.replace(/: ?""(?<thing>[,\n])/gu, ': "__EMPTY__"$<thing>')
     .replace(/""/gu, '"')
     .replace(/"__EMPTY__"/gu, '""')
     .replace('"{', '{')
