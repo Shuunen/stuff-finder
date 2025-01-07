@@ -1,6 +1,5 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import { objectEqual } from 'shuutils'
-import { logger } from './logger.utils'
 
 type FormFieldType = 'checkbox' | 'select' | 'text'
 type FormFieldOptions = { label: string; value: string }[]
