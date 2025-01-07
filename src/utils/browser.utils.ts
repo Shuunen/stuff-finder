@@ -45,6 +45,7 @@ export function setPageTitle (title: string) {
 }
 
 export function clearElementsForPrint () {
+  logger.info('clearing elements for print')
   const selector = [
     '#synology-download-notification-stack',
     'synology-download-content',

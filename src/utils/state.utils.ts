@@ -1,5 +1,5 @@
 import { route } from 'preact-router'
-import { createState, debounce, isBrowserEnvironment, isTestEnvironment, toastError, toastSuccess } from 'shuutils'
+import { createState, debounce, isBrowserEnvironment, isTestEnvironment, toastError, toastInfo, toastSuccess } from 'shuutils'
 import { defaultCommonLists, defaultCredentials, defaultItems } from '../constants'
 import type { AppMessage } from '../types/messages.types'
 import { defaultSound } from '../types/sounds.types'
@@ -26,6 +26,7 @@ function onStatusChangeSync (status: AppStatus) {
 function onMessage (message: AppMessage) {
   if (isTestEnvironment()) return
   if (['error', 'warning'].includes(message.type)) toastError(message.content, message.delay)
+  else if (message.type === 'info') toastInfo(message.content, message.delay)
   else toastSuccess(message.content, message.delay)
 }
 
