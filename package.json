@@ -29,7 +29,7 @@
     "@tsconfig/strictest": "^2.0",
     "@types/dom-speech-recognition": "^0.0",
     "@types/node": "^22.0",
-    "@vitest/coverage-v8": "^2.1",
+    "@vitest/coverage-v8": "^3.0.0",
     "autoprefixer": "^10.4",
     "dependency-cruiser": "latest",
     "eslint": "*",
@@ -39,7 +39,7 @@
     "tailwindcss": "^3.4",
     "typescript": "^5.6",
     "vite": "^6.0",
-    "vitest": "^2.1"
+    "vitest": "^3.0.0"
   },
   "files": [
     "src"
