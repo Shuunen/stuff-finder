@@ -1,6 +1,6 @@
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 import SaveIcon from '@mui/icons-material/Save'
-import LoadingButton from '@mui/lab/LoadingButton'
+import Button from '@mui/material/Button'
 import { signal, useSignalEffect } from '@preact/signals'
 import { route } from 'preact-router'
 import { useCallback, useRef, useState } from 'preact/hooks'
@@ -110,16 +110,15 @@ export function PageItemAddEdit ({ id = '', isEdit = false }: Readonly<{ id?: st
           </div>
         </div>
         <div class="flex justify-center">
-          <LoadingButton
+          <Button
             disabled={!canSubmit}
             loading={isLoading}
-            loadingPosition="start"
             onClick={onSubmit}
             startIcon={<SaveIcon />}
             variant="contained"
           >
             {isEdit ? 'Save' : 'Create'}
-          </LoadingButton>
+          </Button>
         </div>
       </div>
     </AppPageCard>
