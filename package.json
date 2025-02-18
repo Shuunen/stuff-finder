@@ -24,7 +24,7 @@
     "@babel/plugin-syntax-jsx": "*",
     "@biomejs/biome": "^1.9",
     "@preact/preset-vite": "^2.9",
-    "@stylistic/eslint-plugin": "^3.0.0",
+    "@stylistic/eslint-plugin": "^4.0.0",
     "@tsconfig/strictest": "^2.0",
     "@types/dom-speech-recognition": "^0.0",
     "@types/node": "^22.0",
