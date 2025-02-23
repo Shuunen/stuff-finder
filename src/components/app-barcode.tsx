@@ -31,7 +31,7 @@ export function AppBarcode ({ isHighlighted = false, item, size, willResize = tr
   })
 
   return (
-    <div class="box-content flex items-center gap-0 overflow-hidden rounded border border-black px-1 transition-all print:rounded-none print:border-0 print:px-0" data-component="barcode" ref={wrapperReference} style={printSizes[size].styles}>
+    <div class="box-content flex items-center gap-0 overflow-hidden rounded-sm border border-black px-1 transition-all print:rounded-none print:border-0 print:px-0" data-component="barcode" ref={wrapperReference} style={printSizes[size].styles}>
       <div class={`mt-1 ${isHighlighted ? 'bg-green-400' : ''}`}>{/* @ts-expect-error missing types */}
         <qr-code data={value} margin={0} modulesize={3} ref={wcReference} />
       </div>

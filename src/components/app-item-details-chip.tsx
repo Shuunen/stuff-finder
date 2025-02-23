@@ -28,7 +28,7 @@ export function AppItemDetailsChip ({ color = 'default', icon: Icon, label, link
     logger.showSuccess(`${tooltip.split(',')[0]} copied to clipboard`)
   }, [link, tooltip])
 
-  const attributes: Record<string, unknown> = Icon === undefined ? {} : { className: 'reverse', icon: <Icon /> } // eslint-disable-line unicorn/no-keyword-prefix
+  const attributes: Record<string, unknown> = Icon === undefined ? {} : { className: 'reverse', icon: <Icon sx={{ marginRight: '5px !important', marginLeft: '-7px !important' }} /> } // eslint-disable-line unicorn/no-keyword-prefix
 
   return <Tooltip data-component="item-details-chip" title={tooltip}>
     <Chip {...attributes} color={color} label={label} onClick={onChipClick} sx={chipsStyle} variant="outlined" />

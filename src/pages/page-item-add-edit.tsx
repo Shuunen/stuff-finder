@@ -103,15 +103,13 @@ export function PageItemAddEdit ({ id = '', isEdit = false }: Readonly<{ id?: st
 
   return (
     <AppPageCard cardTitle={`${isEdit ? 'Edit' : 'Add'} item`} icon={isEdit ? EditOutlinedIcon : AddCircleOutlineIcon} pageCode={`item-${isEdit ? 'edit' : 'add'}`} pageTitle={`${isEdit ? 'Edit' : 'Add'} item`}>
-      <div class="flex flex-col w-100 max-h-[90%] md:max-h-full mb-20 md:mb-0 overflow-y-auto overflow-x-hidden">
+      <>
         {Boolean(isEdit) && <p class="text-center">Please fill in the form below to edit the item, you can change any field you want 🔄</p>}
         {!isEdit && <p class="text-center">Please fill in the form below to add a new item, no worry, you will be able to edit it later if needed ✏️</p>}
         {id !== '' && initialForm.fields.reference.value === '' && <p>Here is the keyword you search previously : {id}</p>}
-        <div class="flex flex-col md:flex-row gap-6 items-end">
+        <div class="flex flex-col md:flex-row gap-6 items-center">
           <img alt="item visual" class="md:max-h-80 md:max-w-72 p-4 w-auto md:w-1/3 justify-self-center" ref={photoReference} src={itemPhotoToImageUrl(initialForm.fields.photo.value)} />
-          <div class="place-self-center pr-4 md:pr-0 w-full">
-            <AppForm error={error} initialForm={initialForm} onChange={onChange} />
-          </div>
+          <AppForm error={error} initialForm={initialForm} onChange={onChange} />
         </div>
         <div class="flex justify-center">
           <Button
@@ -124,7 +122,7 @@ export function PageItemAddEdit ({ id = '', isEdit = false }: Readonly<{ id?: st
             {isEdit ? 'Save' : 'Create'}
           </Button>
         </div>
-      </div>
+      </>
     </AppPageCard>
   )
 }
