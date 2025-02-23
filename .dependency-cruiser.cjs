@@ -173,6 +173,7 @@ module.exports = {
         dependencyTypes: [
           'npm-dev',
         ],
+        pathNot: 'vitest',
       },
     },
     {
