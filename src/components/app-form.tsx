@@ -1,7 +1,7 @@
 import Button from '@mui/material/Button'
 import { useSignalEffect } from '@preact/signals'
 import { useCallback, useState } from 'preact/hooks'
-import { debounce, off, on, parseJson, readClipboard } from 'shuutils'
+import { Result, debounce, off, on, parseJson, readClipboard } from 'shuutils'
 import { type Form, alignClipboard, validateForm } from '../utils/forms.utils'
 import { logger } from '../utils/logger.utils'
 import { state } from '../utils/state.utils'
@@ -34,17 +34,18 @@ export function AppForm<FormType extends Form> ({ error: parentError = '', initi
 
   // eslint-disable-next-line max-statements
   function updateFieldSync (field: string, target: EventTarget | null, isFromClipboard = false) {
-    if (target === null) throw new Error(`target for field "${field}" is null`)
+    if (target === null) return Result.error(`target for field "${field}" is null`)
     const input = target as HTMLInputElement // eslint-disable-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-unsafe-type-assertion
     let value = input.type === 'checkbox' ? input.checked : input.value
     if (input.role === 'option') value = input.textContent ?? '' // handle autocomplete target
     logger.debug('updateField', { field, value })
     const actualField = form.fields[field]
-    if (actualField === undefined) throw new Error(`field "${field}" not found in form`)
-    if (isFromClipboard) state.message = { content: `Pasted "${field}" field value`, type: 'success' }
+    if (actualField === undefined) return Result.error(`field "${field}" not found in form`)
+    if (isFromClipboard) logger.showSuccess(`Pasted "${field}" field value`)
     const updated = { ...form, fields: { ...form.fields, [field]: { ...actualField, value } }, isTouched: true }
     setForm(updated)
     onChange(updated)
+    return Result.ok('field updated successfully')
   }
 
   const updateDelay = 100
