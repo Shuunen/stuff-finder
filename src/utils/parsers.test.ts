@@ -1,40 +1,15 @@
 import { safeParse } from 'valibot'
 import { expect, it } from 'vitest'
-import { type AirtableSingleRecordResponse, airtableSingleResponseSchema } from './parsers.utils'
+import { itemSchema } from './parsers.utils'
 
-const validSingleResponse = {
-  createdTime: '2021-01-01T00:00:00.000Z',
-  fields: {
-    'barcode': '1234567890',
-    'box': 'A',
-    'brand': 'Brand',
-    'category': 'Category',
-    'details': 'Details',
-    'drawer': 'Drawer',
-    'location': 'Location',
-    'name': 'Name',
-    'ref-printed': true,
-    'reference': 'Reference',
-    'status': 'acheté',
-    'updated-on': '2021-01-01T00:00:00.000Z',
-  },
-  id: 'rec1234567890',
-} satisfies AirtableSingleRecordResponse
-
-it('airtableSingleResponseSchema A empty object', () => {
-  expect(safeParse(airtableSingleResponseSchema, {})).toMatchSnapshot()
-})
-
-it('airtableSingleResponseSchema B missing fields', () => {
-  const response = {
-    ...validSingleResponse,
-    fields: undefined,
-  }
-  const result = safeParse(airtableSingleResponseSchema, response)
-  expect(result).toMatchSnapshot()
-})
-
-it('airtableSingleResponseSchema C valid', () => {
-  const result = safeParse(airtableSingleResponseSchema, validSingleResponse)
-  expect(result).toMatchSnapshot()
+it('safeParse A empty object', () => {
+  const result = safeParse(itemSchema, {})
+  expect(result.issues?.map(issue => issue.message)).toMatchInlineSnapshot(`
+    [
+      "Invalid key: Expected "$id" but received undefined",
+      "Invalid key: Expected "name" but received undefined",
+      "Invalid key: Expected "reference" but received undefined",
+      "Invalid key: Expected "status" but received undefined",
+    ]
+  `)
 })

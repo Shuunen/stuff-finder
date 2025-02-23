@@ -1,110 +1,74 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`deleteItem A delete an item in state 1`] = `
-{
-  "issues": undefined,
-  "output": {
-    "deleted": true,
-    "id": "itemA",
+exports[`item.utils > addItem A should create remotely & push locally 1`] = `
+Ok {
+  "ok": true,
+  "value": {
+    "$id": "reference-b",
+    "barcode": "barcode B",
+    "box": "B (usb & audio)",
+    "brand": "brand B",
+    "details": "details B",
+    "drawer": 2,
+    "isPrinted": false,
+    "name": "name B",
+    "photos": [
+      "some-uuid",
+      "https://some.url/to/image.jpg",
+    ],
+    "price": 42,
+    "reference": "reference B",
+    "status": "bought",
   },
-  "success": true,
-  "typed": true,
 }
 `;
 
-exports[`formToItem A default itemForm 1`] = `
+exports[`item.utils > formToItem A default itemForm 1`] = `
 {
+  "$id": "",
   "barcode": "",
   "box": "",
   "brand": "",
-  "category": "",
   "details": "",
-  "drawer": "",
-  "id": "",
-  "location": "",
+  "drawer": -1,
+  "isPrinted": false,
   "name": "",
-  "photo": [],
-  "price": undefined,
-  "ref-printed": false,
+  "photos": [],
+  "price": -1,
   "reference": "",
-  "status": "acheté",
-  "updated-on": "",
+  "status": "bought",
 }
 `;
 
-exports[`formToItem B itemForm with some values 1`] = `
+exports[`item.utils > formToItem B itemForm with some values 1`] = `
 {
+  "$id": "",
   "barcode": "",
   "box": "",
   "brand": "",
-  "category": "",
   "details": "",
-  "drawer": "",
-  "id": "",
-  "location": "",
+  "drawer": -1,
+  "isPrinted": false,
   "name": "",
-  "photo": [
-    {
-      "url": "https://photos.org/200/200",
-    },
+  "photos": [
+    "https://photos.org/200/200",
   ],
   "price": 42,
-  "ref-printed": false,
   "reference": "",
-  "status": "acheté",
-  "updated-on": "",
+  "status": "bought",
 }
 `;
 
-exports[`getCommonListsFromItems A 1`] = `
-{
-  "boxes": [
-    "",
-    "G (brico & sport)",
-  ],
-  "categories": [
-    "",
-    "category B",
-  ],
-  "drawers": [
-    "",
-    "1",
-    "2",
-    "3",
-    "4",
-    "5",
-    "6",
-    "7",
-  ],
-  "locations": [
-    "",
-    "location A",
-    "Salon",
-  ],
-  "statuses": [
-    "",
-    "à donner",
-    "à vendre",
-    "acheté",
-    "donné",
-    "jeté",
-    "new surprise status",
-    "renvoyé",
-    "vendu",
-  ],
-}
-`;
-
-exports[`itemToForm A mocked item 1`] = `
+exports[`item.utils > itemToForm A mocked item 1`] = `
 {
   "columns": 10,
   "errorMessage": "",
   "fields": {
     "barcode": {
-      "columns": 4,
+      "columns": 1,
       "isRequired": false,
       "isValid": false,
-      "isVisible": true,
+      "isVisible": false,
       "label": "Barcode",
       "link": "",
       "regex": /\\^\\[-,\\\\d\\\\p\\{L\\}\\\\s/&\\]\\{3,30\\}\\$/u,
@@ -113,20 +77,109 @@ exports[`itemToForm A mocked item 1`] = `
       "value": "barcode B",
     },
     "box": {
-      "columns": 4,
+      "columns": 3,
       "isRequired": false,
       "isValid": false,
       "isVisible": true,
       "label": "Box",
       "link": "",
-      "options": [],
+      "options": [
+        {
+          "label": "",
+          "value": "",
+        },
+        {
+          "label": "A (apple)",
+          "value": "A (apple)",
+        },
+        {
+          "label": "B (usb & audio)",
+          "value": "B (usb & audio)",
+        },
+        {
+          "label": "C (couteau)",
+          "value": "C (couteau)",
+        },
+        {
+          "label": "D (doll)",
+          "value": "D (doll)",
+        },
+        {
+          "label": "E (east)",
+          "value": "E (east)",
+        },
+        {
+          "label": "F (périphériques)",
+          "value": "F (périphériques)",
+        },
+        {
+          "label": "G (brico & sport)",
+          "value": "G (brico & sport)",
+        },
+        {
+          "label": "H (hardware)",
+          "value": "H (hardware)",
+        },
+        {
+          "label": "L (lemon)",
+          "value": "L (lemon)",
+        },
+        {
+          "label": "M (malettes)",
+          "value": "M (malettes)",
+        },
+        {
+          "label": "N (noodles)",
+          "value": "N (noodles)",
+        },
+        {
+          "label": "O (orange)",
+          "value": "O (orange)",
+        },
+        {
+          "label": "P (plan de travail)",
+          "value": "P (plan de travail)",
+        },
+        {
+          "label": "Q (sock)",
+          "value": "Q (sock)",
+        },
+        {
+          "label": "R (récup)",
+          "value": "R (récup)",
+        },
+        {
+          "label": "R (red)",
+          "value": "R (red)",
+        },
+        {
+          "label": "S (sdb)",
+          "value": "S (sdb)",
+        },
+        {
+          "label": "T (tour bureau)",
+          "value": "T (tour bureau)",
+        },
+        {
+          "label": "V (violet)",
+          "value": "V (violet)",
+        },
+        {
+          "label": "X (commode malm)",
+          "value": "X (commode malm)",
+        },
+        {
+          "label": "Z (poches zip)",
+          "value": "Z (poches zip)",
+        },
+      ],
       "regex": /\\^\\[\\\\p\\{L\\}\\\\s&\\(\\)\\]\\{3,100\\}\\$/u,
       "type": "select",
       "unit": "",
-      "value": "G (brico & sport)",
+      "value": "B (usb & audio)",
     },
     "brand": {
-      "columns": 2,
+      "columns": 3,
       "isRequired": false,
       "isValid": false,
       "isVisible": true,
@@ -137,21 +190,8 @@ exports[`itemToForm A mocked item 1`] = `
       "unit": "",
       "value": "brand B",
     },
-    "category": {
-      "columns": 3,
-      "isRequired": false,
-      "isValid": false,
-      "isVisible": true,
-      "label": "Category",
-      "link": "",
-      "options": [],
-      "regex": /\\^\\[-,\\\\d\\\\p\\{L\\}\\\\s/&\\]\\{3,100\\}\\$/u,
-      "type": "select",
-      "unit": "",
-      "value": "category B",
-    },
     "details": {
-      "columns": 4,
+      "columns": 5,
       "isRequired": false,
       "isValid": false,
       "isVisible": true,
@@ -163,7 +203,7 @@ exports[`itemToForm A mocked item 1`] = `
       "value": "details B",
     },
     "drawer": {
-      "columns": 3,
+      "columns": 2,
       "isRequired": false,
       "isValid": false,
       "isVisible": true,
@@ -208,6 +248,18 @@ exports[`itemToForm A mocked item 1`] = `
       "unit": "",
       "value": "2",
     },
+    "id": {
+      "columns": 1,
+      "isRequired": false,
+      "isValid": false,
+      "isVisible": false,
+      "label": "Id",
+      "link": "",
+      "regex": /\\^\\[-,\\\\d\\\\p\\{L\\}\\\\s/&\\]\\{3,100\\}\\$/u,
+      "type": "text",
+      "unit": "",
+      "value": "itemToForm-A",
+    },
     "isPrinted": {
       "columns": 1,
       "isRequired": false,
@@ -220,21 +272,8 @@ exports[`itemToForm A mocked item 1`] = `
       "unit": "",
       "value": false,
     },
-    "location": {
-      "columns": 3,
-      "isRequired": false,
-      "isValid": false,
-      "isVisible": true,
-      "label": "Location",
-      "link": "",
-      "options": [],
-      "regex": /\\^\\[-,\\\\d\\\\p\\{L\\}\\\\s/&\\]\\{3,100\\}\\$/u,
-      "type": "select",
-      "unit": "",
-      "value": "Salon",
-    },
     "name": {
-      "columns": 4,
+      "columns": 5,
       "isRequired": true,
       "isValid": false,
       "isVisible": true,
@@ -246,19 +285,19 @@ exports[`itemToForm A mocked item 1`] = `
       "value": "name B",
     },
     "photo": {
-      "columns": 4,
+      "columns": 5,
       "isRequired": false,
       "isValid": false,
       "isVisible": true,
       "label": "Photo",
       "link": "",
-      "regex": /\\^https\\?:\\\\/\\\\/\\\\S\\+\\$/u,
+      "regex": /\\^\\.\\+\\$/u,
       "type": "text",
       "unit": "",
-      "value": "https://picsum.photos/seed/unknown-name/200/200",
+      "value": "some-uuid",
     },
     "price": {
-      "columns": 3,
+      "columns": 2,
       "isRequired": false,
       "isValid": false,
       "isVisible": true,
@@ -267,7 +306,7 @@ exports[`itemToForm A mocked item 1`] = `
       "regex": /\\^\\\\d\\{1,5\\}\\$/u,
       "type": "text",
       "unit": "€",
-      "value": "undefined",
+      "value": "42",
     },
     "reference": {
       "columns": 3,
@@ -282,7 +321,7 @@ exports[`itemToForm A mocked item 1`] = `
       "value": "reference B",
     },
     "status": {
-      "columns": 3,
+      "columns": 2,
       "isRequired": false,
       "isValid": false,
       "isVisible": true,
@@ -290,38 +329,26 @@ exports[`itemToForm A mocked item 1`] = `
       "link": "",
       "options": [
         {
-          "label": "acheté",
-          "value": "acheté",
+          "label": "bought",
+          "value": "bought",
         },
         {
-          "label": "à donner",
-          "value": "à donner",
+          "label": "for-sell",
+          "value": "for-sell",
         },
         {
-          "label": "à vendre",
-          "value": "à vendre",
+          "label": "lost",
+          "value": "lost",
         },
         {
-          "label": "donné",
-          "value": "donné",
-        },
-        {
-          "label": "jeté",
-          "value": "jeté",
-        },
-        {
-          "label": "renvoyé",
-          "value": "renvoyé",
-        },
-        {
-          "label": "vendu",
-          "value": "vendu",
+          "label": "to-give",
+          "value": "to-give",
         },
       ],
       "regex": /\\^\\[-,\\\\d\\\\p\\{L\\}\\\\s/&\\]\\{3,100\\}\\$/u,
       "type": "select",
       "unit": "",
-      "value": "acheté",
+      "value": "bought",
     },
   },
   "isTouched": false,
@@ -329,16 +356,16 @@ exports[`itemToForm A mocked item 1`] = `
 }
 `;
 
-exports[`itemToForm C no item 1`] = `
+exports[`item.utils > itemToForm C no item 1`] = `
 {
   "columns": 10,
   "errorMessage": "",
   "fields": {
     "barcode": {
-      "columns": 4,
+      "columns": 1,
       "isRequired": false,
       "isValid": false,
-      "isVisible": true,
+      "isVisible": false,
       "label": "Barcode",
       "link": "",
       "regex": /\\^\\[-,\\\\d\\\\p\\{L\\}\\\\s/&\\]\\{3,30\\}\\$/u,
@@ -347,20 +374,109 @@ exports[`itemToForm C no item 1`] = `
       "value": "",
     },
     "box": {
-      "columns": 4,
+      "columns": 3,
       "isRequired": false,
       "isValid": false,
       "isVisible": true,
       "label": "Box",
       "link": "",
-      "options": [],
+      "options": [
+        {
+          "label": "",
+          "value": "",
+        },
+        {
+          "label": "A (apple)",
+          "value": "A (apple)",
+        },
+        {
+          "label": "B (usb & audio)",
+          "value": "B (usb & audio)",
+        },
+        {
+          "label": "C (couteau)",
+          "value": "C (couteau)",
+        },
+        {
+          "label": "D (doll)",
+          "value": "D (doll)",
+        },
+        {
+          "label": "E (east)",
+          "value": "E (east)",
+        },
+        {
+          "label": "F (périphériques)",
+          "value": "F (périphériques)",
+        },
+        {
+          "label": "G (brico & sport)",
+          "value": "G (brico & sport)",
+        },
+        {
+          "label": "H (hardware)",
+          "value": "H (hardware)",
+        },
+        {
+          "label": "L (lemon)",
+          "value": "L (lemon)",
+        },
+        {
+          "label": "M (malettes)",
+          "value": "M (malettes)",
+        },
+        {
+          "label": "N (noodles)",
+          "value": "N (noodles)",
+        },
+        {
+          "label": "O (orange)",
+          "value": "O (orange)",
+        },
+        {
+          "label": "P (plan de travail)",
+          "value": "P (plan de travail)",
+        },
+        {
+          "label": "Q (sock)",
+          "value": "Q (sock)",
+        },
+        {
+          "label": "R (récup)",
+          "value": "R (récup)",
+        },
+        {
+          "label": "R (red)",
+          "value": "R (red)",
+        },
+        {
+          "label": "S (sdb)",
+          "value": "S (sdb)",
+        },
+        {
+          "label": "T (tour bureau)",
+          "value": "T (tour bureau)",
+        },
+        {
+          "label": "V (violet)",
+          "value": "V (violet)",
+        },
+        {
+          "label": "X (commode malm)",
+          "value": "X (commode malm)",
+        },
+        {
+          "label": "Z (poches zip)",
+          "value": "Z (poches zip)",
+        },
+      ],
       "regex": /\\^\\[\\\\p\\{L\\}\\\\s&\\(\\)\\]\\{3,100\\}\\$/u,
       "type": "select",
       "unit": "",
       "value": "",
     },
     "brand": {
-      "columns": 2,
+      "columns": 3,
       "isRequired": false,
       "isValid": false,
       "isVisible": true,
@@ -371,21 +487,8 @@ exports[`itemToForm C no item 1`] = `
       "unit": "",
       "value": "",
     },
-    "category": {
-      "columns": 3,
-      "isRequired": false,
-      "isValid": false,
-      "isVisible": true,
-      "label": "Category",
-      "link": "",
-      "options": [],
-      "regex": /\\^\\[-,\\\\d\\\\p\\{L\\}\\\\s/&\\]\\{3,100\\}\\$/u,
-      "type": "select",
-      "unit": "",
-      "value": "",
-    },
     "details": {
-      "columns": 4,
+      "columns": 5,
       "isRequired": false,
       "isValid": false,
       "isVisible": true,
@@ -397,7 +500,7 @@ exports[`itemToForm C no item 1`] = `
       "value": "",
     },
     "drawer": {
-      "columns": 3,
+      "columns": 2,
       "isRequired": false,
       "isValid": false,
       "isVisible": true,
@@ -442,6 +545,18 @@ exports[`itemToForm C no item 1`] = `
       "unit": "",
       "value": "",
     },
+    "id": {
+      "columns": 1,
+      "isRequired": false,
+      "isValid": false,
+      "isVisible": false,
+      "label": "Id",
+      "link": "",
+      "regex": /\\^\\[-,\\\\d\\\\p\\{L\\}\\\\s/&\\]\\{3,100\\}\\$/u,
+      "type": "text",
+      "unit": "",
+      "value": "",
+    },
     "isPrinted": {
       "columns": 1,
       "isRequired": false,
@@ -454,21 +569,8 @@ exports[`itemToForm C no item 1`] = `
       "unit": "",
       "value": false,
     },
-    "location": {
-      "columns": 3,
-      "isRequired": false,
-      "isValid": false,
-      "isVisible": true,
-      "label": "Location",
-      "link": "",
-      "options": [],
-      "regex": /\\^\\[-,\\\\d\\\\p\\{L\\}\\\\s/&\\]\\{3,100\\}\\$/u,
-      "type": "select",
-      "unit": "",
-      "value": "",
-    },
     "name": {
-      "columns": 4,
+      "columns": 5,
       "isRequired": true,
       "isValid": false,
       "isVisible": true,
@@ -480,19 +582,19 @@ exports[`itemToForm C no item 1`] = `
       "value": "",
     },
     "photo": {
-      "columns": 4,
+      "columns": 5,
       "isRequired": false,
       "isValid": false,
       "isVisible": true,
       "label": "Photo",
       "link": "",
-      "regex": /\\^https\\?:\\\\/\\\\/\\\\S\\+\\$/u,
+      "regex": /\\^\\.\\+\\$/u,
       "type": "text",
       "unit": "",
       "value": "",
     },
     "price": {
-      "columns": 3,
+      "columns": 2,
       "isRequired": false,
       "isValid": false,
       "isVisible": true,
@@ -516,7 +618,7 @@ exports[`itemToForm C no item 1`] = `
       "value": "",
     },
     "status": {
-      "columns": 3,
+      "columns": 2,
       "isRequired": false,
       "isValid": false,
       "isVisible": true,
@@ -524,38 +626,26 @@ exports[`itemToForm C no item 1`] = `
       "link": "",
       "options": [
         {
-          "label": "acheté",
-          "value": "acheté",
+          "label": "bought",
+          "value": "bought",
         },
         {
-          "label": "à donner",
-          "value": "à donner",
+          "label": "for-sell",
+          "value": "for-sell",
         },
         {
-          "label": "à vendre",
-          "value": "à vendre",
+          "label": "lost",
+          "value": "lost",
         },
         {
-          "label": "donné",
-          "value": "donné",
-        },
-        {
-          "label": "jeté",
-          "value": "jeté",
-        },
-        {
-          "label": "renvoyé",
-          "value": "renvoyé",
-        },
-        {
-          "label": "vendu",
-          "value": "vendu",
+          "label": "to-give",
+          "value": "to-give",
         },
       ],
       "regex": /\\^\\[-,\\\\d\\\\p\\{L\\}\\\\s/&\\]\\{3,100\\}\\$/u,
       "type": "select",
       "unit": "",
-      "value": "acheté",
+      "value": "bought",
     },
   },
   "isTouched": false,
@@ -563,85 +653,25 @@ exports[`itemToForm C no item 1`] = `
 }
 `;
 
-exports[`pushItem A item with no id should post remotely & push locally 1`] = `
-{
-  "issues": undefined,
-  "output": {
-    "createdTime": "",
-    "fields": {
-      "barcode": "",
-      "box": "box A",
-      "brand": "",
-      "category": "category A",
-      "details": "",
-      "drawer": "",
-      "location": "location A",
-      "name": "item A",
-      "ref-printed": false,
-      "reference": "reference-a",
-      "status": "acheté",
-      "updated-on": "2022-12-26T15:42:00.000Z",
-    },
-    "id": "freshly-created",
-  },
-  "success": true,
-  "typed": true,
-}
-`;
-
-exports[`pushItem A item with no id should post remotely & push locally 3`] = `
-{
-  "fields": {
+exports[`item.utils > updateItem A should update remotely & update locally 1`] = `
+Ok {
+  "ok": true,
+  "value": {
+    "$id": "1",
     "barcode": "barcode B",
-    "box": "G (brico & sport)",
+    "box": "B (usb & audio)",
     "brand": "brand B",
-    "category": "category B",
     "details": "details B",
-    "drawer": "2",
-    "location": "Salon",
+    "drawer": 2,
+    "isPrinted": false,
     "name": "name B",
-    "photo": [
-      {
-        "url": "https://picsum.photos/seed/unknown-name/200/200",
-      },
+    "photos": [
+      "some-uuid",
+      "https://some.url/to/image.jpg",
     ],
-    "ref-printed": false,
+    "price": 42,
     "reference": "reference B",
-    "status": "acheté",
-  },
-}
-`;
-
-exports[`pushItem B item with id should patch remotely & update locally 1`] = `
-{
-  "issues": undefined,
-  "output": {
-    "createdTime": "",
-    "fields": {
-      "barcode": "",
-      "box": "box A",
-      "brand": "",
-      "category": "category A",
-      "details": "",
-      "drawer": "",
-      "location": "location A",
-      "name": "item A",
-      "ref-printed": false,
-      "reference": "reference-a",
-      "status": "acheté",
-      "updated-on": "2022-12-26T15:42:00.000Z",
-    },
-    "id": "existing",
-  },
-  "success": true,
-  "typed": true,
-}
-`;
-
-exports[`pushItem B item with id should patch remotely & update locally 3`] = `
-{
-  "fields": {
-    "details": "new details",
+    "status": "bought",
   },
 }
 `;

@@ -2,140 +2,104 @@
 
 exports[`addSuggestionsFromAliEx A with working get 1`] = `
 {
+  "$id": [],
   "barcode": [],
   "box": [],
   "brand": [],
-  "category": [],
   "details": [],
   "drawer": [],
-  "id": [],
-  "location": [],
+  "isPrinted": [],
   "name": [
     "title A",
   ],
-  "photo": [
+  "photos": [
     undefined,
   ],
   "price": [
     "",
   ],
-  "ref-printed": [],
   "reference": [
     undefined,
   ],
   "status": [
-    "acheté",
+    "bought",
   ],
-  "updated-on": [],
 }
 `;
 
 exports[`addSuggestionsFromAngbo A with working get 1`] = `
 {
+  "$id": [],
   "barcode": [],
   "box": [],
   "brand": [],
-  "category": [],
   "details": [],
   "drawer": [],
-  "id": [],
-  "location": [],
+  "isPrinted": [],
   "name": [
     "title A",
   ],
-  "photo": [
+  "photos": [
     undefined,
   ],
   "price": [
     "",
   ],
-  "ref-printed": [],
   "reference": [
     undefined,
   ],
   "status": [
-    "acheté",
+    "bought",
   ],
-  "updated-on": [],
 }
 `;
 
 exports[`addSuggestionsFromCampo B with working get 1`] = `
 {
+  "$id": [],
   "barcode": [],
   "box": [],
   "brand": [
     "brand B",
   ],
-  "category": [],
   "details": [],
   "drawer": [],
-  "id": [],
-  "location": [],
+  "isPrinted": [],
   "name": [
     undefined,
   ],
-  "photo": [
-    [
-      {
-        "filename": "",
-        "height": 0,
-        "id": "",
-        "thumbnails": {
-          "full": {
-            "height": 0,
-            "url": "",
-            "width": 0,
-          },
-          "large": {
-            "height": 0,
-            "url": "",
-            "width": 0,
-          },
-          "small": {
-            "height": 0,
-            "url": "",
-            "width": 0,
-          },
-        },
-        "type": "",
-        "url": "https://picsum.photos/seed/unknown-name/200/200",
-        "width": 0,
-      },
-    ],
+  "photos": [
+    undefined,
   ],
   "price": [
     "42",
   ],
-  "ref-printed": [],
   "reference": [
     undefined,
   ],
   "status": [
-    "acheté",
+    "bought",
   ],
-  "updated-on": [],
 }
 `;
 
 exports[`addSuggestionsFromDeyes A with working get 1`] = `
 {
+  "$id": [],
   "barcode": [],
   "box": [],
   "brand": [
     "brand A",
   ],
-  "category": [],
   "details": [
     "",
   ],
   "drawer": [],
-  "id": [],
-  "location": [],
+  "isPrinted": [],
   "name": [
     "name A",
   ],
-  "photo": [
+  "photos": [
     {
       "image": undefined,
     },
@@ -143,13 +107,11 @@ exports[`addSuggestionsFromDeyes A with working get 1`] = `
   "price": [
     "43",
   ],
-  "ref-printed": [],
   "reference": [
     "gtin13omg4878",
   ],
   "status": [
-    "acheté",
+    "bought",
   ],
-  "updated-on": [],
 }
 `;

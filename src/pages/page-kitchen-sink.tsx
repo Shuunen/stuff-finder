@@ -1,5 +1,5 @@
 import { AppBarcode } from '../components/app-barcode'
-import { emptyItem } from '../constants'
+import { emptyItem } from '../utils/item.utils'
 
 const isHighlighted = false
 const size = "40x20"

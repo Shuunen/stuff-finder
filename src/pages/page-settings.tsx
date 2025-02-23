@@ -11,7 +11,7 @@ export function PageSettings ({ ...properties }: Readonly<Record<string, unknown
   type Form = typeof settingsForm
   const onSubmit = useCallback((form: Form) => {
     logger.debug('onSubmit', { form })
-    state.credentials = { base: form.fields.base.value, table: form.fields.table.value, token: form.fields.token.value, view: form.fields.view.value, wrap: form.fields.wrap.value }
+    state.credentials = { bucketId: form.fields.bucketId.value, collectionId: form.fields.collectionId.value, databaseId: form.fields.databaseId.value, wrap: '' }
     logger.showSuccess('credentials saved, reloading...', { credentials: state.credentials })
     document.location.reload()
   }, [])

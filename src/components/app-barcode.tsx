@@ -1,9 +1,9 @@
 import { useSignalEffect } from '@preact/signals'
 import { createRef } from 'preact'
 import 'webcomponent-qr-code'
+import type { Item } from '../types/item.types'
 import { type PrintSize, printSizes } from '../types/print.types'
 import { logger } from '../utils/logger.utils'
-import type { Item } from '../utils/parsers.utils'
 import { itemToPrintData } from '../utils/print.utils'
 
 function resizeCode (wrapper: HTMLDivElement, wc: HTMLDivElement) {

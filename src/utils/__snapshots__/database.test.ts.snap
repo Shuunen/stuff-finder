@@ -1,0 +1,107 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`database.utils > addItemRemotely A no photo 1`] = `
+{
+  "$id": "reference-b",
+  "barcode": "barcode B",
+  "box": "B (usb & audio)",
+  "brand": "brand B",
+  "details": "details B",
+  "drawer": 2,
+  "isPrinted": false,
+  "name": "name B",
+  "photos": [],
+  "price": 42,
+  "reference": "reference B",
+  "status": "bought",
+}
+`;
+
+exports[`database.utils > getItemsRemotely C success with 2 items 2`] = `
+[
+  {
+    "$id": "some-item-uuid-a",
+    "barcode": "barcode B",
+    "box": "B (usb & audio)",
+    "brand": "brand B",
+    "details": "details B",
+    "drawer": 2,
+    "isPrinted": false,
+    "name": "name B",
+    "photos": [
+      "some-uuid",
+      "https://some.url/to/image.jpg",
+    ],
+    "price": 42,
+    "reference": "reference B",
+    "status": "bought",
+  },
+  {
+    "$id": "some-other-item-uuid-b",
+    "barcode": "barcode B",
+    "box": "B (usb & audio)",
+    "brand": "brand B",
+    "details": "details B",
+    "drawer": 2,
+    "isPrinted": false,
+    "name": "name B",
+    "photos": [
+      "some-uuid",
+      "https://some.url/to/image.jpg",
+    ],
+    "price": 42,
+    "reference": "reference B",
+    "status": "bought",
+  },
+]
+`;
+
+exports[`database.utils > itemToAppWriteModel A valid 2`] = `
+{
+  "barcode": "barcode B",
+  "box": "B (usb & audio)",
+  "brand": "brand B",
+  "details": "details B",
+  "drawer": 2,
+  "isPrinted": false,
+  "name": "name B",
+  "photos": [
+    "some-uuid",
+    "https://some.url/to/image.jpg",
+  ],
+  "price": 42,
+  "reference": "reference B",
+  "status": "bought",
+}
+`;
+
+exports[`database.utils > listImages C success with 2 images 2`] = `
+[
+  {
+    "$createdAt": "2020-03-01T00:00:00.000Z",
+    "$id": "some-image-file-uuid-a",
+    "$permissions": [],
+    "$updatedAt": "2021-08-01T00:00:00.000Z",
+    "bucketId": "bucketA",
+    "chunksTotal": 1,
+    "chunksUploaded": 1,
+    "mimeType": "image/jpeg",
+    "name": "fileName-a.jpg",
+    "signature": "signature-a",
+    "sizeOriginal": 123456,
+  },
+  {
+    "$createdAt": "2020-03-01T00:00:00.000Z",
+    "$id": "some-other-image-file-uuid-b",
+    "$permissions": [],
+    "$updatedAt": "2021-08-01T00:00:00.000Z",
+    "bucketId": "bucketA",
+    "chunksTotal": 1,
+    "chunksUploaded": 1,
+    "mimeType": "image/jpeg",
+    "name": "fileName-a.jpg",
+    "signature": "signature-a",
+    "sizeOriginal": 123456,
+  },
+]
+`;

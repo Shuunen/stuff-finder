@@ -1,7 +1,7 @@
 import { route } from 'preact-router'
-import { createState, debounce, isBrowserEnvironment, isTestEnvironment, toastError, toastInfo, toastSuccess } from 'shuutils'
-import { defaultCommonLists, defaultCredentials, defaultItems } from '../constants'
-import type { AppMessage } from '../types/messages.types'
+import { createState, debounce, isBrowserEnvironment, isTestEnvironment } from 'shuutils'
+import { defaultCommonLists, defaultCredentials } from '../constants'
+import type { Item } from '../types/item.types'
 import { defaultSound } from '../types/sounds.types'
 import { type AppStatus, defaultStatus } from '../types/status.types'
 import { type Display, defaultTheme } from '../types/theme.types'
@@ -29,14 +29,18 @@ export const { state, watchState } = createState(
   {
     credentials: defaultCredentials,
     display: defaultDisplay,
-    items: defaultItems,
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+    items: [] as Item[],
+    /** timestamp of the last time items were fetched, in milliseconds */
+    itemsTimestamp: 0,
     lists: defaultCommonLists,
     sound: defaultSound,
     status: defaultStatus,
+    /** the display theme of the item list : card or list */
     theme: defaultTheme,
   },
   storage,
-  ['credentials', 'display', 'items', 'lists', 'theme'], // avoid status persistence
+  ['credentials', 'display', 'items', 'itemsTimestamp', 'lists', 'theme'], // avoid status persistence
 )
 
 const statusDelay = 300
