@@ -40,9 +40,9 @@ export function PageItemPrint ({ ...properties }: Readonly<Record<string, unknow
     setIsPrintMode(false)
     if (item['ref-printed']) return
     item['ref-printed'] = true
-    const result = await pushItem(item)
-    state.message = { content: `${result.success ? 'updated' : 'failed updating'} item as printed`, type: result.success ? 'success' : 'error' }
-    if (!result.success) logger.error('pushItem failed', result)
+    const result = await updateItem(item)
+    logger[result.ok ? 'showSuccess' : 'showError'](`${result.ok ? 'updated' : 'failed updating'} item as printed`)
+    if (!result.ok) logger.error('pushItem failed', result)
   }, [item])
   // trigger print directly on page load
   useSignalEffect(() => { void sleep(waitDelay).then(async () => onPrint()) })

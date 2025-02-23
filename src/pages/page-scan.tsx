@@ -45,7 +45,7 @@ export function PageScan ({ ...properties }: Readonly<Record<string, unknown>>) 
 
   useSignalEffect(useCallback(() => {
     // this run once, when the component is mounted
-    if (video.value.current === null) throw new Error('video element is null')
+    if (video.value.current === null) { logger.showError('video element is null'); return () => ({}) }
     logger.debug('starting video stream decoding...')
     state.sound = 'start'
     void reader.decodeFromVideoDevice(null, video.value.current, (result, error) => { /* eslint-disable-line unicorn/no-null */

@@ -1,3 +1,4 @@
+import { Result } from 'shuutils'
 import { logger } from './logger.utils'
 import { state } from './state.utils'
 
@@ -15,13 +16,15 @@ export function listenUserSpeech (onSuccess: (transcript: string, confidence: nu
   /**
    * Called when the speech is recognized
    * @param event the speech recognition event
+   * @returns the result of the recognition
    */
   // biome-ignore lint/correctness/noUndeclaredVariables: it's ok buddy
   recognition.onresult = (event: SpeechRecognitionEvent) => {
     isSuccess = true
     const [result] = Array.from(event.results.item(event.resultIndex))
-    if (!result) throw new Error('no recognition first result found')
+    if (!result) return Result.error('no recognition result found')
     onSuccess(result.transcript, result.confidence)
+    return Result.ok('speech recognized successfully')
   }
   /**
    * Called when the speech is not recognized

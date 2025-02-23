@@ -4,7 +4,7 @@ import Button from '@mui/material/Button'
 import { signal, useSignalEffect } from '@preact/signals'
 import { route } from 'preact-router'
 import { useCallback, useRef, useState } from 'preact/hooks'
-import { dom, objectSum, off, on } from 'shuutils'
+import { Result, dom, objectSum, off, on } from 'shuutils'
 import { AppForm } from '../components/app-form'
 import { AppPageCard } from '../components/app-page-card'
 import { areItemsEquivalent, defaultImage, formToItem, type itemForm, itemToForm, onItemImageError, pushItem } from '../utils/item.utils'
@@ -62,8 +62,8 @@ export function PageItemAddEdit ({ id = '', isEdit = false }: Readonly<{ id?: st
     logger.debug('onSubmit', { form: lastForm, item })
     if (!isEdit && checkExistingSetError(item).isDuplicate) return
     setIsLoading(true)
-    const result = await pushItem(item)
-    if (result.success) { onSubmitSuccess({ ...item, id: result.output.id }); return }
+    const result = await (isEdit ? updateItem(item) : addItem(item))
+    if (result.ok) { onSubmitSuccess({ ...item, $id: result.value.$id }); return }
     state.message = { content: `error ${isEdit ? 'updating' : 'adding'} item`, type: 'error' }
     logger.error('onSubmit failed', result)
     setIsLoading(false)
@@ -71,11 +71,12 @@ export function PageItemAddEdit ({ id = '', isEdit = false }: Readonly<{ id?: st
 
   const handlePhoto = useCallback((form: Form) => {
     const field = form.fields.photo
-    if (field.value === '' || !field.isValid) return
-    const finalUrl = normalizePhotoUrl(field.value)
-    form.fields.photo.value = finalUrl
-    logger.debug('setting photo to', finalUrl, photo.value.current)
-    photo.value.current?.setAttribute('src', finalUrl)
+    if (field.value === '') return Result.ok('photo form field value is empty')
+    if (!field.isValid) return Result.error(`photo form field value "${field.value}" is not valid`)
+    const url = itemPhotoToImageUrl(field.value)
+    form.fields.photo.value = url
+    photo.value.current?.setAttribute('src', url)
+    return Result.ok(`photo url set to : ${url}`)
   }, [photo.value])
 
   const onChange = useCallback((form: Form) => {
@@ -86,11 +87,12 @@ export function PageItemAddEdit ({ id = '', isEdit = false }: Readonly<{ id?: st
     setLastForm(form)
     setCanSubmit(isValid)
     checkExistingSetError(item)
-    handlePhoto(form)
+    const result = handlePhoto(form)
+    logger.debug('handlePhoto', { form, result })
   }, [checkExistingSetError, error, initialItem, initialSum, handlePhoto])
 
   useSignalEffect(useCallback(() => {
-    if (photo.value.current === null) throw new Error('photo not found')
+    if (photo.value.current === null) { logger.showError('photo not found'); return () => ({}) }
     const handler = on('error', () => { onImageError(photo.value.current ?? dom('img')) }, photo.value.current)
     return () => { off(handler) }
   }, [photo.value]))
