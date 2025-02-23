@@ -26,7 +26,7 @@ export function PageHome ({ ...properties }: Readonly<Record<string, unknown>>) 
   const onSpeech = useCallback(() => {
     state.status = 'listening'
     listenUserSpeech((transcript: string) => {
-      logger.showLog(`searching for "${transcript}"`)
+      logger.showInfo(`searching for "${transcript}"`)
       route(`/search/${transcript}`)
     })
   }, [])

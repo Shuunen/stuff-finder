@@ -37,7 +37,6 @@ it('state A default', () => {
           "vendu",
         ],
       },
-      "message": undefined,
       "sound": "",
       "status": "loading",
       "theme": "light",

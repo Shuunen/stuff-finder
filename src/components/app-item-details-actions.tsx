@@ -27,10 +27,13 @@ export function AppItemDetailsActions ({ item }: Readonly<{ item: Item }>) {
 
   async function doDelete () {
     logger.info('deleting item', item)
-    const result = await deleteItem(item.id)
-    const isOk = result.success
-    state.message = { content: isOk ? 'Item deleted' : 'Item deletion failed', type: isOk ? 'success' : 'error' }
-    if (isOk) globalThis.history.back()
+    const result = await deleteItem(item)
+    if (!result.ok) {
+      logger.showError('item deletion failed', result.error)
+      return
+    }
+    logger.showSuccess('item deleted, going back...')
+    globalThis.history.back()
   }
 
   function doEdit () {

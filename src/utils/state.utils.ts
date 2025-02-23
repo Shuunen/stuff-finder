@@ -19,17 +19,6 @@ function onStatusChangeSync (status: AppStatus) {
   if (status === 'ready' && document.location.pathname.includes('/settings')) route('/')
 }
 
-/**
- * Handle a message
- * @param message the message
- */
-function onMessage (message: AppMessage) {
-  if (isTestEnvironment()) return
-  if (['error', 'warning'].includes(message.type)) toastError(message.content, message.delay)
-  else if (message.type === 'info') toastInfo(message.content, message.delay)
-  else toastSuccess(message.content, message.delay)
-}
-
 const laptopWidth = 1500
 
 const defaultDisplay: Display = (isBrowserEnvironment() && globalThis.screen.width < laptopWidth) ? 'list' : 'card'
@@ -42,7 +31,6 @@ export const { state, watchState } = createState(
     display: defaultDisplay,
     items: defaultItems,
     lists: defaultCommonLists,
-    message: undefined as AppMessage | undefined, // eslint-disable-line @typescript-eslint/consistent-type-assertions
     sound: defaultSound,
     status: defaultStatus,
     theme: defaultTheme,
@@ -56,7 +44,5 @@ const statusDelay = 300
 const onStatusChange = debounce(onStatusChangeSync, statusDelay)
 
 watchState('status', () => { void onStatusChange(state.status) })
-
-watchState('message', () => { if (state.message) onMessage(state.message) })
 
 export type State = typeof state
