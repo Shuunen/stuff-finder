@@ -5,7 +5,6 @@ import { useCallback } from 'preact/hooks'
 import { copyToClipboard } from 'shuutils'
 import type { MuiIcon } from '../types/icons.types'
 import { logger } from '../utils/logger.utils'
-import { state } from '../utils/state.utils'
 
 type Properties = Readonly<{
   color?: ChipOwnProps['color']
@@ -26,7 +25,7 @@ export function AppItemDetailsChip ({ color = 'default', icon: Icon, label, link
     if (link !== undefined) { route(link); return }
     const target = event.currentTarget as HTMLElement // eslint-disable-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-unsafe-type-assertion
     await copyToClipboard(target.textContent ?? '')
-    state.message = { content: `${tooltip} copied to clipboard`, type: 'success' }
+    logger.showSuccess(`${tooltip.split(',')[0]} copied to clipboard`)
   }, [link, tooltip])
 
   const attributes: Record<string, unknown> = Icon === undefined ? {} : { className: 'reverse', icon: <Icon /> } // eslint-disable-line unicorn/no-keyword-prefix

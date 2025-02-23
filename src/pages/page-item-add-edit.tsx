@@ -14,7 +14,8 @@ import { state } from '../utils/state.utils'
 import { normalizePhotoUrl } from '../utils/url.utils'
 
 function onImageError (image: HTMLImageElement) {
-  state.message = { content: 'error loading image, setting default image', type: 'error' }
+  logger.error('onImageError : error loading image, setting default image')
+  logger.showError('error loading image, setting default image')
   image.setAttribute('src', defaultImage)
 }
 
@@ -52,7 +53,7 @@ export function PageItemAddEdit ({ id = '', isEdit = false }: Readonly<{ id?: st
 
   const onSubmitSuccess = useCallback((item: Item) => {
     if (!isEdit) { route(`/item/print/${item.id}`); return }
-    state.message = { content: 'item updated successfully', type: 'success' }
+    logger.showSuccess('item updated successfully')
     route(`/item/details/${item.id}`)
   }, [isEdit])
 
@@ -64,7 +65,7 @@ export function PageItemAddEdit ({ id = '', isEdit = false }: Readonly<{ id?: st
     setIsLoading(true)
     const result = await (isEdit ? updateItem(item) : addItem(item))
     if (result.ok) { onSubmitSuccess({ ...item, $id: result.value.$id }); return }
-    state.message = { content: `error ${isEdit ? 'updating' : 'adding'} item`, type: 'error' }
+    logger.showError(`error ${isEdit ? 'updating' : 'adding'} item`)
     logger.error('onSubmit failed', result)
     setIsLoading(false)
   }, [checkExistingSetError, isEdit, lastForm, onSubmitSuccess, itemId])

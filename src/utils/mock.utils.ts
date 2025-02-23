@@ -54,7 +54,6 @@ export function mockState (data: Partial<State> = {}) {
     display: 'list',
     items: defaultItems,
     lists: defaultCommonLists,
-    message: undefined,
     sound: defaultSound,
     status: defaultStatus,
     theme: defaultTheme,
