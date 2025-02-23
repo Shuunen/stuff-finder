@@ -1,4 +1,5 @@
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined'
 import SaveIcon from '@mui/icons-material/Save'
 import Button from '@mui/material/Button'
 import { signal, useSignalEffect } from '@preact/signals'
@@ -7,11 +8,12 @@ import { useCallback, useRef, useState } from 'preact/hooks'
 import { Result, dom, objectSum, off, on } from 'shuutils'
 import { AppForm } from '../components/app-form'
 import { AppPageCard } from '../components/app-page-card'
-import { areItemsEquivalent, defaultImage, formToItem, type itemForm, itemToForm, onItemImageError, pushItem } from '../utils/item.utils'
+import { defaultImage } from '../constants'
+import type { Item } from '../types/item.types'
+import { itemPhotoToImageUrl } from '../utils/database.utils'
+import { addItem, areItemsEquivalent, formToItem, type itemForm, itemToForm, updateItem } from '../utils/item.utils'
 import { logger } from '../utils/logger.utils'
-import type { Item } from '../utils/parsers.utils'
 import { state } from '../utils/state.utils'
-import { normalizePhotoUrl } from '../utils/url.utils'
 
 function onImageError (image: HTMLImageElement) {
   logger.error('onImageError : error loading image, setting default image')
@@ -29,13 +31,12 @@ function checkExisting (item: Item) {
 // eslint-disable-next-line max-statements, complexity, max-lines-per-function
 export function PageItemAddEdit ({ id = '', isEdit = false }: Readonly<{ id?: string; isEdit?: boolean }>) {
   logger.debug('PageItemAddEdit', { id, isEdit })
-  const initialItem = state.items.find(one => one.id === id)
+  const initialItem = state.items.find(one => one.$id === id)
   const [initialSum] = useState(initialItem ? objectSum(initialItem) : 0)
   const initialForm = itemToForm(initialItem)
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [canSubmit, setCanSubmit] = useState(false)
-  const [itemId] = useState(initialItem?.id ?? '')
   const [lastForm, setLastForm] = useState(initialForm)
   const photoReference = useRef<HTMLImageElement>(null)
   const photo = signal(photoReference)
@@ -52,14 +53,14 @@ export function PageItemAddEdit ({ id = '', isEdit = false }: Readonly<{ id?: st
   }, [isEdit])
 
   const onSubmitSuccess = useCallback((item: Item) => {
-    if (!isEdit) { route(`/item/print/${item.id}`); return }
+    if (!isEdit) { route(`/item/print/${item.$id}`); return }
     logger.showSuccess('item updated successfully')
-    route(`/item/details/${item.id}`)
+    route(`/item/details/${item.$id}`)
   }, [isEdit])
 
   // eslint-disable-next-line max-statements
   const onSubmit = useCallback(async () => {
-    const item = formToItem(lastForm, itemId)
+    const item = formToItem(lastForm)
     logger.debug('onSubmit', { form: lastForm, item })
     if (!isEdit && checkExistingSetError(item).isDuplicate) return
     setIsLoading(true)
@@ -68,7 +69,7 @@ export function PageItemAddEdit ({ id = '', isEdit = false }: Readonly<{ id?: st
     logger.showError(`error ${isEdit ? 'updating' : 'adding'} item`)
     logger.error('onSubmit failed', result)
     setIsLoading(false)
-  }, [checkExistingSetError, isEdit, lastForm, onSubmitSuccess, itemId])
+  }, [checkExistingSetError, isEdit, lastForm, onSubmitSuccess])
 
   const handlePhoto = useCallback((form: Form) => {
     const field = form.fields.photo
@@ -101,14 +102,14 @@ export function PageItemAddEdit ({ id = '', isEdit = false }: Readonly<{ id?: st
   if (isEdit && initialItem === undefined) return <>Cannot edit, item with id &quot;{id}&quot; not found ;(</>
 
   return (
-    <AppPageCard cardTitle={`${isEdit ? 'Edit' : 'Add'} item`} icon={AddCircleOutlineIcon} pageCode={`item-${isEdit ? 'edit' : 'add'}`} pageTitle={`${isEdit ? 'Edit' : 'Add'} item`}>
+    <AppPageCard cardTitle={`${isEdit ? 'Edit' : 'Add'} item`} icon={isEdit ? EditOutlinedIcon : AddCircleOutlineIcon} pageCode={`item-${isEdit ? 'edit' : 'add'}`} pageTitle={`${isEdit ? 'Edit' : 'Add'} item`}>
       <div class="flex flex-col w-100 max-h-[90%] md:max-h-full mb-20 md:mb-0 overflow-y-auto overflow-x-hidden">
         {Boolean(isEdit) && <p class="text-center">Please fill in the form below to edit the item, you can change any field you want 🔄</p>}
         {!isEdit && <p class="text-center">Please fill in the form below to add a new item, no worry, you will be able to edit it later if needed ✏️</p>}
         {id !== '' && initialForm.fields.reference.value === '' && <p>Here is the keyword you search previously : {id}</p>}
-        <div class="grid md:grid-cols-3 gap-6 items-end">
-          <img alt="item visual" class="md:max-h-80 md:max-w-80 w-auto" data-id={itemId} onError={onItemImageError} ref={photoReference} src={initialForm.fields.photo.value || defaultImage} />
-          <div class="md:col-span-2">
+        <div class="flex flex-col md:flex-row gap-6 items-end">
+          <img alt="item visual" class="md:max-h-80 md:max-w-72 p-4 w-auto md:w-1/3 justify-self-center" ref={photoReference} src={itemPhotoToImageUrl(initialForm.fields.photo.value)} />
+          <div class="place-self-center pr-4 md:pr-0 w-full">
             <AppForm error={error} initialForm={initialForm} onChange={onChange} />
           </div>
         </div>

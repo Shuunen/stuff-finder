@@ -1,11 +1,10 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { clone } from 'shuutils'
 import { expect, it, vi } from 'vitest'
-import { emptyItemSuggestions } from '../constants'
 import { get } from './browser.utils'
 import { mockItem } from './mock.utils'
 import { state } from './state.utils'
-import { addSuggestionsFromAliEx, addSuggestionsFromAngbo, addSuggestionsFromCampo, addSuggestionsFromDeyes, addSuggestionsFromWrap, cleanSuggestions, getSuggestions } from './suggestions.utils'
+import { addSuggestionsFromAliEx, addSuggestionsFromAngbo, addSuggestionsFromCampo, addSuggestionsFromDeyes, addSuggestionsFromWrap, cleanSuggestions, emptyItemSuggestions, getSuggestions } from './suggestions.utils'
 
 it('cleanSuggestions A', () => { expect(cleanSuggestions({ keyA: ['a', 'b', 'c'], keyB: ['a', 'b', 'c'] })).toEqual({ keyA: ['a', 'b', 'c'], keyB: ['a', 'b', 'c'] }) })
 it('cleanSuggestions B', () => { expect(cleanSuggestions({})).toEqual({}) })
@@ -37,7 +36,7 @@ it('getSuggestions A', async () => {
   expect(suggestions).toMatchInlineSnapshot(`
     {
       "status": [
-        "acheté",
+        "bought",
       ],
     }
   `)

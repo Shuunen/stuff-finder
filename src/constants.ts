@@ -1,84 +1,24 @@
-import type { Item, ItemField, ItemPhoto, ItemStatus } from './utils/parsers.utils'
+export const itemBoxes = ['A (apple)', 'B (usb & audio)', 'C (couteau)', 'D (doll)', 'E (east)', 'F (périphériques)', 'G (brico & sport)', 'H (hardware)', 'L (lemon)', 'M (malettes)', 'N (noodles)', 'O (orange)', 'P (plan de travail)', 'Q (sock)', 'R (récup)', 'R (red)', 'S (sdb)', 'T (tour bureau)', 'V (violet)', 'X (commode malm)', 'Z (poches zip)'] as const
 
-export interface CommonLists {
-  boxes: string[]
-  categories: string[]
-  drawers: string[]
-  locations: string[]
-  statuses: ItemStatus[]
-}
+export const itemStatus = ['bought', 'for-sell', 'lost', 'to-give'] as const
 
-export const defaultCommonLists: CommonLists = {
-  boxes: [],
-  categories: [],
+export const uuidMaxLength = 36
+
+export const defaultCommonLists = {
+  boxes: ['', ...itemBoxes],
   drawers: ['', '1', '2', '3', '4', '5', '6', '7'],
-  locations: [],
-  statuses: [
-    'acheté',
-    'à donner',
-    'à vendre',
-    'donné',
-    'jeté',
-    'renvoyé',
-    'vendu',
-  ],
-} satisfies CommonLists
+  statuses: itemStatus,
+} as const
+
+export type CommonLists = typeof defaultCommonLists
 
 export const defaultCredentials = {
-  base: '',
-  table: '',
-  token: '',
-  view: '',
+  bucketId: '',
+  collectionId: '',
+  databaseId: '',
   wrap: '',
 } satisfies Record<string, string>
 
 export type AppCredentials = typeof defaultCredentials
 
-export const emptyItem: Item = {
-  'barcode': '',
-  'box': '',
-  'brand': '',
-  'category': '',
-  'details': '',
-  'drawer': '',
-  'id': '',
-  'location': '',
-  'name': '',
-  'photo': [],
-  'price': 0,
-  'ref-printed': false,
-  'reference': '',
-  'status': 'acheté',
-  'updated-on': '',
-} satisfies Item
-
-export const emptyItemPhoto: ItemPhoto = {
-  filename: '',
-  height: 0,
-  id: '',
-  thumbnails: { full: { height: 0, url: '', width: 0 }, large: { height: 0, url: '', width: 0 }, small: { height: 0, url: '', width: 0 } },
-  type: '',
-  url: '',
-  width: 0,
-} satisfies ItemPhoto
-
-export const emptyItemSuggestions = {
-  'barcode': [],
-  'box': [],
-  'brand': [],
-  'category': [],
-  'details': [],
-  'drawer': [],
-  'id': [],
-  'location': [],
-  'name': [],
-  'photo': [],
-  'price': [],
-  'ref-printed': [],
-  'reference': [],
-  'status': ['acheté'],
-  'updated-on': [],
-} satisfies Record<ItemField, string[]>
-
-export const defaultItems: Item[] = []
-
+export const defaultImage = '/assets/no-visual.svg'

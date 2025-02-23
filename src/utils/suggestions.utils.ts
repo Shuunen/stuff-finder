@@ -1,15 +1,29 @@
 /* eslint-disable jsdoc/require-jsdoc */
 /* eslint-disable @typescript-eslint/naming-convention */
 import { capitalize, clone } from 'shuutils'
-import { emptyItemSuggestions } from '../constants'
+import type { Item, ItemSuggestions } from '../types/item.types'
 import type { WrapApiAliExResponse, WrapApiAngboResponse, WrapApiCampoResponse, WrapApiDeyesResponse } from '../types/requests.types'
 import { get } from './browser.utils'
 import { logger } from './logger.utils'
-import type { ItemSuggestions } from './parsers.utils'
 import { state } from './state.utils'
 import { getAsin } from './url.utils'
 
 const keysToCapitalize = new Set(['details', 'name'])
+
+export const emptyItemSuggestions = {
+  '$id': [],
+  'barcode': [],
+  'box': [],
+  'brand': [],
+  'details': [],
+  'drawer': [],
+  'isPrinted': [],
+  'name': [],
+  'photos': [],
+  'price': [],
+  'reference': [],
+  'status': ['bought'],
+} satisfies Record<keyof Item, string[]>
 
 function priceParse (price?: number | string) {
   if (price === undefined) return ''
@@ -38,7 +52,7 @@ export async function addSuggestionsFromDeyes (suggestions: ItemSuggestions, cod
   suggestions.brand.push(data.brand.name)
   suggestions.details.push(data.description)
   const [image] = data.image
-  if (image !== undefined) suggestions.photo.push(image)
+  if (image !== undefined) suggestions.photos.push(image)
   suggestions.price.push(priceParse(data.offers.price))
   suggestions.reference.push(data.gtin13)
 }
@@ -48,7 +62,7 @@ export async function addSuggestionsFromAngbo (suggestions: ItemSuggestions, str
   if (!success) return
   logger.debug('angbo data', data)
   suggestions.name.push(data.title)
-  suggestions.photo.push(data.photo)
+  suggestions.photos.push(data.photo)
   suggestions.price.push(priceParse(data.price))
   suggestions.reference.push(data.asin)
 }
@@ -59,7 +73,7 @@ export async function addSuggestionsFromAliEx (suggestions: ItemSuggestions, str
   logger.debug('AliEx data', data)
   for (const item of data.items) {
     suggestions.name.push(item.title)
-    suggestions.photo.push(item.photo)
+    suggestions.photos.push(item.photo)
     suggestions.price.push(priceParse(item.price))
     suggestions.reference.push(item.reference)
   }
@@ -72,7 +86,7 @@ export async function addSuggestionsFromCampo (suggestions: ItemSuggestions, str
   for (const item of data.items) {
     suggestions.brand.push(item.brand)
     suggestions.name.push(item.title)
-    suggestions.photo.push(item.photo)
+    suggestions.photos.push(item.photo)
     if (item.price !== undefined) suggestions.price.push(priceParse(item.price))
     suggestions.reference.push(item.uuid)
   }

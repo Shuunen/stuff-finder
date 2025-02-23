@@ -1,32 +1,57 @@
+import { clone } from 'shuutils'
 import { expect, it } from 'vitest'
 import { alignClipboard, createCheckboxField, createSelectField, optionsToLabels, validateForm } from './forms.utils'
 import { settingsForm } from './settings.utils'
 
 it('validateForm A invalid field value', () => {
-  const form = { ...settingsForm, fields: { ...settingsForm.fields, base: { ...settingsForm.fields.base, value: 'azerty' } } }
+  const form = {
+    ...settingsForm,
+    fields: {
+      ...settingsForm.fields,
+      bucketId: { ...settingsForm.fields.bucketId, value: 'azerty' },
+    },
+  }
   const { hasChanged, updatedForm } = validateForm(form)
   expect(updatedForm).toMatchSnapshot()
   expect(hasChanged).toBe(false)
   expect(updatedForm.isValid).toBe(false)
-  expect(updatedForm.errorMessage).toMatchInlineSnapshot('"Airtable personal access token is required"')
+  expect(updatedForm.errorMessage).toMatchInlineSnapshot(`"AppWrite database id is required"`)
 })
 
 it('validateForm B valid form', () => {
   const form = {
     ...settingsForm,
     fields: {
-      base: { ...settingsForm.fields.base, value: 'app1238479649646a' },
-      table: { ...settingsForm.fields.table, value: 'my-table' },
-      token: { ...settingsForm.fields.token, value: 'pat12345654987123azdazdzadazdzadaz465465468479649646azd46az465azdazd' },
-      view: { ...settingsForm.fields.view, value: 'my-view' },
-      wrap: { ...settingsForm.fields.wrap, value: '13246874azerty4987_pools13546354' },
+      bucketId: { ...settingsForm.fields.bucketId, value: 'some-nice-bucket-uuid' },
+      collectionId: { ...settingsForm.fields.collectionId, value: 'some-nice-collection-uuid' },
+      databaseId: { ...settingsForm.fields.databaseId, value: 'some-nice-database-uuid' },
     },
   }
   const { hasChanged, updatedForm } = validateForm(form)
   expect(updatedForm).toMatchSnapshot()
   expect(hasChanged).toBe(true)
-  expect(updatedForm.isValid).toBe(true)
   expect(updatedForm.errorMessage).toBe('')
+  expect(updatedForm.isValid).toBe(true)
+})
+
+it('validateForm C empty cases', () => {
+  const settingsFormAlternative = clone(settingsForm)
+  settingsFormAlternative.fields.bucketId.isRequired = false
+  settingsFormAlternative.fields.collectionId.isRequired = false
+  const form = {
+    ...settingsFormAlternative,
+    fields: {
+      bucketId: { ...settingsFormAlternative.fields.bucketId, value: '' },
+      collectionId: { ...settingsFormAlternative.fields.collectionId, value: undefined },
+      databaseId: { ...settingsFormAlternative.fields.databaseId, value: 'some-nice-database-uuid' },
+    },
+  }
+  // @ts-expect-error for testing purposes
+  const { hasChanged, updatedForm } = validateForm(form)
+  expect(updatedForm).toMatchSnapshot()
+  expect(hasChanged).toBe(true)
+  expect(updatedForm.isValid).toBe(true)
+  expect(updatedForm.errorMessage).toMatchInlineSnapshot(`""`)
 })
 
 it('createCheckboxField A with a link', () => {

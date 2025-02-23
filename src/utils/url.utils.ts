@@ -1,4 +1,3 @@
-
 const asinRegex = /(?<asin>B[\dA-Z]{9}|\d{9}[\dX])/u
 const photoRegex = {
   aliexpress: /_\d+x\d+\.jpg/u,

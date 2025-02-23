@@ -18,8 +18,8 @@ type Properties<FormType extends Form> = Readonly<{
   suggestions?: Record<string, string[]>
 }>
 
-// eslint-disable-next-line max-statements, unicorn/no-useless-undefined, max-lines-per-function, complexity
-export function AppForm<FormType extends Form> ({ error: parentError = '', initialForm, onChange = voidFunction, onSubmit = undefined, suggestions }: Properties<FormType>) {
+// eslint-disable-next-line max-statements, max-lines-per-function, complexity
+export function AppForm<FormType extends Form> ({ error: parentError = '', initialForm, onChange = voidFunction, onSubmit = undefined, suggestions = {} }: Properties<FormType>) {
 
   const [form, setForm] = useState(initialForm)
 
@@ -79,7 +79,7 @@ export function AppForm<FormType extends Form> ({ error: parentError = '', initi
   const canSubmit = form.isValid && form.isTouched && errorMessage.length === 0
 
   return (
-    <form autoComplete="off" class={`grid w-full md:min-w-[35rem] gap-6 ${gridClass(form.columns)}`} noValidate onSubmit={onFormSubmit} spellcheck={false}>
+    <form autoComplete="off" class={`grid w-full md:min-w-[44rem] gap-6 ${gridClass(form.columns)}`} noValidate onSubmit={onFormSubmit} spellcheck={false}>
       {Object.entries(form.fields).map(([id, field]) => <div class={`grid w-full ${field.isVisible ? '' : 'hidden'} ${colSpanClass(field.columns)}`} key={id}>
         {field.type === 'text' && <AppFormFieldText field={field} form={form} id={id} suggestions={suggestions} updateField={updateField} />}
         {field.type === 'checkbox' && <AppFormFieldCheckbox field={field} id={id} updateField={updateField} />}

@@ -15,10 +15,9 @@ import MenuItem from '@mui/material/MenuItem'
 import { route } from 'preact-router'
 import { useState } from 'preact/hooks'
 import { copyToClipboard } from 'shuutils'
+import type { Item } from '../types/item.types'
 import { deleteItem } from '../utils/item.utils'
 import { logger } from '../utils/logger.utils'
-import type { Item } from '../utils/parsers.utils'
-import { state } from '../utils/state.utils'
 
 // eslint-disable-next-line max-lines-per-function, max-statements
 export function AppItemDetailsActions ({ item }: Readonly<{ item: Item }>) {
@@ -38,11 +37,11 @@ export function AppItemDetailsActions ({ item }: Readonly<{ item: Item }>) {
 
   function doEdit () {
     logger.info('editing item', item)
-    route(`/item/edit/${item.id}`)
+    route(`/item/edit/${item.$id}`)
   }
 
   async function doClone () {
-    const data = { barcode: item.barcode, box: item.box, brand: item.brand, category: item.category, details: item.details, drawer: item.drawer, location: item.location, name: item.name, photo: item.photo?.[0]?.url, price: item.price?.toString(), reference: item.reference, status: item.status }
+    const data = { barcode: item.barcode, box: item.box, brand: item.brand, details: item.details, drawer: item.drawer, name: item.name, photos: item.photos, price: item.price.toString(), reference: item.reference, status: item.status }
     logger.info('cloning item', data)
     await copyToClipboard(data)
     route('/item/add')

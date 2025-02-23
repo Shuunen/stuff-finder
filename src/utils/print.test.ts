@@ -1,30 +1,25 @@
 import { expect, it } from 'vitest'
-import { emptyItemPhoto } from '../constants'
 import { mockItem } from './mock.utils'
 import { itemToPrintData } from './print.utils'
 
 const itemA = mockItem({
+  $id: '1234567',
   barcode: '  barcode',
-  box: ' box ',
   brand: 'brand',
   details: 'details',
-  drawer: '2',
-  id: '1234567',
-  location: 'location',
   name: 'name',
   reference: 'reference  ',
 })
 
 const itemB = mockItem({
+  $id: '1234567',
   barcode: '  barcode',
-  box: ' ',
+  box: '',
   brand: 'brand',
   details: 'details',
-  drawer: '',
-  id: '1234567',
-  location: '',
+  drawer: -1,
   name: 'name',
-  photo: [{ ...emptyItemPhoto, url: 'https://picsum.photos/seed/1234567/200/200' }],
+  photos: ['1234567'],
   reference: '',
 })
 
@@ -36,16 +31,17 @@ it('itemToPrintData value A', () => { expect(itemToPrintData(itemA).value).toEqu
 it('itemToPrintData value B', () => { expect(itemToPrintData({ ...itemA, reference: '  ' }).value).toEqual('barcode') })
 it('itemToPrintData value C', () => { expect(itemToPrintData({ ...itemA, barcode: '  ', reference: '  ' }).value).toEqual('') })
 it('itemToPrintData value D', () => { expect(itemToPrintData(itemB).value).toEqual('barcode') })
+it('itemToPrintData value E', () => { expect(itemToPrintData({ ...itemB, barcode: '' }).value).toEqual('') })
 
-it('itemToPrintData location A', () => { expect(itemToPrintData({ ...itemA, box: 'A', drawer: '4' }).location).toEqual('A4') })
-it('itemToPrintData location B', () => { expect(itemToPrintData({ ...itemA, box: 'A', drawer: '' }).location).toEqual('A') })
-it('itemToPrintData location C', () => { expect(itemToPrintData({ ...itemA, box: '', drawer: '4' }).location).toEqual('location') })
-it('itemToPrintData location D', () => { expect(itemToPrintData({ ...itemA, box: '', drawer: '' }).location).toEqual('location') })
-it('itemToPrintData location E', () => { expect(itemToPrintData({ ...itemA, box: 'A', drawer: '4', location: 'Salon' }).location).toEqual('A4') })
-it('itemToPrintData location F', () => { expect(itemToPrintData({ ...itemA, box: 'A', drawer: '', location: 'Salon' }).location).toEqual('A') })
-it('itemToPrintData location G', () => { expect(itemToPrintData({ ...itemA, box: '', drawer: '4', location: 'Salon' }).location).toEqual('Salon') })
-it('itemToPrintData location H', () => { expect(itemToPrintData(itemA).location).toEqual('B2') })
-it('itemToPrintData location I', () => { expect(itemToPrintData({ ...itemA, box: '', drawer: '', location: '' }).location).toEqual('') })
+it('itemToPrintData location A', () => { expect(itemToPrintData({ ...itemA, box: 'A (apple)', drawer: 4 }).location).toEqual('A4') })
+it('itemToPrintData location B', () => { expect(itemToPrintData({ ...itemA, box: 'A (apple)', drawer: -1 }).location).toEqual('A') })
+it('itemToPrintData location C', () => { expect(itemToPrintData({ ...itemA, box: '', drawer: 4 }).location).toEqual('') })
+it('itemToPrintData location D', () => { expect(itemToPrintData({ ...itemA, box: '', drawer: -1 }).location).toEqual('') })
+it('itemToPrintData location E', () => { expect(itemToPrintData({ ...itemA, box: 'A (apple)', drawer: 4 }).location).toEqual('A4') })
+it('itemToPrintData location F', () => { expect(itemToPrintData({ ...itemA, box: 'A (apple)', drawer: -1 }).location).toEqual('A') })
+it('itemToPrintData location G', () => { expect(itemToPrintData({ ...itemA, box: '', drawer: 4 }).location).toEqual('') })
+it('itemToPrintData location H no box imply no location', () => { expect(itemToPrintData(itemA).location).toEqual('B2') })
+it('itemToPrintData location I', () => { expect(itemToPrintData({ ...itemA, box: '', drawer: -1 }).location).toEqual('') })
 it('itemToPrintData location J', () => { expect(itemToPrintData(itemB).location).toEqual('') })
 
 it('itemToPrintData A', () => { expect(itemToPrintData(itemA)).toMatchSnapshot() })

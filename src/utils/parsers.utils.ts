@@ -1,91 +1,41 @@
-import { type InferOutput, array, boolean, fallback, literal, number, object, optional, string, union } from 'valibot'
+/* eslint-disable unicorn/no-null, @typescript-eslint/no-magic-numbers */
+import { array, boolean, fallback, maxLength, minValue, nonEmpty, nullish, number, object, picklist, pipe, string } from 'valibot'
+import { itemBoxes, itemStatus, uuidMaxLength } from '../constants'
 
-const itemStatusSchema = union([
-  literal('acheté'),
-  literal('à donner'),
-  literal('à vendre'),
-  literal('donné'),
-  literal('jeté'),
-  literal('renvoyé'),
-  literal('vendu'),
-])
+const itemRequiredStringSchema = pipe(string(), nonEmpty())
 
-const airtableErrorSchema = object({
-  message: string(),
-  type: string(),
+/**
+ * List of photos $id stored in the bucket
+ * @example ['id123','id-456']
+ */
+
+export const itemSchema = object({
+  $id: pipe(string(), nonEmpty(), maxLength(uuidMaxLength)),
+  barcode: fallback(string(), ''),
+  box: fallback(picklist(['', ...itemBoxes]), ''),
+  brand: fallback(string(), ''),
+  details: fallback(string(), ''),
+  drawer: fallback(number(), -1),
+  isPrinted: fallback(boolean(), false),
+  name: itemRequiredStringSchema,
+  photos: fallback(array(string()), []),
+  price: fallback(number(), -1),
+  reference: itemRequiredStringSchema,
+  status: picklist(itemStatus),
 })
 
-const idSchema = string()
+export const itemsSchema = array(itemSchema)
 
-const itemThumbnailSchema = object({
-  height: number(),
-  url: string(),
-  width: number(),
-})
-
-const itemPhotoSchema = object({
-  filename: string(),
-  height: optional(number()),
-  id: idSchema,
-  thumbnails: optional(object({
-    full: itemThumbnailSchema,
-    large: itemThumbnailSchema,
-    small: itemThumbnailSchema,
-  })),
-  type: optional(string()),
-  url: string(),
-  width: optional(number()),
-})
-
-const itemBaseSchema = object({
-  'barcode': fallback(string(), ''),
-  'box': fallback(string(), ''),
-  'brand': fallback(string(), ''),
-  'category': fallback(string(), ''),
-  'details': fallback(string(), ''),
-  'drawer': fallback(string(), ''),
-  'location': fallback(string(), ''),
-  'name': fallback(string(), ''),
-  'photo': optional(array(itemPhotoSchema)),
-  'price': optional(number()),
-  'ref-printed': fallback(boolean(), false),
-  'reference': fallback(string(), ''),
-  'status': fallback(itemStatusSchema, 'acheté'),
-  'updated-on': string(),
-})
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const itemSchema = object({
-  ...itemBaseSchema.entries,
-  id: idSchema,
-})
-
-export type ItemStatus = InferOutput<typeof itemStatusSchema>
-
-export type ItemPhoto = InferOutput<typeof itemPhotoSchema>
-
-export type Item = InferOutput<typeof itemSchema>
-
-export type ItemField = keyof Item
-
-export const airtableSingleResponseSchema = object({
-  createdTime: string(),
-  error: optional(airtableErrorSchema),
-  fields: itemBaseSchema,
-  id: idSchema,
-})
-
-export type AirtableSingleRecordResponse = InferOutput<typeof airtableSingleResponseSchema>
-
-export const airtableMultipleResponseSchema = object({
-  error: optional(airtableErrorSchema),
-  offset: optional(string()),
-  records: array(airtableSingleResponseSchema),
-})
-
-export type ItemSuggestions = Record<keyof Item, string[]>
-
-export const airtableDeleteResponseSchema = object({
-  deleted: boolean(),
-  id: idSchema,
+export const itemModelSchema = object({
+  barcode: fallback(nullish(string()), null),
+  box: fallback(nullish(picklist(itemBoxes)), null),
+  brand: fallback(nullish(string()), null),
+  details: fallback(nullish(string()), null),
+  drawer: fallback(nullish(picklist([1, 2, 3, 4, 5, 6, 7, 8, 9])), null),
+  isPrinted: fallback(boolean(), false),
+  name: itemRequiredStringSchema, // required
+  photos: fallback(nullish(array(string())), null),
+  price: fallback(nullish(pipe(number(), minValue(0))), null),
+  reference: itemRequiredStringSchema, // required
+  status: picklist(itemStatus), // required
 })

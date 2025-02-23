@@ -1,5 +1,5 @@
 /* c8 ignore next */
-import type { Item } from './parsers.utils'
+import type { Item } from '../types/item.types'
 
 /**
  * Generate a name from an item
@@ -33,8 +33,9 @@ function itemToPrintCode (item: Item) {
  */
 function itemToPrintLocation (input: Item) {
   const box = (input.box.trim()[0] ?? '').toUpperCase()
-  if (box.length === 0) return input.location
-  const drawer = (input.drawer[0] ?? '').toUpperCase()
+  if (box.length === 0) return ''
+  if (input.drawer === -1) return box
+  const drawer = String(input.drawer)[0]
   return `${box}${drawer}`.trim()
 }
 
