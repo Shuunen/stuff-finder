@@ -19,7 +19,7 @@ export function AppItemDetails ({ item }: Readonly<{ item: Item }>) {
       <div class="relative flex aspect-square w-full min-w-40 max-w-[40vh] flex-col md:min-w-64 md:max-w-72">
         <img alt={item.name} class="absolute top-0 size-full object-contain md:p-4" data-test="item-detail-image" loading="lazy" src={itemToImageUrl(item)} />
       </div>
-      <div class="mb-12 flex min-w-96 flex-col items-start justify-start gap-3 sm:mb-0 sm:mr-6">
+      <div class="mb-12 flex min-w-[30rem] flex-col items-start justify-start gap-3 sm:mb-0 sm:mr-6">
         <h1>{item.name} {item.brand}</h1>
         {Boolean(item.details) && <p class="first-letter:uppercase">{item.details}</p>}
         <div class="my-2 flex gap-3">

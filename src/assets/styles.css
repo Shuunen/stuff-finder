@@ -1,7 +1,9 @@
-@import "tailwindcss/base";
-@import "tailwindcss/components";
-@import "tailwindcss/utilities";
-@import "./mui-chip.css";
+@import 'tailwindcss';
+@import './mui-chip.css' layer(utilities);
+
+@theme {
+  --breakpoint-xs: 360px;
+}
 
 html {
   scroll-behavior: smooth;

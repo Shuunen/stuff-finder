@@ -40,7 +40,7 @@ export function AppSpeedDial ({ isLoading = false, isSettingsRequired = false }:
     <>
       <Fade in={isOpen}>
         {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
-        <div class="absolute bottom-0 right-0 z-10 size-full bg-gradient-to-tl" data-component="speed-dial-backdrop" onClick={toggleOpen} />
+        <div class="absolute bottom-0 right-0 z-10 size-full bg-linear-to-tl" data-component="speed-dial-backdrop" onClick={toggleOpen} />
       </Fade>
       <div class="fixed md:bottom-10 pointer-events-none md:right-10 bottom-5 right-5 z-20 print:hidden flex items-end" data-component="speed-dial">
         <Fade in={isQuickSearchAvailable}>
