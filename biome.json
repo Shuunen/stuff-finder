@@ -28,5 +28,19 @@
   },
   "organizeImports": {
     "enabled": true
-  }
+  },
+  "overrides": [
+    {
+      "include": [
+        "*.test.*"
+      ],
+      "linter": {
+        "rules": {
+          "style": {
+            "noUnusedTemplateLiteral": "off"
+          }
+        }
+      }
+    }
+  ]
 }
