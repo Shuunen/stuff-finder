@@ -54,11 +54,11 @@ export function PageItemPrint ({ ...properties }: Readonly<Record<string, unknow
     <>
       <AppPageCard cardTitle="Print" icon={Print} pageCode="item-print" pageTitle={`${item.name} - Print`} >
         <div class="flex flex-col md:flex-row">
-          <img alt={item.name} class="mx-auto max-h-64 object-contain w-1/3" src={itemToImageUrl(item)} />
+          <img alt={item.name} class="mx-auto max-h-64 w-1/3 object-contain" src={itemToImageUrl(item)} />
           <div class="flex flex-col gap-4 text-center md:items-start md:text-left">
             <h1 class="w-full">{item.name}</h1>
             <p>You are about to print a barcode with the following value : {value}</p>
-            <div class="flex flex-col pt-3 md:flex-row items-center md:items-start">
+            <div class="flex flex-col items-center pt-3 md:flex-row md:items-start">
               <AppBarcode isHighlighted={isHighlighted} item={item} size={size} />
               <div class="flex flex-col gap-3 md:ml-6 md:items-start">
                 <ToggleButtonGroup aria-label="Size" color="primary" exclusive onChange={onSizeChange} size="small" value={size}>

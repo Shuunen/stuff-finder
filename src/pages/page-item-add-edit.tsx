@@ -103,13 +103,13 @@ export function PageItemAddEdit ({ id = '', isEdit = false }: Readonly<{ id?: st
 
   return (
     <AppPageCard cardTitle={`${isEdit ? 'Edit' : 'Add'} item`} icon={isEdit ? EditOutlinedIcon : AddCircleOutlineIcon} pageCode={`item-${isEdit ? 'edit' : 'add'}`} pageTitle={`${isEdit ? 'Edit' : 'Add'} item`}>
-      <div class="flex flex-col w-100 max-h-[90%] md:max-h-full mb-20 md:mb-0 overflow-y-auto overflow-x-hidden">
+      <div class="mb-20 flex max-h-[90%] flex-col overflow-y-auto overflow-x-hidden md:mb-0 md:max-h-full">
         {Boolean(isEdit) && <p class="text-center">Please fill in the form below to edit the item, you can change any field you want 🔄</p>}
         {!isEdit && <p class="text-center">Please fill in the form below to add a new item, no worry, you will be able to edit it later if needed ✏️</p>}
         {id !== '' && initialForm.fields.reference.value === '' && <p>Here is the keyword you search previously : {id}</p>}
-        <div class="flex flex-col md:flex-row gap-6 items-end">
-          <img alt="item visual" class="md:max-h-80 md:max-w-72 p-4 w-auto md:w-1/3 justify-self-center" ref={photoReference} src={itemPhotoToImageUrl(initialForm.fields.photo.value)} />
-          <div class="place-self-center pr-4 md:pr-0 w-full">
+        <div class="flex flex-col items-end gap-6 md:flex-row">
+          <img alt="item visual" class="w-auto justify-self-center p-4 md:max-h-80 md:w-1/3 md:max-w-72" ref={photoReference} src={itemPhotoToImageUrl(initialForm.fields.photo.value)} />
+          <div class="w-full place-self-center pr-4 md:pr-0">
             <AppForm error={error} initialForm={initialForm} onChange={onChange} />
           </div>
         </div>

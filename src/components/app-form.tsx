@@ -79,13 +79,13 @@ export function AppForm<FormType extends Form> ({ error: parentError = '', initi
   const canSubmit = form.isValid && form.isTouched && errorMessage.length === 0
 
   return (
-    <form autoComplete="off" class={`grid w-full md:min-w-[44rem] gap-6 ${gridClass(form.columns)}`} noValidate onSubmit={onFormSubmit} spellcheck={false}>
+    <form autoComplete="off" class={`grid w-full gap-6 md:min-w-[44rem] ${gridClass(form.columns)}`} noValidate onSubmit={onFormSubmit} spellcheck={false}>
       {Object.entries(form.fields).map(([id, field]) => <div class={`grid w-full ${field.isVisible ? '' : 'hidden'} ${colSpanClass(field.columns)}`} key={id}>
         {field.type === 'text' && <AppFormFieldText field={field} form={form} id={id} suggestions={suggestions} updateField={updateField} />}
         {field.type === 'checkbox' && <AppFormFieldCheckbox field={field} id={id} updateField={updateField} />}
         {field.type === 'select' && <AppFormFieldSelect field={field} form={form} id={id} updateField={updateField} />}
       </div>)}
-      <div class="order-last flex flex-col md:col-span-full items-center">
+      <div class="order-last flex flex-col items-center md:col-span-full">
         {Boolean(errorMessage) && Boolean(form.isTouched) && <p class="text-red-500">{errorMessage}</p>}
         {onSubmit !== undefined && <Button disabled={!canSubmit} type="submit" variant="contained">Save</Button>}
       </div>

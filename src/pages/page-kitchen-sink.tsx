@@ -20,10 +20,10 @@ export function PageKitchenSink () {
     <div class="flex flex-col">
       <h1>Kitchen Sink</h1>
       <h2>Barcodes</h2>
-      <div class="grid grid-cols-3 gap-6 w-3/4">
+      <div class="grid w-3/4 grid-cols-3 gap-6">
         {items.map((item) => <div class="flex flex-col items-start gap-0" key={item.reference + item.name}>
           <AppBarcode isHighlighted={isHighlighted} item={item} size={size} willResize={!item.name.includes('NOK')} />
-          <p class="font-mono break-all text-xs mt-1">
+          <p class="mt-1 break-all font-mono text-xs">
             reference : {item.reference}<br />
             length : {item.reference.length}<br />
             size : {item.name.includes('resized') ? 2 : 3 /* eslint-disable-line @typescript-eslint/no-magic-numbers */}

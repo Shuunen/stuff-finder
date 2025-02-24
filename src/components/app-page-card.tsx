@@ -11,15 +11,15 @@ export function AppPageCard ({ cardTitle, children, icon: Icon, nextLabel = 'Hom
   setPageTitle(pageTitle)
   return (
     <ThemeProvider theme={theme}>
-      <div class="flex max-h-full w-full flex-col items-center print:hidden grow md:grow-0" data-component="page-card" data-page={pageCode}>
+      <div class="flex max-h-full w-full grow flex-col items-center md:grow-0 print:hidden" data-component="page-card" data-page={pageCode}>
         <h3 class="hidden sm:block">{cardTitle}</h3>
-        <div class="relative z-10 flex w-full md:w-auto grow flex-col md:min-w-[30rem] justify-center gap-3 overflow-auto bg-gradient-to-b from-white/80 to-white p-4 sm:p-6 md:grow-0 md:gap-6 md:rounded-md md:shadow-md">
-          <div class="flex w-full mb-2 sm:mb-4 md:hidden">
+        <div class="relative z-10 flex w-full grow flex-col justify-center gap-3 overflow-auto bg-gradient-to-b from-white/80 to-white p-4 sm:p-6 md:w-auto md:min-w-[30rem] md:grow-0 md:gap-6 md:rounded-md md:shadow-md">
+          <div class="mb-2 flex w-full sm:mb-4 md:hidden">
             <AppButtonBack />
           </div>
           {children}
         </div>
-        <div class="hidden md:block mb-8">
+        <div class="mb-8 hidden md:block">
           <AppPageBottom icon={Icon} nextLabel={nextLabel} nextUrl={nextUrl} stepsBack={stepsBack} />
         </div>
       </div>
