@@ -16,10 +16,6 @@ export async function get (url: string) {
   return request('GET', url)
 }
 
-export function valuesToOptions (array: readonly string[], selected?: string) {
-  return array.map(value => `<option value="${value}" ${selected === value ? 'selected' : ''}>${value}</option>`).join('')
-}
-
 export function setPageTitle (title: string) {
   document.title = `${title} - Stuff Finder`
 }

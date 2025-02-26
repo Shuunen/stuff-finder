@@ -20,9 +20,6 @@
   },
   "description": "Sorting things is pointless if you can't find them afterwards",
   "devDependencies": {
-    "@babel/plugin-syntax-class-properties": "*",
-    "@babel/plugin-syntax-decorators": "*",
-    "@babel/plugin-syntax-jsx": "*",
     "@biomejs/biome": "^1.9",
     "@preact/preset-vite": "^2.9",
     "@tsconfig/strictest": "^2.0",
@@ -33,6 +30,7 @@
     "dependency-cruiser": "latest",
     "eslint": "*",
     "eslint-plugin-shuunen": "^1.0",
+    "knip": "latest",
     "postcss": "^8.4",
     "repo-check": "1.42",
     "tailwindcss": "^3.4",
@@ -51,21 +49,26 @@
   ],
   "license": "GPL-3.0",
   "name": "@shuunen/stuff-finder",
+  "pnpm": {
+    "overrides": {
+      "tinypool": "0.8.0"
+    }
+  },
   "private": true,
   "repository": {
     "type": "git",
-    "url": "https://github.com/Shuunen/stuff-finder.git"
+    "url": "git+https://github.com/Shuunen/stuff-finder.git"
   },
   "scripts": {
     "build": "tsc && echo tsc success && vite build && echo vite build success && pnpm mark && echo build success",
-    "build:analyze": "npx vite-bundle-visualizer",
     "check": "pnpm install && repo-check && pnpm build && pnpm lint && pnpm test && echo check success",
     "dev": "vite",
-    "lint": "pnpm lint:tsc && pnpm lint:biome && pnpm lint:eslint && pnpm lint:dep && echo lint success",
+    "lint": "pnpm lint:tsc && pnpm lint:biome && pnpm lint:knip && pnpm lint:eslint && pnpm lint:dep && echo lint success",
     "lint:biome": "biome check --error-on-warnings --write --unsafe src && echo lint:biome success",
     "lint:dep": "depcruise src --config && echo lint:dep success",
     "lint:eslint": "eslint --cache --max-warnings 0 src && echo lint:eslint success",
     "lint:eslint:inspect": "eslint --inspect-config",
+    "lint:knip": "knip",
     "lint:tsc": "tsc --noEmit && echo lint:tsc success",
     "mark": "unique-mark dist/index.{html} && echo mark success",
     "postversion": "git push && git push --tags",

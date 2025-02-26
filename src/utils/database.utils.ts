@@ -13,7 +13,7 @@ import { normalizePhotoUrl } from './url.utils'
 const client = new Client()
 const database = new Databases(client)
 const storage = new Storage(client)
-export const projectId = 'stuff-finder'
+const projectId = 'stuff-finder'
 client.setProject(projectId)
 
 export function itemIdToImageUrl (id: Item['$id']) {
@@ -29,7 +29,7 @@ export function getAppWriteIdFromUrl (url: string) {
 
 const urlRegex = /https?:\/\/\S+/u
 
-export function isUrl (text: string) {
+function isUrl (text: string) {
   return urlRegex.test(text)
 }
 

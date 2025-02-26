@@ -19,6 +19,4 @@ export const defaultCredentials = {
   wrap: '',
 } satisfies Record<string, string>
 
-export type AppCredentials = typeof defaultCredentials
-
 export const defaultImage = '/assets/no-visual.svg'

@@ -6,7 +6,7 @@ import { logger } from '../utils/logger.utils'
 import { state } from '../utils/state.utils'
 
 // https://fusejs.io/
-export const fuseOptions = {
+const fuseOptions = {
   distance: 200, // see the tip at https://fusejs.io/concepts/scoring-theory.html#scoring-theory
   ignoreLocation: true, // eslint-disable-line @typescript-eslint/naming-convention
   keys: [
