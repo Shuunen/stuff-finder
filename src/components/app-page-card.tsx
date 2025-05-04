@@ -13,7 +13,7 @@ export function AppPageCard ({ cardTitle, children, icon: Icon, nextLabel = 'Hom
     <ThemeProvider theme={theme}>
       <div class="flex max-h-full w-full grow flex-col items-center md:grow-0 print:hidden" data-component="page-card" data-page={pageCode}>
         <h3 class="hidden sm:block">{cardTitle}</h3>
-        <div class="relative z-10 flex w-full grow flex-col justify-center gap-3 overflow-auto bg-gradient-to-b from-white/80 to-white p-4 sm:p-6 md:w-auto md:min-w-[30rem] md:grow-0 md:gap-6 md:rounded-md md:shadow-md">
+        <div class="relative z-10 flex w-full grow flex-col justify-center gap-3 overflow-auto bg-linear-to-b from-white/80 to-white p-4 sm:p-6 md:w-auto md:min-w-[30rem] md:grow-0 md:gap-6 md:rounded-md md:shadow-md">
           <div class="mb-2 flex w-full sm:mb-4 md:hidden">
             <AppButtonBack />
           </div>
