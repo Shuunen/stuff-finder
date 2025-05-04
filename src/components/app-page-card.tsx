@@ -1,4 +1,4 @@
-import ThemeProvider from '@mui/material/styles/ThemeProvider'
+import { ThemeProvider } from '@mui/material/styles'
 import type { VNode } from 'preact'
 import type { MuiIcon } from '../types/icons.types'
 import { setPageTitle } from '../utils/browser.utils'

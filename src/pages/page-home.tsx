@@ -1,5 +1,5 @@
 import Button from '@mui/material/Button'
-import ThemeProvider from '@mui/material/styles/ThemeProvider'
+import { ThemeProvider } from '@mui/material/styles'
 import { route } from 'preact-router'
 import type { CSSProperties } from 'preact/compat'
 import { useCallback, useMemo, useState } from 'preact/hooks'

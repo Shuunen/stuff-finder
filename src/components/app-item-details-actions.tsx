@@ -73,7 +73,6 @@ export function AppItemDetailsActions ({ item }: Readonly<{ item: Item }>) {
       <Menu
         anchorEl={anchorElement}
         id="basic-menu"
-        MenuListProps={{ 'aria-labelledby': 'basic-button' }}
         onClose={closeMenu}
         open={isOpen}
       >

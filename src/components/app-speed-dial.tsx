@@ -49,7 +49,7 @@ export function AppSpeedDial ({ isLoading = false, isSettingsRequired = false }:
           </div>
         </Fade>
         <SpeedDial ariaLabel='Actions' FabProps={options} icon={icon} onClick={toggleOpen} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} open={isOpen}>
-          {availableActions.map((action) => <SpeedDialAction icon={action.icon} key={action.name} onClick={() => { toggleOpen(); action.handleClick() }} tooltipTitle={action.name} />)}
+          {availableActions.map((action) => <SpeedDialAction icon={action.icon} key={action.name} onClick={() => { toggleOpen(); action.handleClick() }} slotProps={{tooltip: () => ({title: action.name})}} />)}
         </SpeedDial>
       </div>
     </>
