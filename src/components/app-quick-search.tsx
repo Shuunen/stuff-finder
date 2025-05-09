@@ -15,7 +15,7 @@ function onSearch (event: KeyboardEvent) {
   route(`/search/${value}`)
 }
 
-const pagesWithInputs = new Set(['/item/add', '/item/edit/:id'])
+const pagesWithInputs = new Set(['/item/add', '/item/add:id', '/item/edit/:id'])
 
 const focusDelay = 100
 
@@ -37,8 +37,8 @@ export function AppQuickSearch ({ mode, placeholder = 'Quick search...' }: Reado
     const keypressHandler = on('keypress', (event: KeyboardEvent) => {
       const canFocus = !pagesWithInputs.has(path ?? '') && isUsable
       if (!canFocus) return
-      const isInSearchInput = event.target instanceof HTMLElement && event.target.className === search.value.current?.className
-      if (isInSearchInput) return
+      const isInInput = event.target instanceof HTMLElement && event.target.tagName.toLowerCase() === 'input'
+      if (isInInput) return
       logger.debug('keypress on correct page & not in search input, will focus quick-search', { path })
       search.value.current?.focus()
     })
