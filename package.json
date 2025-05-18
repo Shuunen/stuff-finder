@@ -10,7 +10,7 @@
     "@mui/material": "^7.0",
     "@preact/signals": "^2.0",
     "@zxing/library": "^0.21",
-    "appwrite": "^17.0",
+    "appwrite": "^18.0.0",
     "fuse.js": "^7.0",
     "preact": "^10.24",
     "preact-router": "^4.1",
