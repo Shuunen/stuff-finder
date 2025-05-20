@@ -1,6 +1,6 @@
 const asinRegex = /(?<asin>B[\dA-Z]{9}|\d{9}[\dX])/u
 const photoRegex = {
-  aliexpress: /_\d+x\d+\.jpg/u,
+  aliexpress: /_\d+x\d+q?\d?\d?\.jpg.*/u,
   amazon: /._AC.+\.jpg|._S\w\d+_.jpg/u,
   decathlon: /\bf=\d+x\d+/u,
   temu: /\/w\/\d+\//u,
@@ -41,6 +41,6 @@ export function normalizePhotoUrl (url: string, size = 500) {
     .replace(photoRegex.amazon, `._SL${size}_.jpg`)
     .replace(photoRegex.temu, `/w/${size}/`)
     .replace(photoRegex.decathlon, `f=${size}x${size}`)
-    .replace(photoRegex.aliexpress, `_${size}x${size}.jpg`)
+    .replace(photoRegex.aliexpress, `_${size}x${size}q85.jpg`)
 }
 
