@@ -34,7 +34,7 @@
     "repo-check": "1.45",
     "tailwindcss": "^4.1",
     "typescript": "^5.8",
-    "vite": "^6.3",
+    "vite": "^7.0.0",
     "vitest": "^3.1"
   },
   "files": [
