@@ -6,6 +6,12 @@
 
 ![banner](docs/banner.svg)
 
+## Archived
+
+This repo is archived since it migrated to [Shuunen/monorepo](https://github.com/Shuunen/monorepo/tree/master/apps/stuff-finder).
+
+Further development will be done there 🚀
+
 ## Demo
 
 [![logo](public/assets/favicon-16x16.png)](https://stuff-finder.netlify.app) [https://stuff-finder.netlify.app](https://stuff-finder.netlify.app)
