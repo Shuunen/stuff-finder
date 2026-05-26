@@ -1,3 +1,4 @@
+import { isNil } from 'es-toolkit'
 import { capitalize, clone } from 'shuutils'
 import type { Item, ItemSuggestions } from '../types/item.types'
 import type { WrapApiAliExResponse, WrapApiAngboResponse, WrapApiCampoResponse, WrapApiDeyesResponse } from '../types/requests.types'
@@ -30,7 +31,7 @@ function priceParse(price?: number | string) {
 }
 
 function isNullish(value: unknown) {
-  if (value === undefined || value === null) return true
+  if (isNil(value)) return true
   if (typeof value === 'number') return value <= 0 || value === 0
   if (typeof value === 'string') return value === '' || value === '0'
   return true
