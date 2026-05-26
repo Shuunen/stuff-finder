@@ -1,23 +1,15 @@
-/* eslint-disable @typescript-eslint/consistent-type-assertions */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/max-params */
-/* eslint-disable @typescript-eslint/explicit-member-accessibility */
-/* eslint-disable jsdoc/require-jsdoc */
-/* eslint-disable no-restricted-syntax */
-/* eslint-disable @typescript-eslint/naming-convention */
-/* eslint-disable max-classes-per-file */
+// oxlint-disable max-params
 import type { Models } from 'appwrite'
 import { functionReturningVoid, nbDaysInWeek, sleep } from 'shuutils'
-import { vi } from 'vitest'
 import type { ItemModel } from '../types/item.types'
 import { mockItemModel } from './mock.utils'
 
-export function mockFile (data: Partial<Models.File> = {}) {
+export function mockFile(data: Partial<Models.File> = {}) {
   return {
-    '$createdAt': '2020-03-01T00:00:00.000Z',
-    '$id': 'some-image-file-uuid-xyz',
-    '$permissions': [],
-    '$updatedAt': '2021-08-01T00:00:00.000Z',
+    $createdAt: '2020-03-01T00:00:00.000Z',
+    $id: 'some-image-file-uuid-xyz',
+    $permissions: [],
+    $updatedAt: '2021-08-01T00:00:00.000Z',
     bucketId: 'bucketA',
     chunksTotal: 1,
     chunksUploaded: 1,
@@ -67,30 +59,31 @@ const updateDocument = vi.fn(async (databaseId: string, collectionId: string, do
 })
 
 class Databases {
-  createDocument = createDocument
-  deleteDocument = deleteDocument
-  listDocuments = listDocuments
-  updateDocument = updateDocument
-  constructor (client?: Client) {
+  public createDocument = createDocument
+  public deleteDocument = deleteDocument
+  public listDocuments = listDocuments
+  public updateDocument = updateDocument
+  public constructor(client?: Client) {
     if (client) functionReturningVoid()
   }
 }
 
+// oxlint-disable-next-line max-classes-per-file
 class Client {
-  constructor () {
+  public constructor() {
     functionReturningVoid()
   }
-  setProject (project: string) {
+  public setProject(project: string) {
     if (project) functionReturningVoid()
     return this
   }
 }
 
 class Storage {
-  createFile = createFile
-  deleteFile = deleteFile
-  listFiles = listFiles
-  constructor (client?: Client) {
+  public createFile = createFile
+  public deleteFile = deleteFile
+  public listFiles = listFiles
+  public constructor(client?: Client) {
     if (client) functionReturningVoid()
   }
 }
@@ -100,7 +93,7 @@ const Query = {
   offset: vi.fn((nb: number) => ({ isThisMockedDataFromMock: true, offset: nb })),
 }
 
-function reset () {
+function reset() {
   createDocument.mockClear()
   createFile.mockClear()
   listFiles.mockClear()
@@ -113,6 +106,14 @@ function reset () {
 }
 
 export const databaseMock = {
+  Query,
   appwrite: { Client, Databases, Query, Storage },
-  createDocument, createFile, deleteDocument, deleteFile, listDocuments, listFiles, Query, reset, updateDocument,
+  createDocument,
+  createFile,
+  deleteDocument,
+  deleteFile,
+  listDocuments,
+  listFiles,
+  reset,
+  updateDocument,
 }

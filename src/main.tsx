@@ -12,7 +12,7 @@ const root = document.querySelector('#app')
 if (root) render(<App />, root)
 else logger.error('root not found')
 
-// eslint-disable-next-line unicorn/prefer-top-level-await
+// oxlint-disable-next-line unicorn/prefer-top-level-await promise/prefer-await-to-then promise/always-return
 void getItems().then(result => {
   state.status = result.ok ? 'ready' : 'settings-required'
   if (result.ok) toastInfo(result.value)

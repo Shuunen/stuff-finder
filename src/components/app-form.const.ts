@@ -1,4 +1,6 @@
 /**
  * Just a void, empty function.
  */
-export function voidFunction () { /* empty */ }
+export function voidFunction() {
+  /* empty */
+}

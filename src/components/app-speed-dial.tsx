@@ -23,33 +23,56 @@ const actions = [
   { handleClick: () => route('/scan'), icon: <QrCodeScannerIcon />, name: 'Scan' },
 ]
 
-// eslint-disable-next-line max-statements
-export function AppSpeedDial ({ isLoading = false, isSettingsRequired = false }: Readonly<{ isLoading?: boolean; isSettingsRequired?: boolean }>) {
-  const [isOpen, setOpen] = useState(false)
-  const toggleOpen = useCallback(() => { setOpen(!isOpen) }, [isOpen])
-  const onMouse = useCallback((status: 'enter' | 'leave') => { if (!isMobile()) { logger.debug('open cause mouse', status); setOpen(status === 'enter') } }, [])
-  const onMouseEnter = useCallback(() => { onMouse('enter') }, [onMouse])
-  const onMouseLeave = useCallback(() => { onMouse('leave') }, [onMouse])
+// oxlint-disable-next-line max-lines-per-function
+export function AppSpeedDial({ isLoading = false, isSettingsRequired = false }: Readonly<{ isLoading?: boolean; isSettingsRequired?: boolean }>) {
+  const [isOpen, setIsOpen] = useState(false)
+  const toggleOpen = useCallback(() => {
+    setIsOpen(!isOpen)
+  }, [isOpen])
+  const onMouse = useCallback((status: 'enter' | 'leave') => {
+    if (!isMobile()) {
+      logger.debug('open cause mouse', status)
+      setIsOpen(status === 'enter')
+    }
+  }, [])
+  const onMouseEnter = useCallback(() => {
+    onMouse('enter')
+  }, [onMouse])
+  const onMouseLeave = useCallback(() => {
+    onMouse('leave')
+  }, [onMouse])
   const options: Partial<FabProps> = { color: 'default', sx: { backgroundColor: 'white', color: 'purple', opacity: 0.7 } } as const
   const icon = useMemo(() => (isLoading ? <HourglassTop /> : <SpeedDialIcon />), [isLoading])
-  const availableActions = useMemo(() => (isSettingsRequired ? actions.filter((action) => ['Home', 'Settings'].includes(action.name)) : actions), [isSettingsRequired])
+  const availableActions = useMemo(() => (isSettingsRequired ? actions.filter(action => ['Home', 'Settings'].includes(action.name)) : actions), [isSettingsRequired])
   const [{ path }] = useRouter()
-  const [isQuickSearchAvailable, setQuickSearchAvailability] = useState(false)
-  useEffect(() => { setQuickSearchAvailability(path !== '/'); setOpen(false) }, [path])
+  const [isQuickSearchAvailable, setIsQuickSearchAvailable] = useState(false)
+  useEffect(() => {
+    setIsQuickSearchAvailable(path !== '/')
+    setIsOpen(false)
+  }, [path])
   return (
     <>
       <Fade in={isOpen}>
-        {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
-        <div class="absolute bottom-0 right-0 z-10 size-full bg-linear-to-tl" data-component="speed-dial-backdrop" onClick={toggleOpen} />
+        <div class="absolute right-0 bottom-0 z-10 size-full bg-linear-to-tl" data-component="speed-dial-backdrop" onClick={toggleOpen} />
       </Fade>
-      <div class="pointer-events-none fixed bottom-5 right-5 z-20 flex items-end md:bottom-10 md:right-10 print:hidden" data-component="speed-dial">
+      <div class="pointer-events-none fixed right-5 bottom-5 z-20 flex items-end md:right-10 md:bottom-10 print:hidden" data-component="speed-dial">
         <Fade in={isQuickSearchAvailable}>
           <div class="pointer-events-auto mb-2">
-            <AppQuickSearch mode='floating' />
+            <AppQuickSearch mode="floating" />
           </div>
         </Fade>
-        <SpeedDial ariaLabel='Actions' FabProps={options} icon={icon} onClick={toggleOpen} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} open={isOpen}>
-          {availableActions.map((action) => <SpeedDialAction icon={action.icon} key={action.name} onClick={() => { toggleOpen(); action.handleClick() }} slotProps={{tooltip: () => ({title: action.name})}} />)}
+        <SpeedDial ariaLabel="Actions" FabProps={options} icon={icon} onClick={toggleOpen} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} open={isOpen}>
+          {availableActions.map(action => (
+            <SpeedDialAction
+              icon={action.icon}
+              key={action.name}
+              onClick={() => {
+                toggleOpen()
+                action.handleClick()
+              }}
+              slotProps={{ tooltip: () => ({ title: action.name }) }}
+            />
+          ))}
         </SpeedDial>
       </div>
     </>

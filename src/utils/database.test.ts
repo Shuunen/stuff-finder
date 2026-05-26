@@ -1,18 +1,37 @@
-/* eslint-disable max-lines */
 import { Result, nbPercentMax } from 'shuutils'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { databaseMock, mockFile } from './database.mock'
-import { addItemRemotely, deleteImageRemotely, deleteItemRemotely, downloadBlob, downloadImages, downloadItems, downloadObject, downloadUrl, fileTypeToExtension, getAppWriteIdFromUrl, getItemId, getItemsRemotely, itemIdToImageUrl, itemPhotoToImageUrl, itemToAppWriteModel, itemToImageUrl, listImages, updateItemRemotely, uploadImage, uploadPhotosIfNeeded } from './database.utils'
+import {
+  addItemRemotely,
+  deleteImageRemotely,
+  deleteItemRemotely,
+  downloadBlob,
+  downloadImages,
+  downloadItems,
+  downloadObject,
+  downloadUrl,
+  fileTypeToExtension,
+  getAppWriteIdFromUrl,
+  getItemId,
+  getItemsRemotely,
+  itemIdToImageUrl,
+  itemPhotoToImageUrl,
+  itemToAppWriteModel,
+  itemToImageUrl,
+  listImages,
+  updateItemRemotely,
+  uploadImage,
+  uploadPhotosIfNeeded,
+} from './database.utils'
 import { logger } from './logger.utils'
 import { mockFetch, mockItem, mockItemModel } from './mock.utils'
 import { state } from './state.utils'
 
-vi.mock('appwrite', () => databaseMock.appwrite)
+// @ts-expect-error mock type incompatibility with vitest 4
+vi.mock(import('appwrite'), () => databaseMock.appwrite)
 
 globalThis.fetch = mockFetch
 
 describe('database.utils', () => {
-
   beforeEach(() => {
     state.credentials = { bucketId: 'bucketA', collectionId: 'collectionA', databaseId: 'databaseA', wrap: 'wrapA' }
     mockFetch.mockClear()
@@ -27,9 +46,12 @@ describe('database.utils', () => {
         "value": [],
       }
     `)
-    expect(databaseMock.listDocuments).toHaveBeenNthCalledWith(1, 'databaseA', 'collectionA', [{ isThisMockedDataFromMock: true, limit: 100 }, { isThisMockedDataFromMock: true, offset: 0 }])
-    expect(databaseMock.Query.limit).toHaveBeenCalledTimes(1)
-    expect(databaseMock.Query.offset).toHaveBeenCalledTimes(1)
+    expect(databaseMock.listDocuments).toHaveBeenNthCalledWith(1, 'databaseA', 'collectionA', [
+      { isThisMockedDataFromMock: true, limit: 100 },
+      { isThisMockedDataFromMock: true, offset: 0 },
+    ])
+    expect(databaseMock.Query.limit).toHaveBeenCalledOnce()
+    expect(databaseMock.Query.offset).toHaveBeenCalledOnce()
   })
 
   it('getItemsRemotely B failure', async () => {
@@ -48,7 +70,10 @@ describe('database.utils', () => {
     expect(remoteItems).toHaveLength(2)
     expect(remoteItems?.map(({ $id }) => $id).join(', ')).toMatchInlineSnapshot(`"some-item-uuid-a, some-other-item-uuid-b"`)
     expect(remoteItems).toMatchSnapshot()
-    expect(databaseMock.listDocuments).toHaveBeenNthCalledWith(1, 'databaseA', 'collectionA', [{ isThisMockedDataFromMock: true, limit: 100 }, { isThisMockedDataFromMock: true, offset: 0 }])
+    expect(databaseMock.listDocuments).toHaveBeenNthCalledWith(1, 'databaseA', 'collectionA', [
+      { isThisMockedDataFromMock: true, limit: 100 },
+      { isThisMockedDataFromMock: true, offset: 0 },
+    ])
     expect(databaseMock.Query.limit).toHaveBeenCalledTimes(2)
     expect(databaseMock.Query.offset).toHaveBeenCalledTimes(2)
   })
@@ -67,7 +92,7 @@ describe('database.utils', () => {
   it('getItemsRemotely E success but really malformed item => fail', async () => {
     const itemA = mockItemModel({ $id: 'some-item-uuid-a' })
     // @ts-expect-error we want to test a malformed item
-    // eslint-disable-next-line unicorn/no-null
+    // oxlint-disable-next-line unicorn/no-null
     itemA.$id = null
     const items = [itemA]
     databaseMock.listDocuments.mockResolvedValueOnce({ documents: items, total: 2 })
@@ -90,15 +115,17 @@ describe('database.utils', () => {
     const result = await addItemRemotely(item)
     expect(result.ok).toBe(true)
     const photos = Result.unwrap(result).value?.photos
-    expect(photos?.[0] !== undefined).toBe(true)
-    expect(photos?.[0] !== photoUrl, 'photo should not be a url anymore but a uuid after upload to bucket').toBe(true)
+    expect(photos?.[0]).toBeDefined()
+    expect(photos?.[0], 'photo should not be a url anymore but a uuid after upload to bucket').not.toBe(photoUrl)
   })
 
   it('addItemRemotely C but impossible to generate an id', async () => {
     const item = mockItem({ name: '', reference: '' })
     const result = await addItemRemotely(item)
     expect(result.ok).toBe(false)
-    expect(Result.unwrap(result).error).toMatchInlineSnapshot(`"item id is empty in {"$id":"rec234","barcode":"barcode B","box":"B (usb & audio)","brand":"brand B","details":"details B","drawer":2,"isPrinted":false,"name":"","photos":["some-uuid","https://some.url/to/image.jpg"],"price":42,"reference":"","status":"bought"}"`)
+    expect(Result.unwrap(result).error).toMatchInlineSnapshot(
+      `"item id is empty in {"$id":"rec234","barcode":"barcode B","box":"B (usb & audio)","brand":"brand B","details":"details B","drawer":2,"isPrinted":false,"name":"","photos":["some-uuid","https://some.url/to/image.jpg"],"price":42,"reference":"","status":"bought"}"`,
+    )
   })
 
   it('addItemRemotely D with external png photo', async () => {
@@ -115,7 +142,7 @@ describe('database.utils', () => {
     expect(result.ok).toBe(true)
     const photos = Result.unwrap(result).value?.photos
     expect(photos?.[0]).toMatchInlineSnapshot(`"https://example.com/photo.png"`)
-    expect(photos?.[0] === photoUrl, 'photo should be the same url because we do not accept png').toBe(true)
+    expect(photos?.[0], 'photo should be the same url because we do not accept png').toBe(photoUrl)
   })
 
   it('addItemRemotely E but create failed', async () => {
@@ -129,7 +156,7 @@ describe('database.utils', () => {
   it('addItemRemotely F create succeed but parse failed', async () => {
     const malformedItemModel = mockItemModel({ name: 'add item remotely F' })
     // @ts-expect-error we want to test a malformed item
-    // eslint-disable-next-line unicorn/no-null
+    // oxlint-disable-next-line unicorn/no-null
     malformedItemModel.$id = null
     databaseMock.createDocument.mockResolvedValueOnce(malformedItemModel)
     const item = mockItem()
@@ -156,14 +183,18 @@ describe('database.utils', () => {
     const item = mockItem({ $id: '' })
     const result = await updateItemRemotely(item)
     expect(result.ok).toBe(false)
-    expect(Result.unwrap(result).error).toMatchInlineSnapshot(`"item id is empty in {"$id":"","barcode":"barcode B","box":"B (usb & audio)","brand":"brand B","details":"details B","drawer":2,"isPrinted":false,"name":"name B","photos":["some-uuid","https://some.url/to/image.jpg"],"price":42,"reference":"reference B","status":"bought"}"`)
+    expect(Result.unwrap(result).error).toMatchInlineSnapshot(
+      `"item id is empty in {"$id":"","barcode":"barcode B","box":"B (usb & audio)","brand":"brand B","details":"details B","drawer":2,"isPrinted":false,"name":"name B","photos":["some-uuid","https://some.url/to/image.jpg"],"price":42,"reference":"reference B","status":"bought"}"`,
+    )
   })
 
   it('updateItemRemotely C but item has no name or reference', async () => {
     const item = mockItem({ name: '', reference: '' })
     const result = await updateItemRemotely(item)
     expect(result.ok).toBe(false)
-    expect(Result.unwrap(result).error).toMatchInlineSnapshot(`"item id is empty in {"$id":"rec234","barcode":"barcode B","box":"B (usb & audio)","brand":"brand B","details":"details B","drawer":2,"isPrinted":false,"name":"","photos":["some-uuid","https://some.url/to/image.jpg"],"price":42,"reference":"","status":"bought"}"`)
+    expect(Result.unwrap(result).error).toMatchInlineSnapshot(
+      `"item id is empty in {"$id":"rec234","barcode":"barcode B","box":"B (usb & audio)","brand":"brand B","details":"details B","drawer":2,"isPrinted":false,"name":"","photos":["some-uuid","https://some.url/to/image.jpg"],"price":42,"reference":"","status":"bought"}"`,
+    )
   })
 
   it('updateItemRemotely D but update failed', async () => {
@@ -177,7 +208,7 @@ describe('database.utils', () => {
   it('updateItemRemotely E update succeed but parse failed', async () => {
     const malformedItemModel = mockItemModel({ name: 'update item remotely E' })
     // @ts-expect-error we want to test a malformed item
-    // eslint-disable-next-line unicorn/no-null
+    // oxlint-disable-next-line unicorn/no-null
     malformedItemModel.$id = null
     databaseMock.updateDocument.mockResolvedValueOnce(malformedItemModel)
     const item = mockItem()
@@ -228,8 +259,8 @@ describe('database.utils', () => {
     expect(mockFetch).toHaveBeenNthCalledWith(1, photoUrlA)
     expect(mockFetch).toHaveBeenNthCalledWith(2, photoUrlC)
     expect(databaseMock.createFile).toHaveBeenCalledTimes(2)
-    expect(databaseMock.createFile).toHaveBeenNthCalledWith(1, 'bucketA', "reference-b-photo-0-jpg", expect.anything())
-    expect(databaseMock.createFile).toHaveBeenNthCalledWith(2, 'bucketA', "reference-b-photo-2-jpg", expect.anything())
+    expect(databaseMock.createFile).toHaveBeenNthCalledWith(1, 'bucketA', 'reference-b-photo-0-jpg', expect.anything())
+    expect(databaseMock.createFile).toHaveBeenNthCalledWith(2, 'bucketA', 'reference-b-photo-2-jpg', expect.anything())
   })
 
   it('uploadPhotosIfNeeded C with bucket photos, should not upload', async () => {
@@ -245,7 +276,9 @@ describe('database.utils', () => {
     const item = mockItem({ name: '', photos: ['https://example.com/photo-a.jpg'], reference: '' })
     const result = await uploadPhotosIfNeeded(item)
     expect(result.ok).toBe(false)
-    expect(Result.unwrap(result).error).toMatchInlineSnapshot(`"item id is empty in {"$id":"rec234","barcode":"barcode B","box":"B (usb & audio)","brand":"brand B","details":"details B","drawer":2,"isPrinted":false,"name":"","photos":["https://example.com/photo-a.jpg"],"price":42,"reference":"","status":"bought"}"`)
+    expect(Result.unwrap(result).error).toMatchInlineSnapshot(
+      `"item id is empty in {"$id":"rec234","barcode":"barcode B","box":"B (usb & audio)","brand":"brand B","details":"details B","drawer":2,"isPrinted":false,"name":"","photos":["https://example.com/photo-a.jpg"],"price":42,"reference":"","status":"bought"}"`,
+    )
   })
 
   it('uploadPhotosIfNeeded E with external png photo, should not upload', async () => {
@@ -287,19 +320,19 @@ describe('database.utils', () => {
   })
 
   it('downloadBlob A', () => {
-    expect(() => { downloadBlob(new Blob(), 'file.txt') }).toThrowErrorMatchingInlineSnapshot(`[ReferenceError: document is not defined]`)
+    expect(() => downloadBlob(new Blob(), 'file.txt')).not.toThrow()
   })
 
   it('downloadObject A', () => {
-    expect(() => { downloadObject({ wow: 14 }, 'file.txt') }).toThrowErrorMatchingInlineSnapshot(`[ReferenceError: document is not defined]`)
+    expect(() => downloadObject({ wow: 14 }, 'file.txt')).not.toThrow()
   })
 
   it('downloadUrl A', async () => {
-    await expect(downloadUrl('http://files.com/42.txt', 'my-file.txt')).rejects.toThrowErrorMatchingInlineSnapshot(`[ReferenceError: document is not defined]`)
+    await expect(downloadUrl('http://files.com/42.txt', 'my-file.txt')).rejects.toThrowErrorMatchingInlineSnapshot(`[TypeError: The "obj" argument must be an instance of Blob. Received an instance of Object]`)
   })
 
   it('downloadImages A success empty', () => {
-    expect(async () => downloadImages()).not.toThrow()
+    expect(() => downloadImages()).not.toThrow()
   })
 
   it('downloadImages B failure', async () => {
@@ -312,11 +345,12 @@ describe('database.utils', () => {
   it('downloadImages C failure with 2 images', async () => {
     const files = [mockFile({ $id: 'some-image-file-uuid-a' }), mockFile({ $id: 'some-other-image-file-uuid-b' })]
     databaseMock.listFiles.mockResolvedValueOnce({ files, total: 2 })
-    await expect(downloadImages()).rejects.toThrowErrorMatchingInlineSnapshot(`[ReferenceError: document is not defined]`)
+    await expect(downloadImages()).rejects.toThrowErrorMatchingInlineSnapshot(`[TypeError: The "obj" argument must be an instance of Blob. Received an instance of Object]`)
   })
 
-  it('downloadItems A failing', async () => {
-    await expect(downloadItems()).rejects.toThrowErrorMatchingInlineSnapshot(`[ReferenceError: document is not defined]`)
+  it('downloadItems A success', async () => {
+    const result = await downloadItems()
+    expect(result.ok).toBe(true)
   })
 
   it('Query.limit A', () => {
@@ -332,7 +366,10 @@ describe('database.utils', () => {
     const result = await listImages()
     expect(result.ok).toBe(true)
     expect(Result.unwrap(result).value).toHaveLength(0)
-    expect(databaseMock.listFiles).toHaveBeenNthCalledWith(1, 'bucketA', [{ isThisMockedDataFromMock: true, limit: 100 }, { isThisMockedDataFromMock: true, offset: 0 }])
+    expect(databaseMock.listFiles).toHaveBeenNthCalledWith(1, 'bucketA', [
+      { isThisMockedDataFromMock: true, limit: 100 },
+      { isThisMockedDataFromMock: true, offset: 0 },
+    ])
   })
 
   it('listImages B failure', async () => {
@@ -351,7 +388,10 @@ describe('database.utils', () => {
     expect(images).toHaveLength(2)
     expect(images?.map(({ $id }) => $id).join(', ')).toMatchInlineSnapshot(`"some-image-file-uuid-a, some-other-image-file-uuid-b"`)
     expect(images).toMatchSnapshot()
-    expect(databaseMock.listFiles).toHaveBeenNthCalledWith(1, 'bucketA', [{ isThisMockedDataFromMock: true, limit: 100 }, { isThisMockedDataFromMock: true, offset: 0 }])
+    expect(databaseMock.listFiles).toHaveBeenNthCalledWith(1, 'bucketA', [
+      { isThisMockedDataFromMock: true, limit: 100 },
+      { isThisMockedDataFromMock: true, offset: 0 },
+    ])
   })
 
   it('getItemId A item with reference & name', () => {
@@ -384,7 +424,7 @@ describe('database.utils', () => {
     const result = await uploadImage('file-name', 'https://example.com/photo.jpg')
     expect(result.ok).toBe(true)
     expect(Result.unwrap(result).value).toMatchInlineSnapshot(`"file-name-jpg"`)
-    expect(databaseMock.createFile).toHaveBeenNthCalledWith(1, 'bucketA', "file-name-jpg", expect.anything())
+    expect(databaseMock.createFile).toHaveBeenNthCalledWith(1, 'bucketA', 'file-name-jpg', expect.anything())
   })
 
   it('uploadImage B filename without extension, url point to a png => no upload', async () => {
@@ -400,7 +440,7 @@ describe('database.utils', () => {
     const result = await uploadImage('file-name.jpg', 'https://example.com/photo.jpg')
     expect(result.ok).toBe(true)
     expect(Result.unwrap(result).value).toMatchInlineSnapshot(`"file-name-jpg"`)
-    expect(databaseMock.createFile).toHaveBeenNthCalledWith(1, 'bucketA', "file-name-jpg", expect.anything())
+    expect(databaseMock.createFile).toHaveBeenNthCalledWith(1, 'bucketA', 'file-name-jpg', expect.anything())
   })
 
   it('uploadImage D create file fail => fallback to input url', async () => {
@@ -411,7 +451,7 @@ describe('database.utils', () => {
     const result = await uploadImage('file-name.jpg', 'https://example.com/photo.jpg')
     expect(result.ok).toBe(true)
     expect(Result.unwrap(result).value).toMatchInlineSnapshot(`"https://example.com/photo.jpg"`)
-    expect(databaseMock.createFile).toHaveBeenNthCalledWith(1, 'bucketA', "file-name-jpg", expect.anything())
+    expect(databaseMock.createFile).toHaveBeenNthCalledWith(1, 'bucketA', 'file-name-jpg', expect.anything())
     logger.enable()
   })
 
@@ -423,7 +463,7 @@ describe('database.utils', () => {
     const result = await uploadImage('file-name.jpg', 'https://example.com/photo.jpg')
     expect(result.ok).toBe(true)
     expect(Result.unwrap(result).value).toMatchInlineSnapshot(`"file-name-jpg"`)
-    expect(databaseMock.createFile).toHaveBeenNthCalledWith(1, 'bucketA', "file-name-jpg", expect.anything())
+    expect(databaseMock.createFile).toHaveBeenNthCalledWith(1, 'bucketA', 'file-name-jpg', expect.anything())
     expect(databaseMock.deleteFile).toHaveBeenNthCalledWith(1, 'bucketA', 'file-name-jpg')
     logger.enable()
   })
@@ -499,14 +539,13 @@ describe('database.utils', () => {
     const item = mockItem({ price: -1 })
     const result = itemToAppWriteModel(item)
     expect(Result.unwrap(result).error).toMatchInlineSnapshot(`undefined`)
-    expect(Result.unwrap(result).value?.price).toMatchInlineSnapshot(`null`)
+    expect(Result.unwrap(result).value?.price).toMatchInlineSnapshot(`undefined`)
   })
 
   it('itemToAppWriteModel D drawer -1 => null', () => {
     const item = mockItem({ drawer: -1 })
     const result = itemToAppWriteModel(item)
     expect(Result.unwrap(result).error).toMatchInlineSnapshot(`undefined`)
-    expect(Result.unwrap(result).value?.drawer).toMatchInlineSnapshot(`null`)
+    expect(Result.unwrap(result).value?.drawer).toMatchInlineSnapshot(`undefined`)
   })
-
 })

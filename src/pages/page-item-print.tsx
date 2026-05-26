@@ -19,12 +19,10 @@ import { state } from '../utils/state.utils'
 
 const waitDelay = 200
 
-// eslint-disable-next-line max-statements, max-lines-per-function
-export function PageItemPrint ({ ...properties }: Readonly<Record<string, unknown>>) {
-  // eslint-disable-next-line no-restricted-syntax
+// oxlint-disable-next-line max-lines-per-function
+export function PageItemPrint({ ...properties }: Readonly<Record<string, unknown>>) {
   if (typeof properties.id !== 'string') throw new Error('An id in the url is required')
   const item = state.items.find(one => one.$id === properties.id)
-  // eslint-disable-next-line no-restricted-syntax
   if (item === undefined) throw new Error('Item with id &quot;{properties.id}&quot; not found ;(')
 
   const { value } = itemToPrintData(item)
@@ -32,8 +30,12 @@ export function PageItemPrint ({ ...properties }: Readonly<Record<string, unknow
   const [isPrintMode, setIsPrintMode] = useState<boolean>(false)
   const [isHighlighted, setIsHighlighted] = useState<boolean>(false)
   logger.debug('PageItemPrint', { item })
-  const onSizeChange = useCallback((_event: unknown, selectedSize: PrintSize) => { setSize(selectedSize) }, []) // eslint-disable-line @typescript-eslint/naming-convention
-  const onHighlightChange = useCallback((_event: unknown, isChecked: boolean) => { setIsHighlighted(isChecked) }, []) // eslint-disable-line @typescript-eslint/naming-convention
+  const onSizeChange = useCallback((_event: unknown, selectedSize: PrintSize) => {
+    setSize(selectedSize)
+  }, [])
+  const onHighlightChange = useCallback((_event: unknown, isChecked: boolean) => {
+    setIsHighlighted(isChecked)
+  }, [])
   const highlightSwitch = useMemo(() => <Switch checked={isHighlighted} onChange={onHighlightChange} />, [isHighlighted, onHighlightChange])
   const onPrint = useCallback(async () => {
     clearElementsForPrint()
@@ -48,11 +50,14 @@ export function PageItemPrint ({ ...properties }: Readonly<Record<string, unknow
     if (!result.ok) logger.error('pushItem failed', result)
   }, [item])
   // trigger print directly on page load
-  useSignalEffect(() => { void sleep(waitDelay).then(async () => onPrint()) })
+  useSignalEffect(() => {
+    // oxlint-disable-next-line promise/prefer-await-to-then
+    void sleep(waitDelay).then(() => onPrint())
+  })
 
   return (
     <>
-      <AppPageCard cardTitle="Print" icon={Print} pageCode="item-print" pageTitle={`${item.name} - Print`} >
+      <AppPageCard cardTitle="Print" icon={Print} pageCode="item-print" pageTitle={`${item.name} - Print`}>
         <div class="flex flex-col md:flex-row">
           <img alt={item.name} class="mx-auto max-h-64 w-1/3 object-contain" src={itemToImageUrl(item)} />
           <div class="flex flex-col gap-4 text-center md:items-start md:text-left">
@@ -62,15 +67,21 @@ export function PageItemPrint ({ ...properties }: Readonly<Record<string, unknow
               <AppBarcode isHighlighted={isHighlighted} item={item} size={size} />
               <div class="flex flex-col gap-3 md:ml-6 md:items-start">
                 <ToggleButtonGroup aria-label="Size" color="primary" exclusive onChange={onSizeChange} size="small" value={size}>
-                  {Object.keys(printSizes).map(one => <ToggleButton key={one} value={one}>{one}</ToggleButton>)}
+                  {Object.keys(printSizes).map(one => (
+                    <ToggleButton key={one} value={one}>
+                      {one}
+                    </ToggleButton>
+                  ))}
                 </ToggleButtonGroup>
                 <FormControlLabel control={highlightSwitch} label="Highlight zones" />
-                <Button onClick={onPrint} variant="contained">Print</Button>
+                <Button onClick={onPrint} variant="contained">
+                  Print
+                </Button>
               </div>
             </div>
           </div>
         </div>
-      </AppPageCard >
+      </AppPageCard>
       {isPrintMode && <AppBarcode item={item} size={size} />}
     </>
   )

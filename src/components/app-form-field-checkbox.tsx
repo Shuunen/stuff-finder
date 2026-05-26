@@ -9,17 +9,18 @@ type Properties = Readonly<{
   updateField: (field: string, target: EventTarget | null, updateField?: boolean) => void
 }>
 
-export function AppFormFieldCheckbox ({ field, id, updateField }: Properties) {
+export function AppFormFieldCheckbox({ field, id, updateField }: Properties) {
+  const onChange = useCallback(
+    (event: Event) => {
+      updateField(id, event.target)
+    },
+    [id, updateField],
+  )
 
-  const onChange = useCallback((event: Event) => { updateField(id, event.target) }, [id, updateField])
+  // oxlint-disable-next-line unicorn/consistent-function-scoping
+  function checkboxControl(isChecked: boolean | string) {
+    return <Checkbox checked={Boolean(isChecked)} />
+  }
 
-  function checkboxControl (isChecked: boolean | string) { return <Checkbox checked={Boolean(isChecked)} /> }
-
-  return <FormControlLabel
-    control={checkboxControl(field.value)}
-    id={id}
-    label={field.label}
-    onChange={onChange}
-    required={field.isRequired}
-  />
+  return <FormControlLabel control={checkboxControl(field.value)} id={id} label={field.label} onChange={onChange} required={field.isRequired} />
 }

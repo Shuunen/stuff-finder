@@ -31,10 +31,10 @@
 | 2024-04-07#2 |  20s  | 20.11 | romain nzxl win11 | override .js (standard)                             |
 | 2024-04-07#3 |  18s  | 20.11 | romain nzxl win11 | override .ts, .tsx / override .js                   |
 | 2024-04-07#4 |  16s  | 20.11 | romain nzxl win11 | override .ts / override .tsx / override .js         |
-| 2024-04-07#5 |  16s  | 20.11 | romain nzxl win11 | avoid "**/*" in files specifiers                    |
+| 2024-04-07#5 |  16s  | 20.11 | romain nzxl win11 | avoid "\*_/_" in files specifiers                   |
 | 2024-04-07#6 |  14s  | 20.11 | romain nzxl win11 | targeting only src directory instead of "."         |
 | 2024-04-07#7 |  14s  | 20.11 | romain nzxl win11 | targeting only src directory + no --ext .ts,.tsx    |
-| 2024-04-07#8 |  14s  | 20.11 | romain nzxl win11 | targeting . + --ext .ts,.tsx +  no ignorePatterns   |
+| 2024-04-07#8 |  14s  | 20.11 | romain nzxl win11 | targeting . + --ext .ts,.tsx + no ignorePatterns    |
 | 2024-04-07#9 |  14s  | 20.11 | romain nzxl win11 | targeting src + no ignorePatterns                   |
 | 2024-04-07#a |  15s  | 20.11 | romain nzxl win11 | .eslintrc.json => .eslintrc.cjs                     |
 | 2024-04-07#b |  16s  | 20.11 | romain nzxl win11 | use new @stylistic/eslint-plugin                    |
@@ -44,7 +44,7 @@
 | 2024-06-12#1 |  8s   | 20.14 | romain duc win11  | bigger codebase                                     |
 | 2024-12-15#1 |  7s   | 22.11 | romain duc win11  | nothing special                                     |
 
-Note 0 : with plugin:tailwindcss/recommended,  plugin:unicorn/all, hardcore, hardcore/react, hardcore/ts
+Note 0 : with plugin:tailwindcss/recommended, plugin:unicorn/all, hardcore, hardcore/react, hardcore/ts
 Note 1 : to show time taken by rules : `TIMING=1 npx eslint src`
 Note 2 : to view final config : `npx eslint --print-config src/utils/parsers.utils.ts > eslint.config.json`
 Note 3 : to list eslint scanned files : `DEBUG=eslint:cli-engine npx eslint src`
@@ -67,7 +67,7 @@ Note 3 : to list eslint scanned files : `DEBUG=eslint:cli-engine npx eslint src`
 | 2024-07-06#1 | 2.9s  | 20.10 | romain gram zorin | after eslint-plugin-shuunen migration |
 | 2024-07-06#2 | 2.9s  | 20.15 | romain gram zorin | 5 minors didn't changed anything      |
 
-Note 0 : with eslint-config-preact, plugin:tailwindcss/recommended,  plugin:unicorn/all, hardcore, hardcore/react, hardcore/ts
+Note 0 : with eslint-config-preact, plugin:tailwindcss/recommended, plugin:unicorn/all, hardcore, hardcore/react, hardcore/ts
 Note 1 : to show time taken by rules : `TIMING=1 npx eslint src/utils/parsers.utils.ts`
 Note 2 : to view final config : `npx eslint --print-config src/utils/parsers.utils.ts > eslint.config.json`
 Note 3 : to list eslint scanned files : `DEBUG=eslint:cli-engine npx eslint src/utils/parsers.utils.ts`

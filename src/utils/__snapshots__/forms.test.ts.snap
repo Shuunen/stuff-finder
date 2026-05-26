@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`createCheckboxField A with a link 1`] = `
+exports[`forms.utils > createCheckboxField A with a link 1`] = `
 {
   "columns": 1,
   "isRequired": false,
@@ -15,7 +15,7 @@ exports[`createCheckboxField A with a link 1`] = `
 }
 `;
 
-exports[`createSelectField A with a link 1`] = `
+exports[`forms.utils > createSelectField A with a link 1`] = `
 {
   "columns": 1,
   "isRequired": false,
@@ -31,7 +31,7 @@ exports[`createSelectField A with a link 1`] = `
 }
 `;
 
-exports[`validateForm A invalid field value 1`] = `
+exports[`forms.utils > validateForm A invalid field value 1`] = `
 {
   "errorMessage": "AppWrite database id is required",
   "fields": {
@@ -77,7 +77,7 @@ exports[`validateForm A invalid field value 1`] = `
 }
 `;
 
-exports[`validateForm B valid form 1`] = `
+exports[`forms.utils > validateForm B valid form 1`] = `
 {
   "errorMessage": "",
   "fields": {
@@ -123,7 +123,7 @@ exports[`validateForm B valid form 1`] = `
 }
 `;
 
-exports[`validateForm C empty cases 1`] = `
+exports[`forms.utils > validateForm C empty cases 1`] = `
 {
   "errorMessage": "",
   "fields": {

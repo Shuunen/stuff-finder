@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`addSuggestionsFromAliEx A with working get 1`] = `
+exports[`suggestions.utils > addSuggestionsFromAliEx A with working get 1`] = `
 {
   "$id": [],
   "barcode": [],
@@ -27,7 +27,7 @@ exports[`addSuggestionsFromAliEx A with working get 1`] = `
 }
 `;
 
-exports[`addSuggestionsFromAngbo A with working get 1`] = `
+exports[`suggestions.utils > addSuggestionsFromAngbo A with working get 1`] = `
 {
   "$id": [],
   "barcode": [],
@@ -54,7 +54,7 @@ exports[`addSuggestionsFromAngbo A with working get 1`] = `
 }
 `;
 
-exports[`addSuggestionsFromCampo B with working get 1`] = `
+exports[`suggestions.utils > addSuggestionsFromCampo B with working get 1`] = `
 {
   "$id": [],
   "barcode": [],
@@ -83,7 +83,7 @@ exports[`addSuggestionsFromCampo B with working get 1`] = `
 }
 `;
 
-exports[`addSuggestionsFromDeyes A with working get 1`] = `
+exports[`suggestions.utils > addSuggestionsFromDeyes A with working get 1`] = `
 {
   "$id": [],
   "barcode": [],

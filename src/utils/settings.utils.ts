@@ -11,4 +11,3 @@ export const settingsForm = {
   isTouched: false,
   isValid: false,
 } satisfies Form
-

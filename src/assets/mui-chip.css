@@ -3,7 +3,7 @@
 }
 
 .MuiChip-root.reverse svg {
-  @apply ml-0 mr-1.5;
+  @apply mr-1.5 ml-0;
 }
 .MuiChip-root.reverse svg + .MuiChip-label {
   @apply pr-1;

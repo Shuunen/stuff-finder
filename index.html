@@ -1,27 +1,23 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <title>Stuff Finder</title>
+    <meta content="Sorting things is pointless if you can't find them afterwards :D" name="description" />
+    <meta content="#209CEE" name="theme-color" />
+    <meta content="" name="unique-mark" />
+    <link href="/assets/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180" />
+    <link href="/assets/favicon-32x32.png" rel="icon" sizes="32x32" type="image/png" />
+    <link href="/assets/favicon-16x16.png" rel="icon" sizes="16x16" type="image/png" />
+    <link href="/assets/site.webmanifest" rel="manifest" />
+  </head>
 
-<head>
-  <meta charset="UTF-8">
-  <meta content="width=device-width, initial-scale=1" name="viewport">
-  <title>Stuff Finder</title>
-  <meta content="Sorting things is pointless if you can't find them afterwards :D" name="description">
-  <meta content="#209CEE" name="theme-color" />
-  <meta content="" name="unique-mark">
-  <link href="/assets/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180">
-  <link href="/assets/favicon-32x32.png" rel="icon" sizes="32x32" type="image/png">
-  <link href="/assets/favicon-16x16.png" rel="icon" sizes="16x16" type="image/png">
-  <link href="/assets/site.webmanifest" rel="manifest">
-</head>
+  <body class="flex h-screen flex-col overflow-hidden bg-linear-to-tr from-purple-200 align-middle">
+    <div class="flex max-h-full w-full grow flex-col items-center justify-center" id="app"></div>
 
-<body class="flex h-screen flex-col bg-linear-to-tr from-purple-200 align-middle overflow-hidden">
+    <span class="absolute bottom-0 w-full pb-4 text-center font-mono text-sm opacity-30 print:hidden" id="unique-mark"></span>
 
-  <div class="max-h-full flex flex-col justify-center items-center grow w-full" id="app"></div>
-
-  <span class="absolute w-full bottom-0 text-center text-sm font-mono opacity-30 pb-4 print:hidden" id="unique-mark"></span>
-
-  <script src="/src/main.tsx" type="module"></script>
-
-</body>
-
+    <script src="/src/main.tsx" type="module"></script>
+  </body>
 </html>

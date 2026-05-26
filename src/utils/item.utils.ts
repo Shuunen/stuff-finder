@@ -1,4 +1,3 @@
-/* eslint-disable jsdoc/require-jsdoc */
 import { Result, capitalize, clone, isTestEnvironment, nbMsInMinute, objectSum, readableTimeAgo } from 'shuutils'
 import { type CommonLists, itemBoxes } from '../constants'
 import type { Item } from '../types/item.types'
@@ -9,47 +8,46 @@ import { state } from './state.utils'
 import { coolAscii } from './strings.utils'
 
 export const emptyItem = {
-  '$id': '',
-  'barcode': '',
-  'box': '',
-  'brand': '',
-  'details': '',
-  'drawer': -1,
-  'isPrinted': false,
-  'name': '',
-  'photos': [],
-  'price': -1,
-  'reference': '',
-  'status': 'bought',
+  $id: '',
+  barcode: '',
+  box: '',
+  brand: '',
+  details: '',
+  drawer: -1,
+  isPrinted: false,
+  name: '',
+  photos: [],
+  price: -1,
+  reference: '',
+  status: 'bought',
 } satisfies Item
 
 const boxRooms = {
-  'bureau': ['E', 'P', 'Q', 'T', 'Z'] satisfies string[],
-  'entrée': ['A', 'B', 'D', 'H', 'M', 'O', 'W', 'R', 'V'] satisfies string[],
+  bureau: ['E', 'P', 'Q', 'T', 'Z'] satisfies string[],
+  entrée: ['A', 'B', 'D', 'H', 'M', 'O', 'W', 'R', 'V'] satisfies string[],
   'salle de bain': ['S'] satisfies string[],
-  'salon': ['G', 'C', 'X', 'N'] satisfies string[],
+  salon: ['G', 'C', 'X', 'N'] satisfies string[],
 } as const
 
-export function itemBoxToRoom (box: Item['box']) {
-  const letter = box[0]
+export function itemBoxToRoom(box: Item['box']) {
+  const [letter] = box
   if (letter === undefined) return undefined
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-unsafe-type-assertion
   for (const [location, boxes] of Object.entries(boxRooms)) if (boxes.includes(letter)) return location as keyof typeof boxRooms
   return undefined
 }
 
-export function statusStringToStatus (status: string) {
+export function statusStringToStatus(status: string) {
   if (status === 'lost') return 'lost' satisfies Item['status']
   if (status === 'to-give') return 'to-give' satisfies Item['status']
   if (status === 'for-sell') return 'for-sell' satisfies Item['status']
   return 'bought' satisfies Item['status']
 }
 
-function optionsFor (type: keyof CommonLists) {
-  return state.lists[type].map((value) => ({ label: String(value), value: String(value) }))
+function optionsFor(type: keyof CommonLists) {
+  return state.lists[type].map(value => ({ label: value, value }))
 }
 
-function deleteItemLocally (item: Item, currentState = state) {
+function deleteItemLocally(item: Item, currentState = state) {
   const items = clone(currentState.items)
   const index = items.findIndex(current => current.$id === item.$id)
   if (index === -1) return Result.error('item not found in state')
@@ -58,27 +56,28 @@ function deleteItemLocally (item: Item, currentState = state) {
   return Result.ok('item deleted locally')
 }
 
-function updateItemLocally (item: Item, currentState = state) {
+function updateItemLocally(item: Item, currentState = state) {
   const items = clone(currentState.items)
   const index = items.findIndex(one => one.$id === item.$id)
-  if (index === -1) items.push(item) // new item with id
+  if (index === -1)
+    items.push(item) // new item with id
   else items[index] = item // update existing item
   currentState.items = items
 }
 
-export async function addItem (item: Item, currentState = state) {
+export async function addItem(item: Item, currentState = state) {
   const result = await addItemRemotely(item, currentState)
   if (result.ok) updateItemLocally({ ...result.value }, currentState)
   return result
 }
 
-export async function updateItem (item: Item, currentState = state) {
+export async function updateItem(item: Item, currentState = state) {
   const result = await updateItemRemotely(item, currentState)
   if (result.ok) updateItemLocally({ ...result.value }, currentState)
   return result
 }
 
-export async function deleteItem (item: Item, currentState = state) {
+export async function deleteItem(item: Item, currentState = state) {
   const remote = await deleteItemRemotely(item, currentState)
   if (remote.ok) {
     const local = deleteItemLocally(item, currentState)
@@ -90,7 +89,8 @@ export async function deleteItem (item: Item, currentState = state) {
 export const itemForm = {
   columns: 10,
   errorMessage: '',
-  fields: { /* eslint-disable perfectionist/sort-objects */
+  // oxlint-disable-next-line sort-keys
+  fields: {
     name: createTextField({ columns: 5, isRequired: true, label: 'Name' }),
     brand: createTextField({ columns: 3, label: 'Brand' }),
     price: createTextField({ columns: 2, label: 'Price', regex: /^\d{1,5}$/u, unit: '€' }),
@@ -104,48 +104,46 @@ export const itemForm = {
     drawer: createSelectField({ columns: 2, label: 'Drawer', options: optionsFor('drawers'), regex: /\d/u }),
     // hidden
     barcode: createTextField({ isVisible: false, label: 'Barcode', maxLength: 30 }),
-    isPrinted: createCheckboxField({ label: 'Printed', isVisible: false }),
+    isPrinted: createCheckboxField({ isVisible: false, label: 'Printed' }),
     id: createTextField({ isVisible: false, label: 'Id' }),
-  }, /* eslint-enable perfectionist/sort-objects */
+  },
   isTouched: false,
   isValid: false,
 } as const satisfies Form
 
-export function drawerStringToDrawer (drawer: string) {
+export function drawerStringToDrawer(drawer: string) {
   if (drawer === '') return -1
   const number = Number.parseInt(drawer, 10)
   if (Number.isNaN(number)) return -1
   return number
 }
 
-export function boxStringToBox (box: string) {
+export function boxStringToBox(box: string) {
   // @ts-expect-error it's ok
   if (!itemBoxes.includes(box)) return ''
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-unsafe-type-assertion
   return box as Item['box']
 }
 
-export function formToItem (form: typeof itemForm) {
+export function formToItem(form: typeof itemForm) {
   const { barcode, box, brand, details, drawer, id, isPrinted, name, photo, price, reference, status } = form.fields
   return {
     ...emptyItem,
-    '$id': id.value,
-    'barcode': barcode.value,
-    'box': boxStringToBox(box.value),
-    'brand': brand.value,
-    'details': details.value,
-    'drawer': drawerStringToDrawer(drawer.value),
-    'isPrinted': isPrinted.value,
-    'name': name.value,
-    'photos': photo.value === '' ? [] : [photo.value],
-    'price': price.value === '' ? -1 : Number.parseFloat(price.value),
-    'reference': reference.value,
-    'status': statusStringToStatus(status.value),
+    $id: id.value,
+    barcode: barcode.value,
+    box: boxStringToBox(box.value),
+    brand: brand.value,
+    details: details.value,
+    drawer: drawerStringToDrawer(drawer.value),
+    isPrinted: isPrinted.value,
+    name: name.value,
+    photos: photo.value === '' ? [] : [photo.value],
+    price: price.value === '' ? -1 : Number.parseFloat(price.value),
+    reference: reference.value,
+    status: statusStringToStatus(status.value),
   } satisfies Item
 }
 
-// eslint-disable-next-line max-statements
-export function itemToForm (item?: Item) {
+export function itemToForm(item?: Item) {
   if (item === undefined) return itemForm
   const form = clone(itemForm)
   form.fields.id.value = item.$id
@@ -169,21 +167,21 @@ export function itemToForm (item?: Item) {
  * @returns The location string like 'Salon B 2'.
  */
 
-export function itemToLocation (input: Item) {
+export function itemToLocation(input: Item) {
   const box = (input.box.trim()[0] ?? '').toUpperCase()
   const room = capitalize(itemBoxToRoom(input.box) ?? '')
   if (box.length === 0) return room
-  const drawer = (input.drawer < 0) ? '' : `‧${input.drawer}` // '‧2' or ''
-  const details = input.box.split(' (')[1] // 'brico & sport)'
+  const drawer = input.drawer < 0 ? '' : `‧${input.drawer}` // '‧2' or ''
+  const [, details] = input.box.split(' (') // 'brico & sport)'
   const infos = details === undefined ? '' : ` (${details}` // ' (brico & sport)'
-  return `${room}${room.length > 0 ? ' ' : ''}${box}${drawer} ${infos}`.trim().replace(/ {2,}/gu, ' ') // 'Salon G‧2 (brico & sport)' or 'Salon G‧2'
+  return `${room}${room.length > 0 ? ' ' : ''}${box}${drawer} ${infos}`.trim().replaceAll(/ {2,}/gu, ' ') // 'Salon G‧2 (brico & sport)' or 'Salon G‧2'
 }
 
-export function areItemsEquivalent (itemA: Item, itemB: Item) {
+export function areItemsEquivalent(itemA: Item, itemB: Item) {
   return objectSum(removeAppWriteFields(itemA)) === objectSum(removeAppWriteFields(itemB))
 }
 
-export function isDataOlderThan (milliseconds: number, itemsTimestamp = state.itemsTimestamp) {
+export function isDataOlderThan(milliseconds: number, itemsTimestamp = state.itemsTimestamp) {
   if (!itemsTimestamp) return true
   const age = Date.now() - itemsTimestamp
   const minutes = Math.round(age / nbMsInMinute)
@@ -192,11 +190,11 @@ export function isDataOlderThan (milliseconds: number, itemsTimestamp = state.it
   return age >= milliseconds
 }
 
-export async function getItems (items = state.items, itemsTimestamp = state.itemsTimestamp) {
+export async function getItems(items = state.items, itemsTimestamp = state.itemsTimestamp) {
   if (items.length > 0 && !isDataOlderThan(nbMsInMinute, itemsTimestamp)) return Result.ok(`tasks are fresh (${readableTimeAgo(Date.now() - itemsTimestamp)})`)
   state.status = 'loading'
   const result = await getItemsRemotely()
   if (!result.ok) return result
-  state.items = result.value // eslint-disable-line require-atomic-updates
+  state.items = result.value
   return Result.ok(`${result.value.length} items loaded ${coolAscii()}`)
 }

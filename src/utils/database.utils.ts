@@ -1,11 +1,10 @@
-/* eslint-disable no-await-in-loop */
+// oxlint-disable no-await-in-loop
 import { Client, Databases, type Models, Query, Storage } from 'appwrite'
 import { Result, dateIso10, storage as lsStorage, nbHueMax, nbPercentMax, nbSpacesIndent, sleep, slugify, toastSuccess } from 'shuutils'
 import { safeParse } from 'valibot'
 import { defaultImage, uuidMaxLength } from '../constants'
 import type { Item, ItemModel } from '../types/item.types'
 import { logger } from './logger.utils'
-/* eslint-disable jsdoc/require-jsdoc */
 import { itemModelSchema, itemSchema, itemsSchema } from './parsers.utils'
 import { state } from './state.utils'
 import { normalizePhotoUrl } from './url.utils'
@@ -16,24 +15,24 @@ const storage = new Storage(client)
 const projectId = 'stuff-finder'
 client.setProject(projectId)
 
-export function itemIdToImageUrl (id: Item['$id']) {
+export function itemIdToImageUrl(id: Item['$id']) {
   return `https://cloud.appwrite.io/v1/storage/buckets/${state.credentials.bucketId}/files/${id}/view?project=${projectId}&mode=admin`
 }
 
 const appWritePhotoIdRegex = /cloud\.appwrite\.io\/v1\/storage\/buckets\/\w+\/files\/(?<id>[^/]+)\/view/u
 
-export function getAppWriteIdFromUrl (url: string) {
-  const { id } = (appWritePhotoIdRegex.exec(url))?.groups ?? {}
+export function getAppWriteIdFromUrl(url: string) {
+  const { id } = appWritePhotoIdRegex.exec(url)?.groups ?? {}
   return id
 }
 
 const urlRegex = /https?:\/\/\S+/u
 
-function isUrl (text: string) {
+function isUrl(text: string) {
   return urlRegex.test(text)
 }
 
-export function itemPhotoToImageUrl (photo?: string) {
+export function itemPhotoToImageUrl(photo?: string) {
   logger.debug('itemPhotoToImageUrl', { photo })
   if (photo === undefined || photo === '') return defaultImage
   if (!isUrl(photo)) return itemIdToImageUrl(photo)
@@ -42,12 +41,12 @@ export function itemPhotoToImageUrl (photo?: string) {
   return itemIdToImageUrl(id) // bucket url
 }
 
-export function itemToImageUrl (item?: Item) {
+export function itemToImageUrl(item?: Item) {
   const photo = item?.photos[0]
   return itemPhotoToImageUrl(photo)
 }
 
-export function fileTypeToExtension (type: string) {
+export function fileTypeToExtension(type: string) {
   if (type === 'image/jpeg') return Result.ok('jpg')
   if (type === 'image/svg+xml') return Result.ok('svg')
   if (type === 'image/avif') return Result.ok('avif')
@@ -55,22 +54,21 @@ export function fileTypeToExtension (type: string) {
   return Result.error(`un-wanted file type : ${type}`)
 }
 
-export async function deleteImageRemotely (id: string) {
+export async function deleteImageRemotely(id: string) {
   const result = await Result.trySafe(storage.deleteFile(state.credentials.bucketId, id))
   if (result.ok) logger.success(`image "${id}" deleted successfully`)
   else logger.error(`image "${id}" deletion failed`, result.error)
   return result
 }
 
-// eslint-disable-next-line max-statements
-export async function uploadImage (fileName: string, url: string) {
-  const blob = await fetch(url).then(async response => response.blob())
+export async function uploadImage(fileName: string, url: string) {
+  const blob = await fetch(url).then(response => response.blob())
   const extension = fileTypeToExtension(blob.type)
   if (!extension.ok) return Result.ok(url)
   const hasExtension = fileName.includes('.')
   const finalFileName = hasExtension ? fileName : `${fileName}.${extension.value}`
   const file = new File([blob], finalFileName, { type: blob.type })
-  const id = slugify(finalFileName.replace(/[_.]/gu, '-')).slice(0, uuidMaxLength)
+  const id = slugify(finalFileName.replaceAll(/[_.]/gu, '-')).slice(0, uuidMaxLength)
   let upload = await Result.trySafe(storage.createFile(state.credentials.bucketId, id, file))
   if (!upload.ok) {
     logger.error('uploadImage failed', upload.error)
@@ -81,7 +79,7 @@ export async function uploadImage (fileName: string, url: string) {
   return Result.ok(upload.value.$id)
 }
 
-export function downloadBlob (blob: Blob, fileName: string) {
+export function downloadBlob(blob: Blob, fileName: string) {
   const link = document.createElement('a')
   link.href = URL.createObjectURL(blob)
   link.download = fileName
@@ -92,20 +90,19 @@ export function downloadBlob (blob: Blob, fileName: string) {
   toastSuccess('Download started')
 }
 
-export function downloadObject (data: Record<string, unknown> | unknown[], fileName: string) {
+export function downloadObject(data: Record<string, unknown> | unknown[], fileName: string) {
   const json = JSON.stringify(data, undefined, nbSpacesIndent)
   const blob = new Blob([json], { type: 'application/json' })
   downloadBlob(blob, fileName)
 }
 
-export async function downloadUrl (url: string, fileName: string) {
+export async function downloadUrl(url: string, fileName: string) {
   const result = await fetch(url)
   const blob = await result.blob()
   downloadBlob(blob, fileName)
 }
 
-export async function listImages (bucketId = state.credentials.bucketId) {
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+export async function listImages(bucketId = state.credentials.bucketId) {
   const images = [] as Models.File[]
   let offset = 0
   let shouldCheckNextPage = true
@@ -121,8 +118,7 @@ export async function listImages (bucketId = state.credentials.bucketId) {
   return Result.ok(images)
 }
 
-// eslint-disable-next-line max-statements
-export async function downloadImages (bucketId = state.credentials.bucketId) {
+export async function downloadImages(bucketId = state.credentials.bucketId) {
   const result = await listImages(bucketId)
   if (!result.ok) return result
   const downloadedImages = lsStorage.get<string[]>('downloadedImages', [])
@@ -138,8 +134,7 @@ export async function downloadImages (bucketId = state.credentials.bucketId) {
   return Result.ok('images downloaded successfully')
 }
 
-// eslint-disable-next-line max-statements
-export async function getItemsRemotely () {
+export async function getItemsRemotely() {
   const items: ItemModel[] = []
   let offset = 0
   let shouldCheckNextPage = true
@@ -158,7 +153,7 @@ export async function getItemsRemotely () {
   return Result.ok(result.output)
 }
 
-export async function downloadItems () {
+export async function downloadItems() {
   const result = await getItemsRemotely()
   /* c8 ignore next */
   if (!result.ok) return result
@@ -166,20 +161,18 @@ export async function downloadItems () {
   return Result.ok('items downloaded successfully')
 }
 
-export function getItemId (item: Item) {
+export function getItemId(item: Item) {
   const id = slugify(item.reference || item.name).slice(0, uuidMaxLength)
   if (id.length === 0) return Result.error(`item id is empty in ${JSON.stringify(item)}`)
   return Result.ok(id)
 }
 
-export function removeAppWriteFields (item: Record<string, unknown>) {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { $id, ...rest } = structuredClone(item)
+export function removeAppWriteFields(item: Record<string, unknown>) {
+  const { $id: _id, ...rest } = structuredClone(item)
   return rest
 }
 
-// eslint-disable-next-line max-statements
-export async function uploadPhotosIfNeeded (item: Item) {
+export async function uploadPhotosIfNeeded(item: Item) {
   const data = structuredClone(item)
   const id = getItemId(data)
   if (!id.ok) return Result.error(id.error)
@@ -196,15 +189,14 @@ export async function uploadPhotosIfNeeded (item: Item) {
   return Result.ok(data)
 }
 
-export function itemToAppWriteModel (item: Item) {
+export function itemToAppWriteModel(item: Item) {
   const data = removeAppWriteFields(item)
   const result = safeParse(itemModelSchema, data)
   if (!result.success) return Result.error(result.issues.map(issue => issue.message).join(', '))
   return Result.ok(result.output)
 }
 
-// eslint-disable-next-line max-statements
-export async function addItemRemotely (item: Item, currentState = state) {
+export async function addItemRemotely(item: Item, currentState = state) {
   const data = await uploadPhotosIfNeeded(item)
   if (!data.ok) return Result.error(data.error)
   const id = getItemId(data.value)
@@ -220,18 +212,19 @@ export async function addItemRemotely (item: Item, currentState = state) {
   return Result.ok(parse.output)
 }
 
-export async function deleteItemRemotely (item: Item, currentState = state) {
+export async function deleteItemRemotely(item: Item, currentState = state) {
   const { collectionId, databaseId } = currentState.credentials
   const result = await Result.trySafe(database.deleteDocument(databaseId, collectionId, item.$id))
-  if (result.ok) for (const photo of item.photos) {
-    if (isUrl(photo)) continue
-    await deleteImageRemotely(photo)
-  }
+  if (result.ok)
+    for (const photo of item.photos) {
+      if (isUrl(photo)) continue
+      // oxlint-disable-next-line no-await-in-loop
+      await deleteImageRemotely(photo)
+    }
   return result
 }
 
-// eslint-disable-next-line max-statements
-export async function updateItemRemotely (item: Item, currentState = state) {
+export async function updateItemRemotely(item: Item, currentState = state) {
   const data = await uploadPhotosIfNeeded(item)
   if (!data.ok) return Result.error(data.error)
   const { collectionId, databaseId } = currentState.credentials

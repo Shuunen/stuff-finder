@@ -13,7 +13,7 @@ import { storage } from './storage.utils'
  * Handle the status change
  * @param status the new status
  */
-function onStatusChangeSync (status: AppStatus) {
+function onStatusChangeSync(status: AppStatus) {
   if (isTestEnvironment()) return
   if (status === 'settings-required') route('/settings')
   if (status === 'ready' && document.location.pathname.includes('/settings')) route('/')
@@ -21,7 +21,7 @@ function onStatusChangeSync (status: AppStatus) {
 
 const laptopWidth = 1500
 
-const defaultDisplay: Display = (isBrowserEnvironment() && globalThis.screen.width < laptopWidth) ? 'list' : 'card'
+const defaultDisplay: Display = isBrowserEnvironment() && globalThis.screen.width < laptopWidth ? 'list' : 'card'
 
 /* c8 ignore stop */
 
@@ -29,7 +29,6 @@ export const { state, watchState } = createState(
   {
     credentials: defaultCredentials,
     display: defaultDisplay,
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     items: [] as Item[],
     /** timestamp of the last time items were fetched, in milliseconds */
     itemsTimestamp: 0,
@@ -47,6 +46,8 @@ const statusDelay = 300
 
 const onStatusChange = debounce(onStatusChangeSync, statusDelay)
 
-watchState('status', () => { void onStatusChange(state.status) })
+watchState('status', () => {
+  void onStatusChange(state.status)
+})
 
 export type State = typeof state

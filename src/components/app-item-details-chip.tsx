@@ -16,21 +16,27 @@ type Properties = Readonly<{
 
 const chipsStyle = { height: 28, paddingTop: 0.3 }
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
-export function AppItemDetailsChip ({ color = 'default', icon: Icon, label, link, tooltip }: Properties) {
+export function AppItemDetailsChip({ color = 'default', icon: Icon, label, link, tooltip }: Properties) {
+  const onChipClick = useCallback(
+    async (event: MouseEvent) => {
+      event.stopPropagation()
+      logger.debug('onChipClick', { event })
+      if (link !== undefined) {
+        route(link)
+        return
+      }
+      const target = event.currentTarget as HTMLElement
+      await copyToClipboard(target.textContent ?? '')
+      logger.showSuccess(`${tooltip.split(',')[0]} copied to clipboard`)
+    },
+    [link, tooltip],
+  )
 
-  const onChipClick = useCallback(async (event: MouseEvent) => {
-    event.stopPropagation()
-    logger.debug('onChipClick', { event })
-    if (link !== undefined) { route(link); return }
-    const target = event.currentTarget as HTMLElement // eslint-disable-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-unsafe-type-assertion
-    await copyToClipboard(target.textContent ?? '')
-    logger.showSuccess(`${tooltip.split(',')[0]} copied to clipboard`)
-  }, [link, tooltip])
+  const attributes: Record<string, unknown> = Icon === undefined ? {} : { className: 'reverse', icon: <Icon /> }
 
-  const attributes: Record<string, unknown> = Icon === undefined ? {} : { className: 'reverse', icon: <Icon /> } // eslint-disable-line unicorn/no-keyword-prefix
-
-  return <Tooltip data-component="item-details-chip" title={tooltip}>
-    <Chip {...attributes} color={color} label={label} onClick={onChipClick} sx={chipsStyle} variant="outlined" />
-  </Tooltip>
+  return (
+    <Tooltip data-component="item-details-chip" title={tooltip}>
+      <Chip {...attributes} color={color} label={label} onClick={onChipClick} sx={chipsStyle} variant="outlined" />
+    </Tooltip>
+  )
 }

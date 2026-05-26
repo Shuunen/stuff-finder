@@ -8,15 +8,17 @@ import { state } from '../utils/state.utils'
 // https://fusejs.io/
 const fuseOptions = {
   distance: 200, // see the tip at https://fusejs.io/concepts/scoring-theory.html#scoring-theory
-  ignoreLocation: true, // eslint-disable-line @typescript-eslint/naming-convention
+  ignoreLocation: true,
   keys: [
     {
       name: 'name',
       weight: 4,
-    }, {
+    },
+    {
       name: 'brand',
       weight: 2,
-    }, {
+    },
+    {
       name: 'details',
       weight: 4,
     },
@@ -31,13 +33,16 @@ export const maxNameLength = 20
  * @param input the input search string to look for
  * @returns the header and the results
  */
-export async function search (input: string) {
-  logger.info('search, input', { input }) // eslint-disable-next-line @typescript-eslint/naming-convention
+export async function search(input: string) {
+  logger.info('search, input', { input })
   const { default: Fuse } = await import('fuse.js/basic')
   const fuse = new Fuse(state.items, fuseOptions)
   const result = state.items.find(item => item.reference === input || item.barcode === input)
-  if (result !== undefined) { route(`/item/details/${result.$id}/single`); return { header: '', results: [] } }
-  const results = fuse.search(sanitize(input)).map((item) => item.item)
+  if (result !== undefined) {
+    route(`/item/details/${result.$id}/single`)
+    return { header: '', results: [] }
+  }
+  const results = fuse.search(sanitize(input)).map(item => item.item)
   const header = `${results.length} results found for “${sanitize(input)}”`
   return { header, results }
 }

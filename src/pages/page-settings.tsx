@@ -6,7 +6,7 @@ import { logger } from '../utils/logger.utils'
 import { settingsForm } from '../utils/settings.utils'
 import { state } from '../utils/state.utils'
 
-export function PageSettings ({ ...properties }: Readonly<Record<string, unknown>>) {
+export function PageSettings({ ...properties }: Readonly<Record<string, unknown>>) {
   logger.debug('PageSettings', { properties })
   type Form = typeof settingsForm
   const onSubmit = useCallback((form: Form) => {

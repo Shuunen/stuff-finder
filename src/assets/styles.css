@@ -28,7 +28,7 @@ html {
 }
 
 ::-webkit-scrollbar {
-  @apply w-2 h-2;
+  @apply h-2 w-2;
 }
 
 ::-webkit-scrollbar-track {
@@ -36,11 +36,11 @@ html {
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-purple-600 border border-current;
+  @apply border border-current bg-purple-600;
 }
 
 h1 {
-  @apply text-4xl text-purple-700 font-medium;
+  @apply text-4xl font-medium text-purple-700;
 }
 
 h2 {
@@ -48,7 +48,7 @@ h2 {
 }
 
 h3 {
-  @apply text-5xl sm:text-7xl md:text-[5rem] relative indent-6 md:indent-8 translate-y-10 md:translate-y-12 z-0 tracking-[1rem] sm:tracking-[1.5rem] md:tracking-[2rem] font-black text-transparent opacity-30 uppercase;
+  @apply relative z-0 translate-y-10 indent-6 text-5xl font-black tracking-[1rem] text-transparent uppercase opacity-30 sm:text-7xl sm:tracking-[1.5rem] md:translate-y-12 md:indent-8 md:text-[5rem] md:tracking-[2rem];
   -webkit-text-stroke-width: 2px;
   -webkit-text-stroke-color: grey;
 }

@@ -1,3 +1,4 @@
+// oxlint-disable unicorn/no-null promise/always-return promise/prefer-await-to-then promise/prefer-await-to-callbacks
 import QrCodeScannerIcon from '@mui/icons-material/QrCodeScanner'
 import { Alert, Collapse } from '@mui/material'
 import Skeleton from '@mui/material/Skeleton'
@@ -16,7 +17,7 @@ import { state } from '../utils/state.utils'
 const reader = new BrowserMultiFormatReader()
 const waitDelay = 200
 
-function onDecodeSuccess (result: Result) {
+function onDecodeSuccess(result: Result) {
   const code = result.getText()
   logger.info('found qr or barcode :', code)
   route(`/search/${code}`)
@@ -28,38 +29,52 @@ function onDecodeSuccess (result: Result) {
  * @param error the error that occurred if any
  * @returns {void} nothing
  */
-async function onDecode (result: null | Result, error?: Exception) {
-  if (error && !(error instanceof notFoundException)) { logger.showError(error.message, error); return }
+async function onDecode(result: null | Result, error?: Exception) {
+  if (error && !(error instanceof notFoundException)) {
+    logger.showError(error.message, error)
+    return
+  }
   if (result === null) return // if no result was found, do nothing
   state.sound = 'barcode'
   await sleep(waitDelay)
   onDecodeSuccess(result)
 }
 
-export function PageScan ({ ...properties }: Readonly<Record<string, unknown>>) {
-
+// oxlint-disable-next-line max-lines-per-function
+export function PageScan({ ...properties }: Readonly<Record<string, unknown>>) {
   logger.debug('PageScan', { properties })
   const videoReference = useRef<HTMLVideoElement>(null)
   const video = signal(videoReference)
   const [status, setStatus] = useState<'error' | 'loading' | 'need-perm' | 'ready'>('loading')
 
-  useSignalEffect(useCallback(() => {
-    // this run once, when the component is mounted
-    if (video.value.current === null) { logger.showError('video element is null'); return () => ({}) }
-    logger.debug('starting video stream decoding...')
-    state.sound = 'start'
-    void reader.decodeFromVideoDevice(null, video.value.current, (result, error) => { /* eslint-disable-line unicorn/no-null */
-      if (status === 'loading') void sleep(waitDelay).then(() => { setStatus('ready') })
-      void onDecode(result, error)
-    })
-      .catch((error: unknown) => {
-        const message = error instanceof Error ? error.message.toLowerCase() : String(error).toLowerCase()
-        state.sound = 'error'
-        logger.error('error starting video stream decoding :', error)
-        setStatus(message.includes('permission') ? 'need-perm' : 'error')
-      })
-    return () => { reader.reset() } // this run once, when the component is about to unmount
-  }, [video.value, status]))
+  useSignalEffect(
+    useCallback(() => {
+      // this run once, when the component is mounted
+      if (video.value.current === null) {
+        logger.showError('video element is null')
+        return () => ({})
+      }
+      logger.debug('starting video stream decoding...')
+      state.sound = 'start'
+      void reader
+        .decodeFromVideoDevice(null, video.value.current, (result, error) => {
+          if (status === 'loading')
+            void sleep(waitDelay).then(() => {
+              setStatus('ready')
+            })
+          void onDecode(result, error)
+        })
+        .catch((error: unknown) => {
+          const message = error instanceof Error ? error.message.toLowerCase() : String(error).toLowerCase()
+          state.sound = 'error'
+          logger.error('error starting video stream decoding :', error)
+          setStatus(message.includes('permission') ? 'need-perm' : 'error')
+        })
+      return () => {
+        reader.reset()
+      } // this run once, when the component is about to unmount
+    }, [video.value, status]),
+  )
 
   return (
     <AppPageCard cardTitle="Scan" icon={QrCodeScannerIcon} pageCode="scan" pageTitle="Scan QR Code or Barcode">

@@ -1,11 +1,9 @@
-
-interface WrapApiResponse {
+type WrapApiResponse = {
   messages: string[]
-  // eslint-disable-next-line @typescript-eslint/naming-convention
   success: boolean
 }
 
-export interface WrapApiDeyesResponse extends WrapApiResponse {
+export type WrapApiDeyesResponse = {
   data: {
     brand: { name: string }
     description: string
@@ -14,9 +12,9 @@ export interface WrapApiDeyesResponse extends WrapApiResponse {
     name: string
     offers: { price: string }
   }
-}
+} & WrapApiResponse
 
-export interface WrapApiAngboResponse extends WrapApiResponse {
+export type WrapApiAngboResponse = {
   data: {
     asin: string
     photo: string
@@ -24,9 +22,9 @@ export interface WrapApiAngboResponse extends WrapApiResponse {
     title: string
     url: string
   }
-}
+} & WrapApiResponse
 
-export interface WrapApiCampoResponse extends WrapApiResponse {
+export type WrapApiCampoResponse = {
   data: {
     items: {
       brand: string
@@ -38,9 +36,9 @@ export interface WrapApiCampoResponse extends WrapApiResponse {
       uuid: string
     }[]
   }
-}
+} & WrapApiResponse
 
-export interface WrapApiAliExResponse extends WrapApiResponse {
+export type WrapApiAliExResponse = {
   data: {
     items: {
       photo: string
@@ -51,4 +49,4 @@ export interface WrapApiAliExResponse extends WrapApiResponse {
       title: string
     }[]
   }
-}
+} & WrapApiResponse

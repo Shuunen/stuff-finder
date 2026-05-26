@@ -1,4 +1,26 @@
-export const itemBoxes = ['A (apple)', 'B (usb & audio)', 'C (couteau)', 'D (doll)', 'E (east)', 'F (périphériques)', 'G (brico & sport)', 'H (hardware)', 'L (lemon)', 'M (malettes)', 'N (noodles)', 'O (orange)', 'P (plan de travail)', 'Q (sock)', 'R (récup)', 'R (red)', 'S (sdb)', 'T (tour bureau)', 'V (violet)', 'X (commode malm)', 'Z (poches zip)'] as const
+export const itemBoxes = [
+  'A (apple)',
+  'B (usb & audio)',
+  'C (couteau)',
+  'D (doll)',
+  'E (east)',
+  'F (périphériques)',
+  'G (brico & sport)',
+  'H (hardware)',
+  'L (lemon)',
+  'M (malettes)',
+  'N (noodles)',
+  'O (orange)',
+  'P (plan de travail)',
+  'Q (sock)',
+  'R (récup)',
+  'R (red)',
+  'S (sdb)',
+  'T (tour bureau)',
+  'V (violet)',
+  'X (commode malm)',
+  'Z (poches zip)',
+] as const
 
 export const itemStatus = ['bought', 'for-sell', 'lost', 'to-give'] as const
 

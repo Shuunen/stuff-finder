@@ -1,18 +1,16 @@
-
 import { Result, clone, nbMsInMinute, sleep } from 'shuutils'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { databaseMock } from './database.mock'
 import { removeAppWriteFields } from './database.utils'
 import { addItem, areItemsEquivalent, boxStringToBox, deleteItem, drawerStringToDrawer, formToItem, getItems, isDataOlderThan, itemBoxToRoom, itemForm, itemToForm, itemToLocation, statusStringToStatus, updateItem } from './item.utils'
 import { logger } from './logger.utils'
 import { mockFetch, mockItem, mockState } from './mock.utils'
 
-vi.mock('appwrite', () => databaseMock.appwrite)
+// @ts-expect-error mock type incompatibility with vitest 4
+vi.mock(import('appwrite'), () => databaseMock.appwrite)
 
 globalThis.fetch = mockFetch
 
 describe('item.utils', () => {
-
   beforeEach(() => {
     mockFetch.mockClear()
     databaseMock.reset()
@@ -32,7 +30,7 @@ describe('item.utils', () => {
     const result = await addItem(item, state)
     expect(result.ok).toBe(true) // should be a success to have added the item remotely & locally
     expect(result).toMatchSnapshot()
-    expect(databaseMock.createDocument).toHaveBeenNthCalledWith(1, 'databaseA', 'collectionA', "reference-b", removeAppWriteFields(item))
+    expect(databaseMock.createDocument).toHaveBeenNthCalledWith(1, 'databaseA', 'collectionA', 'reference-b', removeAppWriteFields(item))
     expect(state.items).toHaveLength(3) // because we just added a new item, the number of items should increase
   })
 
@@ -167,24 +165,52 @@ describe('item.utils', () => {
     expect(itemToLocation(item)).toMatchInlineSnapshot(`"Z"`)
   })
 
-  it('itemBoxToRoom A', () => { expect(itemBoxToRoom('A (apple)')).toMatchInlineSnapshot(`"entrée"`) })
-  // @ts-expect-error for testing purposes
-  it('itemBoxToRoom B', () => { expect(itemBoxToRoom('zz')).toMatchInlineSnapshot(`undefined`) })
-  it('itemBoxToRoom C', () => { expect(itemBoxToRoom('C (couteau)')).toMatchInlineSnapshot(`"salon"`) })
-  it('itemBoxToRoom D empty box', () => { expect(itemBoxToRoom('')).toMatchInlineSnapshot(`undefined`) })
+  it('itemBoxToRoom A', () => {
+    expect(itemBoxToRoom('A (apple)')).toMatchInlineSnapshot(`"entrée"`)
+  })
+  it('itemBoxToRoom B', () => {
+    // @ts-expect-error for testing purposes
+    expect(itemBoxToRoom('zz')).toMatchInlineSnapshot(`undefined`)
+  })
+  it('itemBoxToRoom C', () => {
+    expect(itemBoxToRoom('C (couteau)')).toMatchInlineSnapshot(`"salon"`)
+  })
+  it('itemBoxToRoom D empty box', () => {
+    expect(itemBoxToRoom('')).toMatchInlineSnapshot(`undefined`)
+  })
 
-  it('statusStringToStatus A lost', () => { expect(statusStringToStatus('lost')).toMatchInlineSnapshot(`"lost"`) })
-  it('statusStringToStatus B bought', () => { expect(statusStringToStatus('bought')).toMatchInlineSnapshot(`"bought"`) })
-  it('statusStringToStatus C to-give', () => { expect(statusStringToStatus('to-give')).toMatchInlineSnapshot(`"to-give"`) })
-  it('statusStringToStatus D for-sell', () => { expect(statusStringToStatus('for-sell')).toMatchInlineSnapshot(`"for-sell"`) })
-  it('statusStringToStatus E un-handled status', () => { expect(statusStringToStatus('hehe')).toMatchInlineSnapshot(`"bought"`) })
+  it('statusStringToStatus A lost', () => {
+    expect(statusStringToStatus('lost')).toMatchInlineSnapshot(`"lost"`)
+  })
+  it('statusStringToStatus B bought', () => {
+    expect(statusStringToStatus('bought')).toMatchInlineSnapshot(`"bought"`)
+  })
+  it('statusStringToStatus C to-give', () => {
+    expect(statusStringToStatus('to-give')).toMatchInlineSnapshot(`"to-give"`)
+  })
+  it('statusStringToStatus D for-sell', () => {
+    expect(statusStringToStatus('for-sell')).toMatchInlineSnapshot(`"for-sell"`)
+  })
+  it('statusStringToStatus E un-handled status', () => {
+    expect(statusStringToStatus('hehe')).toMatchInlineSnapshot(`"bought"`)
+  })
 
-  it('drawerStringToDrawer A valid', () => { expect(drawerStringToDrawer('2')).toBe(2) })
-  it('drawerStringToDrawer B empty', () => { expect(drawerStringToDrawer('')).toBe(-1) })
-  it('drawerStringToDrawer C NaN', () => { expect(drawerStringToDrawer('hehe')).toBe(-1) })
+  it('drawerStringToDrawer A valid', () => {
+    expect(drawerStringToDrawer('2')).toBe(2)
+  })
+  it('drawerStringToDrawer B empty', () => {
+    expect(drawerStringToDrawer('')).toBe(-1)
+  })
+  it('drawerStringToDrawer C NaN', () => {
+    expect(drawerStringToDrawer('hehe')).toBe(-1)
+  })
 
-  it('boxStringToBox A valid', () => { expect(boxStringToBox('A (apple)')).toMatchInlineSnapshot(`"A (apple)"`) })
-  it('boxStringToBox B invalid', () => { expect(boxStringToBox('hehe')).toBe("") })
+  it('boxStringToBox A valid', () => {
+    expect(boxStringToBox('A (apple)')).toMatchInlineSnapshot(`"A (apple)"`)
+  })
+  it('boxStringToBox B invalid', () => {
+    expect(boxStringToBox('hehe')).toBe('')
+  })
 
   it('isDataOlderThan A', () => {
     expect(isDataOlderThan(0, 0), 'data is considered older if time 0').toBe(true)
@@ -211,27 +237,36 @@ describe('item.utils', () => {
     const twoMinutesAgo = Date.now() - 2 * 60 * 1000
     const result = await getItems([], twoMinutesAgo)
     const { error, value } = Result.unwrap(result)
-    expect(error).toBe(undefined)
+    expect(error).toBeUndefined()
     expect(value?.includes('0 items loaded')).toBe(true)
-    expect(databaseMock.listDocuments).toHaveBeenNthCalledWith(1, '', '', [{ isThisMockedDataFromMock: true, limit: 100 }, { isThisMockedDataFromMock: true, offset: 0 }])
+    expect(databaseMock.listDocuments).toHaveBeenNthCalledWith(1, '', '', [
+      { isThisMockedDataFromMock: true, limit: 100 },
+      { isThisMockedDataFromMock: true, offset: 0 },
+    ])
   })
 
   it('getItems B items empty, items fresh => fetch successful', async () => {
     const twoMsAgo = Date.now() - 2
     const result = await getItems([], twoMsAgo)
     const { error, value } = Result.unwrap(result)
-    expect(error).toBe(undefined)
+    expect(error).toBeUndefined()
     expect(value?.includes('0 items loaded')).toBe(true)
-    expect(databaseMock.listDocuments).toHaveBeenNthCalledWith(1, '', '', [{ isThisMockedDataFromMock: true, limit: 100 }, { isThisMockedDataFromMock: true, offset: 0 }])
+    expect(databaseMock.listDocuments).toHaveBeenNthCalledWith(1, '', '', [
+      { isThisMockedDataFromMock: true, limit: 100 },
+      { isThisMockedDataFromMock: true, offset: 0 },
+    ])
   })
 
   it('getItems C items not empty, items not fresh => fetch successful', async () => {
     const twoMinutesAgo = Date.now() - 2 * 60 * 1000
     const result = await getItems([mockItem()], twoMinutesAgo)
     const { error, value } = Result.unwrap(result)
-    expect(error).toBe(undefined)
+    expect(error).toBeUndefined()
     expect(value?.includes('0 items loaded')).toBe(true)
-    expect(databaseMock.listDocuments).toHaveBeenNthCalledWith(1, '', '', [{ isThisMockedDataFromMock: true, limit: 100 }, { isThisMockedDataFromMock: true, offset: 0 }])
+    expect(databaseMock.listDocuments).toHaveBeenNthCalledWith(1, '', '', [
+      { isThisMockedDataFromMock: true, limit: 100 },
+      { isThisMockedDataFromMock: true, offset: 0 },
+    ])
   })
 
   it('getItems D items not empty, items not fresh => fetch failed', async () => {
@@ -240,16 +275,18 @@ describe('item.utils', () => {
     const result = await getItems([mockItem()], twoMinutesAgo)
     const { error } = Result.unwrap(result)
     expect(error).toMatchInlineSnapshot(`[Error: some error]`)
-    expect(databaseMock.listDocuments).toHaveBeenNthCalledWith(1, '', '', [{ isThisMockedDataFromMock: true, limit: 100 }, { isThisMockedDataFromMock: true, offset: 0 }])
+    expect(databaseMock.listDocuments).toHaveBeenNthCalledWith(1, '', '', [
+      { isThisMockedDataFromMock: true, limit: 100 },
+      { isThisMockedDataFromMock: true, offset: 0 },
+    ])
   })
 
   it('getItems E items not empty, items fresh => no fetch', async () => {
     const twoMsAgo = Date.now() - 2
     const result = await getItems([mockItem()], twoMsAgo)
     const { error, value } = Result.unwrap(result)
-    expect(error).toBe(undefined)
+    expect(error).toBeUndefined()
     expect(value).toMatchInlineSnapshot(`"tasks are fresh (now)"`)
     expect(databaseMock.listDocuments).not.toHaveBeenCalled()
   })
-
 })

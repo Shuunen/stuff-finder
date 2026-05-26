@@ -10,24 +10,23 @@ const shortDelay = 200
 
 const longDelay = 600
 
-const sequence = [
-  'Stuff Finder',
-  shortDelay,
-  `Stuff Finder\n${coolAscii()}`, longDelay,
-  `Stuff Finder\n${coolAscii()}`,
-] satisfies TypicalArguments
+const sequence = ['Stuff Finder', shortDelay, `Stuff Finder\n${coolAscii()}`, longDelay, `Stuff Finder\n${coolAscii()}`] satisfies TypicalArguments
 
-export function AppPrompter () {
-
+export function AppPrompter() {
   const prompterReference = useRef<HTMLHeadingElement>(null)
   const prompter = signal(prompterReference)
 
-  useSignalEffect(useCallback(() => {
-    if (prompter.value.current === null) return
-    type(prompter.value.current, ...sequence) // eslint-disable-line @typescript-eslint/no-unsafe-call
-  }, [prompter.value]))
+  useSignalEffect(
+    useCallback(() => {
+      if (prompter.value.current === null) return
+      // oxlint-disable-next-line typescript/no-unsafe-call
+      type(prompter.value.current, ...sequence)
+    }, [prompter.value]),
+  )
 
   return (
-    <h1 class="mb-12 mt-8 h-20 whitespace-pre text-center print:hidden" data-component="prompter" ref={prompterReference}>Hey ^^</h1>
+    <h1 class="mt-8 mb-12 h-20 text-center whitespace-pre print:hidden" data-component="prompter" ref={prompterReference}>
+      Hey ^^
+    </h1>
   )
 }

@@ -2,9 +2,7 @@
   "[javascript][javascriptreact][typescript][typescriptreact][css]": {
     "editor.defaultFormatter": "vscode.typescript-language-features"
   },
-  "cSpell.ignoreWords": [
-    "camwiegert"
-  ],
+  "cSpell.ignoreWords": ["camwiegert"],
   "cSpell.words": [
     "airtable",
     "alcampo",
@@ -36,13 +34,6 @@
     "valibot",
     "zxing"
   ],
-  "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit",
-    "source.organizeImports": "explicit"
-  },
-  "editor.formatOnSave": true,
-  "javascript.format.insertSpaceBeforeFunctionParenthesis": true,
-  "typescript.format.insertSpaceBeforeFunctionParenthesis": true,
   "workbench.colorCustomizations": {
     "activityBar.background": "#4C1C3C",
     "titleBar.activeBackground": "#6A2754",
