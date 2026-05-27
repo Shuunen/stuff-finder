@@ -7,7 +7,7 @@ import { type Display, defaultTheme } from '../types/theme.types'
 import { navigate } from './navigation.utils'
 import { storage } from './storage.utils'
 
-/* c8 ignore start */
+/* v8 ignore start */
 
 /**
  * Handle the status change
@@ -23,7 +23,7 @@ const laptopWidth = 1500
 
 const defaultDisplay: Display = isBrowserEnvironment() && globalThis.screen.width < laptopWidth ? 'list' : 'card'
 
-/* c8 ignore end */
+/* v8 ignore stop */
 
 export const { state, watchState } = createState(
   {

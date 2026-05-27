@@ -4,7 +4,7 @@ import { defaultStatus } from '../types/status.types'
 import { defaultTheme } from '../types/theme.types'
 import type { State } from './state.utils'
 
-export function mockItem(data: Partial<Item> = {}) {
+export function mockItem(data: Partial<Item> = {}): Item {
   return {
     $createdAt: '2025-07-16T13:42:26.000Z',
     $id: 'rec234',
@@ -20,10 +20,10 @@ export function mockItem(data: Partial<Item> = {}) {
     reference: 'reference B',
     status: 'bought',
     ...data,
-  } satisfies Item as Item
+  } satisfies Item
 }
 
-export function mockItemModel(data: Partial<ItemModel> = {}) {
+export function mockItemModel(data: Partial<ItemModel> = {}): ItemModel {
   return {
     ...mockItem(),
     $createdAt: '2020-03-01T00:00:00.000Z',
@@ -35,7 +35,7 @@ export function mockItemModel(data: Partial<ItemModel> = {}) {
     box: 'B (usb & audio)',
     drawer: 2,
     ...data,
-  } satisfies ItemModel as ItemModel
+  } satisfies ItemModel
 }
 
 export function mockState(data: Partial<State> = {}) {

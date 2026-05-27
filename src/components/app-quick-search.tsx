@@ -15,7 +15,9 @@ function onSearch(event: React.KeyboardEvent<HTMLInputElement>) {
   navigateToSearch(value)
 }
 
-const pagesWithInputs = new Set(['/item/add', '/item/add:id', '/item/edit/:id'])
+function hasNativeInput(path: string) {
+  return path.startsWith('/item/add') || path === '/item/edit' || path.startsWith('/item/edit/')
+}
 
 const focusDelay = 100
 
@@ -45,7 +47,7 @@ export function AppQuickSearch({ mode, placeholder = 'Quick search...' }: Readon
     })
     const keypressHandler = on('keypress', (_data, event) => {
       if (!(event instanceof KeyboardEvent)) return
-      const canFocus = !pagesWithInputs.has(path ?? '') && isUsable
+      const canFocus = !hasNativeInput(path) && isUsable
       if (!canFocus) return
       const isInInput = event.target instanceof HTMLElement && event.target.tagName.toLowerCase() === 'input'
       if (isInInput) return

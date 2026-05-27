@@ -56,7 +56,7 @@ export type Item = {
    */
   photos: ItemInfer['photos']
   /**
-   * @description Price of the item (-1 if not set)
+   * @description Price of the item (0 if not set)
    * @example 1299, 26.99
    */
   price: ItemInfer['price']

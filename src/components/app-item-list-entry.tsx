@@ -23,7 +23,7 @@ type Props = Readonly<{
 // oxlint-disable-next-line max-lines-per-function
 function AppItemListEntryComponent({ display, item, showPrice, onSelect, isLoading = false }: Props) {
   const title = `${item.name}${typeof item.brand === 'string' && item.brand.length > 0 ? ` - ${item.brand.trim()}` : ''}`
-  const titleStyle = useMemo(() => ({ color: 'black', fontSize: 18, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }), [])
+  const titleStyle = useMemo(() => ({ color: 'black', fontSize: 18, overflow: 'hidden' }), [])
   const location = itemToLocation(item)
   const subtitle = showPrice ? `${location} - ${formatCurrency(item.price)}` : location
   const displaySubtitle = isLoading ? 'Updating price...' : subtitle
@@ -32,8 +32,6 @@ function AppItemListEntryComponent({ display, item, showPrice, onSelect, isLoadi
       color: display === 'card' ? '#333' : 'grey',
       fontSize: 16,
       overflow: 'hidden',
-      textOverflow: 'ellipsis',
-      whiteSpace: 'nowrap',
     }),
     [display],
   )

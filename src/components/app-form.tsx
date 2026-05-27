@@ -21,11 +21,12 @@ type Properties<FormType extends Form> = Readonly<{
 export function AppForm<FormType extends Form>({ children, error: parentError = '', initialForm, onChange = functionReturningVoid, onSubmit, suggestions }: Properties<FormType>) {
   const [form, setForm] = useState(initialForm)
 
-  const { hasChanged, updatedForm } = validateForm(form)
-  if (hasChanged) {
+  useEffect(() => {
+    const { hasChanged, updatedForm } = validateForm(form)
+    if (!hasChanged) return
     onChange(updatedForm)
     setForm(updatedForm)
-  }
+  }, [form, onChange])
 
   const onFormSubmit = useCallback(
     (event: SubmitEvent<HTMLFormElement>) => {
