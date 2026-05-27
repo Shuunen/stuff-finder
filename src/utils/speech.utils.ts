@@ -1,3 +1,4 @@
+/* v8 ignore file */
 import { Result } from 'shuutils'
 import { logger } from './logger.utils'
 import { state } from './state.utils'

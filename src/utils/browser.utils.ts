@@ -1,3 +1,4 @@
+/* v8 ignore file */
 import { logger } from './logger.utils'
 
 async function request(method: 'DELETE' | 'GET' | 'PATCH' | 'POST', url: string, data?: Record<string, unknown>) {
@@ -21,6 +22,6 @@ export function setPageTitle(title: string) {
 export function clearElementsForPrint() {
   logger.info('clearing elements for print')
   const selector = ['#synology-download-notification-stack', 'synology-download-content', '[at-magnifier-wrapper]', '.shu-toast']
-  const elements = document.querySelectorAll(selector.join(','))
+  const elements = Array.from(document.querySelectorAll(selector.join(',')))
   for (const element of elements) element.remove()
 }

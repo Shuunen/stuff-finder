@@ -1,5 +1,5 @@
-import { preact } from '@preact/preset-vite'
 import tailwindcss from '@tailwindcss/vite'
+import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vitest/config'
 import { uniqueMark } from './src/plugins/unique-mark.ts'
 
@@ -9,16 +9,29 @@ export default defineConfig({
     commonjsOptions: {
       transformMixedEsModules: true,
     },
-    reportCompressedSize: false,
+    emptyOutDir: true,
+    outDir: './dist',
+    reportCompressedSize: true,
   },
-  plugins: [preact(), tailwindcss(), uniqueMark()],
+  plugins: [react(), tailwindcss(), uniqueMark()],
+  preview: {
+    host: 'localhost',
+    port: 4300,
+  },
   server: {
-    port: 8080,
+    host: 'localhost',
+    port: 4200,
   },
   test: {
     coverage: {
-      exclude: ['src/utils/browser.utils.ts', 'src/utils/speech.utils.ts', 'src/constants.ts'],
+      exclude: ['**/*.types.ts', '**/*.tsx', '**/*.d.ts', '**/*.css'],
+      include: ['src'],
       provider: 'v8' as const,
+      reporter: [['text', { maxCols: 120 }], 'lcov'],
+      reportsDirectory: './test-output/vitest/coverage',
+      thresholds: {
+        100: true,
+      },
     },
     environment: 'happy-dom',
     globals: true,

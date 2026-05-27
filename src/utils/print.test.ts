@@ -1,89 +1,101 @@
 import { mockItem } from './mock.utils'
 import { itemToPrintData } from './print.utils'
 
-describe('print.utils', () => {
-  const itemA = mockItem({
-    $id: '1234567',
-    barcode: '  barcode',
-    brand: 'brand',
-    details: 'details',
-    name: 'name',
-    reference: 'reference  ',
-  })
+const itemA = mockItem({
+  $id: '1234567',
+  barcode: '  barcode',
+  brand: 'brand',
+  details: 'details',
+  name: 'name',
+  reference: 'reference  ',
+})
 
-  const itemB = mockItem({
-    $id: '1234567',
-    barcode: '  barcode',
-    box: '',
-    brand: 'brand',
-    details: 'details',
-    drawer: -1,
-    name: 'name',
-    photos: ['1234567'],
-    reference: '',
-  })
+const itemB = mockItem({
+  $id: '1234567',
+  barcode: '  barcode',
+  box: '',
+  brand: 'brand',
+  details: 'details',
+  drawer: -1,
+  name: 'name',
+  photos: ['1234567'],
+  reference: '',
+})
 
-  it('itemToPrintData text A', () => {
+describe('itemToPrintData text', () => {
+  it('A full item', () => {
     expect(itemToPrintData(itemA).text).toBe('name brand details')
   })
-  it('itemToPrintData text B', () => {
+  it('B no name', () => {
     expect(itemToPrintData({ ...itemA, name: '  ' }).text).toBe('brand details')
   })
-  it('itemToPrintData text C', () => {
+  it('C no brand', () => {
     expect(itemToPrintData({ ...itemA, brand: '  ' }).text).toBe('name details')
   })
+})
 
-  it('itemToPrintData value A', () => {
+describe('itemToPrintData value', () => {
+  it('A uses reference', () => {
     expect(itemToPrintData(itemA).value).toBe('reference')
   })
-  it('itemToPrintData value B', () => {
+  it('B no reference falls back to barcode', () => {
     expect(itemToPrintData({ ...itemA, reference: '  ' }).value).toBe('barcode')
   })
-  it('itemToPrintData value C', () => {
+  it('C no reference and no barcode', () => {
     expect(itemToPrintData({ ...itemA, barcode: '  ', reference: '  ' }).value).toBe('')
   })
-  it('itemToPrintData value D', () => {
+  it('D itemB uses barcode', () => {
     expect(itemToPrintData(itemB).value).toBe('barcode')
   })
-  it('itemToPrintData value E', () => {
+  it('E itemB no barcode', () => {
     expect(itemToPrintData({ ...itemB, barcode: '' }).value).toBe('')
   })
+})
 
-  it('itemToPrintData location A', () => {
-    expect(itemToPrintData({ ...itemA, box: 'A (apple)', drawer: 4 }).location).toBe('A4')
+describe('itemToPrintData location', () => {
+  it('A with box and drawer', () => {
+    expect(itemToPrintData({ ...itemA, box: 'A (apple)', drawer: 4 }).location).toMatchInlineSnapshot(`"A‧4"`)
   })
-  it('itemToPrintData location B', () => {
+  it('B with box no drawer', () => {
     expect(itemToPrintData({ ...itemA, box: 'A (apple)', drawer: -1 }).location).toBe('A')
   })
-  it('itemToPrintData location C', () => {
+  it('C no box with drawer', () => {
     expect(itemToPrintData({ ...itemA, box: '', drawer: 4 }).location).toBe('')
   })
-  it('itemToPrintData location D', () => {
+  it('D no box no drawer', () => {
     expect(itemToPrintData({ ...itemA, box: '', drawer: -1 }).location).toBe('')
   })
-  it('itemToPrintData location E', () => {
-    expect(itemToPrintData({ ...itemA, box: 'A (apple)', drawer: 4 }).location).toBe('A4')
+  it('E with box and drawer again', () => {
+    expect(itemToPrintData({ ...itemA, box: 'A (apple)', drawer: 4 }).location).toMatchInlineSnapshot(`"A‧4"`)
   })
-  it('itemToPrintData location F', () => {
+  it('F with box no valid drawer', () => {
     expect(itemToPrintData({ ...itemA, box: 'A (apple)', drawer: -1 }).location).toBe('A')
   })
-  it('itemToPrintData location G', () => {
+  it('G empty box with drawer', () => {
     expect(itemToPrintData({ ...itemA, box: '', drawer: 4 }).location).toBe('')
   })
-  it('itemToPrintData location H no box imply no location', () => {
-    expect(itemToPrintData(itemA).location).toBe('B2')
+  it('H no box implies no location', () => {
+    expect(itemToPrintData(itemA).location).toMatchInlineSnapshot(`"B‧2"`)
   })
-  it('itemToPrintData location I', () => {
+  it('I empty box no drawer', () => {
     expect(itemToPrintData({ ...itemA, box: '', drawer: -1 }).location).toBe('')
   })
-  it('itemToPrintData location J', () => {
+  it('J itemB has empty location', () => {
     expect(itemToPrintData(itemB).location).toBe('')
   })
+  it('K box room with drawer', () => {
+    expect(itemToPrintData(mockItem({ box: 'Salon', drawer: 3 })).location).toMatchInlineSnapshot(`"Salon‧3"`)
+  })
+  it('L box room no drawer', () => {
+    expect(itemToPrintData(mockItem({ box: 'Salon', drawer: undefined })).location).toMatchInlineSnapshot(`"Salon"`)
+  })
+})
 
-  it('itemToPrintData A', () => {
+describe('itemToPrintData snapshot', () => {
+  it('A full item', () => {
     expect(itemToPrintData(itemA)).toMatchSnapshot()
   })
-  it('itemToPrintData B', () => {
+  it('B minimal item', () => {
     expect(itemToPrintData(itemB)).toMatchSnapshot()
   })
 })

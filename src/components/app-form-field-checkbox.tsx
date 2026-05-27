@@ -1,6 +1,6 @@
 import Checkbox from '@mui/material/Checkbox'
 import FormControlLabel from '@mui/material/FormControlLabel'
-import { useCallback } from 'preact/hooks'
+import { useCallback } from 'react'
 import type { FormFieldCheckbox } from '../utils/forms.utils'
 
 type Properties = Readonly<{
@@ -9,18 +9,17 @@ type Properties = Readonly<{
   updateField: (field: string, target: EventTarget | null, updateField?: boolean) => void
 }>
 
+function checkboxControl(isChecked: boolean | string) {
+  return <Checkbox checked={Boolean(isChecked)} />
+}
+
 export function AppFormFieldCheckbox({ field, id, updateField }: Properties) {
   const onChange = useCallback(
-    (event: Event) => {
+    (event: React.SyntheticEvent, _checked: boolean) => {
       updateField(id, event.target)
     },
     [id, updateField],
   )
-
-  // oxlint-disable-next-line unicorn/consistent-function-scoping
-  function checkboxControl(isChecked: boolean | string) {
-    return <Checkbox checked={Boolean(isChecked)} />
-  }
 
   return <FormControlLabel control={checkboxControl(field.value)} id={id} label={field.label} onChange={onChange} required={field.isRequired} />
 }

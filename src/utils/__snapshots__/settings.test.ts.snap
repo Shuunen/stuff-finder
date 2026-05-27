@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`settings.utils > validateForm A default settingsForm is not changed & not valid 1`] = `
+exports[`settingsForm > validateForm A default settingsForm is not changed & not valid 1`] = `
 {
   "errorMessage": "AppWrite database id is required",
   "fields": {

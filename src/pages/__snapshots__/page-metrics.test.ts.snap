@@ -1,0 +1,119 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`page-metrics.utils > calculateBoxAnalysis A should analyze box distribution correctly 1`] = `
+{
+  "A (apple)": {
+    "count": 2,
+    "totalValue": 500,
+  },
+  "B (usb & audio)": {
+    "count": 1,
+    "totalValue": 300,
+  },
+  "C (couteau)": {
+    "count": 1,
+    "totalValue": 10,
+  },
+  "Unknown": {
+    "count": 1,
+    "totalValue": 0,
+  },
+}
+`;
+
+exports[`page-metrics.utils > getToGiveItemsCount B should count items with to-give status 1`] = `
+[
+  {
+    "$createdAt": "2025-07-16T13:42:26.000Z",
+    "$id": "1",
+    "barcode": "barcode B",
+    "box": "B (usb & audio)",
+    "brand": "brand B",
+    "details": "details B",
+    "drawer": 2,
+    "isPrinted": false,
+    "name": "Item to give 1",
+    "photos": [
+      "some-uuid",
+      "https://some.url/to/image.jpg",
+    ],
+    "price": 42,
+    "reference": "GIVE1",
+    "status": "to-give",
+  },
+  {
+    "$createdAt": "2025-07-16T13:42:26.000Z",
+    "$id": "2",
+    "barcode": "barcode B",
+    "box": "B (usb & audio)",
+    "brand": "brand B",
+    "details": "details B",
+    "drawer": 2,
+    "isPrinted": false,
+    "name": "Item to give 2",
+    "photos": [
+      "some-uuid",
+      "https://some.url/to/image.jpg",
+    ],
+    "price": 42,
+    "reference": "GIVE2",
+    "status": "to-give",
+  },
+]
+`;
+
+exports[`page-metrics.utils > getTopValueItems A should return top valued items 1`] = `
+[
+  {
+    "$createdAt": "2025-07-16T13:42:26.000Z",
+    "$id": "1",
+    "barcode": "barcode B",
+    "box": "A (apple)",
+    "brand": "Apple",
+    "details": "iPhone 12",
+    "drawer": 2,
+    "isPrinted": true,
+    "name": "iPhone 12",
+    "photos": [
+      "some-uuid",
+      "https://some.url/to/image.jpg",
+    ],
+    "price": 500,
+    "reference": "IP12",
+    "status": "bought",
+  },
+  {
+    "$createdAt": "2025-07-16T13:42:26.000Z",
+    "$id": "2",
+    "barcode": "barcode B",
+    "box": "B (usb & audio)",
+    "brand": "Sony",
+    "details": "Wireless headphones",
+    "drawer": 2,
+    "isPrinted": false,
+    "name": "WH-1000XM4",
+    "photos": [
+      "some-uuid",
+      "https://some.url/to/image.jpg",
+    ],
+    "price": 300,
+    "reference": "WH1000XM4",
+    "status": "for-sell",
+  },
+  {
+    "$createdAt": "2025-07-16T13:42:26.000Z",
+    "$id": "5",
+    "barcode": "barcode B",
+    "box": "C (couteau)",
+    "brand": "Generic",
+    "details": "Power cable",
+    "drawer": 2,
+    "isPrinted": true,
+    "name": "Power Cable",
+    "photos": undefined,
+    "price": 10,
+    "reference": "POWERCABLE",
+    "status": "bought",
+  },
+]
+`;

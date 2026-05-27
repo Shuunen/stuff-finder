@@ -1,4 +1,3 @@
-// oxlint-disable max-params
 import type { Models } from 'appwrite'
 import { functionReturningVoid, nbDaysInWeek, sleep } from 'shuutils'
 import type { ItemModel } from '../types/item.types'
@@ -13,6 +12,8 @@ export function mockFile(data: Partial<Models.File> = {}) {
     bucketId: 'bucketA',
     chunksTotal: 1,
     chunksUploaded: 1,
+    compression: '',
+    encryption: false,
     mimeType: 'image/jpeg',
     name: 'fileName-a.jpg',
     signature: 'signature-a',
@@ -21,49 +22,50 @@ export function mockFile(data: Partial<Models.File> = {}) {
   } satisfies Models.File as Models.File
 }
 
-const createFile = vi.fn(async (bucketId: string, fileId: string, _file: File) => {
+const createFile = vi.fn(async ({ bucketId, fileId }: { bucketId: string; file: File; fileId: string }) => {
   await sleep(nbDaysInWeek)
   return { $id: fileId, bucketId, isThisMockedDataFromMock: true }
 })
 
-const deleteFile = vi.fn(async (bucketId: string, fileId: string, _file: File) => {
+const deleteFile = vi.fn(async ({ bucketId, fileId }: { bucketId: string; fileId: string }) => {
   await sleep(nbDaysInWeek)
   return { $id: fileId, bucketId, isThisMockedDataFromMock: true }
 })
 
-const listFiles = vi.fn(async (_bucketId: string, _queries: [{ limit: number }, { offset: number }]) => {
+const listFiles = vi.fn(async (_params: { bucketId: string; queries?: unknown[] }) => {
   await sleep(nbDaysInWeek)
   return { files: [], total: 0 } satisfies Models.FileList as Models.FileList
 })
 
-const createDocument = vi.fn(async (databaseId: string, collectionId: string, documentId: string, data: object) => {
+const createRow = vi.fn(async ({ data, databaseId, rowId, tableId }: { data: object; databaseId: string; rowId: string; tableId: string }) => {
   await sleep(nbDaysInWeek)
-  const item = mockItemModel({ $collectionId: collectionId, $databaseId: databaseId, $id: documentId, ...data })
-  return item satisfies Models.Document as Models.Document
+  const item = mockItemModel({ $databaseId: databaseId, $id: rowId, $tableId: tableId, ...data })
+  return item satisfies Models.Row as Models.Row
 })
 
-const deleteDocument = vi.fn(async (databaseId: string, collectionId: string, documentId: string) => {
+const deleteRow = vi.fn(async ({ databaseId, rowId, tableId }: { databaseId: string; rowId: string; tableId: string }) => {
   await sleep(nbDaysInWeek)
-  return { $id: documentId, collectionId, databaseId, isThisMockedDataFromMock: true }
+  return { $id: rowId, databaseId, isThisMockedDataFromMock: true, tableId }
 })
 
-const listDocuments = vi.fn(async (_databaseId: string, _collectionId: string) => {
+const listRows = vi.fn(async (_params: { databaseId: string; queries?: unknown[]; tableId: string }) => {
   await sleep(nbDaysInWeek)
-  return { documents: [], total: 0 } satisfies Models.DocumentList<ItemModel> as Models.DocumentList<ItemModel>
+  return { rows: [], total: 0 } satisfies Models.RowList<ItemModel> as Models.RowList<ItemModel>
 })
 
-const updateDocument = vi.fn(async (databaseId: string, collectionId: string, documentId: string, data: object) => {
+const updateRow = vi.fn(async ({ data, databaseId, rowId, tableId }: { data: object; databaseId: string; rowId: string; tableId: string }) => {
   await sleep(nbDaysInWeek)
-  const item = mockItemModel({ $collectionId: collectionId, $databaseId: databaseId, $id: documentId, ...data })
-  return item satisfies Models.Document as Models.Document
+  const item = mockItemModel({ $databaseId: databaseId, $id: rowId, $tableId: tableId, ...data })
+  return item satisfies Models.Row as Models.Row
 })
 
-class Databases {
-  public createDocument = createDocument
-  public deleteDocument = deleteDocument
-  public listDocuments = listDocuments
-  public updateDocument = updateDocument
+class TablesDB {
+  public createRow = createRow
+  public deleteRow = deleteRow
+  public listRows = listRows
+  public updateRow = updateRow
   public constructor(client?: Client) {
+    /* v8 ignore if */
     if (client) functionReturningVoid()
   }
 }
@@ -74,6 +76,7 @@ class Client {
     functionReturningVoid()
   }
   public setProject(project: string) {
+    /* v8 ignore if */
     if (project) functionReturningVoid()
     return this
   }
@@ -84,6 +87,7 @@ class Storage {
   public deleteFile = deleteFile
   public listFiles = listFiles
   public constructor(client?: Client) {
+    /* v8 ignore if */
     if (client) functionReturningVoid()
   }
 }
@@ -94,26 +98,27 @@ const Query = {
 }
 
 function reset() {
-  createDocument.mockClear()
   createFile.mockClear()
-  listFiles.mockClear()
-  deleteDocument.mockClear()
+  createRow.mockClear()
   deleteFile.mockClear()
-  listDocuments.mockClear()
-  updateDocument.mockClear()
+  deleteRow.mockClear()
+  listFiles.mockClear()
+  listRows.mockClear()
+  updateRow.mockClear()
   Query.limit.mockClear()
   Query.offset.mockClear()
 }
 
+// oxlint-disable-next-line sort-keys
 export const databaseMock = {
-  Query,
-  appwrite: { Client, Databases, Query, Storage },
-  createDocument,
+  appwrite: { Client, Query, Storage, TablesDB },
   createFile,
-  deleteDocument,
+  createRow,
   deleteFile,
-  listDocuments,
+  deleteRow,
   listFiles,
+  listRows,
+  Query,
   reset,
-  updateDocument,
+  updateRow,
 }

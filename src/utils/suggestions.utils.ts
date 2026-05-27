@@ -1,4 +1,3 @@
-import { isNil } from 'es-toolkit'
 import { capitalize, clone } from 'shuutils'
 import type { Item, ItemSuggestions } from '../types/item.types'
 import type { WrapApiAliExResponse, WrapApiAngboResponse, WrapApiCampoResponse, WrapApiDeyesResponse } from '../types/requests.types'
@@ -10,6 +9,7 @@ import { getAsin } from './url.utils'
 const keysToCapitalize = new Set(['details', 'name'])
 
 export const emptyItemSuggestions = {
+  $createdAt: [],
   $id: [],
   barcode: [],
   box: [],
@@ -31,7 +31,7 @@ function priceParse(price?: number | string) {
 }
 
 function isNullish(value: unknown) {
-  if (isNil(value)) return true
+  if (value === undefined || value === null) return true
   if (typeof value === 'number') return value <= 0 || value === 0
   if (typeof value === 'string') return value === '' || value === '0'
   return true
@@ -51,6 +51,7 @@ export async function addSuggestionsFromDeyes(suggestions: ItemSuggestions, code
   suggestions.brand.push(data.brand.name)
   suggestions.details.push(data.description)
   const [image] = data.image
+  /* v8 ignore if -- @preserve */
   if (image !== undefined) suggestions.photos.push(image)
   suggestions.price.push(priceParse(data.offers.price))
   suggestions.reference.push(data.gtin13)
@@ -86,6 +87,7 @@ export async function addSuggestionsFromCampo(suggestions: ItemSuggestions, stri
     suggestions.brand.push(item.brand)
     suggestions.name.push(item.title)
     suggestions.photos.push(item.photo)
+    /* v8 ignore if -- @preserve */
     if (item.price !== undefined) suggestions.price.push(priceParse(item.price))
     suggestions.reference.push(item.uuid)
   }
@@ -95,16 +97,16 @@ export function cleanSuggestions(suggestionsInput: Record<string, string[] | und
   const suggestions = clone(suggestionsInput)
   const keys = Object.keys(suggestions)
   for (const key of keys) {
-    /* c8 ignore next */
+    /* v8 ignore next -- @preserve */
     let values = suggestions[key] ?? []
     if (keysToCapitalize.has(key))
       values = values.map(value => {
         if (isNullish(value)) return value
         return capitalize(value, true)
       })
-    if (values.length === 0)
-      // oxlint-disable-next-line typescript/no-dynamic-delete
-      delete suggestions[key] // clear empty fields
+    // clear empty suggestions
+    // oxlint-disable-next-line no-dynamic-delete
+    if (values.length === 0) delete suggestions[key]
     else suggestions[key] = values.filter((value, index, array) => array.indexOf(value) === index && !isNullish(value)) // remove duplicates & nullish
   }
   return suggestions as Record<string, string[]>
@@ -113,8 +115,11 @@ export function cleanSuggestions(suggestionsInput: Record<string, string[] | und
 export async function getSuggestions(string_: string) {
   const asin = getAsin(string_)
   const suggestionsBase = clone(emptyItemSuggestions)
+  /* v8 ignore if -- @preserve */
   if (asin !== undefined) await addSuggestionsFromAngbo(suggestionsBase, asin)
+  /* v8 ignore if -- @preserve */
   if (suggestionsBase.name.length === 0) await addSuggestionsFromDeyes(suggestionsBase, string_)
+  /* v8 ignore if -- @preserve */
   if (suggestionsBase.name.length === 0) await addSuggestionsFromAliEx(suggestionsBase, string_)
   await addSuggestionsFromCampo(suggestionsBase, string_)
   return cleanSuggestions(suggestionsBase)

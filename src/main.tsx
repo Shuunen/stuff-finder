@@ -1,20 +1,19 @@
-import { render } from 'preact'
+import { createRoot } from 'react-dom/client'
 import { toastError, toastInfo } from 'shuutils'
-import { App } from './app.tsx'
+import { App } from './app'
 import './assets/styles.css'
-import { getItems } from './utils/item.utils.ts'
-import { logger } from './utils/logger.utils.ts'
-import { state } from './utils/state.utils.ts'
+import { getItems } from './utils/item.utils'
+import { logger } from './utils/logger.utils'
+import { state } from './utils/state.utils'
 
 logger.info('app start')
 
 const root = document.querySelector('#app')
-if (root) render(<App />, root)
+if (root) createRoot(root).render(<App />)
 else logger.error('root not found')
 
-// oxlint-disable-next-line unicorn/prefer-top-level-await promise/prefer-await-to-then promise/always-return
-void getItems().then(result => {
-  state.status = result.ok ? 'ready' : 'settings-required'
-  if (result.ok) toastInfo(result.value)
-  else if (typeof result.error === 'string') toastError(result.error)
-})
+const result = await getItems()
+state.status = result.ok ? 'ready' : 'settings-required'
+if (result.ok) toastInfo(result.value)
+else if (result.error instanceof Error) toastError(result.error.message)
+else if (typeof result.error === 'string') toastError(result.error)

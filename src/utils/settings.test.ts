@@ -1,7 +1,7 @@
 import { validateForm } from './forms.utils'
 import { settingsForm } from './settings.utils'
 
-describe('settings.utils', () => {
+describe('settingsForm', () => {
   it('validateForm A default settingsForm is not changed & not valid', () => {
     const { hasChanged, updatedForm } = validateForm(settingsForm)
     expect(updatedForm).toMatchSnapshot()

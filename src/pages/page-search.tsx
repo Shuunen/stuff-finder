@@ -1,43 +1,56 @@
 import SearchIcon from '@mui/icons-material/Search'
-import { route } from 'preact-router'
-import { useEffect, useState } from 'preact/hooks'
+import { CircularProgress } from '@mui/material'
+import { useEffect, useMemo, useState } from 'react'
+import { useLocation, useParams } from 'react-router-dom'
 import { ellipsis } from 'shuutils'
 import { AppButtonNext } from '../components/app-button-next'
 import { AppDisplayToggle } from '../components/app-display-toggle'
 import { AppItemList } from '../components/app-item-list'
 import { AppPageCard } from '../components/app-page-card'
-import type { Item } from '../types/item.types'
+import { logger } from '../utils/logger.utils'
 import { sadAscii } from '../utils/strings.utils'
-import { maxNameLength, search } from './page-search.const'
+import { maxNameLength, search, type SearchState } from './page-search.const'
 
-export function PageSearch({ input = '' }: Readonly<{ [key: string]: unknown; input?: string }>) {
-  const [header, setHeader] = useState('Loading...')
-  const [results, setResults] = useState<Item[]>([])
+const emptyResults: SearchState['results'] = []
+
+export function PageSearch() {
+  const { input = '' } = useParams<{ input: string }>()
+  const { state } = useLocation() as { state: SearchState | null }
+  const stateResults = useMemo(() => state?.results ?? emptyResults, [state])
+  const [results, setResults] = useState(stateResults)
+  const [loading, setLoading] = useState(stateResults.length === 0)
 
   useEffect(() => {
-    // oxlint-disable-next-line promise/prefer-await-to-then promise/always-return
+    if (stateResults.length > 0) {
+      setResults(stateResults)
+      setLoading(false)
+      return
+    }
+    setLoading(true)
+    // oxlint-disable-next-line prefer-await-to-then, always-return
     void search(input).then(data => {
-      setHeader(data.header)
+      logger.info('search results loaded', { header: data.header, input, results: data.results, state })
       setResults(data.results)
-      if (data.results.length === 1) route(`/item/details/${data.results[0]?.$id ?? ''}/single`)
+      setLoading(false)
     })
-  }, [input])
+  }, [input, stateResults, state])
 
   return (
     <AppPageCard cardTitle="Search" icon={SearchIcon} pageCode="search" pageTitle={`Search for “${ellipsis(input, maxNameLength)}”`}>
-      <div class="flex max-h-[90%] flex-col items-center gap-3 sm:gap-5 md:max-h-full">
-        <h2 class="text-center">{header}</h2>
+      <div className="flex max-h-[90%] flex-col items-center gap-3 sm:gap-5 md:max-h-full">
+        <h2 className="text-center">{state?.header}</h2>
+        {loading && <CircularProgress className="size-12 text-primary" />}
         {results.length > 0 && (
           <>
-            <div class="absolute top-7 right-7">
+            <div className="absolute top-7 right-7">
               <AppDisplayToggle />
             </div>
             <AppItemList items={results} />
           </>
         )}
-        {results.length === 0 && (
+        {!loading && results.length === 0 && (
           <>
-            <p>{sadAscii()}</p>
+            <code className="my-4 animate-bounce text-4xl text-primary">{sadAscii()}</code>
             <AppButtonNext label="Add a product" url={`/item/add/${input}`} />
           </>
         )}

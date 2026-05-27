@@ -6,12 +6,6 @@
 
 ![banner](docs/banner.svg)
 
-## Archived
-
-This repo is archived since it migrated to [Shuunen/monorepo](https://github.com/Shuunen/monorepo/tree/master/apps/stuff-finder).
-
-Further development will be done there 🚀
-
 ## Demo
 
 [![logo](public/assets/favicon-16x16.png)](https://stuff-finder.netlify.app) [https://stuff-finder.netlify.app](https://stuff-finder.netlify.app)
@@ -42,6 +36,7 @@ Further development will be done there 🚀
 - 2.0.0 : 3KB html + 18KB css + 720KB js (more components, better design)
 - 2.1.0 : 1KB html + 18KB css + 726KB js
 - 2.2.0 : 1KB html + 18KB css + 691KB js (after making everything lazy & optimizing common deps)
+- 3.0.0 : 2KB html + 28KB css + 1007KB js (after react migration and various features)
 
 Check build stats in details by running `pnpm build:analyze`.
 

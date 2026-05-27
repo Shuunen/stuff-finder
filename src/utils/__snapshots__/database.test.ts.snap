@@ -2,6 +2,7 @@
 
 exports[`database.utils > addItemRemotely A no photo 1`] = `
 {
+  "$createdAt": "2020-03-01T00:00:00.000Z",
   "$id": "reference-b",
   "barcode": "barcode B",
   "box": "B (usb & audio)",
@@ -20,6 +21,7 @@ exports[`database.utils > addItemRemotely A no photo 1`] = `
 exports[`database.utils > getItemsRemotely C success with 2 items 2`] = `
 [
   {
+    "$createdAt": "2020-03-01T00:00:00.000Z",
     "$id": "some-item-uuid-a",
     "barcode": "barcode B",
     "box": "B (usb & audio)",
@@ -37,6 +39,7 @@ exports[`database.utils > getItemsRemotely C success with 2 items 2`] = `
     "status": "bought",
   },
   {
+    "$createdAt": "2020-03-01T00:00:00.000Z",
     "$id": "some-other-item-uuid-b",
     "barcode": "barcode B",
     "box": "B (usb & audio)",
@@ -85,6 +88,8 @@ exports[`database.utils > listImages C success with 2 images 2`] = `
     "bucketId": "bucketA",
     "chunksTotal": 1,
     "chunksUploaded": 1,
+    "compression": "",
+    "encryption": false,
     "mimeType": "image/jpeg",
     "name": "fileName-a.jpg",
     "signature": "signature-a",
@@ -98,6 +103,8 @@ exports[`database.utils > listImages C success with 2 images 2`] = `
     "bucketId": "bucketA",
     "chunksTotal": 1,
     "chunksUploaded": 1,
+    "compression": "",
+    "encryption": false,
     "mimeType": "image/jpeg",
     "name": "fileName-a.jpg",
     "signature": "signature-a",

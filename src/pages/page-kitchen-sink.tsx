@@ -1,9 +1,8 @@
 import { AppBarcode } from '../components/app-barcode'
+import type { Item } from '../types/item.types'
 import { emptyItem } from '../utils/item.utils'
 
 const isHighlighted = false
-const resizedBarcodeSize = 2
-const normalBarcodeSize = 3
 const size = '40x20'
 const items = [
   { ...emptyItem, name: 'ok without resize', reference: '123' },
@@ -15,23 +14,56 @@ const items = [
   { ...emptyItem, name: 'ok without resize', reference: 'le chat de feu' },
   { ...emptyItem, name: 'NOK without resize', reference: 'le chat de feu vert' },
   { ...emptyItem, name: 'ok resized to 2', reference: 'le chat de feu vert' },
-]
+  {
+    ...emptyItem,
+    box: 'Red' as Item['box'],
+    brand: '3 chars box name',
+    drawer: 3,
+    name: 'This is a box test',
+    reference: '12345678901234567890wq',
+  },
+  {
+    ...emptyItem,
+    box: 'Blue',
+    brand: '4 chars box name',
+    drawer: 4,
+    name: 'This is a box test',
+    reference: '12345678901234567890wq',
+  },
+  {
+    ...emptyItem,
+    box: 'Green',
+    brand: '5 chars box name',
+    drawer: 5,
+    name: 'This is a box test',
+    reference: '12345678901234567890wq',
+  },
+  {
+    ...emptyItem,
+    box: 'Yellow',
+    brand: '6 chars box name',
+    drawer: 6,
+    name: 'This is a box test',
+    reference: '12345678901234567890wq',
+  },
+] satisfies Item[]
 
 export function PageKitchenSink() {
   return (
-    <div class="flex flex-col">
+    <div className="flex flex-col">
       <h1>Kitchen Sink</h1>
       <h2>Barcodes</h2>
-      <div class="grid w-3/4 grid-cols-3 gap-6">
+      <div className="grid w-3/4 grid-cols-3 gap-6">
         {items.map(item => (
-          <div class="flex flex-col items-start gap-0" key={item.reference + item.name}>
+          <div className="flex flex-col items-start gap-0" key={item.reference + item.name}>
             <AppBarcode isHighlighted={isHighlighted} item={item} size={size} willResize={!item.name.includes('NOK')} />
-            <p class="mt-1 font-mono text-xs break-all">
+            <p className="mt-1 font-mono text-xs break-all">
               reference : {item.reference}
               <br />
               length : {item.reference.length}
               <br />
-              size : {item.name.includes('resized') ? resizedBarcodeSize : normalBarcodeSize}
+              {/* oxlint-disable-next-line no-magic-numbers */}
+              size : {item.name.includes('resized') ? 2 : 3}
             </p>
           </div>
         ))}

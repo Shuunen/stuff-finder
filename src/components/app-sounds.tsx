@@ -1,26 +1,21 @@
-import { signal } from '@preact/signals'
-import { useRef } from 'preact/hooks'
+import { useRef } from 'react'
 import { logger } from '../utils/logger.utils'
 import { state, watchState } from '../utils/state.utils'
 
 export function AppSounds() {
   const barcodeReference = useRef<HTMLAudioElement>(null)
-  const barcodeSound = signal(barcodeReference)
   const notifyReference = useRef<HTMLAudioElement>(null)
-  const notifySound = signal(notifyReference)
   const startReference = useRef<HTMLAudioElement>(null)
-  const startSound = signal(startReference)
   const stopReference = useRef<HTMLAudioElement>(null)
-  const stopSound = signal(stopReference)
   const errorReference = useRef<HTMLAudioElement>(null)
-  const errorSound = signal(errorReference)
+
   watchState('sound', () => {
     logger.info('sound to play', state.sound)
-    if (state.sound === 'barcode') void barcodeSound.value.current?.play()
-    if (state.sound === 'notify') void notifySound.value.current?.play()
-    if (state.sound === 'start') void startSound.value.current?.play()
-    if (state.sound === 'stop') void stopSound.value.current?.play()
-    if (state.sound === 'error') void errorSound.value.current?.play()
+    if (state.sound === 'barcode') barcodeReference.current?.play()
+    if (state.sound === 'notify') notifyReference.current?.play()
+    if (state.sound === 'start') startReference.current?.play()
+    if (state.sound === 'stop') stopReference.current?.play()
+    if (state.sound === 'error') errorReference.current?.play()
   })
   return (
     <>

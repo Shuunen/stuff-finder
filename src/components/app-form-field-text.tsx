@@ -1,6 +1,6 @@
 import Autocomplete, { type AutocompleteRenderInputParams } from '@mui/material/Autocomplete'
 import TextField from '@mui/material/TextField'
-import { useCallback } from 'preact/hooks'
+import { useCallback } from 'react'
 import type { Form, FormFieldText } from '../utils/forms.utils'
 
 type Properties = Readonly<{
@@ -13,14 +13,13 @@ type Properties = Readonly<{
 
 export function AppFormFieldText({ field, form, id, suggestions, updateField }: Properties) {
   const onChange = useCallback(
-    (event: Event) => {
+    (event: React.SyntheticEvent) => {
       updateField(id, event.target)
     },
     [id, updateField],
   )
 
   const renderInput = useCallback(
-    // @ts-expect-error Preact signals type incompatibility with MUI
     (parameters: AutocompleteRenderInputParams) => <TextField {...parameters} error={form.isTouched && !field.isValid} label={field.label} onChange={onChange} required={field.isRequired} value={field.value} variant="standard" />,
     [form.isTouched, field.isValid, field.isRequired, field.label, onChange, field.value],
   )

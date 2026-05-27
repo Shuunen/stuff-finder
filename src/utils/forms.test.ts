@@ -1,8 +1,77 @@
 import { clone } from 'shuutils'
-import { alignClipboard, createCheckboxField, createSelectField, optionsToLabels, validateForm } from './forms.utils'
+import { alignClipboard, createCheckboxField, createSelectField, optionsToLabels, updateForm, validateForm } from './forms.utils'
 import { settingsForm } from './settings.utils'
 
 describe('forms.utils', () => {
+  it('updateForm A should update form fields with valid values', () => {
+    const form = clone(settingsForm)
+    const updatedFields = { bucketId: 'new-bucket-id', collectionId: 'new-collection-id' }
+    const { hasChanged, updatedForm } = updateForm(form, updatedFields)
+    expect(hasChanged).toBe(true)
+    expect(updatedForm.isTouched).toBe(true)
+    expect(updatedForm.fields.bucketId.value).toBe('new-bucket-id')
+    expect(updatedForm.fields.collectionId.value).toBe('new-collection-id')
+  })
+
+  it('updateForm B should skip invalid field keys', () => {
+    const form = clone(settingsForm)
+    const updatedFields = { '': 'empty-key', nonExistentField: 'some-value' }
+    const { hasChanged, updatedForm } = updateForm(form, updatedFields)
+    expect(hasChanged).toBe(true)
+    expect(updatedForm.isTouched).toBe(true)
+    expect(updatedForm.fields.bucketId.value).toBe('')
+  })
+
+  it('updateForm C should skip invalid values', () => {
+    const form = clone(settingsForm)
+    const updatedFields = { bucketId: '' }
+    const { hasChanged, updatedForm } = updateForm(form, updatedFields)
+    expect(hasChanged).toBe(true)
+    expect(updatedForm.isTouched).toBe(true)
+    expect(updatedForm.fields.bucketId.value).toBe('')
+  })
+
+  it('updateForm D should update only existing fields', () => {
+    const form = clone(settingsForm)
+    const updatedFields = { bucketId: 'valid-bucket', nonExistentField: 'ignored-value' }
+    const { hasChanged, updatedForm } = updateForm(form, updatedFields)
+    expect(hasChanged).toBe(true)
+    expect(updatedForm.isTouched).toBe(true)
+    expect(updatedForm.fields.bucketId.value).toBe('valid-bucket')
+    expect(updatedForm.fields).not.toHaveProperty('nonExistentField')
+  })
+
+  it('updateForm E should handle checkbox fields properly', () => {
+    const formWithCheckbox = {
+      ...settingsForm,
+      fields: {
+        ...settingsForm.fields,
+        acceptTerms: createCheckboxField({ label: 'Accept Terms' }),
+      },
+    }
+    const updatedFields = { acceptTerms: 'true', bucketId: 'valid-bucket' }
+    const { hasChanged, updatedForm } = updateForm(formWithCheckbox, updatedFields)
+    expect(hasChanged).toBe(true)
+    expect(updatedForm.isTouched).toBe(true)
+    expect(updatedForm.fields.acceptTerms.value).toBe(true)
+    expect(updatedForm.fields.bucketId.value).toBe('valid-bucket')
+  })
+
+  it('updateForm F should convert false string to boolean for checkbox', () => {
+    const formWithCheckbox = {
+      ...settingsForm,
+      fields: {
+        ...settingsForm.fields,
+        acceptTerms: createCheckboxField({ label: 'Accept Terms', value: true }),
+      },
+    }
+    const updatedFields = { acceptTerms: 'false' }
+    const { hasChanged, updatedForm } = updateForm(formWithCheckbox, updatedFields)
+    expect(hasChanged).toBe(true)
+    expect(updatedForm.isTouched).toBe(true)
+    expect(updatedForm.fields.acceptTerms.value).toBe(false)
+  })
+
   it('validateForm A invalid field value', () => {
     const form = {
       ...settingsForm,
@@ -73,34 +142,34 @@ describe('forms.utils', () => {
   it('alignClipboard A Google Shit edition :(', () => {
     expect(
       alignClipboard(`"{
-    ""base"": ""app123456"",
-    ""token"": ""pat123456"",
-    ""table"": ""stuff-finder"",
-    ""view"": ""stuff-finder"",
-    ""wrap"": ""123456""
-  }"`),
+  ""base"": ""app123456"",
+  ""token"": ""pat123456"",
+  ""table"": ""stuff-finder"",
+  ""view"": ""stuff-finder"",
+  ""wrap"": ""123456""
+}"`),
     ).toBe(`{
-    "base": "app123456",
-    "token": "pat123456",
-    "table": "stuff-finder",
-    "view": "stuff-finder",
-    "wrap": "123456"
-  }`)
+  "base": "app123456",
+  "token": "pat123456",
+  "table": "stuff-finder",
+  "view": "stuff-finder",
+  "wrap": "123456"
+}`)
   })
 
   it('alignClipboard B empty fields', () => {
     expect(
       alignClipboard(`{
-      "details": "",
-      name: "Jojo",
-      age: "",
-      golden: ""
-    }`),
+    "details": "",
+    name: "Jojo",
+    age: "",
+    golden: ""
+  }`),
     ).toBe(`{
-      "details": "",
-      name: "Jojo",
-      age: "",
-      golden: ""
-    }`)
+    "details": "",
+    name: "Jojo",
+    age: "",
+    golden: ""
+  }`)
   })
 })

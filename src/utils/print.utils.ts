@@ -1,5 +1,6 @@
-/* c8 ignore next */
+/* v8 ignore next -- @preserve */
 import type { Item } from '../types/item.types'
+import { itemToLocation } from './item.utils'
 
 /**
  * Generate a name from an item
@@ -27,26 +28,13 @@ function itemToPrintCode(item: Item) {
 }
 
 /**
- * Get a print location from an item
- * @param input the item
- * @returns the location
- */
-function itemToPrintLocation(input: Item) {
-  const box = (input.box.trim()[0] ?? '').toUpperCase()
-  if (box.length === 0) return ''
-  if (input.drawer === -1) return box
-  const [drawer] = String(input.drawer)
-  return `${box}${drawer}`.trim()
-}
-
-/**
  * Get print data from item
  * @param item the item
  * @returns the data
  */
 export function itemToPrintData(item: Item) {
   return {
-    location: itemToPrintLocation(item),
+    location: itemToLocation(item, true),
     text: itemToPrintText(item),
     value: itemToPrintCode(item),
   }
