@@ -17,6 +17,7 @@ export function mockFile(data: Partial<Models.File> = {}) {
     mimeType: 'image/jpeg',
     name: 'fileName-a.jpg',
     signature: 'signature-a',
+    sizeActual: 123_456,
     sizeOriginal: 123_456,
     ...data,
   } satisfies Models.File as Models.File
