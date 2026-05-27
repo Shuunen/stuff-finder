@@ -1,16 +1,15 @@
-import Button from '@mui/material/Button'
-import { useSignalEffect } from '@preact/signals'
-import { useCallback, useState } from 'preact/hooks'
-import { Result, debounce, off, on, parseJson, readClipboard } from 'shuutils'
-import { type Form, alignClipboard, validateForm } from '../utils/forms.utils'
+import { Button } from '@mui/material'
+import { type ReactNode, type SubmitEvent, useCallback, useEffect, useState } from 'react'
+import { debounce, functionReturningVoid, off, on, Result, copyToClipboard, readClipboard, parseJson, objectSerialize } from 'shuutils'
+import { alignClipboard, type Form, updateForm, validateForm } from '../utils/forms.utils'
 import { logger } from '../utils/logger.utils'
 import { colSpanClass, gridClass } from '../utils/theme.utils'
 import { AppFormFieldCheckbox } from './app-form-field-checkbox'
 import { AppFormFieldSelect } from './app-form-field-select'
 import { AppFormFieldText } from './app-form-field-text'
-import { voidFunction } from './app-form.const'
 
 type Properties<FormType extends Form> = Readonly<{
+  children?: ReactNode
   error?: string
   initialForm: FormType
   onChange?: (form: FormType) => void
@@ -18,23 +17,28 @@ type Properties<FormType extends Form> = Readonly<{
   suggestions?: Record<string, string[]>
 }>
 
-// eslint-disable-next-line max-statements, max-lines-per-function, complexity
-export function AppForm<FormType extends Form> ({ error: parentError = '', initialForm, onChange = voidFunction, onSubmit = undefined, suggestions = {} }: Properties<FormType>) {
-
+// oxlint-disable-next-line max-lines-per-function
+export function AppForm<FormType extends Form>({ children, error: parentError = '', initialForm, onChange = functionReturningVoid, onSubmit, suggestions }: Properties<FormType>) {
   const [form, setForm] = useState(initialForm)
 
-  const { hasChanged, updatedForm } = validateForm(form)
-  if (hasChanged) { onChange(updatedForm); setForm(updatedForm) }
+  useEffect(() => {
+    const { hasChanged, updatedForm } = validateForm(form)
+    if (!hasChanged) return
+    onChange(updatedForm)
+    setForm(updatedForm)
+  }, [form, onChange])
 
-  const onFormSubmit = useCallback((event: Event) => {
-    event.preventDefault()
-    onSubmit?.(form)
-  }, [form, onSubmit])
+  const onFormSubmit = useCallback(
+    (event: SubmitEvent<HTMLFormElement>) => {
+      event.preventDefault()
+      onSubmit?.(form)
+    },
+    [form, onSubmit],
+  )
 
-  // eslint-disable-next-line max-statements
-  function updateFieldSync (field: string, target: EventTarget | null, isFromClipboard = false) {
+  function updateFieldSync(field: string, target: EventTarget | null, isFromClipboard = false) {
     if (target === null) return Result.error(`target for field "${field}" is null`)
-    const input = target as HTMLInputElement // eslint-disable-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-unsafe-type-assertion
+    const input = target as HTMLInputElement
     let value = input.type === 'checkbox' ? input.checked : input.value
     if (input.role === 'option') value = input.textContent ?? '' // handle autocomplete target
     logger.debug('updateField', { field, value })
@@ -50,44 +54,57 @@ export function AppForm<FormType extends Form> ({ error: parentError = '', initi
   const updateDelay = 100
   const updateField = debounce(updateFieldSync, updateDelay)
 
-  // eslint-disable-next-line max-statements, complexity
   const checkDataInClipboard = useCallback(async () => {
-    const rawClip = await readClipboard().catch(() => { logger.info('user denied clipboard access'); return '' })
-    if (rawClip === '') { logger.info('clipboard is empty'); return }
-    const clip = alignClipboard(rawClip)
-    const { error, value: data } = parseJson(clip)
-    if (error !== '' || typeof data !== 'object' || data === null) { logger.info('error or data not an object', { clip, data, error, rawClip }); return }
-    const futureForm = structuredClone(form)
-    futureForm.isTouched = true
-    const entries = Object.entries(data)
-    for (const [key, value] of entries) {
-      if (typeof key !== 'string' || typeof value !== 'string' || key === '' || value === '') continue
-      const actualField = futureForm.fields[key]
-      if (actualField === undefined) continue  // @ts-expect-error typing issue
-      futureForm.fields[key] = { ...actualField, value }
-    }
-    setForm(futureForm)
+    const rawClip = await readClipboard()
+      .then(value => Result.ok(value))
+      .catch((error: unknown) => Result.error(`error reading clipboard : ${error instanceof Error ? error.message : String(error)}`))
+    if (!rawClip.ok) return Result.error(`error reading clipboard : ${rawClip.error}`)
+    if (rawClip.value === '') return Result.ok('clipboard is empty')
+    const clip = alignClipboard(rawClip.value)
+    const json = parseJson(clip)
+    if (json.error || typeof json.value !== 'object' || json.value === null) return Result.error(`error parsing clipboard data : ${objectSerialize({ clip, error: json.error, rawClip, value: json.value })}`)
+    const { hasChanged: hasChangedLocal, updatedForm: updatedFormLocal } = updateForm(form, json.value)
+    if (!hasChangedLocal) return Result.ok('no changes made')
+    setForm(updatedFormLocal)
+    void copyToClipboard({})
+    return Result.ok('form updated from clipboard')
   }, [form])
 
-  useSignalEffect(useCallback(() => {
-    const handler = on('focus', () => { void checkDataInClipboard() })
-    if (document.hasFocus()) void checkDataInClipboard()
-    return () => { off(handler) }
-  }, [checkDataInClipboard]))
+  useEffect(() => {
+    async function handleClipboardOnFocus() {
+      const result = await checkDataInClipboard()
+      logger.info('clipboard data checked on focus', result)
+    }
+    async function handleClipboardOnInitialFocus() {
+      const outerResult = await Result.trySafe(checkDataInClipboard())
+      if (!outerResult.ok) return logger.error('failed to check clipboard data on initial focus :', outerResult.error)
+      logger.info('clipboard data checked on initial focus', outerResult.value)
+    }
+    const handler = on('focus', () => void handleClipboardOnFocus())
+    if (document.hasFocus()) void handleClipboardOnInitialFocus()
+    return () => off(handler)
+  }, [checkDataInClipboard])
 
   const errorMessage = parentError.length > 0 ? parentError : form.errorMessage
   const canSubmit = form.isValid && form.isTouched && errorMessage.length === 0
 
   return (
-    <form autoComplete="off" class={`grid w-full gap-6 md:min-w-[44rem] ${gridClass(form.columns)}`} noValidate onSubmit={onFormSubmit} spellcheck={false}>
-      {Object.entries(form.fields).map(([id, field]) => <div class={`grid w-full ${field.isVisible ? '' : 'hidden'} ${colSpanClass(field.columns)}`} key={id}>
-        {field.type === 'text' && <AppFormFieldText field={field} form={form} id={id} suggestions={suggestions} updateField={updateField} />}
-        {field.type === 'checkbox' && <AppFormFieldCheckbox field={field} id={id} updateField={updateField} />}
-        {field.type === 'select' && <AppFormFieldSelect field={field} form={form} id={id} updateField={updateField} />}
-      </div>)}
-      <div class="order-last flex flex-col items-center md:col-span-full">
-        {Boolean(errorMessage) && Boolean(form.isTouched) && <p class="text-red-500">{errorMessage}</p>}
-        {onSubmit !== undefined && <Button disabled={!canSubmit} type="submit" variant="contained">Save</Button>}
+    <form autoComplete="off" className={`grid w-full gap-6 md:min-w-176 ${gridClass(form.columns)}`} noValidate onSubmit={onFormSubmit} spellCheck={false}>
+      {Object.entries(form.fields).map(([id, field]) => (
+        <div className={`grid w-full ${field.isVisible ? '' : 'hidden'} ${colSpanClass(field.columns)}`} key={id}>
+          {field.type === 'text' && <AppFormFieldText field={field} form={form} id={id} suggestions={suggestions} updateField={updateField} />}
+          {field.type === 'checkbox' && <AppFormFieldCheckbox field={field} id={id} updateField={updateField} />}
+          {field.type === 'select' && <AppFormFieldSelect field={field} form={form} id={id} updateField={updateField} />}
+        </div>
+      ))}
+      <div className="order-last flex justify-center md:col-span-full">
+        {Boolean(errorMessage) && form.isTouched && <p className="text-red-500">{errorMessage}</p>}
+        {onSubmit !== undefined && (
+          <Button disabled={!canSubmit} name="submit" type="submit" variant={canSubmit ? 'contained' : 'outlined'}>
+            Save
+          </Button>
+        )}
+        {children}
       </div>
     </form>
   )

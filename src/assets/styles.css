@@ -3,6 +3,7 @@
 
 @theme {
   --breakpoint-xs: 360px;
+  --color-primary: var(--color-purple-700);
 }
 
 /*
@@ -21,42 +22,43 @@
   ::file-selector-button {
     border-color: var(--color-gray-200, currentcolor);
   }
-}
 
-html {
-  scroll-behavior: smooth;
-}
+  html {
+    scroll-behavior: smooth;
+  }
 
-::-webkit-scrollbar {
-  @apply w-2 h-2;
-}
+  ::-webkit-scrollbar {
+    @apply h-2 w-2;
+  }
 
-::-webkit-scrollbar-track {
-  @apply bg-purple-100;
-}
+  ::-webkit-scrollbar-track {
+    @apply bg-current/10;
+  }
 
-::-webkit-scrollbar-thumb {
-  @apply bg-purple-600 border border-current;
-}
+  ::-webkit-scrollbar-thumb {
+    @apply border border-current bg-current;
+  }
 
-h1 {
-  @apply text-4xl text-purple-700 font-medium;
-}
+  h1 {
+    @apply text-4xl font-medium text-purple-700;
+  }
 
-h2 {
-  @apply text-2xl text-purple-900;
-}
+  h2 {
+    @apply text-2xl text-purple-900;
+  }
 
-h3 {
-  @apply text-5xl sm:text-7xl md:text-[5rem] relative indent-6 md:indent-8 translate-y-10 md:translate-y-12 z-0 tracking-[1rem] sm:tracking-[1.5rem] md:tracking-[2rem] font-black text-transparent opacity-30 uppercase;
-  -webkit-text-stroke-width: 2px;
-  -webkit-text-stroke-color: grey;
+  h3 {
+    -webkit-text-stroke-width: 2px;
+    -webkit-text-stroke-color: grey;
+    @apply relative z-0 translate-y-10 indent-6 text-5xl font-black tracking-[1rem] text-transparent uppercase opacity-30 sm:text-7xl sm:tracking-[1.5rem] md:translate-y-12 md:indent-8 md:text-[5rem] md:tracking-[2rem];
+  }
 }
 
 .flex:not([class*='gap-']) {
   @apply gap-6;
 }
 
-.shu-toast {
-  @apply print:hidden;
+.shu-toast, /* not sure what is this weird div :D */
+body > script + div[id][style] {
+  @apply print:hidden!;
 }

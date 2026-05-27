@@ -11,10 +11,10 @@ const photoRegex = {
  * @param url the url
  * @returns the uuid
  */
-export function urlToUuid (url: string) {
+export function urlToUuid(url: string) {
   // in: https://wrapapi.com/use/jojo/deyes/json/0.0.2?code=3760052142741&wrapAPIKey=xyz
   // out: wrapapicomusejojodeyesjson002code3760052142741
-  return url.replace(/https?|\W|wrapAPIKey.+/gu, '')
+  return url.replaceAll(/https?|\W|wrapAPIKey.+/gu, '')
 }
 
 /**
@@ -22,7 +22,7 @@ export function urlToUuid (url: string) {
  * @param url the url
  * @returns the asin
  */
-export function getAsin (url: string) {
+export function getAsin(url: string) {
   // in: https://www.amazon.fr/dp/B07V7GZQJ2 or B07V7GZQJ2
   // out: B07V7GZQJ2
   const split = url.split('/dp/')
@@ -36,11 +36,6 @@ export function getAsin (url: string) {
  * @param size the size to normalize to
  * @returns the normalized url
  */
-export function normalizePhotoUrl (url: string, size = 500) {
-  return url
-    .replace(photoRegex.amazon, `._SL${size}_.jpg`)
-    .replace(photoRegex.temu, `/w/${size}/`)
-    .replace(photoRegex.decathlon, `f=${size}x${size}`)
-    .replace(photoRegex.aliexpress, `_${size}x${size}q85.jpg`)
+export function normalizePhotoUrl(url: string, size = 500) {
+  return url.replace(photoRegex.amazon, `._SL${size}_.jpg`).replace(photoRegex.temu, `/w/${size}/`).replace(photoRegex.decathlon, `f=${size}x${size}`).replace(photoRegex.aliexpress, `_${size}x${size}q85.jpg`)
 }
-

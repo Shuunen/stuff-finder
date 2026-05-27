@@ -1,14 +1,14 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`itemToPrintData A 1`] = `
+exports[`itemToPrintData snapshot > A full item 1`] = `
 {
-  "location": "B2",
+  "location": "B‧2",
   "text": "name brand details",
   "value": "reference",
 }
 `;
 
-exports[`itemToPrintData B 1`] = `
+exports[`itemToPrintData snapshot > B minimal item 1`] = `
 {
   "location": "",
   "text": "name brand details",

@@ -1,4 +1,5 @@
-import { type ThemeOptions, createTheme } from '@mui/material/styles'
+// oxlint-disable no-magic-numbers
+import { createTheme, type ThemeOptions } from '@mui/material/styles'
 
 const themeOptions: ThemeOptions = {
   palette: {
@@ -16,9 +17,7 @@ export const theme = createTheme(themeOptions)
  * @param columns the number of columns
  * @returns the grid class
  */
-// eslint-disable-next-line complexity
-export function gridClass (columns = 1) {
-  /* eslint-disable @typescript-eslint/no-magic-numbers */
+export function gridClass(columns = 1) {
   if (columns === 2) return 'md:grid-cols-2'
   if (columns === 3) return 'md:grid-cols-3'
   if (columns === 4) return 'md:grid-cols-4'
@@ -29,7 +28,6 @@ export function gridClass (columns = 1) {
   if (columns === 9) return 'md:grid-cols-9'
   if (columns === 10) return 'md:grid-cols-10'
   return 'md:grid-cols-1'
-  /* eslint-enable @typescript-eslint/no-magic-numbers */
 }
 
 /**
@@ -37,9 +35,7 @@ export function gridClass (columns = 1) {
  * @param columns the number of columns
  * @returns the column span class
  */
-// eslint-disable-next-line complexity
-export function colSpanClass (columns: number) {
-  /* eslint-disable @typescript-eslint/no-magic-numbers */
+export function colSpanClass(columns: number) {
   if (columns === 2) return 'md:col-span-2'
   if (columns === 3) return 'md:col-span-3'
   if (columns === 4) return 'md:col-span-4'
@@ -50,5 +46,4 @@ export function colSpanClass (columns: number) {
   if (columns === 9) return 'md:col-span-9'
   if (columns === 10) return 'md:col-span-10'
   return 'md:col-span-1'
-  /* eslint-enable @typescript-eslint/no-magic-numbers */
 }

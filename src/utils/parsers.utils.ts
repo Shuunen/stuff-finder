@@ -1,15 +1,11 @@
-/* eslint-disable unicorn/no-null, @typescript-eslint/no-magic-numbers */
+// oxlint-disable no-null, no-magic-numbers
 import { array, boolean, fallback, maxLength, minValue, nonEmpty, nullish, number, object, picklist, pipe, string } from 'valibot'
 import { itemBoxes, itemStatus, uuidMaxLength } from '../constants'
 
 const itemRequiredStringSchema = pipe(string(), nonEmpty())
 
-/**
- * List of photos $id stored in the bucket
- * @example ['id123','id-456']
- */
-
 export const itemSchema = object({
+  $createdAt: pipe(string(), nonEmpty()),
   $id: pipe(string(), nonEmpty(), maxLength(uuidMaxLength)),
   barcode: fallback(string(), ''),
   box: fallback(picklist(['', ...itemBoxes]), ''),
@@ -19,7 +15,7 @@ export const itemSchema = object({
   isPrinted: fallback(boolean(), false),
   name: itemRequiredStringSchema,
   photos: fallback(array(string()), []),
-  price: fallback(number(), -1),
+  price: pipe(number(), minValue(0)),
   reference: itemRequiredStringSchema,
   status: picklist(itemStatus),
 })

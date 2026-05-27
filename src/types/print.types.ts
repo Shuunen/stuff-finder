@@ -1,4 +1,3 @@
-
 export const printSizes = {
   '40x20': {
     styles: {

@@ -4,6 +4,7 @@ exports[`item.utils > addItem A should create remotely & push locally 1`] = `
 Ok {
   "ok": true,
   "value": {
+    "$createdAt": "2020-03-01T00:00:00.000Z",
     "$id": "reference-b",
     "barcode": "barcode B",
     "box": "B (usb & audio)",
@@ -24,7 +25,8 @@ Ok {
 `;
 
 exports[`item.utils > formToItem A default itemForm 1`] = `
-{
+"{
+  "$createdAt": "xxxx-xx-xxTxx:xx:xx.000Z",
   "$id": "",
   "barcode": "",
   "box": "",
@@ -36,12 +38,13 @@ exports[`item.utils > formToItem A default itemForm 1`] = `
   "photos": [],
   "price": -1,
   "reference": "",
-  "status": "bought",
-}
+  "status": "bought"
+}"
 `;
 
 exports[`item.utils > formToItem B itemForm with some values 1`] = `
-{
+"{
+  "$createdAt": "xxxx-xx-xxTxx:xx:xx.000Z",
   "$id": "",
   "barcode": "",
   "box": "",
@@ -51,12 +54,12 @@ exports[`item.utils > formToItem B itemForm with some values 1`] = `
   "isPrinted": false,
   "name": "",
   "photos": [
-    "https://photos.org/200/200",
+    "https://photos.org/200/200"
   ],
   "price": 42,
   "reference": "",
-  "status": "bought",
-}
+  "status": "bought"
+}"
 `;
 
 exports[`item.utils > itemToForm A mocked item 1`] = `
@@ -71,7 +74,7 @@ exports[`item.utils > itemToForm A mocked item 1`] = `
       "isVisible": false,
       "label": "Barcode",
       "link": "",
-      "regex": /\\^\\[-,\\\\d\\\\p\\{L\\}\\\\s/&\\]\\{3,30\\}\\$/u,
+      "regex": /\\^\\[-',\\.\\\\d\\\\p\\{L\\}\\\\s/&\\]\\{3,30\\}\\$/u,
       "type": "text",
       "unit": "",
       "value": "barcode B",
@@ -97,8 +100,24 @@ exports[`item.utils > itemToForm A mocked item 1`] = `
           "value": "B (usb & audio)",
         },
         {
+          "label": "Blue",
+          "value": "Blue",
+        },
+        {
+          "label": "Bureau",
+          "value": "Bureau",
+        },
+        {
           "label": "C (couteau)",
           "value": "C (couteau)",
+        },
+        {
+          "label": "Chambre",
+          "value": "Chambre",
+        },
+        {
+          "label": "Cuisine",
+          "value": "Cuisine",
         },
         {
           "label": "D (doll)",
@@ -109,6 +128,10 @@ exports[`item.utils > itemToForm A mocked item 1`] = `
           "value": "E (east)",
         },
         {
+          "label": "Entrée",
+          "value": "Entrée",
+        },
+        {
           "label": "F (périphériques)",
           "value": "F (périphériques)",
         },
@@ -117,8 +140,20 @@ exports[`item.utils > itemToForm A mocked item 1`] = `
           "value": "G (brico & sport)",
         },
         {
+          "label": "Green",
+          "value": "Green",
+        },
+        {
+          "label": "Garage",
+          "value": "Garage",
+        },
+        {
           "label": "H (hardware)",
           "value": "H (hardware)",
+        },
+        {
+          "label": "J (à donner)",
+          "value": "J (à donner)",
         },
         {
           "label": "L (lemon)",
@@ -157,8 +192,20 @@ exports[`item.utils > itemToForm A mocked item 1`] = `
           "value": "S (sdb)",
         },
         {
+          "label": "Salle de bain",
+          "value": "Salle de bain",
+        },
+        {
+          "label": "Salon",
+          "value": "Salon",
+        },
+        {
           "label": "T (tour bureau)",
           "value": "T (tour bureau)",
+        },
+        {
+          "label": "Terrasse",
+          "value": "Terrasse",
         },
         {
           "label": "V (violet)",
@@ -167,6 +214,10 @@ exports[`item.utils > itemToForm A mocked item 1`] = `
         {
           "label": "X (commode malm)",
           "value": "X (commode malm)",
+        },
+        {
+          "label": "Yellow",
+          "value": "Yellow",
         },
         {
           "label": "Z (poches zip)",
@@ -185,7 +236,7 @@ exports[`item.utils > itemToForm A mocked item 1`] = `
       "isVisible": true,
       "label": "Brand",
       "link": "",
-      "regex": /\\^\\[-,\\\\d\\\\p\\{L\\}\\\\s/&\\]\\{3,100\\}\\$/u,
+      "regex": /\\^\\[-',\\.\\\\d\\\\p\\{L\\}\\\\s/&\\]\\{3,100\\}\\$/u,
       "type": "text",
       "unit": "",
       "value": "brand B",
@@ -197,7 +248,7 @@ exports[`item.utils > itemToForm A mocked item 1`] = `
       "isVisible": true,
       "label": "Details",
       "link": "",
-      "regex": /\\^\\[-,\\\\d\\\\p\\{L\\}\\\\s/&\\]\\{3,200\\}\\$/u,
+      "regex": /\\^\\[-',\\.\\\\d\\\\p\\{L\\}\\\\s/&\\]\\{3,200\\}\\$/u,
       "type": "text",
       "unit": "",
       "value": "details B",
@@ -255,7 +306,7 @@ exports[`item.utils > itemToForm A mocked item 1`] = `
       "isVisible": false,
       "label": "Id",
       "link": "",
-      "regex": /\\^\\[-,\\\\d\\\\p\\{L\\}\\\\s/&\\]\\{3,100\\}\\$/u,
+      "regex": /\\^\\[-',\\.\\\\d\\\\p\\{L\\}\\\\s/&\\]\\{3,100\\}\\$/u,
       "type": "text",
       "unit": "",
       "value": "itemToForm-A",
@@ -267,7 +318,7 @@ exports[`item.utils > itemToForm A mocked item 1`] = `
       "isVisible": false,
       "label": "Printed",
       "link": "",
-      "regex": /\\^\\[-,\\\\d\\\\p\\{L\\}\\\\s/&\\]\\{3,100\\}\\$/u,
+      "regex": /\\^\\[-',\\.\\\\d\\\\p\\{L\\}\\\\s/&\\]\\{3,100\\}\\$/u,
       "type": "checkbox",
       "unit": "",
       "value": false,
@@ -279,7 +330,7 @@ exports[`item.utils > itemToForm A mocked item 1`] = `
       "isVisible": true,
       "label": "Name",
       "link": "",
-      "regex": /\\^\\[-,\\\\d\\\\p\\{L\\}\\\\s/&\\]\\{3,100\\}\\$/u,
+      "regex": /\\^\\[-',\\.\\\\d\\\\p\\{L\\}\\\\s/&\\]\\{3,100\\}\\$/u,
       "type": "text",
       "unit": "",
       "value": "name B",
@@ -315,7 +366,7 @@ exports[`item.utils > itemToForm A mocked item 1`] = `
       "isVisible": true,
       "label": "Reference",
       "link": "",
-      "regex": /\\^\\[\\\\w-\\]\\{3,50\\}\\$/u,
+      "regex": /\\^\\[\\\\w/-\\]\\{3,50\\}\\$/u,
       "type": "text",
       "unit": "",
       "value": "reference B",
@@ -345,7 +396,7 @@ exports[`item.utils > itemToForm A mocked item 1`] = `
           "value": "to-give",
         },
       ],
-      "regex": /\\^\\[-,\\\\d\\\\p\\{L\\}\\\\s/&\\]\\{3,100\\}\\$/u,
+      "regex": /\\^\\[-',\\.\\\\d\\\\p\\{L\\}\\\\s/&\\]\\{3,100\\}\\$/u,
       "type": "select",
       "unit": "",
       "value": "bought",
@@ -368,7 +419,7 @@ exports[`item.utils > itemToForm C no item 1`] = `
       "isVisible": false,
       "label": "Barcode",
       "link": "",
-      "regex": /\\^\\[-,\\\\d\\\\p\\{L\\}\\\\s/&\\]\\{3,30\\}\\$/u,
+      "regex": /\\^\\[-',\\.\\\\d\\\\p\\{L\\}\\\\s/&\\]\\{3,30\\}\\$/u,
       "type": "text",
       "unit": "",
       "value": "",
@@ -394,8 +445,24 @@ exports[`item.utils > itemToForm C no item 1`] = `
           "value": "B (usb & audio)",
         },
         {
+          "label": "Blue",
+          "value": "Blue",
+        },
+        {
+          "label": "Bureau",
+          "value": "Bureau",
+        },
+        {
           "label": "C (couteau)",
           "value": "C (couteau)",
+        },
+        {
+          "label": "Chambre",
+          "value": "Chambre",
+        },
+        {
+          "label": "Cuisine",
+          "value": "Cuisine",
         },
         {
           "label": "D (doll)",
@@ -406,6 +473,10 @@ exports[`item.utils > itemToForm C no item 1`] = `
           "value": "E (east)",
         },
         {
+          "label": "Entrée",
+          "value": "Entrée",
+        },
+        {
           "label": "F (périphériques)",
           "value": "F (périphériques)",
         },
@@ -414,8 +485,20 @@ exports[`item.utils > itemToForm C no item 1`] = `
           "value": "G (brico & sport)",
         },
         {
+          "label": "Green",
+          "value": "Green",
+        },
+        {
+          "label": "Garage",
+          "value": "Garage",
+        },
+        {
           "label": "H (hardware)",
           "value": "H (hardware)",
+        },
+        {
+          "label": "J (à donner)",
+          "value": "J (à donner)",
         },
         {
           "label": "L (lemon)",
@@ -454,8 +537,20 @@ exports[`item.utils > itemToForm C no item 1`] = `
           "value": "S (sdb)",
         },
         {
+          "label": "Salle de bain",
+          "value": "Salle de bain",
+        },
+        {
+          "label": "Salon",
+          "value": "Salon",
+        },
+        {
           "label": "T (tour bureau)",
           "value": "T (tour bureau)",
+        },
+        {
+          "label": "Terrasse",
+          "value": "Terrasse",
         },
         {
           "label": "V (violet)",
@@ -464,6 +559,10 @@ exports[`item.utils > itemToForm C no item 1`] = `
         {
           "label": "X (commode malm)",
           "value": "X (commode malm)",
+        },
+        {
+          "label": "Yellow",
+          "value": "Yellow",
         },
         {
           "label": "Z (poches zip)",
@@ -482,7 +581,7 @@ exports[`item.utils > itemToForm C no item 1`] = `
       "isVisible": true,
       "label": "Brand",
       "link": "",
-      "regex": /\\^\\[-,\\\\d\\\\p\\{L\\}\\\\s/&\\]\\{3,100\\}\\$/u,
+      "regex": /\\^\\[-',\\.\\\\d\\\\p\\{L\\}\\\\s/&\\]\\{3,100\\}\\$/u,
       "type": "text",
       "unit": "",
       "value": "",
@@ -494,7 +593,7 @@ exports[`item.utils > itemToForm C no item 1`] = `
       "isVisible": true,
       "label": "Details",
       "link": "",
-      "regex": /\\^\\[-,\\\\d\\\\p\\{L\\}\\\\s/&\\]\\{3,200\\}\\$/u,
+      "regex": /\\^\\[-',\\.\\\\d\\\\p\\{L\\}\\\\s/&\\]\\{3,200\\}\\$/u,
       "type": "text",
       "unit": "",
       "value": "",
@@ -552,7 +651,7 @@ exports[`item.utils > itemToForm C no item 1`] = `
       "isVisible": false,
       "label": "Id",
       "link": "",
-      "regex": /\\^\\[-,\\\\d\\\\p\\{L\\}\\\\s/&\\]\\{3,100\\}\\$/u,
+      "regex": /\\^\\[-',\\.\\\\d\\\\p\\{L\\}\\\\s/&\\]\\{3,100\\}\\$/u,
       "type": "text",
       "unit": "",
       "value": "",
@@ -564,7 +663,7 @@ exports[`item.utils > itemToForm C no item 1`] = `
       "isVisible": false,
       "label": "Printed",
       "link": "",
-      "regex": /\\^\\[-,\\\\d\\\\p\\{L\\}\\\\s/&\\]\\{3,100\\}\\$/u,
+      "regex": /\\^\\[-',\\.\\\\d\\\\p\\{L\\}\\\\s/&\\]\\{3,100\\}\\$/u,
       "type": "checkbox",
       "unit": "",
       "value": false,
@@ -576,7 +675,7 @@ exports[`item.utils > itemToForm C no item 1`] = `
       "isVisible": true,
       "label": "Name",
       "link": "",
-      "regex": /\\^\\[-,\\\\d\\\\p\\{L\\}\\\\s/&\\]\\{3,100\\}\\$/u,
+      "regex": /\\^\\[-',\\.\\\\d\\\\p\\{L\\}\\\\s/&\\]\\{3,100\\}\\$/u,
       "type": "text",
       "unit": "",
       "value": "",
@@ -612,7 +711,7 @@ exports[`item.utils > itemToForm C no item 1`] = `
       "isVisible": true,
       "label": "Reference",
       "link": "",
-      "regex": /\\^\\[\\\\w-\\]\\{3,50\\}\\$/u,
+      "regex": /\\^\\[\\\\w/-\\]\\{3,50\\}\\$/u,
       "type": "text",
       "unit": "",
       "value": "",
@@ -642,7 +741,7 @@ exports[`item.utils > itemToForm C no item 1`] = `
           "value": "to-give",
         },
       ],
-      "regex": /\\^\\[-,\\\\d\\\\p\\{L\\}\\\\s/&\\]\\{3,100\\}\\$/u,
+      "regex": /\\^\\[-',\\.\\\\d\\\\p\\{L\\}\\\\s/&\\]\\{3,100\\}\\$/u,
       "type": "select",
       "unit": "",
       "value": "bought",
@@ -657,6 +756,7 @@ exports[`item.utils > updateItem A should update remotely & update locally 1`] =
 Ok {
   "ok": true,
   "value": {
+    "$createdAt": "2020-03-01T00:00:00.000Z",
     "$id": "1",
     "barcode": "barcode B",
     "box": "B (usb & audio)",
