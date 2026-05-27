@@ -38,7 +38,7 @@
 - 2.2.0 : 1KB html + 18KB css + 691KB js (after making everything lazy & optimizing common deps)
 - 3.0.0 : 2KB html + 28KB css + 1007KB js (after react migration and various features)
 
-Check build stats in details by running `pnpm build:analyze`.
+Check build stats in details by running `pnpm build:analyze`. Tooling benchmarks are tracked in [docs/benchmarks.md](docs/benchmarks.md).
 
 ## Thanks
 

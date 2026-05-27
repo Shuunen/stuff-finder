@@ -19,8 +19,7 @@ Always invoke a skill FIRST for matching requests — do not answer directly.
 
 ## Project docs
 
-- `CHANGELOG.md` — release history
-- `TODOS.md` — open work items
+- `docs/benchmarks.md` — build and tooling benchmarks
 
 ## After any codebase change
 
