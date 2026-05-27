@@ -1,4 +1,5 @@
 import type { NavigateFunction } from 'react-router-dom'
+import { logger } from './logger.utils'
 
 let navigateFunction: NavigateFunction | undefined = undefined
 
@@ -17,5 +18,9 @@ export function setNavigate(aFunction: NavigateFunction) {
  * @param state - Optional. State to pass to the target route.
  */
 export function navigate(path: string, replace = false, state?: unknown) {
-  if (navigateFunction) navigateFunction(path, { replace, state })
+  if (!navigateFunction) {
+    logger.warn('navigate called before router initialization — call setNavigate() first', { path })
+    return
+  }
+  navigateFunction(path, { replace, state })
 }
