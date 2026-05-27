@@ -19,3 +19,15 @@ The project uses both `@mui/material` (with Emotion) and Tailwind CSS — signif
 ## 5. Full item list persisted to localStorage
 
 `state.items` (potentially a large array) is persisted to localStorage with a timestamp. The full item list is serialized/deserialized on every load, which will hit localStorage's ~5MB limit for large catalogs.
+
+## 6. `logger` is a cross-community bridge across 6 modules
+
+`logger` has the second-highest betweenness centrality in the graph (0.033), bridging Item UI, Item Management, Forms, Search, Metrics, and Routing. A utility that cuts across every domain suggests either insufficient error boundaries or that logging is being used as a poor-man's observability layer.
+
+## 7. `State` is the real architectural spine — is it doing too much?
+
+The global `state` object bridges the same 6 communities as `logger` (betweenness 0.029). Every major module reads or watches it. Combined with TODO #2 (state mutation triggering navigation), this is a single point of coupling for the entire app — hard to test in isolation and fragile under concurrent updates.
+
+## 8. `Item Management & CRUD` community has very low cohesion (0.05)
+
+The graph clusters 86 nodes into one community with a cohesion score of 0.05, indicating a grab-bag of loosely related responsibilities: Appwrite CRUD, item form lifecycle, box/room/drawer constants, and add/edit page logic. Splitting into focused modules (remote API layer, local form state, location constants) would reduce cross-cutting dependencies.
