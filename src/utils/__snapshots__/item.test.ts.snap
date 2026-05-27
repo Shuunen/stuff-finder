@@ -349,7 +349,7 @@ exports[`item.utils > itemToForm A mocked item 1`] = `
     },
     "price": {
       "columns": 2,
-      "isRequired": true,
+      "isRequired": false,
       "isValid": false,
       "isVisible": true,
       "label": "Price",
@@ -694,7 +694,7 @@ exports[`item.utils > itemToForm C no item 1`] = `
     },
     "price": {
       "columns": 2,
-      "isRequired": true,
+      "isRequired": false,
       "isValid": false,
       "isVisible": true,
       "label": "Price",

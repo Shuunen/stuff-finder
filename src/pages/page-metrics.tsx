@@ -12,7 +12,7 @@ import type { MuiIcon } from '../types/icons.types'
 import type { Item } from '../types/item.types'
 import { updateItem } from '../utils/item.utils'
 import { logger } from '../utils/logger.utils'
-import { state } from '../utils/state.utils'
+import { state, watchState } from '../utils/state.utils'
 import { calculateMetrics, formatCurrency, type MetricsData, topValueItems } from './page-metrics.utils'
 
 // oxlint-disable-next-line no-magic-numbers
@@ -166,7 +166,11 @@ MetricCardMissingPriceList.displayName = 'MetricCardMissingPriceList'
 
 export function PageMetrics({ ...properties }: Readonly<Record<string, unknown>>) {
   logger.debug('PageMetrics', { properties })
-  const metrics = useMemo(() => calculateMetrics(state.items), [])
+  const [items, setItems] = useState(state.items)
+  watchState('items', () => {
+    setItems(state.items)
+  })
+  const metrics = useMemo(() => calculateMetrics(items), [items])
   return (
     <AppPageCard cardTitle="Metrics" icon={InsightsIcon} pageCode="metrics" pageTitle="Metrics">
       <div className="flex flex-col">

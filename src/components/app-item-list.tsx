@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useMemo, useRef, useState } from 'react'
 import type { Item } from '../types/item.types'
 import type { Display } from '../types/theme.types'
 import { state, watchState } from '../utils/state.utils'
@@ -14,6 +14,7 @@ type Props = Readonly<{
 
 export function AppItemList(props: Props) {
   const { display: displayProp, items, loadingItemIds, onSelection, showPrice } = props
+  const loadingSet = useMemo(() => new Set(loadingItemIds), [loadingItemIds])
   const [display, setDisplay] = useState<Display>(displayProp ?? state.display)
   // handle selection
   const [, setSelection] = useState<Item[]>([])
@@ -38,7 +39,7 @@ export function AppItemList(props: Props) {
     <nav aria-label="item list" className="mb-20 overflow-x-hidden overflow-y-auto md:mb-0" data-component="item-list">
       <div className={`grid grid-cols-1 bg-gray-100 ${display === 'list' ? '' : 'gap-3 p-3 xs:grid-cols-2 sm:grid-cols-3 sm:gap-5 sm:p-5'}`} data-type="list">
         {items.map(item => (
-          <AppItemListEntry display={display} isLoading={loadingItemIds?.includes(item.$id)} item={item} key={item.$id} onSelect={onSelection ? onSelect : undefined} showPrice={showPrice} />
+          <AppItemListEntry display={display} isLoading={loadingSet.has(item.$id)} item={item} key={item.$id} onSelect={onSelection ? onSelect : undefined} showPrice={showPrice} />
         ))}
       </div>
     </nav>

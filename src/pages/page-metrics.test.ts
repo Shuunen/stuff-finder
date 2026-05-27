@@ -115,7 +115,6 @@ describe('page-metrics.utils', () => {
     expect(result.totalValue).toMatchInlineSnapshot(`810`)
     expect(result.topValueItems, 'topValueItems length').toHaveLength(3)
     expect(Object.keys(result.boxAnalysis), 'boxAnalysis length').toHaveLength(4)
-    expect(Object.keys(result.statusCounts), 'statusCounts length').toHaveLength(3)
   })
 
   it('formatCurrency A should format currency correctly', () => {

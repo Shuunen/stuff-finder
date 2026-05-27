@@ -73,7 +73,6 @@ export function calculateMetrics(items: Item[]) {
     itemsWithoutLocation: getItemsWithoutLocation(items),
     itemsWithoutPhoto: getItemsWithoutPhoto(items),
     itemsWithoutPrice: getItemsWithoutPrice(items),
-    statusCounts: calculateStatusCounts(items),
     topValueItems: getTopValueItems(items),
   }
 }

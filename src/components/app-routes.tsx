@@ -1,5 +1,5 @@
 // oxlint-disable promise/prefer-await-to-then
-import { lazy } from 'react'
+import { lazy, useEffect } from 'react'
 import { Route, Routes, useNavigate } from 'react-router-dom'
 import { setNavigate } from '../utils/navigation.utils'
 import { AppLoader } from './app-loader'
@@ -17,7 +17,9 @@ const AsyncPageKitchenSink = lazy(() => import('../pages/page-kitchen-sink').the
 
 export function AppRoutes() {
   const navigate = useNavigate()
-  setNavigate(navigate)
+  useEffect(() => {
+    setNavigate(navigate)
+  }, [navigate])
   return (
     <Routes>
       <Route element={<AsyncPageHome />} path="/" />

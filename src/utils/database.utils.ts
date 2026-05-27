@@ -201,13 +201,14 @@ export async function uploadPhotosIfNeeded(item: Item, oldPhotos: string[] = [])
     if (uuid === undefined) {
       const oldPhoto = oldPhotos[index]
       const hasOldBucketPhoto = oldPhoto !== undefined && !isUrl(oldPhoto)
-      // oxlint-disable-next-line no-await-in-loop
-      if (hasOldBucketPhoto) await deleteImageRemotely(oldPhoto)
       // generate a text id based on timestamp
       const suffix = Date.now().toString(nbDaysInMonth)
       // oxlint-disable-next-line no-await-in-loop
       const result = await uploadImage(`${id.value}_photo-${index}-${suffix}`, photo)
       if (!result.ok) return Result.error(`failed to upload photo at index ${index} for item ${item.$id}`)
+      // delete old bucket photo only after successful upload to prevent data loss
+      // oxlint-disable-next-line no-await-in-loop
+      if (hasOldBucketPhoto) await deleteImageRemotely(oldPhoto)
       // if upload failed, uuid will be the original url, it can be a external url or a bucket url that we failed to upload but still exists
       uuid = result.value
     }
