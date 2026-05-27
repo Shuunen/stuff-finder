@@ -1,6 +1,7 @@
 import TuneIcon from '@mui/icons-material/Tune'
 import { Button } from '@mui/material'
 import { useCallback } from 'react'
+import { safeParse } from 'valibot'
 import { AppForm } from '../components/app-form'
 import { AppPageCard } from '../components/app-page-card'
 import { downloadItems } from '../utils/database.utils'
@@ -16,15 +17,15 @@ export function PageSettings() {
       collectionId: form.fields.collectionId.value,
       databaseId: form.fields.databaseId.value,
     }
-    const parsed = settingsSchema.safeParse(formData)
+    const parsed = safeParse(settingsSchema, formData)
     if (!parsed.success) {
-      logger.error('settings validation failed', parsed.error)
+      logger.error('settings validation failed', parsed.issues)
       return
     }
     state.credentials = {
-      bucketId: parsed.data.bucketId,
-      collectionId: parsed.data.collectionId,
-      databaseId: parsed.data.databaseId,
+      bucketId: parsed.output.bucketId,
+      collectionId: parsed.output.collectionId,
+      databaseId: parsed.output.databaseId,
       wrap: '',
     }
     logger.showSuccess('credentials saved...')
