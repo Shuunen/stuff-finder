@@ -2,11 +2,33 @@
 import { createTheme, type ThemeOptions } from '@mui/material/styles'
 
 const themeOptions: ThemeOptions = {
-  palette: {
-    mode: 'light',
-    primary: {
-      main: '#8b32db',
+  components: {
+    MuiButton: {
+      variants: [
+        {
+          props: { variant: 'outlined' },
+          style: {
+            '&:hover': {
+              boxShadow: '1px 1px 0 var(--color-black)',
+              transform: 'translate(1px, 1px)',
+            },
+            background: 'var(--color-white)',
+            borderColor: 'var(--color-black)',
+            borderRadius: '12px',
+            borderWidth: '2px',
+            boxShadow: '3px 3px 0 var(--color-black)',
+            color: 'var(--color-black)',
+            fontWeight: 'bold',
+            lineHeight: 1.5,
+            padding: '6px 16px',
+            transition: 'all 0.1s ease-in-out',
+          },
+        },
+      ],
     },
+  },
+  typography: {
+    fontFamily: "'Bricolage Grotesque', system-ui, sans-serif",
   },
 }
 
