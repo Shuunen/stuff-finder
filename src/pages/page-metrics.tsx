@@ -1,4 +1,3 @@
-import InsightsIcon from '@mui/icons-material/Insights'
 import OutboxIcon from '@mui/icons-material/Outbox'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import SpeedIcon from '@mui/icons-material/Speed'
@@ -172,7 +171,7 @@ export function PageMetrics({ ...properties }: Readonly<Record<string, unknown>>
   })
   const metrics = useMemo(() => calculateMetrics(items), [items])
   return (
-    <AppPageCard cardTitle="Metrics" icon={InsightsIcon} pageCode="metrics" pageTitle="Metrics">
+    <AppPageCard cardTitle="Metrics" pageCode="metrics" pageTitle="Metrics">
       <div className="flex flex-col">
         {/* Amounts */}
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3">

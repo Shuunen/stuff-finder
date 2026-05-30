@@ -1,4 +1,3 @@
-import TuneIcon from '@mui/icons-material/Tune'
 import { Button } from '@mui/material'
 import { useCallback } from 'react'
 import { safeParse } from 'valibot'
@@ -33,7 +32,7 @@ export function PageSettings() {
   }, [])
 
   return (
-    <AppPageCard cardTitle="Settings" icon={TuneIcon} pageCode="settings" pageTitle="Settings">
+    <AppPageCard cardTitle="Settings" pageCode="settings" pageTitle="Settings">
       <div className="flex flex-col">
         <p>Stuff-Finder needs your Appwrite credentials to access your data, they are only stored in your browser.</p>
         <AppForm initialForm={settingsForm} onSubmit={onSubmit} />

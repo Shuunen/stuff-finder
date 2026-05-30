@@ -1,4 +1,3 @@
-import Print from '@mui/icons-material/Print'
 import Button from '@mui/material/Button'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Switch from '@mui/material/Switch'
@@ -48,7 +47,7 @@ export function PageItemPrint() {
 
   return (
     <>
-      <AppPageCard cardTitle="Print" icon={Print} pageCode="item-print" pageTitle={`${item.name} - Print`}>
+      <AppPageCard cardTitle="Print" pageCode="item-print" pageTitle={`${item.name} - Print`}>
         <div className="flex flex-col md:flex-row">
           <img alt={item.name} className="mx-auto max-h-64 w-1/3 object-contain" src={itemToImageUrl(item)} />
           <div className="flex flex-col gap-4 text-center md:items-start md:text-left">
