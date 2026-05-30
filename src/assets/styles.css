@@ -3,28 +3,49 @@
 
 @theme {
   --breakpoint-xs: 360px;
-  --color-primary: var(--color-purple-700);
+
+  /* Color palette */
+  --color-black: #1e2a3b;
+  --color-slate: #4a5666;
+  --color-red: #e04a2b;
+  --color-amber: #ffd27a;
+  --color-mint: #b7e5c0;
+  --color-sky: #9fd3e8;
+  --color-pink: #f0a8c8;
+  --color-peach: #ffb088;
+  --color-violet: #e8d8f8;
+  --color-cream: #fbf7ee;
+
+  /* Semantic palette */
+  /* --color-black stays --color-black */
+  /* --color-white stays --color-white */
+  --color-grey: var(--color-slate);
+  --color-background: var(--color-cream);
+  --color-primary: var(--color-red);
+  --color-pastel-1: var(--color-amber);
+  --color-pastel-2: var(--color-mint);
+  --color-pastel-3: var(--color-sky);
+  --color-pastel-4: var(--color-pink);
+  --color-pastel-5: var(--color-peach);
+  --color-pastel-6: var(--color-violet);
+
+  /* Typography */
+  --font-display: 'Bricolage Grotesque', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
 }
 
-/*
-  The default border color has changed to `currentcolor` in Tailwind CSS v4,
-  so we've added these compatibility styles to make sure everything still
-  looks the same as it did with Tailwind CSS v3.
-
-  If we ever want to remove these styles, we need to add an explicit border
-  color utility to any element that depends on these defaults.
-*/
 @layer base {
   *,
   ::after,
   ::before,
   ::backdrop,
   ::file-selector-button {
-    border-color: var(--color-gray-200, currentcolor);
+    @apply border-black;
   }
 
   html {
     scroll-behavior: smooth;
+    @apply bg-background font-display text-black;
   }
 
   ::-webkit-scrollbar {
@@ -32,24 +53,24 @@
   }
 
   ::-webkit-scrollbar-track {
-    @apply bg-current/10;
+    @apply bg-grey/10;
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply border border-current bg-current;
+    @apply rounded-full bg-pastel-1;
   }
 
   h1 {
-    @apply text-4xl font-medium text-purple-700;
+    @apply text-4xl font-black;
   }
 
   h2 {
-    @apply text-2xl text-purple-900;
+    @apply text-2xl font-bold;
   }
 
   h3 {
     -webkit-text-stroke-width: 2px;
-    -webkit-text-stroke-color: grey;
+    -webkit-text-stroke-color: var(--color-grey);
     @apply relative z-0 translate-y-10 indent-6 text-5xl font-black tracking-[1rem] text-transparent uppercase opacity-30 sm:text-7xl sm:tracking-[1.5rem] md:translate-y-12 md:indent-8 md:text-[5rem] md:tracking-[2rem];
   }
 }
