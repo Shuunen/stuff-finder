@@ -1,4 +1,4 @@
-import Button from '@mui/material/Button'
+import PrintIcon from '@mui/icons-material/Print'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Switch from '@mui/material/Switch'
 import ToggleButton from '@mui/material/ToggleButton'
@@ -7,6 +7,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { sleep } from 'shuutils'
 import { AppBarcode } from '../components/app-barcode'
+import { AppButton } from '../components/app-button'
 import { AppPageCard } from '../components/app-page-card'
 import { type PrintSize, printSizes } from '../types/print.types'
 import { itemToImageUrl } from '../utils/database.utils'
@@ -64,9 +65,7 @@ export function PageItemPrint() {
                   ))}
                 </ToggleButtonGroup>
                 <FormControlLabel control={highlightSwitch} label="Highlight zones" />
-                <Button onClick={onPrint} variant="contained">
-                  Print
-                </Button>
+                <AppButton name="print" color="pastel-4" label="Print" onClick={onPrint} startIcon={<PrintIcon />} />
               </div>
             </div>
           </div>

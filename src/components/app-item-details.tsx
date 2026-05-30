@@ -6,6 +6,7 @@ import type { Item } from '../types/item.types'
 import { itemToImageUrl } from '../utils/database.utils'
 import { itemToLocation } from '../utils/item.utils'
 import { navigate } from '../utils/navigation.utils'
+import { AppButton } from './app-button'
 import { AppItemDetailsActions } from './app-item-details-actions'
 import { AppLocSticker } from './app-loc-sticker'
 
@@ -15,13 +16,6 @@ const squiggleAnchor2 = 0.6
 const squiggleAnchor3 = 0.9
 const squiggleEndPad = 2
 const squiggleWidth = 120
-
-const statusColors: Record<string, string> = {
-  bought: 'var(--color-pastel-2)',
-  'for-sell': 'var(--color-pastel-1)',
-  lost: 'var(--color-pastel-4)',
-  'to-give': 'var(--color-pastel-3)',
-}
 
 function squiggleSvg(width: number) {
   const cp1 = width * squiggleCtrl1
@@ -37,18 +31,14 @@ function squiggleSvg(width: number) {
 }
 
 function renderMetaTags(item: Item) {
-  const baseClasses = cn('shadow-chunky rounded-full border border-grey px-4 py-1 font-semibold')
+  const baseClasses = cn('rounded-full border border-grey bg-white px-4 py-1 font-semibold')
   return (
     <div className="flex flex-wrap gap-2" data-testid="item-detail-meta">
-      {item.price > 0 && <div className={cn(baseClasses, 'bg-pastel-1')}>€{item.price}</div>}
-      {item.barcode.length > 0 && <div className={cn(baseClasses, 'bg-white')}>{item.barcode}</div>}
-      {item.reference.length > 0 && <div className={cn(baseClasses, 'bg-white')}>{item.reference}</div>}
-      {item.status.length > 0 && (
-        <div className={cn(baseClasses)} style={{ background: statusColors[item.status] }}>
-          {item.status}
-        </div>
-      )}
-      <div className={cn(baseClasses, 'bg-pastel-6')}>{item.isPrinted ? 'printed' : 'not printed'}</div>
+      {item.price > 0 && <div className={baseClasses}>€{item.price}</div>}
+      {item.barcode.length > 0 && <div className={baseClasses}>{item.barcode}</div>}
+      {item.reference.length > 0 && <div className={baseClasses}>{item.reference}</div>}
+      {item.status.length > 0 && <div className={baseClasses}>{item.status}</div>}
+      <div className={baseClasses}>{item.isPrinted ? 'printed' : 'not printed'}</div>
     </div>
   )
 }
@@ -56,14 +46,8 @@ function renderMetaTags(item: Item) {
 function renderActionButtons(item: Item) {
   return (
     <div className="mt-6 flex justify-center gap-3" data-testid="item-detail-actions">
-      <button className="sf-chunky-btn" onClick={() => navigate(`/item/edit/${item.$id}`)} type="button">
-        <EditOutlinedIcon />
-        Edit
-      </button>
-      <button className="sf-chunky-btn bg-pastel-6" onClick={() => navigate(`/item/print/${item.$id}`)} type="button">
-        Print label
-        <PrintIcon />
-      </button>
+      <AppButton label="Edit" name="edit" onClick={() => navigate(`/item/edit/${item.$id}`)} startIcon={<EditOutlinedIcon />} />
+      <AppButton color="pastel-6" label="Print label" name="print-label" onClick={() => navigate(`/item/print/${item.$id}`)} endIcon={<PrintIcon />} />
     </div>
   )
 }

@@ -2,7 +2,6 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
 import FileCopyIcon from '@mui/icons-material/FileCopy'
 import MoreDots from '@mui/icons-material/MoreVert'
-import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
@@ -18,6 +17,7 @@ import type { Item } from '../types/item.types'
 import { deleteItem } from '../utils/item.utils'
 import { logger } from '../utils/logger.utils'
 import { navigate } from '../utils/navigation.utils'
+import { AppButton } from './app-button'
 
 // oxlint-disable-next-line max-lines-per-function
 export function AppItemDetailsActions({ item }: Readonly<{ item: Item }>) {
@@ -108,12 +108,8 @@ export function AppItemDetailsActions({ item }: Readonly<{ item: Item }>) {
           <DialogContentText>We need to confirm the deletion of this item.</DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={closeDialog} variant="outlined">
-            Cancel
-          </Button>
-          <Button autoFocus color="error" onClick={doDelete} variant="contained">
-            Delete
-          </Button>
+          <AppButton name="cancel" label="Cancel" onClick={closeDialog} />
+          <AppButton name="delete" color="pastel-5" label="Delete" onClick={doDelete} />
         </DialogActions>
       </Dialog>
     </div>

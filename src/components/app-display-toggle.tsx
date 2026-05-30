@@ -3,6 +3,7 @@ import ViewListIcon from '@mui/icons-material/ViewList'
 import { useCallback, useState } from 'react'
 import type { Display } from '../types/theme.types'
 import { state } from '../utils/state.utils'
+import { AppButton } from './app-button'
 
 export function AppDisplayToggle() {
   const [display, setDisplay] = useState<Display>(state.display)
@@ -14,12 +15,8 @@ export function AppDisplayToggle() {
 
   return (
     <div aria-label="display" className="view-toggle">
-      <button aria-label="card view" className={`view-toggle-btn ${display === 'card' ? 'active' : ''}`} onClick={() => changeDisplay('card')} type="button">
-        <GridViewIcon fontSize="small" />
-      </button>
-      <button aria-label="list view" className={`view-toggle-btn ${display === 'list' ? 'active' : ''}`} onClick={() => changeDisplay('list')} type="button">
-        <ViewListIcon fontSize="small" />
-      </button>
+      <AppButton name="card-view" onClick={() => changeDisplay('card')} startIcon={<GridViewIcon fontSize="small" />} variant={display === 'card' ? 'outlined' : 'text'} />
+      <AppButton name="list-view" onClick={() => changeDisplay('list')} startIcon={<ViewListIcon fontSize="small" />} variant={display === 'list' ? 'outlined' : 'text'} />
     </div>
   )
 }

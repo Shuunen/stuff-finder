@@ -1,5 +1,7 @@
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import type { JSX } from 'react'
 import { AppBarcode } from '../components/app-barcode'
+import { AppButton } from '../components/app-button'
 import type { Item } from '../types/item.types'
 import { emptyItem } from '../utils/item.utils'
 
@@ -114,6 +116,52 @@ function paletteTable() {
   )
 }
 
+const buttonColors = ['white', 'primary', 'pastel-1', 'pastel-2', 'pastel-3', 'pastel-4', 'pastel-5', 'pastel-6'] as const
+
+function buttonsSection() {
+  return (
+    <div className="flex flex-col gap-6">
+      <div>
+        <small>outlined (default)</small>
+        <div className="flex flex-wrap gap-3">
+          {buttonColors.map(color => (
+            <AppButton key={color} color={color} label={color} name={`outlined-${color}`} variant="outlined" />
+          ))}
+        </div>
+      </div>
+      <div>
+        <small>text</small>
+        <div className="flex flex-wrap gap-3">
+          {buttonColors.map(color => (
+            <AppButton key={color} color={color} label={color} name={`text-${color}`} variant="text" />
+          ))}
+        </div>
+      </div>
+      <div>
+        <small>disabled</small>
+        <div className="flex flex-wrap gap-3">
+          <AppButton disabled label="outlined disabled" name="disabled-outlined" variant="outlined" />
+          <AppButton disabled label="text disabled" name="disabled-text" variant="text" />
+        </div>
+      </div>
+      <div>
+        <small>with icon</small>
+        <div className="flex flex-wrap gap-3">
+          <AppButton label="Back" name="icon-start" startIcon={<ChevronLeftIcon />} />
+          <AppButton label="Next" name="icon-end" endIcon={<ChevronLeftIcon style={{ transform: 'rotate(180deg)' }} />} color="pastel-3" />
+        </div>
+      </div>
+      <div>
+        <small>loading</small>
+        <div className="flex flex-wrap gap-3">
+          <AppButton label="Loading" loading name="loading" />
+          <AppButton label="Loading primary" loading name="loading-primary" color="primary" />
+        </div>
+      </div>
+    </div>
+  )
+}
+
 const typeScale = [
   { label: 'h1 — Level one title', sample: 'Stuff Finder', tag: 'h1' },
   { label: 'h2 — Level two title', sample: 'Where did I put it?', tag: 'h2' },
@@ -139,23 +187,29 @@ function typographyTable() {
   )
 }
 
+function Section({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <div className="flex flex-col gap-6">
+      <h2>{title}</h2>
+      {children}
+      <div className="mx-auto my-8 w-1/2 border-b-4 border-primary/20" />
+    </div>
+  )
+}
+
+// oxlint-disable-next-line react/no-multi-comp
 export function PageKitchenSink() {
   return (
     <div className="flex h-screen flex-col gap-10 p-12" data-page="kitchen-sink">
       <h1>Kitchen Sink</h1>
-      <div className="grid min-h-0 flex-1 gap-12 overflow-y-auto">
-        <section>
-          <h2 className="mb-6">Typography</h2>
-          {typographyTable()}
-        </section>
+      <div className="grid min-h-0 flex-1 gap-6 overflow-y-auto">
+        <Section title="Typography">{typographyTable()}</Section>
 
-        <section>
-          <h2 className="mb-4">Colors</h2>
-          {paletteTable()}
-        </section>
+        <Section title="Colors">{paletteTable()}</Section>
 
-        <section>
-          <h2>Barcodes</h2>
+        <Section title="Buttons">{buttonsSection()}</Section>
+
+        <Section title="Barcodes">
           <div className="grid w-3/4 grid-cols-3 gap-6">
             {items.map(item => (
               <div className="flex flex-col items-start gap-0" key={item.reference + item.name}>
@@ -171,7 +225,7 @@ export function PageKitchenSink() {
               </div>
             ))}
           </div>
-        </section>
+        </Section>
       </div>
     </div>
   )

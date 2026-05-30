@@ -174,31 +174,6 @@
   pointer-events: none;
 }
 
-/* ---- Chunky button (secondary) ---- */
-.sf-chunky-btn {
-  height: 56px;
-  padding: 0 20px;
-  border: 2px solid var(--color-black);
-  border-radius: 18px;
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 17px;
-  color: var(--color-black);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  box-shadow: 4px 4px 0 var(--color-black);
-  transition:
-    box-shadow 0.1s ease,
-    transform 0.1s ease;
-}
-.sf-chunky-btn:hover {
-  box-shadow: 3px 3px 0 var(--color-black);
-  transform: translate(1px, 1px);
-}
-
 /* ---- Tape strip decoration ---- */
 .sf-tape {
   position: absolute;
@@ -389,23 +364,6 @@
   z-index: 20;
   @apply right-30 bottom-8 max-w-lg;
 }
-.search-dock-action {
-  width: 40px;
-  height: 40px;
-  border-radius: 100%;
-  border: 2px solid var(--color-black);
-  display: grid;
-  place-items: center;
-  cursor: pointer;
-  flex-shrink: 0;
-  transition:
-    box-shadow 0.1s ease,
-    transform 0.1s ease;
-}
-.search-dock-action:hover {
-  box-shadow: 2px 2px 0 var(--color-black);
-  transform: translate(-1px, -1px);
-}
 
 /* ---- View toggle ---- */
 .view-toggle {
@@ -414,24 +372,6 @@
   border-radius: 100px;
   padding: 3px;
   box-shadow: 2px 2px 0 var(--color-black);
-}
-.view-toggle-btn {
-  width: 36px;
-  height: 30px;
-  border-radius: 100px;
-  border: none;
-  cursor: pointer;
-  display: grid;
-  place-items: center;
-  transition: background 0.1s ease;
-}
-.view-toggle-btn.active {
-  background: var(--color-black);
-  color: var(--color-background);
-}
-.view-toggle-btn:not(.active) {
-  background: transparent;
-  color: var(--color-grey);
 }
 
 /* ---- Scan page ---- */

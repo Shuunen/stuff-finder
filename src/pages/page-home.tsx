@@ -5,6 +5,7 @@ import QrCodeScannerIcon from '@mui/icons-material/QrCodeScanner'
 import SearchIcon from '@mui/icons-material/Search'
 import SettingsIcon from '@mui/icons-material/Settings'
 import { useCallback, useState } from 'react'
+import { AppButton } from '../components/app-button'
 import { AppPill } from '../components/app-pill'
 import { setPageTitle } from '../utils/browser.utils'
 import { logger } from '../utils/logger.utils'
@@ -49,9 +50,7 @@ export function PageHome({ ...properties }: Readonly<Record<string, unknown>>) {
     <div className="sf-page relative w-full py-12" data-testid="home">
       <div className="flex items-center justify-between" data-testid="home-header">
         <AppPill className="bg-pastel-1">{itemCount} things</AppPill>
-        <button className="sf-icon-btn" onClick={() => navigate('/settings')} title="Settings" type="button">
-          <SettingsIcon />
-        </button>
+        <AppButton name="settings" onClick={() => navigate('/settings')} endIcon={<SettingsIcon />} />
       </div>
       <div className="mx-auto flex flex-1 flex-col justify-center" data-testid="home-content">
         <div className="relative mb-7">
@@ -75,26 +74,16 @@ export function PageHome({ ...properties }: Readonly<Record<string, unknown>>) {
                 value={query}
               />
             </div>
-            <button className="sf-find-btn md:max-w-fit md:px-8" type="submit">
-              Find it
-              <ArrowForwardIcon />
-            </button>
+            <AppButton label="Find it" name="find" type="submit" color="primary" disabled={!isUsable} endIcon={<ArrowForwardIcon />} />
           </div>
         </form>
       </div>
       <div className="flex items-center justify-center gap-7">
-        <button className="sf-ghost-btn" onClick={() => navigate('/scan')} type="button">
-          <QrCodeScannerIcon />
-          Scan
-        </button>
+        <AppButton label="Scan" name="scan" onClick={() => navigate('/scan')} variant="text" disabled={!isUsable} startIcon={<QrCodeScannerIcon />} />
         <span className="h-4 w-px" style={{ background: 'color-mix(in srgb, var(--color-grey) 40%, transparent)' }} />
-        <button className="sf-ghost-btn" onClick={onSpeech} type="button">
-          <MicIcon /> Speak
-        </button>
+        <AppButton label="Speak" name="speak" onClick={onSpeech} variant="text" disabled={!isUsable} startIcon={<MicIcon />} />
         <span className="h-4 w-px" style={{ background: 'color-mix(in srgb, var(--color-grey) 40%, transparent)' }} />
-        <button className="sf-ghost-btn" onClick={() => navigate('/item/add')} type="button">
-          Add <AddIcon />
-        </button>
+        <AppButton label="Add" name="add" onClick={() => navigate('/item/add')} variant="text" disabled={!isUsable} startIcon={<AddIcon />} />
       </div>
     </div>
   )

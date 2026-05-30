@@ -9,6 +9,7 @@ import { logger } from '../utils/logger.utils'
 import { navigate } from '../utils/navigation.utils'
 import { listenUserSpeech } from '../utils/speech.utils'
 import { state, watchState } from '../utils/state.utils'
+import { AppButton } from './app-button'
 
 const focusDelay = 100
 
@@ -30,18 +31,14 @@ type DockProps = { isUsable: boolean; onSpeech: () => void; placeholder: string;
 
 function renderFloatingDock({ isUsable, onSpeech, placeholder, searchRef }: DockProps) {
   return (
-    <div className="search-dock bg-white">
+    <div className="search-dock bg-white" data-testid="floating-search-dock">
       <div className="flex items-center gap-3">
         <SearchIcon />
         <input className="bg-transparent font-display text-grey outline-none" disabled={!isUsable} onKeyUp={onSearch} placeholder={placeholder} ref={searchRef} />
       </div>
       <div className="flex gap-2">
-        <button className="search-dock-action bg-pastel-2 text-grey" onClick={onSpeech} title="Speak to search" type="button">
-          <MicIcon fontSize="small" />
-        </button>
-        <button className="search-dock-action bg-pastel-3 text-grey" onClick={() => navigate('/')} title="Home" type="button">
-          <HomeIcon fontSize="small" />
-        </button>
+        <AppButton name="speak-search" onClick={onSpeech} startIcon={<MicIcon fontSize="small" />} variant="text" />
+        <AppButton name="home" onClick={() => navigate('/')} startIcon={<HomeIcon fontSize="small" />} variant="text" />
       </div>
     </div>
   )
