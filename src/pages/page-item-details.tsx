@@ -1,7 +1,8 @@
-import ManageSearchIcon from '@mui/icons-material/ManageSearch'
 import { useParams } from 'react-router-dom'
+import { AppButtonBack } from '../components/app-button-back'
 import { AppItemDetails } from '../components/app-item-details'
-import { AppPageCard } from '../components/app-page-card'
+import { AppQuickSearch } from '../components/app-quick-search'
+import { setPageTitle } from '../utils/browser.utils'
 import { logger } from '../utils/logger.utils'
 import { state } from '../utils/state.utils'
 
@@ -12,9 +13,23 @@ export function PageItemDetails() {
   if (item === undefined) return <>Item with id &quot;{id}&quot; not found ;(</>
   logger.debug('PageItemDetails', { item })
   const stepsBack = context === 'single' ? 2 : 1 // oxlint-disable-line @typescript-eslint/no-magic-numbers
+  setPageTitle(`${item.name} - Details`)
+
   return (
-    <AppPageCard cardTitle="Details" icon={ManageSearchIcon} nextLabel="Edit" nextUrl={`/item/edit/${item.$id}`} pageCode="item-details" pageTitle={`${item.name} - Details`} stepsBack={stepsBack}>
-      <AppItemDetails item={item} />
-    </AppPageCard>
+    <div className="sf-page" data-page="item-details">
+      {/* Top nav */}
+      <div className="flex items-center justify-between px-5 pt-4 pb-2">
+        <AppButtonBack stepsBack={stepsBack} />
+        <div className="w-10" />
+      </div>
+
+      {/* Content */}
+      <div className="relative flex-1 overflow-auto px-5 pb-28">
+        <AppItemDetails item={item} />
+      </div>
+
+      {/* Bottom search dock */}
+      <AppQuickSearch mode="floating" />
+    </div>
   )
 }

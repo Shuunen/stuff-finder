@@ -14,7 +14,6 @@ import { useLocation } from 'react-router-dom'
 import { isMobile } from 'shuutils'
 import { logger } from '../utils/logger.utils'
 import { navigate } from '../utils/navigation.utils'
-import { AppQuickSearch } from './app-quick-search'
 
 const actions = [
   { handleClick: () => navigate('/'), icon: <HomeIcon />, name: 'Home' },
@@ -44,27 +43,28 @@ export function AppSpeedDial({ isLoading = false, isSettingsRequired = false }: 
   }, [onMouse])
   const options: Partial<FabProps> = {
     color: 'default',
-    sx: { backgroundColor: 'white', color: 'purple', opacity: 0.7 },
+    sx: {
+      '&:hover': { backgroundColor: 'var(--color-background)', boxShadow: '2px 2px 0 var(--color-black)' },
+      backgroundColor: 'white',
+      border: '2px solid var(--color-black)',
+      boxShadow: '3px 3px 0 var(--color-black)',
+      color: 'var(--color-black)',
+      opacity: 0.85,
+    },
   } as const
   const icon = useMemo(() => (isLoading ? <HourglassTop /> : <SpeedDialIcon />), [isLoading])
   const availableActions = useMemo(() => (isSettingsRequired ? actions.filter(action => ['Home', 'Settings'].includes(action.name)) : actions), [isSettingsRequired])
   const { pathname: path } = useLocation()
-  const [isQuickSearchAvailable, setIsQuickSearchAvailable] = useState(false)
   useEffect(() => {
-    setIsQuickSearchAvailable(path !== '/')
     setIsOpen(false)
   }, [path])
+
   return (
     <>
       <Fade in={isOpen}>
-        <div className="absolute right-0 bottom-0 z-10 size-full bg-linear-to-tl" data-component="speed-dial-backdrop" onClick={toggleOpen} />
+        <div className="absolute right-0 bottom-0 z-10 size-full" data-component="speed-dial-backdrop" onClick={toggleOpen} />
       </Fade>
-      <div className="pointer-events-none fixed right-5 bottom-5 z-20 flex items-end md:right-10 md:bottom-10 print:hidden" data-component="speed-dial">
-        <Fade in={isQuickSearchAvailable}>
-          <div className="pointer-events-auto mb-2">
-            <AppQuickSearch mode="floating" />
-          </div>
-        </Fade>
+      <div className="pointer-events-none fixed right-4 bottom-4 z-20 flex items-end md:right-8 md:bottom-8 print:hidden" data-component="speed-dial">
         <SpeedDial ariaLabel="Actions" FabProps={options} icon={icon} onClick={toggleOpen} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} open={isOpen}>
           {availableActions.map(action => (
             <SpeedDialAction
@@ -75,6 +75,7 @@ export function AppSpeedDial({ isLoading = false, isSettingsRequired = false }: 
                 action.handleClick()
               }}
               slotProps={{ tooltip: () => ({ title: action.name }) }}
+              sx={{ '&:hover': { boxShadow: '1px 1px 0 var(--color-black)' }, border: '2px solid var(--color-black)', boxShadow: '2px 2px 0 var(--color-black)' }}
             />
           ))}
         </SpeedDial>
