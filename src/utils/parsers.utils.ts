@@ -1,6 +1,20 @@
 // oxlint-disable no-null, no-magic-numbers
 import { array, boolean, fallback, maxLength, minValue, nonEmpty, nullish, number, object, picklist, pipe, string } from 'valibot'
-import { itemBoxes, itemStatus, uuidMaxLength } from '../constants'
+import { defaultCredentials, itemBoxes, itemStatus, uuidMaxLength } from '../constants'
+
+export const credentialsSchema = fallback(
+  object({
+    bucketId: fallback(string(), ''),
+    collectionId: fallback(string(), ''),
+    databaseId: fallback(string(), ''),
+    wrap: fallback(string(), ''),
+  }),
+  defaultCredentials,
+)
+
+export const displaySchema = fallback(picklist(['card', 'list'] as const), 'card' as const)
+
+export const themeSchema = fallback(picklist(['dark', 'light'] as const), 'light' as const)
 
 const itemRequiredStringSchema = pipe(string(), nonEmpty())
 

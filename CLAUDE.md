@@ -34,8 +34,8 @@ Never disable a lint rule without asking the user. Try to fix the code first the
 - **Constants**: camelCase only, never UPPER_SNAKE_CASE
 - **Absent values**: `undefined`, never `null`; use `isNil` from es-toolkit to check
 - **Narrowing**: use `invariant(x, "msg")` from es-toolkit — never `x!` or silent `if (!x) return`
-- **Semantic CSS**: Use only semantic class names in markup; centralize shared styling css files via CSS selectors and tailwind `@apply`, not scattered utility classes
 - **Colors in TSX**: Only use colors from the Semantic palette (e.g. `primary`, `background`, ...) — never raw color palette names (`red`, `cream`, etc.) or hardcoded hex values
+- **No silent failures**: every `catch` block must log with at least `logger.error` or `logger.warn` — never swallow errors silently
 
 ## Testing practices
 

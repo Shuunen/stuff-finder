@@ -338,4 +338,25 @@ describe('item.utils', () => {
     expect(value).toMatchInlineSnapshot(`"tasks are fresh (now)"`)
     expect(databaseMock.listRows).not.toHaveBeenCalled()
   })
+
+  it('getItems F offline with cached items => return cache, no fetch', async () => {
+    vi.stubGlobal('navigator', { onLine: false })
+    const twoMinutesAgo = Date.now() - 2 * 60 * 1000
+    const result = await getItems([mockItem()], twoMinutesAgo)
+    const { error, value } = Result.unwrap(result)
+    expect(error).toBeUndefined()
+    expect(value).toBe('offline — 1 cached items available')
+    expect(databaseMock.listRows).not.toHaveBeenCalled()
+    vi.unstubAllGlobals()
+  })
+
+  it('getItems G offline with no cached items => error, no fetch', async () => {
+    vi.stubGlobal('navigator', { onLine: false })
+    const twoMinutesAgo = Date.now() - 2 * 60 * 1000
+    const result = await getItems([], twoMinutesAgo)
+    const { error } = Result.unwrap(result)
+    expect(error).toMatchInlineSnapshot(`"offline and no cached items available"`)
+    expect(databaseMock.listRows).not.toHaveBeenCalled()
+    vi.unstubAllGlobals()
+  })
 })

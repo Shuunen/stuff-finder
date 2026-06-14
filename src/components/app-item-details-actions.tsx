@@ -58,7 +58,6 @@ export function AppItemDetailsActions({ className, item }: Readonly<{ className?
     navigate('/item/add')
   }
 
-  // oxlint-disable-next-line no-null
   const [anchorElement, setAnchorElement] = useState<HTMLElement | null>(null)
   const isOpen = Boolean(anchorElement)
   const handleClick = (event?: React.MouseEvent<HTMLElement>) => {
@@ -66,7 +65,6 @@ export function AppItemDetailsActions({ className, item }: Readonly<{ className?
     setAnchorElement(event.currentTarget)
   }
   const closeMenu = () => {
-    // oxlint-disable-next-line no-null
     setAnchorElement(null)
   }
   const [isDialogOpen, setIsDialogOpen] = useState(false)
