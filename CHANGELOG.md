@@ -2,6 +2,21 @@
 
 All notable changes to stuff-finder are documented here.
 
+## [3.2.0] - 2026-06-15
+
+### Added
+
+- **Offline PWA** — app works without a network connection, browsing cached items when offline
+- **IndexedDB storage via Dexie** — items, credentials, display, and theme now persist in IndexedDB instead of localStorage
+- **Automatic migration** — existing localStorage data is migrated to IndexedDB on first launch of v3.2; localStorage access failures in privacy-mode browsers are handled gracefully
+- **Service worker** — workbox precaches all assets; Appwrite images use CacheFirst (30 days); external resources use NetworkFirst with a 200-entry / 1-day cap
+- **Offline banner** — displayed when the device has no network connection
+- **Schema validation on IndexedDB reads** — credentials, display, and theme are validated with valibot on load, falling back to safe defaults if the stored value is malformed
+
+### Changed
+
+- Dependencies bumped: appwrite 26, MUI 9.1, react-router 7.17, es-toolkit 1.47.1, vitest 4.1.8 and others
+
 ## [3.1.0] - 2026-06-14
 
 ### Added in 3.1.0
