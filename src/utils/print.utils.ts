@@ -1,4 +1,4 @@
-/* v8 ignore next -- @preserve */
+/* v8 ignore next */
 import type { Item } from '../types/item.types'
 import { itemToLocation } from './item.utils'
 

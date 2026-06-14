@@ -2,6 +2,8 @@ import { createRoot } from 'react-dom/client'
 import { toastError, toastInfo } from 'shuutils'
 import { App } from './app'
 import './assets/styles.css'
+import { loadFromDexie } from './db/db-init'
+import { migrateFromLocalStorage } from './db/db-migrate'
 import { getItems } from './utils/item.utils'
 import { logger } from './utils/logger.utils'
 import { state } from './utils/state.utils'
@@ -12,6 +14,8 @@ const root = document.querySelector('#app')
 if (root) createRoot(root).render(<App />)
 else logger.error('root not found')
 
+await migrateFromLocalStorage()
+await loadFromDexie()
 const result = await getItems()
 state.status = result.ok ? 'ready' : 'settings-required'
 if (result.ok) toastInfo(result.value)

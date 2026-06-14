@@ -5,7 +5,6 @@ import { defaultSound } from '../types/sounds.types'
 import { type AppStatus, defaultStatus } from '../types/status.types'
 import { type Display, defaultTheme } from '../types/theme.types'
 import { navigate } from './navigation.utils'
-import { storage } from './storage.utils'
 
 /* v8 ignore start */
 
@@ -25,21 +24,17 @@ const defaultDisplay: Display = isBrowserEnvironment() && globalThis.screen.widt
 
 /* v8 ignore stop */
 
-export const { state, watchState } = createState(
-  {
-    credentials: defaultCredentials,
-    display: defaultDisplay,
-    items: [] as Item[],
-    /** timestamp of the last time items were fetched, in milliseconds */
-    itemsTimestamp: 0,
-    sound: defaultSound,
-    status: defaultStatus,
-    /** the display theme of the item list : card or list */
-    theme: defaultTheme,
-  },
-  storage,
-  ['credentials', 'display', 'items', 'itemsTimestamp', 'theme'], // avoid status persistence
-)
+export const { state, watchState } = createState({
+  credentials: defaultCredentials,
+  display: defaultDisplay,
+  items: [] as Item[],
+  /** timestamp of the last time items were fetched, in milliseconds */
+  itemsTimestamp: 0,
+  sound: defaultSound,
+  status: defaultStatus,
+  /** the display theme of the item list : card or list */
+  theme: defaultTheme,
+})
 
 const statusDelay = 300
 
