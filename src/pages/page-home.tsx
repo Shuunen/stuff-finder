@@ -53,7 +53,9 @@ export function PageHome({ ...properties }: Readonly<Record<string, unknown>>) {
   return (
     <div className="relative flex w-full grow flex-col py-12" data-testid="home">
       <div className="flex items-center justify-between" data-testid="home-header">
-        <AppPill className="bg-pastel-1">{itemCount} things</AppPill>
+        <AppPill name="item-count" className="bg-pastel-1">
+          {itemCount} things
+        </AppPill>
         <AppButton name="settings" onClick={() => navigate('/settings')} label="Settings" endIcon={<SettingsIcon />} />
       </div>
       <div className="mx-auto flex flex-1 flex-col justify-center" data-testid="home-content">
@@ -67,7 +69,7 @@ export function PageHome({ ...properties }: Readonly<Record<string, unknown>>) {
         </div>
         <form onSubmit={onSearch}>
           <div className="flex flex-col gap-4 md:flex-row">
-            <AppPill className="rounded-xl bg-white px-4 py-3 md:min-w-md">
+            <AppPill name="home-search-input" className="rounded-xl bg-white px-4 py-3 md:min-w-md">
               <SearchIcon />
               <input
                 className="ml-2 grow outline-none"
@@ -78,7 +80,7 @@ export function PageHome({ ...properties }: Readonly<Record<string, unknown>>) {
                 value={query}
               />
             </AppPill>
-            <AppButton label="Find it" name="find" type="submit" color="primary" disabled={!isUsable} endIcon={<ArrowForwardIcon />} />
+            <AppButton name="find" label="Find it" type="submit" color="primary" disabled={!isUsable} endIcon={<ArrowForwardIcon />} />
           </div>
         </form>
       </div>

@@ -30,7 +30,7 @@ type DockProps = { isUsable: boolean; onSpeech: () => void; placeholder: string;
 
 function renderFloatingDock({ isUsable, onSpeech, placeholder, searchRef }: DockProps) {
   return (
-    <AppPill className="flex w-full max-w-96 items-center justify-between bg-white" data-testid="floating-search-dock">
+    <AppPill className="flex w-full max-w-96 items-center justify-between bg-white" name="quick-search">
       <div className="flex items-center gap-3">
         <SearchIcon />
         <input className="bg-transparent font-display text-grey outline-none" disabled={!isUsable} onKeyUp={onSearch} placeholder={placeholder} ref={searchRef} />

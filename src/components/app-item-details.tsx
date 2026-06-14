@@ -16,11 +16,29 @@ import { AppWave } from './app-wave'
 function renderMetaTags(item: Item) {
   return (
     <div className="flex flex-wrap gap-2" data-testid="item-detail-meta">
-      {item.price > 0 && <AppPill shallow>€{item.price}</AppPill>}
-      {item.barcode.length > 0 && <AppPill shallow>{item.barcode}</AppPill>}
-      {item.reference.length > 0 && <AppPill shallow>{item.reference}</AppPill>}
-      {item.status.length > 0 && <AppPill shallow>{item.status}</AppPill>}
-      <AppPill shallow>{item.isPrinted ? 'printed' : 'not printed'}</AppPill>
+      {item.price > 0 && (
+        <AppPill name="price" shallow>
+          €{item.price}
+        </AppPill>
+      )}
+      {item.barcode.length > 0 && (
+        <AppPill name="barcode" shallow>
+          {item.barcode}
+        </AppPill>
+      )}
+      {item.reference.length > 0 && (
+        <AppPill name="reference" shallow>
+          {item.reference}
+        </AppPill>
+      )}
+      {item.status.length > 0 && (
+        <AppPill name="status" shallow>
+          {item.status}
+        </AppPill>
+      )}
+      <AppPill name="print-status" shallow>
+        {item.isPrinted ? 'printed' : 'not printed'}
+      </AppPill>
     </div>
   )
 }
@@ -37,7 +55,7 @@ function renderTopActionButtons(item: Item, stepsBack?: number) {
 function renderVisual(item: Item) {
   return (
     <div className="relative px-1 pt-2">
-      <AppPill className="relative w-full rounded-xl bg-white p-3">
+      <AppPill name="visual" className="relative w-full rounded-xl bg-white p-3">
         <img alt={item.name} className="max-h-65 w-full rounded-xl object-contain md:max-h-120" data-testid="item-detail-image" loading="lazy" src={itemToImageUrl(item)} style={{ aspectRatio: '4/3' }} />
         <AppTape className="absolute -top-8 left-1/3 w-42 -rotate-6" />
       </AppPill>
@@ -63,7 +81,7 @@ export function AppItemDetails({ item, stepsBack }: Readonly<{ item: Item; steps
     <div className="flex flex-col gap-6" data-component="item-details">
       {renderTopActionButtons(item, stepsBack)}
       {renderVisual(item)}
-      <AppPill className="mt-6 ml-2 flex flex-col items-start gap-3 rounded-xl bg-white px-6 py-8">
+      <AppPill name="item-details" className="mt-6 ml-2 flex flex-col items-start gap-3 rounded-xl bg-white px-6 py-8">
         <AppTape className="absolute -top-8 left-1/2 w-36 rotate-3 bg-pastel-1!" />
         <em>{[item.brand, itemLocation].filter(Boolean).join(' · ')}</em>
         <div>

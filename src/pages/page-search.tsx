@@ -41,7 +41,9 @@ export function PageSearch() {
     <div className="flex h-full grow flex-col" data-page="search">
       <div className="flex items-center justify-between px-5 pt-4 pb-2">
         <AppButtonBack />
-        <AppPill className="ml-6 bg-pastel-1">{loading ? '…' : `${results.length} results found`}</AppPill>
+        <AppPill name="search-results" className="ml-6 bg-pastel-1">
+          {loading ? '…' : `${results.length} results found`}
+        </AppPill>
         <AppDisplayToggle />
       </div>
 

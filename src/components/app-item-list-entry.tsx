@@ -36,7 +36,7 @@ function AppItemListEntryComponent({ className, display, item, isLoading = false
           goToDetails()
         }}
       >
-        <AppPill hover className="flex w-full flex-col items-start gap-4 rounded-xl bg-white">
+        <AppPill name="item-card" hover className="flex w-full flex-col items-start gap-4 rounded-xl bg-white">
           <img alt={item.name} className="mx-auto max-h-96" data-testid="item-card-entry-image" loading="lazy" src={itemToImageUrl(item)} />
           <div className="grid gap-2">
             {renderDetails(item)}
@@ -55,7 +55,7 @@ function AppItemListEntryComponent({ className, display, item, isLoading = false
         goToDetails()
       }}
     >
-      <AppPill hover className="relative flex w-full flex-col gap-4 rounded-xl bg-white md:flex-row">
+      <AppPill name="item-list" hover className="relative flex w-full flex-col gap-4 rounded-xl bg-white md:flex-row">
         <img alt={item.name} className="object-contain p-2 md:max-h-36 md:w-36" data-testid="item-list-entry-image" loading="lazy" src={itemToImageUrl(item)} />
         <div className="mr-auto grid gap-2">{renderDetails(item)}</div>
         <AppLocSticker className="absolute -top-2 -right-2 md:relative md:top-auto md:right-4" box={item.box} drawer={item.drawer} />

@@ -97,7 +97,7 @@ function paletteTable() {
         {paletteRows.map(row => (
           <tr className="border-b border-grey/10" key={row.name}>
             <td className="w-16 py-2 pr-4">
-              <AppPill className="size-16 rounded border-2 border-grey" background={`var(${row.token})`} />
+              <AppPill name={`color-${row.name}`} className="size-16 rounded border-2 border-grey" background={`var(${row.token})`} />
             </td>
             <td className="py-2">
               <span className="font-display text-sm font-bold text-black">{row.name}</span>
@@ -126,7 +126,7 @@ function buttonsSection() {
         <small>outlined (default)</small>
         <div className="flex flex-wrap gap-3">
           {buttonColors.map(color => (
-            <AppButton key={color} color={color} label={color} name={`outlined-${color}`} variant="outlined" />
+            <AppButton key={color} name={`outlined-${color}`} color={color} label={color} variant="outlined" />
           ))}
         </div>
       </div>
@@ -134,7 +134,7 @@ function buttonsSection() {
         <small>text</small>
         <div className="flex flex-wrap gap-3">
           {buttonColors.map(color => (
-            <AppButton key={color} color={color} label={color} name={`text-${color}`} variant="text" />
+            <AppButton key={color} name={`text-${color}`} color={color} label={color} variant="text" />
           ))}
         </div>
       </div>
