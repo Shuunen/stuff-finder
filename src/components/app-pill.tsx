@@ -17,7 +17,7 @@ export function AppPill({ children, className, hover, shallow, background }: Rea
   return (
     <span
       className={cn(
-        `border-ink relative inline-flex items-center rounded-full px-3 py-1 font-mono text-sm font-bold whitespace-nowrap transition`,
+        `border-ink relative inline-flex items-center rounded-full px-3 py-1 font-mono text-sm font-bold whitespace-nowrap transition focus-within:border-primary focus-within:shadow-[4px_4px_0_var(--color-primary)]`,
         className,
         shallow ? 'border' : 'border-2 shadow-[3px_3px_0_var(--color-black)]',
         hover && 'hover:-translate-y-0.5 hover:shadow-[4px_4px_0_var(--color-black)]',
