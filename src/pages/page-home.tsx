@@ -32,7 +32,7 @@ export function PageHome({ ...properties }: Readonly<Record<string, unknown>>) {
   })
 
   const onSearch = useCallback(
-    (event: { preventDefault(): void }) => {
+    (event: { preventDefault: () => void }) => {
       event.preventDefault()
       if (!query.trim() || !isUsable) return
       state.sound = 'start'
