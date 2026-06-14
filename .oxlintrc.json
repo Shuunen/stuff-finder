@@ -56,7 +56,7 @@
     {
       "files": ["**/*.tsx"],
       "rules": {
-        "null": "off"
+        "no-null": "off"
       }
     },
     {

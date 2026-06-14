@@ -73,7 +73,6 @@ export function PageScan({ ...properties }: Readonly<Record<string, unknown>>) {
     logger.debug('starting video stream decoding...')
     state.sound = 'start'
     reader
-      // oxlint-disable-next-line unicorn/no-null
       .decodeFromVideoDevice(null, videoReference.current, (result, error) => {
         if (status === 'loading')
           void sleep(waitDelay).then(() => {
