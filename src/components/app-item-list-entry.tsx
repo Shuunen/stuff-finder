@@ -1,18 +1,14 @@
-import { Button, Checkbox } from '@mui/material'
-import Card from '@mui/material/Card'
-import CardMedia from '@mui/material/CardMedia'
-import ListItem from '@mui/material/ListItem'
-import ListItemButton from '@mui/material/ListItemButton'
-import ListItemText from '@mui/material/ListItemText'
-import { memo, useCallback, useMemo, useState } from 'react'
-import { formatCurrency } from '../pages/page-metrics.utils'
+import { memo, useCallback } from 'react'
+import { cn } from 'shuutils'
 import type { Item } from '../types/item.types'
 import type { Display } from '../types/theme.types'
 import { itemToImageUrl } from '../utils/database.utils'
-import { itemToLocation } from '../utils/item.utils'
 import { navigate } from '../utils/navigation.utils'
+import { AppLocSticker } from './app-loc-sticker'
+import { AppPill } from './app-pill'
 
 type Props = Readonly<{
+  className?: string
   display: Display
   isLoading?: boolean
   item: Item
@@ -20,100 +16,53 @@ type Props = Readonly<{
   showPrice?: boolean
 }>
 
-// oxlint-disable-next-line max-lines-per-function
-function AppItemListEntryComponent({ display, item, showPrice, onSelect, isLoading = false }: Props) {
-  const title = `${item.name}${typeof item.brand === 'string' && item.brand.length > 0 ? ` - ${item.brand.trim()}` : ''}`
-  const titleStyle = useMemo(() => ({ color: 'black', fontSize: 18, overflow: 'hidden' }), [])
-  const location = itemToLocation(item)
-  const subtitle = showPrice ? `${location} - ${formatCurrency(item.price)}` : location
-  const displaySubtitle = isLoading ? 'Updating price...' : subtitle
-  const subtitleStyle = useMemo(
-    () => ({
-      color: display === 'card' ? '#333' : 'grey',
-      fontSize: 16,
-      overflow: 'hidden',
-    }),
-    [display],
-  )
-  const listStyle = useMemo(
-    () => ({
-      background: 'white',
-      color: 'black',
-      filter: isLoading ? 'brightness(0.9)' : '',
-      transition: 'filter .3s',
-    }),
-    [isLoading],
-  )
-  const cardStyle = useMemo(
-    () => ({
-      ':hover': { boxShadow: '0 0 20px 0 rgba(0, 0, 0, 0.5)' },
-      height: '100%',
-      maxWidth: 300,
-      position: 'relative',
-      width: '100%',
-    }),
-    [],
-  )
-  const imgStyle = useMemo(() => ({ aspectRatio: 1, objectFit: 'contain', padding: '1vw 1vw 0 1vw', width: '100%' }), [])
-  const floatingHeaderStyle = useMemo(
-    () => ({
-      background: 'whitesmoke',
-      color: 'black',
-      fontSize: 18,
-      height: '100%',
-      marginBottom: 0,
-      paddingX: 2,
-      paddingY: 1,
-      width: '100%',
-    }),
-    [],
-  )
-  const goToDetails = useCallback(() => navigate(`/item/details/${item.$id}`), [item.$id])
-  // handle selection
-  const [checked, setChecked] = useState(false)
-  const toggleSelection = useCallback(() => {
-    setChecked(currentChecked => {
-      const newSelected = !currentChecked
-      if (onSelect) onSelect(item, newSelected)
-      return newSelected
-    })
-  }, [item, onSelect])
-  const secondaryAction =
-    !isLoading && onSelect ? (
-      <Button endIcon={<Checkbox checked={checked} edge="end" />} onClick={toggleSelection}>
-        Select
-      </Button>
-    ) : undefined
+function renderDetails(item: Item) {
   return (
-    <ListItem data-type="list-item" disablePadding key={item.$id} secondaryAction={secondaryAction}>
-      {display === 'list' && (
-        <ListItemButton component="a" disabled={isLoading} href={`/item/details/${item.$id}`} sx={listStyle}>
-          <img alt={title} className="mr-4 size-12 rounded-full object-contain" data-test="item-list-entry-image" loading="lazy" src={itemToImageUrl(item)} />
-          <ListItemText
-            primary={title}
-            secondary={displaySubtitle}
-            slotProps={{
-              primary: titleStyle,
-              secondary: subtitleStyle,
-            }}
-          />
-        </ListItemButton>
-      )}
-      {display === 'card' && (
-        <Card onClick={goToDetails} sx={cardStyle}>
-          <CardMedia alt={title} component="img" data-test="item-card-entry-image" image={itemToImageUrl(item)} loading="lazy" sx={imgStyle} />
-          <ListItemText
-            primary={title}
-            secondary={displaySubtitle}
-            slotProps={{
-              primary: titleStyle,
-              secondary: subtitleStyle,
-            }}
-            sx={floatingHeaderStyle}
-          />
-        </Card>
-      )}
-    </ListItem>
+    <>
+      {item.brand.length > 0 && <em>{item.brand}</em>}
+      <p className="text-xl font-bold">{item.name}</p>
+    </>
+  )
+}
+
+function AppItemListEntryComponent({ className, display, item, isLoading = false }: Props) {
+  const goToDetails = useCallback(() => navigate(`/item/details/${item.$id}`), [item.$id])
+
+  if (display === 'card')
+    return (
+      <a
+        className={cn(`block transition`, isLoading && 'opacity-60', className)}
+        href={`/item/details/${item.$id}`}
+        onClick={event => {
+          event.preventDefault()
+          goToDetails()
+        }}
+      >
+        <AppPill hover className="flex w-full flex-col items-start gap-4 rounded-xl bg-white">
+          <img alt={item.name} className="mx-auto max-h-96" data-testid="item-card-entry-image" loading="lazy" src={itemToImageUrl(item)} />
+          <div className="grid gap-2">
+            {renderDetails(item)}
+            <AppLocSticker className="absolute -top-1 -right-2" box={item.box} drawer={item.drawer} rotate={3.5} />
+          </div>
+        </AppPill>
+      </a>
+    )
+
+  return (
+    <a
+      className={cn(`flex items-center gap-4`, isLoading && 'opacity-60', className)}
+      href={`/item/details/${item.$id}`}
+      onClick={event => {
+        event.preventDefault()
+        goToDetails()
+      }}
+    >
+      <AppPill hover className="relative flex w-full flex-col gap-4 rounded-xl bg-white md:flex-row">
+        <img alt={item.name} className="object-contain p-2 md:max-h-36 md:w-36" data-testid="item-list-entry-image" loading="lazy" src={itemToImageUrl(item)} />
+        <div className="mr-auto grid gap-2">{renderDetails(item)}</div>
+        <AppLocSticker className="absolute -top-2 -right-2 md:relative md:top-auto md:right-4" box={item.box} drawer={item.drawer} />
+      </AppPill>
+    </a>
   )
 }
 

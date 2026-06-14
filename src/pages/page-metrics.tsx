@@ -1,11 +1,10 @@
-import InsightsIcon from '@mui/icons-material/Insights'
 import OutboxIcon from '@mui/icons-material/Outbox'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import SpeedIcon from '@mui/icons-material/Speed'
-import { Button } from '@mui/material'
 import { memo, type ReactNode, useCallback, useEffect, useMemo, useState } from 'react'
 // oxlint-disable react/no-multi-comp
 import { tw } from 'shuutils'
+import { AppButton } from '../components/app-button'
 import { AppItemList } from '../components/app-item-list'
 import { AppPageCard } from '../components/app-page-card'
 import type { MuiIcon } from '../types/icons.types'
@@ -122,9 +121,7 @@ function PriceButtons({ onPriceClick, selection }: { onPriceClick: (price: numbe
       <p>Set price for the {label} :</p>
       <div className="flex gap-4">
         {priceList.map(price => (
-          <Button key={price} onClick={() => onPriceClick(price)} variant="outlined">
-            {price} €
-          </Button>
+          <AppButton name={`price-${price}`} key={price} label={`${price} €`} onClick={() => onPriceClick(price)} />
         ))}
       </div>
     </>
@@ -172,7 +169,7 @@ export function PageMetrics({ ...properties }: Readonly<Record<string, unknown>>
   })
   const metrics = useMemo(() => calculateMetrics(items), [items])
   return (
-    <AppPageCard cardTitle="Metrics" icon={InsightsIcon} pageCode="metrics" pageTitle="Metrics">
+    <AppPageCard cardTitle="Metrics" pageCode="metrics" pageTitle="Metrics">
       <div className="flex flex-col">
         {/* Amounts */}
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3">

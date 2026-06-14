@@ -1,6 +1,6 @@
-import { ArrowLeft } from '@mui/icons-material'
-import { Button } from '@mui/material'
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import { useCallback } from 'react'
+import { AppButton } from './app-button'
 
 const previous = -1
 
@@ -9,10 +9,5 @@ export function AppButtonBack({ stepsBack = 1 }: Readonly<{ stepsBack?: number }
     globalThis.history.go(previous * stepsBack)
   }, [stepsBack])
 
-  return (
-    <Button name="back" onClick={goBack} variant="outlined">
-      <ArrowLeft />
-      Back
-    </Button>
-  )
+  return <AppButton label="Back" name="back" onClick={goBack} startIcon={<ChevronLeftIcon />} />
 }

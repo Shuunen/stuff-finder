@@ -5,9 +5,9 @@ describe('theme', () => {
     expect(theme.palette.primary).toMatchInlineSnapshot(`
       {
         "contrastText": "#fff",
-        "dark": "rgb(97, 35, 153)",
-        "light": "rgb(162, 91, 226)",
-        "main": "#8b32db",
+        "dark": "#1565c0",
+        "light": "#42a5f5",
+        "main": "#1976d2",
       }
     `)
   })

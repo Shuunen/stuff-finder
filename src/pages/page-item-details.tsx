@@ -1,7 +1,6 @@
-import ManageSearchIcon from '@mui/icons-material/ManageSearch'
 import { useParams } from 'react-router-dom'
 import { AppItemDetails } from '../components/app-item-details'
-import { AppPageCard } from '../components/app-page-card'
+import { setPageTitle } from '../utils/browser.utils'
 import { logger } from '../utils/logger.utils'
 import { state } from '../utils/state.utils'
 
@@ -12,9 +11,11 @@ export function PageItemDetails() {
   if (item === undefined) return <>Item with id &quot;{id}&quot; not found ;(</>
   logger.debug('PageItemDetails', { item })
   const stepsBack = context === 'single' ? 2 : 1 // oxlint-disable-line @typescript-eslint/no-magic-numbers
+  setPageTitle(`${item.name} - Details`)
+
   return (
-    <AppPageCard cardTitle="Details" icon={ManageSearchIcon} nextLabel="Edit" nextUrl={`/item/edit/${item.$id}`} pageCode="item-details" pageTitle={`${item.name} - Details`} stepsBack={stepsBack}>
-      <AppItemDetails item={item} />
-    </AppPageCard>
+    <div className="mx-auto flex flex-col" data-page="item-details">
+      <AppItemDetails item={item} stepsBack={stepsBack} />
+    </div>
   )
 }
