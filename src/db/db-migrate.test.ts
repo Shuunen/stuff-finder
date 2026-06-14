@@ -79,4 +79,13 @@ describe('db-migrate', () => {
     await migrateFromLocalStorage()
     await expect(db.items.count()).resolves.toBe(0)
   })
+
+  it('H gracefully skips migration when localStorage is inaccessible', async () => {
+    vi.spyOn(globalThis.localStorage, 'getItem').mockImplementation(() => {
+      throw new Error('SecurityError: The operation is insecure.')
+    })
+    await expect(migrateFromLocalStorage()).resolves.toBeUndefined()
+    await expect(db.items.count()).resolves.toBe(0)
+    vi.restoreAllMocks()
+  })
 })

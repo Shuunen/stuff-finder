@@ -6,6 +6,8 @@ import { uniqueMark } from './src/plugins/unique-mark.ts'
 
 const imagesCacheMaxEntries = 500
 const imagesCacheMaxAgeSeconds = 2_592_000 // 30 days
+const externalCacheMaxEntries = 200
+const externalCacheMaxAgeSeconds = 86_400 // 1 day
 const httpStatusOk = 200
 
 // oxlint-disable-next-line import/no-default-export
@@ -57,6 +59,10 @@ export default defineConfig({
           },
           {
             handler: 'NetworkFirst',
+            options: {
+              cacheName: 'external-resources',
+              expiration: { maxAgeSeconds: externalCacheMaxAgeSeconds, maxEntries: externalCacheMaxEntries },
+            },
             urlPattern: /^https:\/\//u,
           },
         ],

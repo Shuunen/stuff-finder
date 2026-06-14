@@ -1,5 +1,7 @@
 import { debounce } from 'shuutils'
+import { parse } from 'valibot'
 import { logger } from '../utils/logger.utils'
+import { credentialsSchema, displaySchema, themeSchema } from '../utils/parsers.utils'
 import { state, watchState } from '../utils/state.utils'
 import { db } from './db'
 
@@ -33,10 +35,10 @@ export async function loadFromDexie(): Promise<void> {
   try {
     const [items, credentialsMeta, displayMeta, itemsTimestampMeta, themeMeta] = await Promise.all([db.items.toArray(), db.meta.get('credentials'), db.meta.get('display'), db.meta.get('itemsTimestamp'), db.meta.get('theme')])
     if (items.length > 0) state.items = items
-    if (credentialsMeta !== undefined) state.credentials = credentialsMeta.value as typeof state.credentials
-    if (displayMeta !== undefined) state.display = displayMeta.value as typeof state.display
+    if (credentialsMeta !== undefined) state.credentials = parse(credentialsSchema, credentialsMeta.value)
+    if (displayMeta !== undefined) state.display = parse(displaySchema, displayMeta.value)
     if (typeof itemsTimestampMeta?.value === 'number') state.itemsTimestamp = itemsTimestampMeta.value
-    if (themeMeta !== undefined) state.theme = themeMeta.value as typeof state.theme
+    if (themeMeta !== undefined) state.theme = parse(themeSchema, themeMeta.value)
   } catch (error) {
     /* v8 ignore next */
     logger.error('loadFromDexie failed', error)

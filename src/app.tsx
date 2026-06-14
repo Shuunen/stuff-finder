@@ -35,7 +35,9 @@ function useOfflineStatus() {
 export function App() {
   const isOffline = useOfflineStatus()
   const fallback = useMemo(() => <AppLoader isLoading />, [])
-  useEffect(setupPwa, [])
+  useEffect(() => {
+    setupPwa()
+  }, [])
   return (
     <ThemeProvider theme={theme}>
       <AppOfflineWarning isOffline={isOffline} />

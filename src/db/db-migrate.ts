@@ -14,8 +14,15 @@ const lsPrefix = 'stuff-finder_'
 const legacyKeys = ['credentials', 'display', 'items', 'itemsTimestamp', 'theme'] as const
 
 function readLegacyKey(lsKey: string): string | undefined {
-  const raw = globalThis.localStorage.getItem(lsPrefix + lsKey)
-  return raw ?? undefined
+  try {
+    const raw = globalThis.localStorage.getItem(lsPrefix + lsKey)
+    return raw ?? undefined
+  } catch (error) {
+    /* v8 ignore start */
+    logger.warn('readLegacyKey failed, localStorage may be restricted', error)
+    return undefined
+    /* v8 ignore stop */
+  }
 }
 
 function parseLegacyJson(lsKey: string): unknown {
@@ -29,12 +36,24 @@ function parseLegacyJson(lsKey: string): unknown {
 }
 
 function clearLegacyKeys(): void {
-  for (const lsKey of legacyKeys) globalThis.localStorage.removeItem(lsPrefix + lsKey)
+  try {
+    for (const lsKey of legacyKeys) globalThis.localStorage.removeItem(lsPrefix + lsKey)
+  } catch (error) {
+    /* v8 ignore next */
+    logger.warn('clearLegacyKeys failed, localStorage may be restricted', error)
+  }
+}
+
+function hasLegacyLocalStorageData(): boolean {
+  try {
+    return legacyKeys.some(lsKey => globalThis.localStorage.getItem(lsPrefix + lsKey) !== null)
+  } catch {
+    return false
+  }
 }
 
 export async function migrateFromLocalStorage(): Promise<void> {
-  const hasLegacyData = legacyKeys.some(lsKey => globalThis.localStorage.getItem(lsPrefix + lsKey) !== null)
-  if (hasLegacyData)
+  if (hasLegacyLocalStorageData())
     try {
       const rawItems = parseLegacyJson('items')
       const itemsResult = rawItems === undefined ? undefined : safeParse(itemsSchema, rawItems)
@@ -54,10 +73,10 @@ export async function migrateFromLocalStorage(): Promise<void> {
         if (display !== undefined) metaEntries.push({ key: 'display', value: display })
         if (theme !== undefined) metaEntries.push({ key: 'theme', value: theme })
         await db.meta.bulkPut(metaEntries)
+        clearLegacyKeys()
       })
-      clearLegacyKeys()
     } catch (error) {
-      /* v8 ignore next -- @preserve */
+      /* v8 ignore next */
       logger.error('migrateFromLocalStorage failed', error)
     }
 }
