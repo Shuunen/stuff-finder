@@ -21,7 +21,7 @@ export function AppLocSticker({ box, drawer, rotate = 0, className = '' }: Props
       style={{ background: color, transform: rotate ? `rotate(${rotate}deg)` : undefined }}
     >
       <div className="grid h-9 w-9 shrink-0 place-items-center rounded-lg border-2 border-black bg-white text-[18px] font-bold text-black">{letter}</div>
-      {drawerStr !== undefined && <span>{`drawer ${drawerStr}`}</span>}
+      {drawerStr !== undefined && <span className="text-black">{`drawer ${drawerStr}`}</span>}
     </div>
   )
 }

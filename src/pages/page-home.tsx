@@ -22,10 +22,13 @@ export function PageHome({ ...properties }: Readonly<Record<string, unknown>>) {
 
   const [query, setQuery] = useState('')
   const [isUsable, setIsUsable] = useState(state.status !== 'settings-required')
-  const itemCount = state.items.length
+  const [itemCount, setItemCount] = useState(state.items.length)
 
   watchState('status', () => {
     setIsUsable(state.status !== 'settings-required')
+  })
+  watchState('items', () => {
+    setItemCount(state.items.length)
   })
 
   const onSearch = useCallback(

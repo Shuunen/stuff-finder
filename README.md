@@ -10,17 +10,7 @@
 
 [![logo](public/assets/favicon-16x16.png)](https://stuff-finder.netlify.app) [https://stuff-finder.netlify.app](https://stuff-finder.netlify.app)
 
-[![demo](docs/design-1.2.0.jpg)](https://stuff-finder.netlify.app)
-
-## Todo
-
-- [ ] nicer colorful identity ([something like this ?](https://www.iconfinder.com/icons/44859/cube_icon))
-- [ ] detect user in/activity to refresh data
-- [ ] show given/thrown items with a different color/display, also they're no more in box/room
-- [ ] features to recover :
-  - [ ] clone item
-  - [ ] search retry when scan, search, or speech fail
-  - [ ] print un-printed items
+[![demo](docs/design-3.0.0-home-desktop.jpg)](https://stuff-finder.netlify.app)
 
 ## Build sizes
 
@@ -37,6 +27,7 @@
 - 2.1.0 : 1KB html + 18KB css + 726KB js
 - 2.2.0 : 1KB html + 18KB css + 691KB js (after making everything lazy & optimizing common deps)
 - 3.0.0 : 2KB html + 28KB css + 1007KB js (after react migration and various features)
+- 3.1.0 : 3KB html + 31KB css + 1020KB js (new design: AppPill, AppWave, AppLocSticker, AppButton)
 
 Check build stats in details by running `pnpm build:analyze`. Tooling benchmarks are tracked in [docs/benchmarks.md](docs/benchmarks.md).
 

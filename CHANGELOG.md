@@ -2,6 +2,34 @@
 
 All notable changes to stuff-finder are documented here.
 
+## [3.1.0] - 2026-06-14
+
+### Added in 3.1.0
+
+- **AppPill component** — reusable pill-shaped card container with optional hover lift, shadow depth, and background color; replaces ad-hoc card styling across all pages
+- **AppWave component** — decorative SVG wave divider for page headers
+- **AppButton component** — unified MUI Button wrapper with consistent semantic color palette, aria-label support, and ThemeProvider hoisted to app root for performance
+- **AppLocSticker component** — box/drawer location badge with A–Z box color palette, positioned absolutely on item cards
+- **box.utils.ts** — `boxToLetter` and `boxToColor` utilities for the A–Z box color system; 100% test coverage
+
+### Changed in 3.1.0
+
+- **Full UI redesign** — all pages and components rebuilt with the new design system (pill cards, tape accents, wave headers, location stickers)
+- **AppItemListEntry** — redesigned card and list views using AppPill, AppLocSticker; removed unused `onSelect`/`showPrice` dead props
+- **AppItemList** — removed dead selection machinery (`onSelect`, selection state, `showPrice`); simplified to display-only
+- **AppItemDetails** — redesigned detail view with improved layout, tape accent, and AppPill containers
+- **AppQuickSearch** — redesigned floating search dock with AppPill; added focus-visible ring on input; added aria-label on voice search button
+- **PageHome** — redesigned hero with wave, tape, pill-based search; fixed stale `itemCount` read (now reactive via watchState)
+- **AppForm** — Save button always rendered with `outlined` variant (visible when disabled)
+- **AppTape** — migrated from template literal to `cn()` for proper Tailwind class merging
+- **page-metrics.tsx** — migrated `gray-*` Tailwind palette classes to semantic tokens (`text-black`, `text-grey`, `border-black/20`); removed dead `onSelection`/`showPrice` props
+- **MUI ThemeProvider** — hoisted from every AppButton instance to app root (`app.tsx`), eliminating 50+ redundant context trees per page
+
+### Fixed in 3.1.0
+
+- **Accessibility** — removed `outline: none` on search inputs without replacement; added `focus-visible:ring` indicators
+- **HTML validity** — AppPill changed from `<span>` to `<div>` to allow block-level children without browser auto-correction
+
 ## [3.0.0] - 2026-05-27
 
 ### Added in 3.0.0

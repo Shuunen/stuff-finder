@@ -12,8 +12,6 @@ type Props = Readonly<{
   display: Display
   isLoading?: boolean
   item: Item
-  onSelect?: (item: Item, isSelected: boolean) => void
-  showPrice?: boolean
 }>
 
 function renderDetails(item: Item) {
