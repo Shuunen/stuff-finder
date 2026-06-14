@@ -1,4 +1,3 @@
-import QrCodeScannerIcon from '@mui/icons-material/QrCodeScanner'
 import { Alert, Collapse } from '@mui/material'
 import Skeleton from '@mui/material/Skeleton'
 import { BrowserMultiFormatReader } from '@zxing/library/es2015/browser/BrowserMultiFormatReader'
@@ -18,7 +17,7 @@ const waitDelay = 200
 
 function onDecodeSuccess(result: Result) {
   const code = result.getText()
-  logger.info('found qr or barcode :', code)
+  logger.info('found qr or barcode :', { code, result })
   void navigateToSearch(code)
 }
 
@@ -54,7 +53,7 @@ async function onDecode(result: null | Result, error?: Exception) {
     logger.showError(error.message, error)
     return
   }
-  if (result === null) return // if no result was found, do nothing
+  if (!result?.getText()) return // if no result was found, do nothing
   state.sound = 'barcode'
   await sleep(waitDelay)
   onDecodeSuccess(result)
@@ -67,7 +66,7 @@ export function PageScan({ ...properties }: Readonly<Record<string, unknown>>) {
 
   useEffect(() => {
     // this run once, when the component is mounted
-    if (videoReference.current === null) {
+    if (!videoReference.current) {
       logger.showError('video element is null')
       return functionReturningVoid
     }
@@ -98,7 +97,7 @@ export function PageScan({ ...properties }: Readonly<Record<string, unknown>>) {
   }, [status])
 
   return (
-    <AppPageCard cardTitle="Scan" icon={QrCodeScannerIcon} pageCode="scan" pageTitle="Scan QR Code or Barcode">
+    <AppPageCard cardTitle="Scan" pageCode="scan" pageTitle="Scan QR Code or Barcode">
       <div className="text-center">
         <h2 className="mb-6">Scan a QR Code or a barcode to search for it 👀</h2>
         {renderScanStatus(status, videoReference)}

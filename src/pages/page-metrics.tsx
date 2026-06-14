@@ -1,11 +1,10 @@
-import InsightsIcon from '@mui/icons-material/Insights'
 import OutboxIcon from '@mui/icons-material/Outbox'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import SpeedIcon from '@mui/icons-material/Speed'
-import { Button } from '@mui/material'
 import { memo, type ReactNode, useCallback, useEffect, useMemo, useState } from 'react'
 // oxlint-disable react/no-multi-comp
 import { tw } from 'shuutils'
+import { AppButton } from '../components/app-button'
 import { AppItemList } from '../components/app-item-list'
 import { AppPageCard } from '../components/app-page-card'
 import type { MuiIcon } from '../types/icons.types'
@@ -25,19 +24,17 @@ type MetricCardProps = {
   icon?: MuiIcon
   items?: Item[]
   loadingItemIds?: Item['$id'][]
-  onSelection?: (items: Item[]) => void
-  showPrice?: boolean
   title: string
 }
 
 const iconStyle = { fontSize: '3rem' }
 
 const MetricCard = memo((props: MetricCardProps) => {
-  const { title, color, amount, icon: Icon, items, onSelection, showPrice, children, loadingItemIds } = props
+  const { title, color, amount, icon: Icon, items, children, loadingItemIds } = props
   const isHidden = items?.length === 0
 
   return (
-    <div className={`relative flex gap-6 rounded-lg border border-gray-200 bg-white p-6 whitespace-nowrap shadow-sm ${color} ${isHidden ? 'hidden' : ''}`}>
+    <div className={`relative flex gap-6 rounded-lg border border-black/20 bg-white p-6 whitespace-nowrap shadow-sm ${color} ${isHidden ? 'hidden' : ''}`}>
       {amount && Icon && (
         <div className="flex items-center">
           <Icon className="opacity-30" sx={iconStyle} />
@@ -48,7 +45,7 @@ const MetricCard = memo((props: MetricCardProps) => {
         <h2 className="text-xl font-semibold text-current">{title}</h2>
         {(children || items) && (
           <div className="max-h-96 space-y-3 overflow-y-auto">
-            {items && <AppItemList display="list" items={items} loadingItemIds={loadingItemIds} onSelection={onSelection} showPrice={showPrice ?? false} />}
+            {items && <AppItemList display="list" items={items} loadingItemIds={loadingItemIds} />}
             {!items && children}
           </div>
         )}
@@ -62,10 +59,10 @@ MetricCard.displayName = 'MetricCard'
 
 function MetricCardEntry({ title, subtitle, value }: { title: string; subtitle: string; value: string }) {
   return (
-    <div className="mr-3 flex items-center justify-between rounded-md border border-gray-200 p-3">
+    <div className="mr-3 flex items-center justify-between rounded-md border border-black/20 p-3">
       <div className="max-w-4/5 flex-1">
-        <h4 className="truncate font-medium text-gray-900">{title}</h4>
-        <p className="text-sm text-gray-600">{subtitle}</p>
+        <h4 className="truncate font-medium text-black">{title}</h4>
+        <p className="text-sm text-grey">{subtitle}</p>
       </div>
       <p className="font-medium">{value}</p>
     </div>
@@ -122,9 +119,7 @@ function PriceButtons({ onPriceClick, selection }: { onPriceClick: (price: numbe
       <p>Set price for the {label} :</p>
       <div className="flex gap-4">
         {priceList.map(price => (
-          <Button key={price} onClick={() => onPriceClick(price)} variant="outlined">
-            {price} €
-          </Button>
+          <AppButton name={`price-${price}`} key={price} label={`${price} €`} onClick={() => onPriceClick(price)} />
         ))}
       </div>
     </>
@@ -141,8 +136,6 @@ const MetricCardMissingPriceList = memo(({ metrics }: { metrics: MetricsData }) 
     setSelection(current => filterSelectionByDisplayItems(current, itemsToDisplay))
   }, [itemsToDisplay, metrics.itemsWithoutPrice.length])
 
-  const onSelection = useCallback((items: Item[]) => setSelection(filterSelectionByDisplayItems(items, itemsToDisplay)), [itemsToDisplay])
-
   const removeItemsFromLists = useCallback((itemIds: string[]) => {
     setItemsToDisplay(current => removeItemsFromList(current, itemIds))
     setSelection(current => removeItemsFromList(current, itemIds))
@@ -156,7 +149,7 @@ const MetricCardMissingPriceList = memo(({ metrics }: { metrics: MetricsData }) 
   )
 
   return (
-    <MetricCard color={tw('text-red-600')} items={itemsToDisplay} loadingItemIds={loadingItemIds} onSelection={onSelection} title={`Items without price : ${itemsToDisplay.length}`}>
+    <MetricCard color={tw('text-red-600')} items={itemsToDisplay} loadingItemIds={loadingItemIds} title={`Items without price : ${itemsToDisplay.length}`}>
       <PriceButtons onPriceClick={onPriceClick} selection={selection} />
     </MetricCard>
   )
@@ -172,7 +165,7 @@ export function PageMetrics({ ...properties }: Readonly<Record<string, unknown>>
   })
   const metrics = useMemo(() => calculateMetrics(items), [items])
   return (
-    <AppPageCard cardTitle="Metrics" icon={InsightsIcon} pageCode="metrics" pageTitle="Metrics">
+    <AppPageCard cardTitle="Metrics" pageCode="metrics" pageTitle="Metrics">
       <div className="flex flex-col">
         {/* Amounts */}
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
@@ -183,7 +176,7 @@ export function PageMetrics({ ...properties }: Readonly<Record<string, unknown>>
         {/* Lists */}
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
           <MetricCard color={tw('text-red-600')} items={metrics.itemsNotPrinted} title={`Items not printed : ${metrics.itemsNotPrinted.length}`} />
-          <MetricCard color={tw('text-red-600')} items={metrics.itemsWithoutLocation} showPrice title={`Items without location : ${metrics.itemsWithoutLocation.length}`} />
+          <MetricCard color={tw('text-red-600')} items={metrics.itemsWithoutLocation} title={`Items without location : ${metrics.itemsWithoutLocation.length}`} />
           <MetricCard color={tw('text-red-600')} items={metrics.itemsWithoutPhoto} title={`Items without photo : ${metrics.itemsWithoutPhoto.length}`} />
           <MetricCardMissingPriceList metrics={metrics} />
           <MetricCard color={tw('text-blue-700')} title="Storage locations">
@@ -193,7 +186,7 @@ export function PageMetrics({ ...properties }: Readonly<Record<string, unknown>>
                 <MetricCardEntry key={box} subtitle={`${data.count} items`} title={box || 'No box specified'} value={formatCurrency(data.totalValue)} />
               ))}
           </MetricCard>
-          <MetricCard color={tw('text-green-700')} items={metrics.topValueItems} showPrice title={`Top ${topValueItems} most valuable`} />
+          <MetricCard color={tw('text-green-700')} items={metrics.topValueItems} title={`Top ${topValueItems} most valuable`} />
           <MetricCard color={tw('text-yellow-700')} items={metrics.itemsToGive} title={`Items to give : ${metrics.itemsToGive.length}`} />
         </div>
       </div>

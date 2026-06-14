@@ -1,9 +1,9 @@
-import { Button } from '@mui/material'
 import { type ReactNode, type SubmitEvent, useCallback, useEffect, useState } from 'react'
 import { debounce, functionReturningVoid, off, on, Result, copyToClipboard, readClipboard, parseJson, objectSerialize } from 'shuutils'
 import { alignClipboard, type Form, updateForm, validateForm } from '../utils/forms.utils'
 import { logger } from '../utils/logger.utils'
 import { colSpanClass, gridClass } from '../utils/theme.utils'
+import { AppButton } from './app-button'
 import { AppFormFieldCheckbox } from './app-form-field-checkbox'
 import { AppFormFieldSelect } from './app-form-field-select'
 import { AppFormFieldText } from './app-form-field-text'
@@ -99,11 +99,7 @@ export function AppForm<FormType extends Form>({ children, error: parentError = 
       ))}
       <div className="order-last flex justify-center md:col-span-full">
         {Boolean(errorMessage) && form.isTouched && <p className="text-red-500">{errorMessage}</p>}
-        {onSubmit !== undefined && (
-          <Button disabled={!canSubmit} name="submit" type="submit" variant={canSubmit ? 'contained' : 'outlined'}>
-            Save
-          </Button>
-        )}
+        {onSubmit !== undefined && <AppButton disabled={!canSubmit} label="Save" name="submit" type="submit" variant="outlined" />}
         {children}
       </div>
     </form>

@@ -2,13 +2,11 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
 import FileCopyIcon from '@mui/icons-material/FileCopy'
 import MoreDots from '@mui/icons-material/MoreVert'
-import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
 import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
-import IconButton from '@mui/material/IconButton'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
@@ -18,9 +16,10 @@ import type { Item } from '../types/item.types'
 import { deleteItem } from '../utils/item.utils'
 import { logger } from '../utils/logger.utils'
 import { navigate } from '../utils/navigation.utils'
+import { AppButton } from './app-button'
 
 // oxlint-disable-next-line max-lines-per-function
-export function AppItemDetailsActions({ item }: Readonly<{ item: Item }>) {
+export function AppItemDetailsActions({ className, item }: Readonly<{ className?: string; item: Item }>) {
   logger.info('AppItemDetailsActions', item)
 
   async function doDelete() {
@@ -62,8 +61,9 @@ export function AppItemDetailsActions({ item }: Readonly<{ item: Item }>) {
   // oxlint-disable-next-line no-null
   const [anchorElement, setAnchorElement] = useState<HTMLElement | null>(null)
   const isOpen = Boolean(anchorElement)
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElement(event.currentTarget as HTMLElement | null)
+  const handleClick = (event?: React.MouseEvent<HTMLElement>) => {
+    if (!event) return
+    setAnchorElement(event.currentTarget)
   }
   const closeMenu = () => {
     // oxlint-disable-next-line no-null
@@ -78,11 +78,9 @@ export function AppItemDetailsActions({ item }: Readonly<{ item: Item }>) {
   }
 
   return (
-    <div>
-      <IconButton aria-controls={isOpen ? 'basic-menu' : undefined} aria-expanded={isOpen ? 'true' : undefined} aria-haspopup="true" aria-label="more" onClick={handleClick}>
-        <MoreDots />
-      </IconButton>
-      <Menu anchorEl={anchorElement} onClose={closeMenu} open={isOpen}>
+    <div className={className}>
+      <AppButton aria-controls={isOpen ? 'item-actions-menu' : undefined} aria-expanded={isOpen ? 'true' : undefined} aria-haspopup="true" name="more" label="More" onClick={handleClick} endIcon={<MoreDots />} />
+      <Menu id="item-actions-menu" anchorEl={anchorElement} onClose={closeMenu} open={isOpen}>
         <MenuItem onClick={doEdit}>
           <ListItemIcon>
             <EditIcon />
@@ -102,18 +100,14 @@ export function AppItemDetailsActions({ item }: Readonly<{ item: Item }>) {
           Delete
         </MenuItem>
       </Menu>
-      <Dialog aria-describedby="alert-dialog-description" aria-labelledby="alert-dialog-title" onClose={closeDialog} open={isDialogOpen}>
-        <DialogTitle>Delete item ?</DialogTitle>
+      <Dialog aria-describedby="delete-dialog-description" aria-labelledby="delete-dialog-title" onClose={closeDialog} open={isDialogOpen}>
+        <DialogTitle id="delete-dialog-title">Delete item ?</DialogTitle>
         <DialogContent>
-          <DialogContentText>We need to confirm the deletion of this item.</DialogContentText>
+          <DialogContentText id="delete-dialog-description">We need to confirm the deletion of this item.</DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={closeDialog} variant="outlined">
-            Cancel
-          </Button>
-          <Button autoFocus color="error" onClick={doDelete} variant="contained">
-            Delete
-          </Button>
+          <AppButton name="cancel" label="Cancel" onClick={closeDialog} />
+          <AppButton name="delete" color="pastel-5" label="Delete" onClick={doDelete} />
         </DialogActions>
       </Dialog>
     </div>

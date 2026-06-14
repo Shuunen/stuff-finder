@@ -1,10 +1,8 @@
-import AddCircleOutlined from '@mui/icons-material/AddCircleOutlined'
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined'
 import SaveIcon from '@mui/icons-material/Save'
-import Button from '@mui/material/Button'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { dom, functionReturningVoid, objectSum, off, on, Result } from 'shuutils'
+import { AppButton } from '../components/app-button'
 import { AppForm } from '../components/app-form'
 import { AppPageCard } from '../components/app-page-card'
 import { defaultImage } from '../constants'
@@ -137,7 +135,7 @@ export function PageItemAddEdit({ isEdit = false }: Readonly<{ isEdit?: boolean 
   if (isEdit && initialItem === undefined) return <>Cannot edit, item with id &quot;{id}&quot; not found ;(</>
 
   return (
-    <AppPageCard cardTitle={`${isEdit ? 'Edit' : 'Add'} item`} icon={isEdit ? EditOutlinedIcon : AddCircleOutlined} pageCode={`item-${isEdit ? 'edit' : 'add'}`} pageTitle={`${isEdit ? 'Edit' : 'Add'} item`}>
+    <AppPageCard cardTitle={`${isEdit ? 'Edit' : 'Add'} item`} pageCode={`item-${isEdit ? 'edit' : 'add'}`} pageTitle={`${isEdit ? 'Edit' : 'Add'} item`}>
       <div className="mb-20 flex max-h-[90%] flex-col overflow-x-hidden overflow-y-auto md:mb-0 md:max-h-full">
         {isEdit && <p className="text-center">Please fill in the form below to edit the item, you can change any field you want 🔄</p>}
         {!isEdit && <p className="text-center">Please fill in the form below to add a new item, no worry, you will be able to edit it later if needed ✏️</p>}
@@ -149,9 +147,7 @@ export function PageItemAddEdit({ isEdit = false }: Readonly<{ isEdit?: boolean 
           </div>
         </div>
         <div className="flex justify-center">
-          <Button disabled={!canSubmit} loading={isLoading} onClick={onSubmit} startIcon={<SaveIcon />} variant="contained">
-            {isEdit ? 'Save' : 'Create'}
-          </Button>
+          <AppButton name="submit" disabled={!canSubmit} label={isEdit ? 'Save' : 'Create'} loading={isLoading} onClick={onSubmit} startIcon={<SaveIcon />} />
         </div>
       </div>
     </AppPageCard>

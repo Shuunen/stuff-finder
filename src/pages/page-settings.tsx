@@ -1,7 +1,6 @@
-import TuneIcon from '@mui/icons-material/Tune'
-import { Button } from '@mui/material'
 import { useCallback } from 'react'
 import { safeParse } from 'valibot'
+import { AppButton } from '../components/app-button'
 import { AppForm } from '../components/app-form'
 import { AppPageCard } from '../components/app-page-card'
 import { downloadItems } from '../utils/database.utils'
@@ -33,14 +32,12 @@ export function PageSettings() {
   }, [])
 
   return (
-    <AppPageCard cardTitle="Settings" icon={TuneIcon} pageCode="settings" pageTitle="Settings">
+    <AppPageCard cardTitle="Settings" pageCode="settings" pageTitle="Settings">
       <div className="flex flex-col">
         <p>Stuff-Finder needs your Appwrite credentials to access your data, they are only stored in your browser.</p>
         <AppForm initialForm={settingsForm} onSubmit={onSubmit} />
       </div>
-      <Button className="absolute bottom-6" name="download" onClick={downloadItems} type="button" variant="outlined">
-        Download items
-      </Button>
+      <AppButton name="download" label="Download items" onClick={downloadItems} />
     </AppPageCard>
   )
 }

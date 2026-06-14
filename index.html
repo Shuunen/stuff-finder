@@ -11,10 +11,13 @@
     <link href="/assets/favicon-32x32.png" rel="icon" sizes="32x32" type="image/png" />
     <link href="/assets/favicon-16x16.png" rel="icon" sizes="16x16" type="image/png" />
     <link href="/assets/site.webmanifest" rel="manifest" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
   </head>
 
-  <body class="flex h-screen flex-col overflow-hidden bg-linear-to-tr from-purple-200 align-middle">
-    <div class="flex max-h-full w-full grow flex-col items-center justify-center" id="app"></div>
+  <body class="flex h-screen flex-col overflow-hidden">
+    <div class="container mx-auto flex max-h-full w-full grow flex-col" id="app"></div>
 
     <span class="absolute bottom-0 w-full pb-4 text-center font-mono text-sm opacity-30 print:hidden" id="unique-mark"></span>
 

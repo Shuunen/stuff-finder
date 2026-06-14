@@ -1,29 +1,29 @@
-import SearchIcon from '@mui/icons-material/Search'
-import { CircularProgress } from '@mui/material'
 import { useEffect, useMemo, useState } from 'react'
 import { useLocation, useParams } from 'react-router-dom'
 import { ellipsis } from 'shuutils'
+import { AppButtonBack } from '../components/app-button-back'
 import { AppButtonNext } from '../components/app-button-next'
 import { AppDisplayToggle } from '../components/app-display-toggle'
 import { AppItemList } from '../components/app-item-list'
-import { AppPageCard } from '../components/app-page-card'
+import { AppPill } from '../components/app-pill'
+import { setPageTitle } from '../utils/browser.utils'
 import { logger } from '../utils/logger.utils'
 import { sadAscii } from '../utils/strings.utils'
 import { maxNameLength, search, type SearchState } from './page-search.const'
 
 const emptyResults: SearchState['results'] = []
 
+// oxlint-disable-next-line max-lines-per-function
 export function PageSearch() {
   const { input = '' } = useParams<{ input: string }>()
   const { state } = useLocation() as { state: SearchState | null }
   const stateResults = useMemo(() => state?.results ?? emptyResults, [state])
   const [results, setResults] = useState(stateResults)
-  const [header, setHeader] = useState(state?.header ?? '')
   const [loading, setLoading] = useState(stateResults.length === 0)
+  setPageTitle(`Search for "${ellipsis(input, maxNameLength)}"`)
 
   useEffect(() => {
     if (stateResults.length > 0) {
-      setHeader(state?.header ?? '')
       setResults(stateResults)
       setLoading(false)
       return
@@ -32,32 +32,38 @@ export function PageSearch() {
     // oxlint-disable-next-line prefer-await-to-then, always-return
     void search(input).then(data => {
       logger.info('search results loaded', { header: data.header, input, results: data.results, state })
-      setHeader(data.header)
       setResults(data.results)
       setLoading(false)
     })
   }, [input, stateResults, state])
 
   return (
-    <AppPageCard cardTitle="Search" icon={SearchIcon} pageCode="search" pageTitle={`Search for “${ellipsis(input, maxNameLength)}”`}>
-      <div className="flex max-h-[90%] flex-col items-center gap-3 sm:gap-5 md:max-h-full">
-        <h2 className="text-center">{header}</h2>
-        {loading && <CircularProgress className="size-12 text-primary" />}
-        {results.length > 0 && (
-          <>
-            <div className="absolute top-7 right-7">
-              <AppDisplayToggle />
-            </div>
-            <AppItemList items={results} />
-          </>
-        )}
-        {!loading && results.length === 0 && (
-          <>
-            <code className="my-4 animate-bounce text-4xl text-primary">{sadAscii()}</code>
-            <AppButtonNext label="Add a product" url={`/item/add/${input}`} />
-          </>
-        )}
+    <div className="flex h-full grow flex-col" data-page="search">
+      <div className="flex items-center justify-between px-5 pt-4 pb-2">
+        <AppButtonBack />
+        <AppPill name="search-results" className="ml-6 bg-pastel-1">
+          {loading ? '…' : `${results.length} results found`}
+        </AppPill>
+        <AppDisplayToggle />
       </div>
-    </AppPageCard>
+
+      <h2 className="my-4 text-center">Looking for &ldquo;{ellipsis(input, maxNameLength)}&rdquo;</h2>
+
+      {loading && (
+        <div className="flex flex-1 items-center justify-center">
+          <div className="h-10 w-10 animate-spin rounded-full border-4 border-t-transparent" />
+        </div>
+      )}
+
+      {!loading && results.length > 0 && <AppItemList items={results} />}
+
+      {!loading && results.length === 0 && (
+        <div className="flex flex-1 flex-col items-center justify-center gap-4 px-6 pb-24">
+          <code className="animate-bounce text-4xl text-primary">{sadAscii()}</code>
+          <p className="text-center text-grey">Nothing found for &ldquo;{input}&rdquo;</p>
+          <AppButtonNext label="Add this thing" url={`/item/add/${input}`} />
+        </div>
+      )}
+    </div>
   )
 }

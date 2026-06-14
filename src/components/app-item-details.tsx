@@ -1,41 +1,97 @@
-import LocationOnIcon from '@mui/icons-material/LocationOn'
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined'
 import PrintIcon from '@mui/icons-material/Print'
 import { useMemo } from 'react'
 import type { Item } from '../types/item.types'
 import { itemToImageUrl } from '../utils/database.utils'
 import { itemToLocation } from '../utils/item.utils'
+import { navigate } from '../utils/navigation.utils'
+import { AppButton } from './app-button'
+import { AppButtonBack } from './app-button-back'
 import { AppItemDetailsActions } from './app-item-details-actions'
-import { AppItemDetailsChip } from './app-item-details-chip'
+import { AppLocSticker } from './app-loc-sticker'
+import { AppPill } from './app-pill'
+import { AppTape } from './app-tape'
+import { AppWave } from './app-wave'
 
-export function AppItemDetails({ item }: Readonly<{ item: Item }>) {
-  const itemLocation = useMemo(() => itemToLocation(item), [item])
-
+function renderMetaTags(item: Item) {
   return (
-    <div className="flex flex-col items-center sm:flex-row">
-      <div className="absolute top-5 right-5 flex flex-col items-end gap-1 transition-opacity hover:opacity-85">
-        <AppItemDetailsActions item={item} />
+    <div className="flex flex-wrap gap-2" data-testid="item-detail-meta">
+      {item.price > 0 && (
+        <AppPill name="price" shallow>
+          €{item.price}
+        </AppPill>
+      )}
+      {item.barcode.length > 0 && (
+        <AppPill name="barcode" shallow>
+          {item.barcode}
+        </AppPill>
+      )}
+      {item.reference.length > 0 && (
+        <AppPill name="reference" shallow>
+          {item.reference}
+        </AppPill>
+      )}
+      {item.status.length > 0 && (
+        <AppPill name="status" shallow>
+          {item.status}
+        </AppPill>
+      )}
+      <AppPill name="print-status" shallow>
+        {item.isPrinted ? 'printed' : 'not printed'}
+      </AppPill>
+    </div>
+  )
+}
+
+function renderTopActionButtons(item: Item, stepsBack?: number) {
+  return (
+    <div className="my-8 flex justify-between px-1">
+      <AppButtonBack stepsBack={stepsBack} />
+      <AppItemDetailsActions item={item} />
+    </div>
+  )
+}
+
+function renderVisual(item: Item) {
+  return (
+    <div className="relative px-1 pt-2">
+      <AppPill name="visual" className="relative w-full rounded-xl bg-white p-3">
+        <img alt={item.name} className="max-h-65 w-full rounded-xl object-contain md:max-h-120" data-testid="item-detail-image" loading="lazy" src={itemToImageUrl(item)} style={{ aspectRatio: '4/3' }} />
+        <AppTape className="absolute -top-8 left-1/3 w-42 -rotate-6" />
+      </AppPill>
+      <div className="absolute -top-3 right-0 xs:-right-4">
+        <AppLocSticker box={item.box} drawer={item.drawer} rotate={6} />
       </div>
-      <div className="relative flex aspect-square w-full max-w-[40vh] min-w-40 flex-col md:max-w-72 md:min-w-64">
-        <img alt={item.name} className="absolute top-0 size-full object-contain md:p-4" data-test="item-detail-image" loading="lazy" src={itemToImageUrl(item)} />
-      </div>
-      <div className="mb-12 flex min-w-96 flex-col items-start justify-start gap-3 sm:mr-6 sm:mb-0">
-        <h1>
-          {item.name} {item.brand}
-        </h1>
-        {Boolean(item.details) && <p className="first-letter:uppercase">{item.details}</p>}
-        <div className="my-2 flex gap-3">
-          <LocationOnIcon className="text-purple-600" />
-          <div className="font-medium">{itemLocation || 'Unknown'}</div>
+    </div>
+  )
+}
+
+function renderBottomActionButtons(item: Item) {
+  return (
+    <div className="mt-6 flex justify-center gap-3" data-testid="item-detail-actions">
+      <AppButton label="Edit" name="edit" onClick={() => navigate(`/item/edit/${item.$id}`)} startIcon={<EditOutlinedIcon />} />
+      <AppButton color="pastel-6" label="Print label" name="print-label" onClick={() => navigate(`/item/print/${item.$id}`)} endIcon={<PrintIcon />} />
+    </div>
+  )
+}
+
+export function AppItemDetails({ item, stepsBack }: Readonly<{ item: Item; stepsBack?: number }>) {
+  const itemLocation = useMemo(() => itemToLocation(item), [item])
+  return (
+    <div className="flex flex-col gap-6" data-component="item-details">
+      {renderTopActionButtons(item, stepsBack)}
+      {renderVisual(item)}
+      <AppPill name="item-details" className="mt-6 ml-2 flex flex-col items-start gap-3 rounded-xl bg-white px-6 py-8">
+        <AppTape className="absolute -top-8 left-1/2 w-36 rotate-3 bg-pastel-1!" />
+        <em>{[item.brand, itemLocation].filter(Boolean).join(' · ')}</em>
+        <div>
+          <h1>{item.name}</h1>
+          <AppWave className="mt-2" />
         </div>
-        <div className="flex flex-wrap justify-start gap-3 md:flex-nowrap">
-          {item.brand.length > 0 && <AppItemDetailsChip label={item.brand} link={`/search/${item.brand}`} tooltip="Brand, click to search" />}
-          {item.price > 0 && <AppItemDetailsChip label={`${item.price} €`} tooltip="Price, click to copy" />}
-          {item.reference.length > 0 && <AppItemDetailsChip label={item.reference} tooltip="Reference, click to copy" />}
-          {item.barcode.length > 0 && <AppItemDetailsChip label={item.barcode} tooltip="Barcode, click to copy" />}
-          {item.status.length > 0 && <AppItemDetailsChip label={item.status} tooltip="Status, click to copy" />}
-          <AppItemDetailsChip color="primary" icon={PrintIcon} label={item.isPrinted ? 'printed' : 'not printed'} link={`/item/print/${item.$id}`} tooltip="Click to print" />
-        </div>
-      </div>
+        <p>{item.details}</p>
+        {renderMetaTags(item)}
+      </AppPill>
+      {renderBottomActionButtons(item)}
     </div>
   )
 }

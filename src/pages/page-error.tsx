@@ -1,11 +1,10 @@
-import PestControlIcon from '@mui/icons-material/PestControl'
 import { AppPageCard } from '../components/app-page-card'
 import { logger } from '../utils/logger.utils'
 
 export function PageError({ code, ...properties }: Readonly<{ [key: string]: unknown; code?: string }>) {
   logger.debug('PageError', { code, properties })
   return (
-    <AppPageCard cardTitle="Error" icon={PestControlIcon} pageCode="error" pageTitle={`Error ${code}`}>
+    <AppPageCard cardTitle="Error" pageCode="error" pageTitle={`Error ${code}`}>
       <div className="flex flex-col">
         <h1>Ow no :(</h1>
         <h2>It seems that a &quot;{code}&quot; error occurred...</h2>
