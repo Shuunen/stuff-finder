@@ -3,6 +3,9 @@ import { kebabCase } from 'es-toolkit'
 import type { Colors } from '../types/theme.types'
 
 type Props = Readonly<{
+  'aria-controls'?: string
+  'aria-expanded'?: 'true' | 'false'
+  'aria-haspopup'?: 'true' | 'false' | 'menu' | 'listbox' | 'tree' | 'grid' | 'dialog'
   color?: Colors
   className?: string
   disabled?: boolean
@@ -16,12 +19,10 @@ type Props = Readonly<{
   variant?: 'text' | 'outlined'
 }>
 
-export function AppButton({ color = 'white', className, disabled, endIcon, label, loading, name, onClick, startIcon, type = 'button', variant = 'outlined' }: Props) {
-  const style = { backgroundColor: variant === 'text' ? 'transparent' : `var(--color-${color})`, color: color === 'primary' ? 'var(--color-white)' : `var(--color-black)` }
+export function AppButton({ color = 'white', label, name, variant = 'outlined', ...rest }: Props) {
+  const ariaLabel = label ? `${name} button` : undefined
   const testId = kebabCase(`app-button-${name}`)
-  return (
-    <Button aria-label={`${name} button`} className={className} style={style} disabled={disabled} endIcon={endIcon} loading={loading} data-testid={testId} onClick={onClick} startIcon={startIcon} type={type} variant={variant}>
-      {label}
-    </Button>
-  )
+  const style = { backgroundColor: variant === 'text' ? 'transparent' : `var(--color-${color})`, color: color === 'primary' ? 'var(--color-white)' : `var(--color-black)` }
+  const props = { 'aria-label': ariaLabel, 'data-testid': testId, style, variant, ...rest }
+  return <Button {...props}>{label}</Button>
 }
