@@ -54,6 +54,12 @@
       }
     },
     {
+      "files": ["**/*.tsx"],
+      "rules": {
+        "null": "off"
+      }
+    },
+    {
       "files": ["**/*.test.{js,ts,tsx}", "vitest.*.ts", "**/*.mock.ts"],
       "globals": {
         "afterAll": "readonly",
