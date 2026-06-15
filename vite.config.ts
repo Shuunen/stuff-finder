@@ -27,7 +27,7 @@ export default defineConfig({
     // oxlint-disable-next-line new-cap
     VitePWA({
       manifest: {
-        background_color: '#ffffff',
+        background_color: '#fbf7ee',
         description: "Sorting things is pointless if you can't find them afterwards",
         display: 'standalone',
         icons: [
@@ -42,7 +42,7 @@ export default defineConfig({
         scope: '/',
         short_name: 'Stuff Finder',
         start_url: '/',
-        theme_color: '#209cee',
+        theme_color: '#e04a2b',
       },
       registerType: 'autoUpdate',
       workbox: {
