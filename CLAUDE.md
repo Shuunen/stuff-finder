@@ -35,7 +35,7 @@ Never disable a lint rule without asking the user. Try to fix the code first the
 - **Absent values**: `undefined`, never `null`; use `isNil` from es-toolkit to check
 - **Narrowing**: use `invariant(x, "msg")` from es-toolkit — never `x!` or silent `if (!x) return`
 - **Colors in TSX**: Only use colors from the Semantic palette (e.g. `primary`, `background`, ...) — never raw color palette names (`red`, `cream`, etc.) or hardcoded hex values
-- **No silent failures**: every `catch` block must log with at least `logger.error` or `logger.warn` — never swallow errors silently
+- **No silent failures**: use `logger.error` or `logger.warn` — never swallow errors silently
 
 ## Testing practices
 
