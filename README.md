@@ -34,20 +34,16 @@ Check build stats in details by running `pnpm build:analyze`. Tooling benchmarks
 ## Thanks
 
 - [101 Soundboards](https://www.101soundboards.com/sounds/1295599-barcode-scan-beep-09) : for the various sounds used in the app
-- [Add icon](https://www.iconfinder.com/icons/1814113/add_more_plus_icon) by Alexander Madyankin & Roman Shamin
-- [Box icon](https://www.iconfinder.com/icons/2123914/app_box_essential_ui_icon) by Just Icon
 - [Boxy Svg](https://boxy-svg.com) : simple & effective svg editor
 - [Oxlint](https://oxc.rs/docs/guide/usage/linter.html) : super fast linter to find & fix problems
 - [Oxfmt](https://oxc.rs/docs/guide/usage/formatter.html) : super fast formatter
 - [Eye icon](https://www.iconfinder.com/icons/5925640/eye_no_view_icon) by IconPai
-- [Favicon.io](https://favicon.io/favicon-generator/?t=SF&ff=Istok+Web&fs=110&fc=#FFF&b=rounded&bc=#08F) : handy favicon generator
+- [Favicon.io](https://favicon.io/favicon-generator/?t=SF&ff=Istok+Web&fs=110&fc=%23FFF&b=rounded&bc=%23e04a2b) : handy favicon generator
 - [Github](https://github.com) : this great, free and evolving platform
-- [Keyboard & mic icons](https://www.iconfinder.com/iconsets/bitsies) by Recep Kütük
 - [MUI](https://mui.com) : a nice material ui lib
 - [Netlify](https://netlify.com) : awesome company that offers hosting for OSS
 - [React](https://reactjs.org) : great library for web and native user interfaces
 - [RIOT Optimizer](https://riot-optimizer.com) : Radical Image Optimization Tool, the best software I found to compress images
-- [Scan icon](https://www.iconfinder.com/icons/3702397/barcode_code_scan_scanner_icon) by Ghariza Mahavira
 - [Shields.io](https://shields.io) : for the nice badges on top of this readme
 - [Shuutils](https://github.com/Shuunen/shuutils) : collection of pure JS utils
 - [Svg Omg](https://jakearchibald.github.io/svgomg/) : the great king of svg file size reduction
