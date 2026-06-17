@@ -83,12 +83,10 @@ export function AppItemDetails({ item, stepsBack }: Readonly<{ item: Item; steps
       {renderVisual(item)}
       <AppPill name="item-details" className="mt-6 ml-2 flex flex-col items-start gap-3 rounded-xl bg-white px-6 py-8">
         <AppTape className="absolute -top-8 left-1/2 w-36 rotate-3 bg-pastel-1!" />
-        <em>{[item.brand, itemLocation].filter(Boolean).join(' · ')}</em>
-        <div>
-          <h1>{item.name}</h1>
-          <AppWave className="mt-2" />
-        </div>
-        <p>{item.details}</p>
+        <em className="whitespace-normal">{[item.brand, itemLocation].filter(Boolean).join(' · ')}</em>
+        <h1 className="whitespace-normal">{item.name}</h1>
+        <AppWave className="my-1" />
+        <p className="mb-1">{item.details}</p>
         {renderMetaTags(item)}
       </AppPill>
       {renderBottomActionButtons(item)}

@@ -42,7 +42,7 @@ export default defineConfig({
         scope: '/',
         short_name: 'Stuff Finder',
         start_url: '/',
-        theme_color: '#e04a2b',
+        theme_color: '#fbf7ee',
       },
       registerType: 'autoUpdate',
       workbox: {

@@ -31,9 +31,9 @@ type DockProps = { isUsable: boolean; onSpeech: () => void; placeholder: string;
 function renderFloatingDock({ isUsable, onSpeech, placeholder, searchRef }: DockProps) {
   return (
     <AppPill className="flex w-full max-w-96 items-center justify-between bg-white" name="quick-search">
-      <div className="flex items-center gap-3">
+      <div className="flex grow items-center gap-3">
         <SearchIcon />
-        <input className="bg-transparent font-display text-grey outline-none" disabled={!isUsable} onKeyUp={onSearch} placeholder={placeholder} ref={searchRef} />
+        <input className="grow bg-transparent font-display text-grey outline-none" disabled={!isUsable} onKeyUp={onSearch} placeholder={placeholder} ref={searchRef} />
       </div>
       <AppButton className="flex! h-8 min-w-8! grow-0 overflow-hidden rounded-full! pr-0! pl-3!" name="speak-search" onClick={onSpeech} startIcon={<MicIcon fontSize="small" />} variant="text" />
     </AppPill>
@@ -58,7 +58,7 @@ function setupListeners(path: string, isUsable: boolean, searchRef: React.RefObj
   }
 }
 
-export function AppQuickSearch({ placeholder = 'Quick search…' }: Readonly<{ placeholder?: string }>) {
+export function AppQuickSearch({ placeholder = 'label maker, AAA batteries…' }: Readonly<{ placeholder?: string }>) {
   const searchReference = useRef<HTMLInputElement>(null)
   const [isUsable, setIsUsable] = useState(state.status !== 'settings-required')
   const { pathname: path } = useLocation()
