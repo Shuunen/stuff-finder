@@ -86,7 +86,7 @@ export function AppItemDetails({ item, stepsBack }: Readonly<{ item: Item; steps
         <em className="whitespace-normal">{[item.brand, itemLocation].filter(Boolean).join(' · ')}</em>
         <h1 className="whitespace-normal">{item.name}</h1>
         <AppWave className="my-1" />
-        <p className="mb-1">{item.details}</p>
+        <p className="mb-1 whitespace-normal">{item.details}</p>
         {renderMetaTags(item)}
       </AppPill>
       {renderBottomActionButtons(item)}
