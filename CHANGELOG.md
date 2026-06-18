@@ -2,9 +2,18 @@
 
 All notable changes to stuff-finder are documented here.
 
+## [3.2.1] - 2026-06-18
+
+### Added in 3.2.1
+
+- **Page animations** — items, pages, and UI elements now fade and slide in on load with staggered entry for list items (up to 500ms stagger across 10 items)
+- **Background patterns** — app background randomly picks from four SVG patterns (geometric, doodle, triangles) on each session for visual variety
+- **Tape animation** — decorative tape elements scale in from left on page load
+- **Reduced-motion support** — all animations are collapsed to 0.01ms for users who prefer reduced motion
+
 ## [3.2.0] - 2026-06-15
 
-### Added
+### Added in 3.2.0
 
 - **Offline PWA** — app works without a network connection, browsing cached items when offline
 - **IndexedDB storage via Dexie** — items, credentials, display, and theme now persist in IndexedDB instead of localStorage

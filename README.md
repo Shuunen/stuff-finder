@@ -42,6 +42,7 @@ Check build stats in details by running `pnpm build:analyze`. Tooling benchmarks
 - [Github](https://github.com) : this great, free and evolving platform
 - [MUI](https://mui.com) : a nice material ui lib
 - [Netlify](https://netlify.com) : awesome company that offers hosting for OSS
+- [Pattern Monster](https://pattern.monster/doodle-21) : Various quality patterns for app bg
 - [React](https://reactjs.org) : great library for web and native user interfaces
 - [RIOT Optimizer](https://riot-optimizer.com) : Radical Image Optimization Tool, the best software I found to compress images
 - [Shields.io](https://shields.io) : for the nice badges on top of this readme
