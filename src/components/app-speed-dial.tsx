@@ -4,6 +4,7 @@ import HomeIcon from '@mui/icons-material/Home'
 import HourglassTop from '@mui/icons-material/HourglassTop'
 import InsightsIcon from '@mui/icons-material/Insights'
 import QrCodeScannerIcon from '@mui/icons-material/QrCodeScanner'
+import RefreshIcon from '@mui/icons-material/Refresh'
 import SettingsIcon from '@mui/icons-material/Settings'
 import type { FabProps } from '@mui/material'
 import Fade from '@mui/material/Fade'
@@ -22,6 +23,7 @@ const actions = [
   { handleClick: () => navigate('/settings'), icon: <SettingsIcon />, name: 'Settings' },
   { handleClick: () => navigate('/metrics'), icon: <InsightsIcon />, name: 'Metrics' },
   { handleClick: () => navigate('/scan'), icon: <QrCodeScannerIcon />, name: 'Scan' },
+  { handleClick: () => globalThis.location.reload(), icon: <RefreshIcon />, name: 'Reload' },
 ]
 
 // oxlint-disable-next-line max-lines-per-function

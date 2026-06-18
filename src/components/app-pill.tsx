@@ -1,5 +1,6 @@
 import { kebabCase } from 'es-toolkit'
 import { cn } from 'shuutils'
+import { appBoxClasses } from '../utils/theme.utils'
 
 type AppPillProperties = {
   /** Optional, background color */
@@ -10,7 +11,7 @@ type AppPillProperties = {
   children?: React.ReactNode
   /** Optional, activate hover effect */
   hover?: boolean
-  /** Required, name of the pill, used for accessibility */
+  /** Name of the pill for accessibility */
   name: string
   /** Optional, when true, avoid the deep shadow effect */
   shallow?: boolean
@@ -18,18 +19,19 @@ type AppPillProperties = {
 
 export function AppPill({ children, className, hover, shallow, background, name }: Readonly<AppPillProperties>) {
   return (
-    <span
+    <div
       className={cn(
-        `border-ink relative inline-flex items-center rounded-full px-3 py-1 font-mono text-sm font-bold whitespace-nowrap transition focus-within:border-primary focus-within:shadow-[4px_4px_0_var(--color-primary)]`,
+        appBoxClasses.base,
+        `inline-flex items-center rounded-full px-3 py-1 font-mono text-sm font-bold whitespace-nowrap focus-within:border-primary focus-within:shadow-[4px_4px_0_var(--color-primary)]`,
+        shallow ? 'border' : appBoxClasses.deepShadow,
+        hover && appBoxClasses.hover,
         className,
-        shallow ? 'border' : 'border-2 shadow-[3px_3px_0_var(--color-black)]',
-        hover && 'hover:-translate-y-0.5 hover:shadow-[4px_4px_0_var(--color-black)]',
       )}
       style={{ background }}
       aria-label={name}
       data-testid={kebabCase(`app-pill-${name}`)}
     >
       {children}
-    </span>
+    </div>
   )
 }

@@ -2,6 +2,21 @@
 
 All notable changes to stuff-finder are documented here.
 
+## [3.2.2] - 2026-06-18
+
+### Added in 3.2.2
+
+- **AppCard component** — new reusable card component with consistent box shadow, border, and hover animation used across item list entries, page cards, and detail views
+- **appBoxClasses utility** — shared Tailwind class constants (`base`, `deepShadow`, `hover`) centralizing card/pill styling so changes apply everywhere at once
+- **Reload in speed dial** — quick-access reload action added to the floating speed dial for one-tap data refresh
+
+### Changed in 3.2.2
+
+- **Smoother item details** — detail pages scroll to top on open and add bottom padding so content clears the speed dial
+- **Search heading** — query display upgraded to `h1` with a decorative tape underlay and subtle rotation for visual emphasis
+- **AppPageCard layout** — simplified to a centered column with card and nav always visible on all screen sizes (removed separate mobile/desktop variants)
+- **AppPill internals** — now uses `appBoxClasses` for consistent shadow and hover behavior; changed from `span` to `div` to support block content
+
 ## [3.2.1] - 2026-06-18
 
 ### Added in 3.2.1

@@ -76,3 +76,9 @@ const patterns = ['geometric-4.svg', 'geometric-5.svg', 'triangles-21.svg', 'doo
 export const pattern = pickOne(patterns)
 
 globalThis.document.body.style.backgroundImage = `url("/assets/patterns/${pattern}")`
+
+export const appBoxClasses = {
+  base: 'border-ink relative transition',
+  deepShadow: 'border-2 shadow-[3px_3px_0_var(--color-black)]',
+  hover: 'hover:-translate-y-0.5 hover:shadow-[4px_4px_0_var(--color-black)]',
+}
