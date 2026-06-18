@@ -14,7 +14,7 @@ export function PageItemDetails() {
   setPageTitle(`${item.name} - Details`)
 
   return (
-    <div className="mx-auto flex flex-col" data-page="item-details">
+    <div className="mx-auto flex flex-col pb-24" data-page="item-details">
       <AppItemDetails item={item} stepsBack={stepsBack} />
     </div>
   )
