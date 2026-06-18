@@ -12,6 +12,7 @@ export function PageItemDetails() {
   logger.debug('PageItemDetails', { item })
   const stepsBack = context === 'single' ? 2 : 1 // oxlint-disable-line @typescript-eslint/no-magic-numbers
   setPageTitle(`${item.name} - Details`)
+  window.scrollTo({ behavior: 'smooth', top: 0 })
 
   return (
     <div className="mx-auto flex flex-col pb-24" data-page="item-details">
