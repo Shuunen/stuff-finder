@@ -38,7 +38,7 @@ export function PageSearch() {
   }, [input, stateResults, state])
 
   return (
-    <div className="flex h-full grow flex-col" data-page="search">
+    <div className="flex h-full grow animate-fade-up flex-col" data-page="search">
       <div className="flex items-center justify-between px-5 pt-4 pb-2">
         <AppButtonBack />
         <AppPill name="search-results" className="ml-6 bg-pastel-1">

@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@import './animations.css';
 
 @theme {
   --breakpoint-xs: 360px;
@@ -43,7 +44,7 @@
   }
   html {
     scroll-behavior: smooth;
-    @apply bg-background font-display text-black;
+    @apply bg-background bg-linear-to-tr from-cream to-amber/30 font-display text-black;
   }
   ::-webkit-scrollbar {
     @apply h-2 w-2;

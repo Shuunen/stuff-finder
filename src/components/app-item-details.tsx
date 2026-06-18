@@ -54,7 +54,7 @@ function renderTopActionButtons(item: Item, stepsBack?: number) {
 
 function renderVisual(item: Item) {
   return (
-    <div className="relative px-1 pt-2">
+    <div className="relative animate-fade-in px-1 pt-2">
       <AppPill name="visual" className="relative w-full rounded-xl bg-white p-3">
         <img alt={item.name} className="max-h-65 w-full rounded-xl object-contain md:max-h-120" data-testid="item-detail-image" loading="lazy" src={itemToImageUrl(item)} style={{ aspectRatio: '4/3' }} />
         <AppTape className="absolute -top-8 left-1/3 w-42 -rotate-6" />
@@ -68,7 +68,7 @@ function renderVisual(item: Item) {
 
 function renderBottomActionButtons(item: Item) {
   return (
-    <div className="mt-6 flex justify-center gap-3" data-testid="item-detail-actions">
+    <div className="mt-6 flex animate-fade-up justify-center gap-3" data-testid="item-detail-actions">
       <AppButton label="Edit" name="edit" onClick={() => navigate(`/item/edit/${item.$id}`)} startIcon={<EditOutlinedIcon />} />
       <AppButton color="pastel-6" label="Print label" name="print-label" onClick={() => navigate(`/item/print/${item.$id}`)} endIcon={<PrintIcon />} />
     </div>
@@ -81,7 +81,7 @@ export function AppItemDetails({ item, stepsBack }: Readonly<{ item: Item; steps
     <div className="flex flex-col gap-6" data-component="item-details">
       {renderTopActionButtons(item, stepsBack)}
       {renderVisual(item)}
-      <AppPill name="item-details" className="mt-6 ml-2 flex flex-col items-start gap-3 rounded-xl bg-white px-6 py-8">
+      <AppPill name="item-details" className="mt-6 ml-2 flex animate-fade-up flex-col items-start gap-3 rounded-xl bg-white px-6 py-8">
         <AppTape className="absolute -top-8 left-1/2 w-36 rotate-3 bg-pastel-1!" />
         <em className="whitespace-normal">{[item.brand, itemLocation].filter(Boolean).join(' · ')}</em>
         <h1 className="whitespace-normal">{item.name}</h1>

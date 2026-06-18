@@ -1,5 +1,6 @@
 // oxlint-disable no-magic-numbers
 import { createTheme, type ThemeOptions } from '@mui/material/styles'
+import { pickOne } from 'shuutils'
 
 const themeOptions: ThemeOptions = {
   components: {
@@ -69,3 +70,9 @@ export function colSpanClass(columns: number) {
   if (columns === 10) return 'md:col-span-10'
   return 'md:col-span-1'
 }
+
+const patterns = ['geometric-4.svg', 'geometric-5.svg', 'triangles-21.svg', 'doodle-2.svg']
+
+export const pattern = pickOne(patterns)
+
+globalThis.document.body.style.backgroundImage = `url("/assets/patterns/${pattern}")`
