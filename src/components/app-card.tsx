@@ -1,5 +1,6 @@
 import { kebabCase } from 'es-toolkit'
 import { cn } from 'shuutils'
+import { appBoxClasses } from '../utils/theme.utils'
 
 type AppCardProperties = {
   /** Optional additional class name */
@@ -14,10 +15,7 @@ type AppCardProperties = {
 
 export function AppCard({ children, className, hover, name }: Readonly<AppCardProperties>) {
   return (
-    <div
-      className={cn(`border-ink relative flex flex-col gap-6 rounded-xl border-2 bg-white p-4 shadow-[3px_3px_0_var(--color-black)] transition`, hover && 'hover:-translate-y-0.5 hover:shadow-[4px_4px_0_var(--color-black)]', className)}
-      data-testid={kebabCase(`app-card-${name}`)}
-    >
+    <div className={cn(appBoxClasses.base, `flex flex-col gap-6 rounded-xl bg-white p-4`, appBoxClasses.deepShadow, hover && appBoxClasses.hover, className)} data-testid={kebabCase(`app-card-${name}`)}>
       {children}
     </div>
   )

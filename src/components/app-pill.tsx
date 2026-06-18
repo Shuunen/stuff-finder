@@ -1,5 +1,6 @@
 import { kebabCase } from 'es-toolkit'
 import { cn } from 'shuutils'
+import { appBoxClasses } from '../utils/theme.utils'
 
 type AppPillProperties = {
   /** Optional, background color */
@@ -20,9 +21,10 @@ export function AppPill({ children, className, hover, shallow, background, name 
   return (
     <div
       className={cn(
-        `border-ink relative inline-flex items-center rounded-full px-3 py-1 font-mono text-sm font-bold whitespace-nowrap transition focus-within:border-primary focus-within:shadow-[4px_4px_0_var(--color-primary)]`,
-        shallow ? 'border' : 'border-2 shadow-[3px_3px_0_var(--color-black)]',
-        hover && 'hover:-translate-y-0.5 hover:shadow-[4px_4px_0_var(--color-black)]',
+        appBoxClasses.base,
+        `inline-flex items-center rounded-full px-3 py-1 font-mono text-sm font-bold whitespace-nowrap focus-within:border-primary focus-within:shadow-[4px_4px_0_var(--color-primary)]`,
+        shallow ? 'border' : appBoxClasses.deepShadow,
+        hover && appBoxClasses.hover,
         className,
       )}
       style={{ background }}
