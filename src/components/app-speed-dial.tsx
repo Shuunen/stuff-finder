@@ -10,7 +10,7 @@ import type { FabProps } from '@mui/material'
 import Fade from '@mui/material/Fade'
 import SpeedDial from '@mui/material/SpeedDial'
 import SpeedDialAction from '@mui/material/SpeedDialAction'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { isMobile } from 'shuutils'
 import { logger } from '../utils/logger.utils'
@@ -61,6 +61,10 @@ export function AppSpeedDial({ isLoading = false, isSettingsRequired = false }: 
   } as const
   const icon = useMemo(() => (isLoading ? <HourglassTop /> : <SpeedDialIcon />), [isLoading])
   const availableActions = useMemo(() => (isSettingsRequired ? actions.filter(action => ['Home', 'Settings'].includes(action.name)) : actions), [isSettingsRequired])
+  useEffect(() => {
+    // oxlint-disable-next-line react/react-compiler
+    setOpenForPath(null)
+  }, [path])
   const isQuickSearchAvailable = path !== '/'
 
   return (

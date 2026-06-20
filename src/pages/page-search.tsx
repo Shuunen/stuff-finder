@@ -27,12 +27,18 @@ export function PageSearch() {
 
   useEffect(() => {
     if (stateResults.length > 0) return
-    // oxlint-disable-next-line prefer-await-to-then, always-return
-    void search(input).then(data => {
-      logger.info('search results loaded', { header: data.header, input, results: data.results, state })
-      setAsyncResults(data.results)
-      setLastSearchedInput(input)
-    })
+    async function runSearch() {
+      try {
+        const data = await search(input)
+        logger.info('search results loaded', { header: data.header, input, results: data.results, state })
+        setAsyncResults(data.results)
+      } catch (error: unknown) {
+        logger.error('search failed', error)
+      } finally {
+        setLastSearchedInput(input)
+      }
+    }
+    void runSearch()
   }, [input, stateResults, state])
 
   return (
