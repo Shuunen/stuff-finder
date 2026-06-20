@@ -34,7 +34,7 @@ function AppItemListEntryComponent({ className, display, index = 0, item, isLoad
   if (display === 'card')
     return (
       <a
-        className={cn(`block animate-fade-up transition`, isLoading && 'opacity-60', className)}
+        className={cn(`block animate-fade-up break-inside-avoid pt-1 pr-2 transition`, isLoading && 'opacity-60', className)}
         style={{ animationDelay: staggerDelay }}
         href={`/item/details/${item.$id}`}
         onClick={event => {
