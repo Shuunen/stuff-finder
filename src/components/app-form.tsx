@@ -21,13 +21,6 @@ type Properties<FormType extends Form> = Readonly<{
 export function AppForm<FormType extends Form>({ children, error: parentError = '', initialForm, onChange = functionReturningVoid, onSubmit, suggestions }: Properties<FormType>) {
   const [form, setForm] = useState(initialForm)
 
-  useEffect(() => {
-    const { hasChanged, updatedForm } = validateForm(form)
-    if (!hasChanged) return
-    onChange(updatedForm)
-    setForm(updatedForm)
-  }, [form, onChange])
-
   const onFormSubmit = useCallback(
     (event: SubmitEvent<HTMLFormElement>) => {
       event.preventDefault()
@@ -46,8 +39,9 @@ export function AppForm<FormType extends Form>({ children, error: parentError = 
     if (actualField === undefined) return Result.error(`field "${field}" not found in form`)
     if (isFromClipboard) logger.showSuccess(`Pasted "${field}" field value`)
     const updated = { ...form, fields: { ...form.fields, [field]: { ...actualField, value } }, isTouched: true }
-    setForm(updated)
-    onChange(updated)
+    const { updatedForm: validatedUpdate } = validateForm(updated)
+    setForm(validatedUpdate)
+    onChange(validatedUpdate)
     return Result.ok('field updated successfully')
   }
 
@@ -65,10 +59,12 @@ export function AppForm<FormType extends Form>({ children, error: parentError = 
     if (json.error || typeof json.value !== 'object' || json.value === null) return Result.error(`error parsing clipboard data : ${objectSerialize({ clip, error: json.error, rawClip, value: json.value })}`)
     const { hasChanged: hasChangedLocal, updatedForm: updatedFormLocal } = updateForm(form, json.value)
     if (!hasChangedLocal) return Result.ok('no changes made')
-    setForm(updatedFormLocal)
+    const { updatedForm: validatedLocal } = validateForm(updatedFormLocal)
+    setForm(validatedLocal)
+    onChange(validatedLocal)
     void copyToClipboard({})
     return Result.ok('form updated from clipboard')
-  }, [form])
+  }, [form, onChange])
 
   useEffect(() => {
     async function handleClipboardOnFocus() {

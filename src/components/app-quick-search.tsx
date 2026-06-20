@@ -70,6 +70,7 @@ export function AppQuickSearch({ placeholder = 'label maker, AAA batteries…' }
 
   const onSpeech = () => {
     if (!isUsable) return
+    // oxlint-disable-next-line react/react-compiler
     state.status = 'listening'
     listenUserSpeech((transcript: string) => {
       logger.showInfo(`searching for "${transcript}"`)
@@ -77,5 +78,6 @@ export function AppQuickSearch({ placeholder = 'label maker, AAA batteries…' }
     })
   }
 
+  // oxlint-disable-next-line react/react-compiler
   return renderFloatingDock({ isUsable, onSpeech, placeholder, searchRef: searchReference })
 }

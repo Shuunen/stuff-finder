@@ -10,7 +10,7 @@ import type { FabProps } from '@mui/material'
 import Fade from '@mui/material/Fade'
 import SpeedDial from '@mui/material/SpeedDial'
 import SpeedDialAction from '@mui/material/SpeedDialAction'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { isMobile } from 'shuutils'
 import { logger } from '../utils/logger.utils'
@@ -28,16 +28,21 @@ const actions = [
 
 // oxlint-disable-next-line max-lines-per-function
 export function AppSpeedDial({ isLoading = false, isSettingsRequired = false }: Readonly<{ isLoading?: boolean; isSettingsRequired?: boolean }>) {
-  const [isOpen, setIsOpen] = useState(false)
+  const { pathname: path } = useLocation()
+  const [openForPath, setOpenForPath] = useState<string | null>(null)
+  const isOpen = openForPath === path
   const toggleOpen = useCallback(() => {
-    setIsOpen(!isOpen)
-  }, [isOpen])
-  const onMouse = useCallback((status: 'enter' | 'leave') => {
-    if (!isMobile()) {
-      logger.debug('open cause mouse', status)
-      setIsOpen(status === 'enter')
-    }
-  }, [])
+    setOpenForPath(prev => (prev === path ? null : path))
+  }, [path])
+  const onMouse = useCallback(
+    (status: 'enter' | 'leave') => {
+      if (!isMobile()) {
+        logger.debug('open cause mouse', status)
+        setOpenForPath(status === 'enter' ? path : null)
+      }
+    },
+    [path],
+  )
   const onMouseEnter = useCallback(() => {
     onMouse('enter')
   }, [onMouse])
@@ -56,12 +61,7 @@ export function AppSpeedDial({ isLoading = false, isSettingsRequired = false }: 
   } as const
   const icon = useMemo(() => (isLoading ? <HourglassTop /> : <SpeedDialIcon />), [isLoading])
   const availableActions = useMemo(() => (isSettingsRequired ? actions.filter(action => ['Home', 'Settings'].includes(action.name)) : actions), [isSettingsRequired])
-  const { pathname: path } = useLocation()
-  const [isQuickSearchAvailable, setIsQuickSearchAvailable] = useState(false)
-  useEffect(() => {
-    setIsQuickSearchAvailable(path !== '/')
-    setIsOpen(false)
-  }, [path])
+  const isQuickSearchAvailable = path !== '/'
 
   return (
     <>
