@@ -1,5 +1,6 @@
 # TODOS
 
+- setup i18n and re-activate `react/jsx-no-literals` rule
 - nicer colorful identity ([something like this ?](https://www.iconfinder.com/icons/44859/cube_icon))
 - detect user in/activity to refresh data
 - show given/thrown items with a different color/display, also they're no more in box/room
