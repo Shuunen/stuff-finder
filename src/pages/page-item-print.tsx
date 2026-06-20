@@ -3,7 +3,7 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import Switch from '@mui/material/Switch'
 import ToggleButton from '@mui/material/ToggleButton'
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { sleep } from 'shuutils'
 import { AppBarcode } from '../components/app-barcode'
@@ -25,19 +25,27 @@ export function PageItemPrint() {
   const [isPrintMode, setIsPrintMode] = useState<boolean>(false)
   const [isHighlighted, setIsHighlighted] = useState<boolean>(false)
   logger.debug('PageItemPrint', { item })
-  const onSizeChange = useCallback((_event: unknown, selectedSize: PrintSize) => {
-    setSize(selectedSize)
-  }, [])
-  const onHighlightChange = useCallback((_event: unknown, isChecked: boolean) => {
-    setIsHighlighted(isChecked)
-  }, [])
+  const onSizeChange = useCallback(
+    (_event: unknown, selectedSize: PrintSize) => {
+      setSize(selectedSize)
+    },
+    [setSize],
+  )
+  const onHighlightChange = useCallback(
+    (_event: unknown, isChecked: boolean) => {
+      setIsHighlighted(isChecked)
+    },
+    [setIsHighlighted],
+  )
   const highlightSwitch = useMemo(() => <Switch checked={isHighlighted} onChange={onHighlightChange} />, [isHighlighted, onHighlightChange])
   const onPrint = useCallback(async () => {
     await handlePrintAction(item, setIsPrintMode)
-  }, [item])
+  }, [item, setIsPrintMode])
   // trigger print directly on page load
   const onPrintRef = useRef(onPrint)
-  onPrintRef.current = onPrint
+  useLayoutEffect(() => {
+    onPrintRef.current = onPrint
+  })
   useEffect(() => {
     async function triggerPrint() {
       await sleep(waitDelay)

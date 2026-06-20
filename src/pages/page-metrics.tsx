@@ -1,7 +1,7 @@
 import OutboxIcon from '@mui/icons-material/Outbox'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import SpeedIcon from '@mui/icons-material/Speed'
-import { memo, type ReactNode, useCallback, useEffect, useMemo, useState } from 'react'
+import { memo, type ReactNode, useCallback, useMemo, useState } from 'react'
 // oxlint-disable react/no-multi-comp
 import { tw } from 'shuutils'
 import { AppButton } from '../components/app-button'
@@ -127,18 +127,14 @@ function PriceButtons({ onPriceClick, selection }: { onPriceClick: (price: numbe
 }
 
 const MetricCardMissingPriceList = memo(({ metrics }: { metrics: MetricsData }) => {
-  const [selection, setSelection] = useState<Item[]>([])
+  const [baseSelection, setBaseSelection] = useState<Item[]>([])
   const [itemsToDisplay, setItemsToDisplay] = useState<Item[]>(() => [...metrics.itemsWithoutPrice])
   const [loadingItemIds, setLoadingItemIds] = useState<Item['$id'][] | undefined>()
-
-  useEffect(() => {
-    if (itemsToDisplay.length === metrics.itemsWithoutPrice.length) return
-    setSelection(current => filterSelectionByDisplayItems(current, itemsToDisplay))
-  }, [itemsToDisplay, metrics.itemsWithoutPrice.length])
+  const selection = useMemo(() => filterSelectionByDisplayItems(baseSelection, itemsToDisplay), [baseSelection, itemsToDisplay])
 
   const removeItemsFromLists = useCallback((itemIds: string[]) => {
     setItemsToDisplay(current => removeItemsFromList(current, itemIds))
-    setSelection(current => removeItemsFromList(current, itemIds))
+    setBaseSelection(current => removeItemsFromList(current, itemIds))
   }, [])
 
   const onPriceClick = useCallback(

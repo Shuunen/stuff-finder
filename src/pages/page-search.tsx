@@ -19,22 +19,19 @@ export function PageSearch() {
   const { input = '' } = useParams<{ input: string }>()
   const { state } = useLocation() as { state: SearchState | null }
   const stateResults = useMemo(() => state?.results ?? emptyResults, [state])
-  const [results, setResults] = useState(stateResults)
-  const [loading, setLoading] = useState(stateResults.length === 0)
+  const [lastSearchedInput, setLastSearchedInput] = useState(() => (stateResults.length > 0 ? input : ''))
+  const [asyncResults, setAsyncResults] = useState<SearchState['results']>(() => (stateResults.length > 0 ? stateResults : []))
+  const results = stateResults.length > 0 ? stateResults : asyncResults
+  const loading = stateResults.length === 0 && lastSearchedInput !== input
   setPageTitle(`Search for "${ellipsis(input, maxNameLength)}"`)
 
   useEffect(() => {
-    if (stateResults.length > 0) {
-      setResults(stateResults)
-      setLoading(false)
-      return
-    }
-    setLoading(true)
+    if (stateResults.length > 0) return
     // oxlint-disable-next-line prefer-await-to-then, always-return
     void search(input).then(data => {
       logger.info('search results loaded', { header: data.header, input, results: data.results, state })
-      setResults(data.results)
-      setLoading(false)
+      setAsyncResults(data.results)
+      setLastSearchedInput(input)
     })
   }, [input, stateResults, state])
 

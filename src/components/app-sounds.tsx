@@ -9,6 +9,7 @@ export function AppSounds() {
   const stopReference = useRef<HTMLAudioElement>(null)
   const errorReference = useRef<HTMLAudioElement>(null)
 
+  // oxlint-disable-next-line react/react-compiler
   watchState('sound', () => {
     logger.info('sound to play', state.sound)
     if (state.sound === 'barcode') barcodeReference.current?.play()
