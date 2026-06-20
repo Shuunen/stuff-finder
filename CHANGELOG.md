@@ -2,6 +2,22 @@
 
 All notable changes to stuff-finder are documented here.
 
+## [3.2.3] - 2026-06-20
+
+### Changed in 3.2.3
+
+- **Dependency updates** — updated all packages to latest versions for security and compatibility improvements
+- **Print layout** — items now break cleanly across print pages; full-width layout on print removes container padding for better paper usage
+- **Speed dial** — dial now closes properly when navigating away and back to the same page (no more ghost-open state)
+- **Search error handling** — failed searches now log an error and clear the loading state instead of showing a permanent spinner
+- **React hooks cleanup** — replaced several `useEffect`-based state syncs with derived state and `useMemo` for better render performance and fewer cascading updates
+
+### Fixed in 3.2.3
+
+- Card layout padding in item list entries was inconsistent on print
+- Speed dial reopened automatically when returning to a previously visited page
+- Search loading spinner could get stuck permanently if the search request failed
+
 ## [3.2.2] - 2026-06-18
 
 ### Added in 3.2.2
