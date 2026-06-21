@@ -72,7 +72,7 @@ export function PageItemPrint() {
                     </ToggleButton>
                   ))}
                 </ToggleButtonGroup>
-                <FormControlLabel control={highlightSwitch} label="Highlight zones" />
+                <FormControlLabel control={highlightSwitch} data-testid="highlight-switch" label="Highlight zones" />
                 <AppButton name="print" color="pastel-4" label="Print" onClick={onPrint} startIcon={<PrintIcon />} />
               </div>
             </div>
