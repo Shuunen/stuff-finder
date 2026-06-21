@@ -19,6 +19,10 @@
     "lint:types": {
       "inputs": ["src/**/*.{ts,tsx}", "tsconfig*.json"]
     },
+    "test:e2e": {
+      "inputs": ["src/**", "e2e/**", "playwright.config.ts"],
+      "outputs": ["test-results/**", "playwright-report/**"]
+    },
     "test:unit": {
       "inputs": ["src/**/*.{ts,tsx}", "vite.config.ts"],
       "outputs": ["coverage/**"]
