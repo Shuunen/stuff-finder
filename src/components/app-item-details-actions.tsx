@@ -79,19 +79,19 @@ export function AppItemDetailsActions({ className, item }: Readonly<{ className?
     <div className={className}>
       <AppButton aria-controls={isOpen ? 'item-actions-menu' : undefined} aria-expanded={isOpen ? 'true' : undefined} aria-haspopup="true" name="more" label="More" onClick={handleClick} endIcon={<MoreDots />} />
       <Menu id="item-actions-menu" anchorEl={anchorElement} onClose={closeMenu} open={isOpen}>
-        <MenuItem onClick={doEdit}>
+        <MenuItem data-testid="menu-item-edit" onClick={doEdit}>
           <ListItemIcon>
             <EditIcon />
           </ListItemIcon>
           Edit
         </MenuItem>
-        <MenuItem onClick={doClone}>
+        <MenuItem data-testid="menu-item-clone" onClick={doClone}>
           <ListItemIcon>
             <FileCopyIcon />
           </ListItemIcon>
           Clone
         </MenuItem>
-        <MenuItem onClick={openDialog}>
+        <MenuItem data-testid="menu-item-delete" onClick={openDialog}>
           <ListItemIcon>
             <DeleteIcon />
           </ListItemIcon>

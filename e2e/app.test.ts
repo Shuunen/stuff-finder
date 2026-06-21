@@ -230,3 +230,185 @@ test('navigating to an unknown route shows the error page', async ({ page }) => 
   await page.goto('/this-page-does-not-exist')
   await expect(page.locator('[data-page="error"]')).toBeVisible()
 })
+
+test('scan page renders', async ({ page }) => {
+  await page.goto('/scan')
+  await expect(page.locator('[data-page="scan"]')).toBeVisible()
+})
+
+test('print page renders for an existing item', async ({ page }) => {
+  await page.addInitScript(() => {
+    globalThis.print = () => undefined
+  })
+  await seedDatabase(page)
+  await page.goto('/item/print/item-001')
+  await expect(page.locator('[data-page="item-print"]')).toBeVisible()
+  await expect(page.locator('[data-page="item-print"]')).toContainText('MacBook Pro')
+})
+
+test('print page size toggle buttons are visible', async ({ page }) => {
+  await page.addInitScript(() => {
+    globalThis.print = () => undefined
+  })
+  await seedDatabase(page)
+  await page.goto('/item/print/item-001')
+  await expect(page.locator('[data-page="item-print"] [aria-label="Size"]')).toBeVisible()
+})
+
+test('print page highlight switch is visible', async ({ page }) => {
+  await page.addInitScript(() => {
+    globalThis.print = () => undefined
+  })
+  await seedDatabase(page)
+  await page.goto('/item/print/item-001')
+  await expect(page.locator('[data-testid="highlight-switch"]')).toBeVisible()
+})
+
+test('print label button on item details navigates to print page', async ({ page }) => {
+  await page.addInitScript(() => {
+    globalThis.print = () => undefined
+  })
+  await seedDatabase(page)
+  await page.goto('/item/details/item-001')
+  await page.locator('[data-testid="app-button-print-label"]').click()
+  await expect(page).toHaveURL(/\/item\/print\/item-001/u)
+  await expect(page.locator('[data-page="item-print"]')).toBeVisible()
+})
+
+test('item details shows price pill for items with a price', async ({ page }) => {
+  await seedDatabase(page)
+  await page.goto('/item/details/item-001')
+  await expect(page.locator('[data-testid="app-pill-price"]')).toContainText('1500')
+})
+
+test('item details shows barcode pill for items with a barcode', async ({ page }) => {
+  await seedDatabase(page)
+  await page.goto('/item/details/item-001')
+  await expect(page.locator('[data-testid="app-pill-barcode"]')).toContainText('1234567890')
+})
+
+test('item details shows reference pill for items with a reference', async ({ page }) => {
+  await seedDatabase(page)
+  await page.goto('/item/details/item-001')
+  await expect(page.locator('[data-testid="app-pill-reference"]')).toContainText('MBP-M3-2023')
+})
+
+test('item details shows print status pill', async ({ page }) => {
+  await seedDatabase(page)
+  await page.goto('/item/details/item-001')
+  await expect(page.locator('[data-testid="app-pill-print-status"]')).toContainText('not printed')
+})
+
+test('item details shows printed status for already-printed items', async ({ page }) => {
+  await seedDatabase(page)
+  await page.goto('/item/details/item-002')
+  await expect(page.locator('[data-testid="app-pill-print-status"]')).toContainText('printed')
+})
+
+test('more button opens action menu with edit, clone, and delete options', async ({ page }) => {
+  await seedDatabase(page)
+  await page.goto('/item/details/item-001')
+  await page.locator('[data-testid="app-button-more"]').click()
+  await expect(page.locator('[data-testid="menu-item-edit"]')).toBeVisible()
+  await expect(page.locator('[data-testid="menu-item-clone"]')).toBeVisible()
+  await expect(page.locator('[data-testid="menu-item-delete"]')).toBeVisible()
+})
+
+test('more menu edit option navigates to item edit page', async ({ page }) => {
+  await seedDatabase(page)
+  await page.goto('/item/details/item-001')
+  await page.locator('[data-testid="app-button-more"]').click()
+  await page.locator('[data-testid="menu-item-edit"]').click()
+  await expect(page).toHaveURL(/\/item\/edit\/item-001/u)
+  await expect(page.locator('[data-page="item-edit"]')).toBeVisible()
+})
+
+test('more menu delete option shows confirmation dialog', async ({ page }) => {
+  await seedDatabase(page)
+  await page.goto('/item/details/item-001')
+  await page.locator('[data-testid="app-button-more"]').click()
+  await page.locator('[data-testid="menu-item-delete"]').click()
+  await expect(page.locator('[role="dialog"]')).toBeVisible()
+  await expect(page.locator('[role="dialog"]')).toContainText('Delete item')
+})
+
+test('cancel button in delete dialog closes the dialog', async ({ page }) => {
+  await seedDatabase(page)
+  await page.goto('/item/details/item-001')
+  await page.locator('[data-testid="app-button-more"]').click()
+  await page.locator('[data-testid="menu-item-delete"]').click()
+  await expect(page.locator('[role="dialog"]')).toBeVisible()
+  await page.locator('[data-testid="app-button-cancel"]').click()
+  await expect(page.locator('[role="dialog"]')).not.toBeVisible()
+  await expect(page.locator('[data-page="item-details"]')).toBeVisible()
+})
+
+test('quick-search with multiple matches navigates to the search page', async ({ page }) => {
+  await seedDatabase(page, [
+    { ...SAMPLE_ITEMS[0], $id: 'item-001', name: 'Blue Widget' },
+    { ...SAMPLE_ITEMS[1], $id: 'item-002', name: 'Blue Gadget' },
+    { ...SAMPLE_ITEMS[2], $id: 'item-003', name: 'Red Thing' },
+  ])
+  await page.goto('/')
+  const searchInput = page.locator('[data-testid="home"] [data-testid="app-pill-quick-search"] input')
+  await searchInput.fill('Blue')
+  await searchInput.press('Enter')
+  await expect(page).toHaveURL(/\/search\/Blue/u)
+  await expect(page.locator('[data-page="search"]')).toBeVisible()
+})
+
+test('clicking a search result navigates to item details', async ({ page }) => {
+  await seedDatabase(page)
+  await page.goto('/search/Apple')
+  await expect(page.locator('[data-page="search"]')).toBeVisible()
+  await page.locator('[data-component="item-list"] a').first().click()
+  await expect(page.locator('[data-page="item-details"]')).toBeVisible()
+})
+
+test('speed dial is visible on non-home pages', async ({ page }) => {
+  await seedDatabase(page)
+  await page.goto('/metrics')
+  await expect(page.locator('[data-component="speed-dial"]')).toBeVisible()
+})
+
+test('speed dial opens when clicking the actions button', async ({ page }) => {
+  await seedDatabase(page)
+  await page.goto('/metrics')
+  await page.locator('[aria-label="Actions"]').click()
+  await expect(page.locator('[data-component="speed-dial-backdrop"]')).toBeVisible()
+})
+
+test('speed dial navigates to settings when settings action is clicked', async ({ page }) => {
+  await seedDatabase(page)
+  await page.goto('/metrics')
+  await page.locator('[aria-label="Actions"]').click()
+  // MUI SpeedDial keeps action buttons at CSS scale(0) in the DOM even when open;
+  // dispatch the click directly to bypass Playwright's geometry checks
+  await page.evaluate(() => {
+    const el = document.querySelector('[data-testid="speed-dial-action-settings"]')
+    if (el instanceof HTMLElement) el.click()
+  })
+  await expect(page).toHaveURL(/\/settings/u)
+  await expect(page.locator('[data-page="settings"]')).toBeVisible()
+})
+
+test('speed dial navigates to add item when add action is clicked', async ({ page }) => {
+  await seedDatabase(page)
+  await page.goto('/metrics')
+  await page.locator('[aria-label="Actions"]').click()
+  // MUI SpeedDial keeps action buttons at CSS scale(0) in the DOM even when open;
+  // dispatch the click directly to bypass Playwright's geometry checks
+  await page.evaluate(() => {
+    const el = document.querySelector('[data-testid="speed-dial-action-add"]')
+    if (el instanceof HTMLElement) el.click()
+  })
+  await expect(page).toHaveURL(/\/item\/add/u)
+  await expect(page.locator('[data-page="item-add"]')).toBeVisible()
+})
+
+test('item add page shows the search term when navigated from a failed search', async ({ page }) => {
+  await seedDatabase(page)
+  await page.goto('/item/add/widget')
+  await expect(page.locator('[data-page="item-add"]')).toBeVisible()
+  await expect(page.locator('[data-page="item-add"]')).toContainText('widget')
+})
