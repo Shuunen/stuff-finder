@@ -18,19 +18,19 @@ describe('navigation.utils', () => {
   })
 
   it('setNavigate A should store the navigate function', () => {
-    setNavigate(mockNavigate as unknown as NavigateFunction)
+    setNavigate(mockNavigate)
     navigate('/test')
     expect(navigateSpy).toHaveBeenCalledWith('/test', { replace: false })
   })
 
   it('navigate A should call navigate with path and default replace false when navigate is set', () => {
-    setNavigate(mockNavigate as unknown as NavigateFunction)
+    setNavigate(mockNavigate)
     navigate('/dashboard')
     expect(navigateSpy).toHaveBeenCalledWith('/dashboard', { replace: false })
   })
 
   it('navigate B should call navigate with path and replace true when specified', () => {
-    setNavigate(mockNavigate as unknown as NavigateFunction)
+    setNavigate(mockNavigate)
     navigate('/login', true)
     expect(navigateSpy).toHaveBeenCalledWith('/login', { replace: true })
   })
@@ -41,7 +41,7 @@ describe('navigation.utils', () => {
   })
 
   it('navigate D should handle multiple calls with different parameters', () => {
-    setNavigate(mockNavigate as unknown as NavigateFunction)
+    setNavigate(mockNavigate)
     navigate('/first')
     navigate('/second', true)
     navigate('/third', false)
@@ -52,7 +52,7 @@ describe('navigation.utils', () => {
   })
 
   it('navigate E should pass state to the navigate function', () => {
-    setNavigate(mockNavigate as unknown as NavigateFunction)
+    setNavigate(mockNavigate)
     const routeState = { header: 'test', results: [] }
     navigate('/search/foo', false, routeState)
     expect(navigateSpy).toHaveBeenCalledWith('/search/foo', { replace: false, state: routeState })

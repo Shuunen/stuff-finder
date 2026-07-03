@@ -26,7 +26,7 @@ export const emptyItemSuggestions = {
 
 function priceParse(price?: number | string) {
   if (price === undefined) return ''
-  if (typeof price === 'string') return Math.round(Number.parseFloat(price)).toString()
+  if (typeof price === 'string') return Math.round(Number(price)).toString()
   return Math.round(price).toString()
 }
 

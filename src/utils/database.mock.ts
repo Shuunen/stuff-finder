@@ -3,7 +3,7 @@ import { functionReturningVoid, nbDaysInWeek, sleep } from 'shuutils'
 import type { ItemModel } from '../types/item.types'
 import { mockItemModel } from './mock.utils'
 
-export function mockFile(data: Partial<Models.File> = {}) {
+export function mockFile(data: Partial<Models.File> = {}): Models.File {
   return {
     $createdAt: '2020-03-01T00:00:00.000Z',
     $id: 'some-image-file-uuid-xyz',
@@ -20,7 +20,7 @@ export function mockFile(data: Partial<Models.File> = {}) {
     sizeActual: 123_456,
     sizeOriginal: 123_456,
     ...data,
-  } satisfies Models.File as Models.File
+  } satisfies Models.File
 }
 
 const createFile = vi.fn(async ({ bucketId, fileId }: { bucketId: string; file: File; fileId: string }) => {
@@ -33,31 +33,31 @@ const deleteFile = vi.fn(async ({ bucketId, fileId }: { bucketId: string; fileId
   return { $id: fileId, bucketId, isThisMockedDataFromMock: true }
 })
 
-const listFiles = vi.fn(async (_params: { bucketId: string; queries?: unknown[] }) => {
+const listFiles = vi.fn(async (_params: { bucketId: string; queries?: unknown[] }): Promise<Models.FileList> => {
   await sleep(nbDaysInWeek)
-  return { files: [], total: 0 } satisfies Models.FileList as Models.FileList
+  return { files: [], total: 0 } satisfies Models.FileList
 })
 
-const createRow = vi.fn(async ({ data, databaseId, rowId, tableId }: { data: object; databaseId: string; rowId: string; tableId: string }) => {
+const createRow = vi.fn(async ({ data, databaseId, rowId, tableId }: { data: object; databaseId: string; rowId: string; tableId: string }): Promise<Models.Row> => {
   await sleep(nbDaysInWeek)
   const item = mockItemModel({ $databaseId: databaseId, $id: rowId, $tableId: tableId, ...data })
-  return item satisfies Models.Row as Models.Row
+  return item satisfies Models.Row
 })
 
 const deleteRow = vi.fn(async ({ databaseId, rowId, tableId }: { databaseId: string; rowId: string; tableId: string }) => {
   await sleep(nbDaysInWeek)
-  return { $id: rowId, databaseId, isThisMockedDataFromMock: true, tableId }
+  return { $databaseId: databaseId, $id: rowId, $tableId: tableId, isThisMockedDataFromMock: true }
 })
 
-const listRows = vi.fn(async (_params: { databaseId: string; queries?: unknown[]; tableId: string }) => {
+const listRows = vi.fn(async (_params: { databaseId: string; queries?: unknown[]; tableId: string }): Promise<Models.RowList<ItemModel>> => {
   await sleep(nbDaysInWeek)
-  return { rows: [], total: 0 } satisfies Models.RowList<ItemModel> as Models.RowList<ItemModel>
+  return { rows: [], total: 0 } satisfies Models.RowList<ItemModel>
 })
 
-const updateRow = vi.fn(async ({ data, databaseId, rowId, tableId }: { data: object; databaseId: string; rowId: string; tableId: string }) => {
+const updateRow = vi.fn(async ({ data, databaseId, rowId, tableId }: { data: object; databaseId: string; rowId: string; tableId: string }): Promise<Models.Row> => {
   await sleep(nbDaysInWeek)
   const item = mockItemModel({ $databaseId: databaseId, $id: rowId, $tableId: tableId, ...data })
-  return item satisfies Models.Row as Models.Row
+  return item satisfies Models.Row
 })
 
 class TablesDB {

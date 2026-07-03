@@ -619,10 +619,10 @@ describe('database.utils', () => {
   it('deleteItemRemotely A success', async () => {
     logger.disable()
     databaseMock.deleteRow.mockResolvedValueOnce({
+      $databaseId: 'databaseA',
       $id: 'some-item-uuid',
-      databaseId: 'databaseA',
+      $tableId: 'collectionA',
       isThisMockedDataFromMock: true,
-      tableId: 'collectionA',
     })
     const item = mockItem({
       $id: 'item-uuid',

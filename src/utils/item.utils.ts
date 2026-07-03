@@ -138,7 +138,7 @@ export const itemForm = {
 
 export function drawerStringToDrawer(drawer: string) {
   if (drawer === '') return -1
-  const number = Number.parseInt(drawer, 10)
+  const number = Math.trunc(Number(drawer))
   if (Number.isNaN(number)) return -1
   return number
 }
@@ -163,7 +163,7 @@ export function formToItem(form: typeof itemForm) {
     isPrinted: isPrinted.value,
     name: name.value,
     photos: photo.value === '' ? [] : [photo.value],
-    price: price.value === '' ? -1 : Number.parseFloat(price.value),
+    price: price.value === '' ? -1 : Number(price.value),
     reference: reference.value,
     status: statusStringToStatus(status.value),
   } satisfies Item

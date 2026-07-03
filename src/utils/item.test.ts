@@ -89,7 +89,7 @@ describe('item.utils', () => {
       rowId: 'itemA',
       tableId: 'collectionA',
     })
-    expect(JSON.stringify(Result.unwrap(result).value)).toMatchInlineSnapshot(`"{"$id":"itemA","databaseId":"databaseA","isThisMockedDataFromMock":true,"tableId":"collectionA"}"`)
+    expect(JSON.stringify(Result.unwrap(result).value)).toMatchInlineSnapshot(`"{"$databaseId":"databaseA","$id":"itemA","$tableId":"collectionA","isThisMockedDataFromMock":true}"`)
     logger.enable()
   })
 

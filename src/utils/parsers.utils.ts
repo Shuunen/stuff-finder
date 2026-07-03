@@ -44,7 +44,9 @@ export const itemModelSchema = object({
   drawer: fallback(nullish(picklist([1, 2, 3, 4, 5, 6, 7, 8, 9])), null),
   isPrinted: fallback(boolean(), false),
   name: itemRequiredStringSchema, // required
+  // oxlint-disable-next-line unicorn/max-nested-calls
   photos: fallback(nullish(array(string())), null),
+  // oxlint-disable-next-line unicorn/max-nested-calls
   price: fallback(nullish(pipe(number(), minValue(0))), null),
   reference: itemRequiredStringSchema, // required
   status: picklist(itemStatus), // required
