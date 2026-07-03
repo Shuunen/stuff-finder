@@ -14,7 +14,7 @@ export function PageItemDetails() {
 
   if (typeof id !== 'string') return <>An id in the url is required, got &quot;{id}&quot;</>
   const item = state.items.find(one => one.$id === id)
-  if (item === undefined) return <>Item with id &quot;{id}&quot; not found ;(</>
+  if (item === undefined) return <p data-testid="item-not-found">Item with id &quot;{id}&quot; not found ;(</p>
   logger.debug('PageItemDetails', { item })
   const stepsBack = context === 'single' ? 2 : 1 // oxlint-disable-line @typescript-eslint/no-magic-numbers
   setPageTitle(`${item.name} - Details`)

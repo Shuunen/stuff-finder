@@ -1,5 +1,18 @@
 import { expect, type Page, test } from '@playwright/test'
 
+async function stubPrint(page: Page) {
+  await page.addInitScript(() => {
+    globalThis.print = () => undefined
+  })
+}
+
+async function clickSpeedDialAction(page: Page, name: string) {
+  await page.evaluate(actionName => {
+    const el = document.querySelector(`[data-testid="speed-dial-action-${actionName}"]`)
+    if (el instanceof HTMLElement) el.click()
+  }, name)
+}
+
 type Item = {
   $createdAt: string
   $id: string
@@ -82,8 +95,14 @@ async function seedDatabase(page: Page, dbItems: Item[] = SAMPLE_ITEMS) {
           for (const item of itemsToSeed) tx.objectStore('items').put(item)
           tx.objectStore('meta').put({ key: 'credentials', value: { bucketId: 'test', collectionId: 'test', databaseId: 'test', wrap: '' } })
           tx.objectStore('meta').put({ key: 'itemsTimestamp', value: Date.now() })
-          tx.addEventListener('complete', () => resolve())
-          tx.addEventListener('error', () => reject(new Error('IDB transaction failed')))
+          tx.addEventListener('complete', () => {
+            db.close()
+            resolve()
+          })
+          tx.addEventListener('error', () => {
+            db.close()
+            reject(new Error('IDB transaction failed'))
+          })
         })
         request.addEventListener('error', () => reject(new Error('IDB open failed')))
       }),
@@ -93,8 +112,16 @@ async function seedDatabase(page: Page, dbItems: Item[] = SAMPLE_ITEMS) {
 
 test.beforeEach(async ({ page }) => {
   await page.route('https://cloud.appwrite.io/**', route => route.abort())
-  await page.goto('/')
-  await page.evaluate(() => indexedDB.deleteDatabase('stuff-finder'))
+  // waitUntil:'commit' establishes the app origin without letting React initialize and read stale IDB data
+  await page.goto('/', { waitUntil: 'commit' })
+  await page.evaluate(
+    () =>
+      new Promise<void>((resolve, reject) => {
+        const request = indexedDB.deleteDatabase('stuff-finder')
+        request.addEventListener('success', () => resolve())
+        request.addEventListener('error', () => reject(new Error('IDB delete failed')))
+      }),
+  )
 })
 
 test('page loads without uncaught errors', async ({ page }) => {
@@ -206,13 +233,13 @@ test('item edit form is pre-filled with existing item data', async ({ page }) =>
   await seedDatabase(page)
   await page.goto('/item/edit/item-001')
   await expect(page.locator('[data-page="item-edit"]')).toBeVisible()
-  await expect(page.locator('[data-page="item-edit"] input').first()).toHaveValue('MacBook Pro')
+  await expect(page.locator('[data-page="item-edit"] input[id="name"]')).toHaveValue('MacBook Pro')
 })
 
 test('navigating to a nonexistent item id shows not-found message', async ({ page }) => {
   await seedDatabase(page)
   await page.goto('/item/details/nonexistent-id')
-  await expect(page.locator('body')).toContainText('not found')
+  await expect(page.locator('[data-testid="item-not-found"]')).toBeVisible()
 })
 
 test('metrics page renders', async ({ page }) => {
@@ -237,9 +264,7 @@ test('scan page renders', async ({ page }) => {
 })
 
 test('print page renders for an existing item', async ({ page }) => {
-  await page.addInitScript(() => {
-    globalThis.print = () => undefined
-  })
+  await stubPrint(page)
   await seedDatabase(page)
   await page.goto('/item/print/item-001')
   await expect(page.locator('[data-page="item-print"]')).toBeVisible()
@@ -247,27 +272,21 @@ test('print page renders for an existing item', async ({ page }) => {
 })
 
 test('print page size toggle buttons are visible', async ({ page }) => {
-  await page.addInitScript(() => {
-    globalThis.print = () => undefined
-  })
+  await stubPrint(page)
   await seedDatabase(page)
   await page.goto('/item/print/item-001')
   await expect(page.locator('[data-page="item-print"] [aria-label="Size"]')).toBeVisible()
 })
 
 test('print page highlight switch is visible', async ({ page }) => {
-  await page.addInitScript(() => {
-    globalThis.print = () => undefined
-  })
+  await stubPrint(page)
   await seedDatabase(page)
   await page.goto('/item/print/item-001')
   await expect(page.locator('[data-testid="highlight-switch"]')).toBeVisible()
 })
 
 test('print label button on item details navigates to print page', async ({ page }) => {
-  await page.addInitScript(() => {
-    globalThis.print = () => undefined
-  })
+  await stubPrint(page)
   await seedDatabase(page)
   await page.goto('/item/details/item-001')
   await page.locator('[data-testid="app-button-print-label"]').click()
@@ -332,6 +351,16 @@ test('more menu delete option shows confirmation dialog', async ({ page }) => {
   await expect(page.locator('[role="dialog"]')).toContainText('Delete item')
 })
 
+test('confirm button in delete dialog deletes the item and navigates away', async ({ page }) => {
+  await seedDatabase(page)
+  await page.goto('/item/details/item-001')
+  await page.route('https://cloud.appwrite.io/**', route => (route.request().method() === 'DELETE' ? route.fulfill({ body: '', status: 204 }) : route.abort()))
+  await page.locator('[data-testid="app-button-more"]').click()
+  await page.locator('[data-testid="menu-item-delete"]').click()
+  await page.locator('[data-testid="app-button-delete"]').click()
+  await expect(page.locator('[data-page="item-details"]')).not.toBeVisible()
+})
+
 test('cancel button in delete dialog closes the dialog', async ({ page }) => {
   await seedDatabase(page)
   await page.goto('/item/details/item-001')
@@ -384,10 +413,7 @@ test('speed dial navigates to settings when settings action is clicked', async (
   await page.locator('[aria-label="Actions"]').click()
   // MUI SpeedDial keeps action buttons at CSS scale(0) in the DOM even when open;
   // dispatch the click directly to bypass Playwright's geometry checks
-  await page.evaluate(() => {
-    const el = document.querySelector('[data-testid="speed-dial-action-settings"]')
-    if (el instanceof HTMLElement) el.click()
-  })
+  await clickSpeedDialAction(page, 'settings')
   await expect(page).toHaveURL(/\/settings/u)
   await expect(page.locator('[data-page="settings"]')).toBeVisible()
 })
@@ -398,10 +424,7 @@ test('speed dial navigates to add item when add action is clicked', async ({ pag
   await page.locator('[aria-label="Actions"]').click()
   // MUI SpeedDial keeps action buttons at CSS scale(0) in the DOM even when open;
   // dispatch the click directly to bypass Playwright's geometry checks
-  await page.evaluate(() => {
-    const el = document.querySelector('[data-testid="speed-dial-action-add"]')
-    if (el instanceof HTMLElement) el.click()
-  })
+  await clickSpeedDialAction(page, 'add')
   await expect(page).toHaveURL(/\/item\/add/u)
   await expect(page.locator('[data-page="item-add"]')).toBeVisible()
 })
@@ -411,4 +434,59 @@ test('item add page shows the search term when navigated from a failed search', 
   await page.goto('/item/add/widget')
   await expect(page.locator('[data-page="item-add"]')).toBeVisible()
   await expect(page.locator('[data-page="item-add"]')).toContainText('widget')
+})
+
+test('more menu clone option navigates to item add page and pre-fills the form', async ({ page }) => {
+  await page.context().grantPermissions(['clipboard-write', 'clipboard-read'])
+  await seedDatabase(page)
+  await page.goto('/item/details/item-001')
+  await page.locator('[data-testid="app-button-more"]').click()
+  await page.locator('[data-testid="menu-item-clone"]').click()
+  await expect(page).toHaveURL(/\/item\/add/u)
+  await expect(page.locator('[data-page="item-add"]')).toBeVisible()
+  await page.locator('[data-page="item-add"] input').first().click()
+  await expect(page.locator('[data-page="item-add"] input[id="name"]')).toHaveValue('MacBook Pro')
+})
+
+test('speed dial navigates home when home action is clicked', async ({ page }) => {
+  await seedDatabase(page)
+  await page.goto('/metrics')
+  await page.locator('[aria-label="Actions"]').click()
+  await clickSpeedDialAction(page, 'home')
+  await expect(page.locator('[data-testid="home"]')).toBeVisible()
+})
+
+test('speed dial navigates to metrics when metrics action is clicked', async ({ page }) => {
+  await seedDatabase(page)
+  await page.goto('/settings')
+  await page.locator('[aria-label="Actions"]').click()
+  await clickSpeedDialAction(page, 'metrics')
+  await expect(page).toHaveURL(/\/metrics/u)
+  await expect(page.locator('[data-page="metrics"]')).toBeVisible()
+})
+
+test('speed dial navigates to scan when scan action is clicked', async ({ page }) => {
+  await seedDatabase(page)
+  await page.goto('/metrics')
+  await page.locator('[aria-label="Actions"]').click()
+  await clickSpeedDialAction(page, 'scan')
+  await expect(page).toHaveURL(/\/scan/u)
+  await expect(page.locator('[data-page="scan"]')).toBeVisible()
+})
+
+test('speed dial reload action is present in the DOM when speed dial is open', async ({ page }) => {
+  await seedDatabase(page)
+  await page.goto('/metrics')
+  await page.locator('[aria-label="Actions"]').click()
+  await expect(page.locator('[data-testid="speed-dial-action-reload"]')).toBeAttached()
+})
+
+test('highlight switch toggles checked state when clicked', async ({ page }) => {
+  await stubPrint(page)
+  await seedDatabase(page)
+  await page.goto('/item/print/item-001')
+  const switchInput = page.locator('[data-testid="highlight-switch"] input[type="checkbox"]')
+  await expect(switchInput).not.toBeChecked()
+  await switchInput.click({ force: true })
+  await expect(switchInput).toBeChecked()
 })
