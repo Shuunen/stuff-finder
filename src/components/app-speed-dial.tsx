@@ -87,7 +87,7 @@ export function AppSpeedDial({ isLoading = false, isSettingsRequired = false }: 
                 toggleOpen()
                 action.handleClick()
               }}
-              slotProps={{ tooltip: () => ({ title: action.name }) }}
+              slotProps={{ fab: { 'data-testid': `speed-dial-action-${action.name.toLowerCase()}` }, tooltip: () => ({ title: action.name }) }}
               sx={{ '&:hover': { boxShadow: '1px 1px 0 var(--color-black)' }, border: '2px solid var(--color-black)', boxShadow: '2px 2px 0 var(--color-black)' }}
             />
           ))}

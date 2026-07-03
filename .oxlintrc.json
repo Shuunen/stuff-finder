@@ -70,11 +70,13 @@
         "describe": "readonly",
         "expect": "readonly",
         "expectTypeOf": "readonly",
+        "indexedDB": "readonly",
         "it": "readonly",
         "mock": "readonly",
         "vi": "readonly"
       },
       "rules": {
+        "promise/avoid-new": "off",
         "jsx-no-new-array-as-prop": "off",
         "max-lines": "off",
         "max-lines-per-function": "off",
