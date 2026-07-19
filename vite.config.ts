@@ -13,9 +13,6 @@ const httpStatusOk = 200
 // oxlint-disable-next-line import/no-default-export
 export default defineConfig({
   build: {
-    commonjsOptions: {
-      transformMixedEsModules: true,
-    },
     emptyOutDir: true,
     outDir: './dist',
     reportCompressedSize: true,
