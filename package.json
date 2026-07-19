@@ -37,7 +37,7 @@
     "@vitest/coverage-v8": "^4.1.9",
     "fake-indexeddb": "^6.2.5",
     "happy-dom": "^20.10.6",
-    "oxfmt": "^0.57.0",
+    "oxfmt": "^0.59.0",
     "oxlint": "^1.72.0",
     "oxlint-tsgolint": "^0.24.0",
     "tailwindcss": "^4.3.2",
