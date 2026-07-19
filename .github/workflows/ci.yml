@@ -25,7 +25,7 @@ jobs:
         run: pnpm install --frozen-lockfile && echo install dependencies ok ✅
 
       - name: Cache Playwright browsers
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         id: playwright-cache
         with:
           path: ~/.cache/ms-playwright
