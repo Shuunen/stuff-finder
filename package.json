@@ -39,7 +39,7 @@
     "happy-dom": "^20.10.6",
     "oxfmt": "^0.59.0",
     "oxlint": "^1.72.0",
-    "oxlint-tsgolint": "^0.24.0",
+    "oxlint-tsgolint": "^0.25.0",
     "tailwindcss": "^4.3.2",
     "turbo": "^2.10.3",
     "typescript": "~6.0.3",
