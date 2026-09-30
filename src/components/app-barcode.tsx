@@ -1,8 +1,8 @@
 import { useEffect, useRef } from 'react'
 import 'webcomponent-qr-code'
-import { cn } from 'shuutils'
 import type { Item } from '../types/item.types'
 import { type PrintSize, printSizes } from '../types/print.types'
+import { cn } from '../utils/class.utils'
 import { logger } from '../utils/logger.utils'
 import { itemToPrintData } from '../utils/print.utils'
 

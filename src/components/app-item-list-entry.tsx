@@ -1,7 +1,7 @@
 import { memo, useCallback } from 'react'
-import { cn } from 'shuutils'
 import type { Item } from '../types/item.types'
 import type { Display } from '../types/theme.types'
+import { cn } from '../utils/class.utils'
 import { itemToImageUrl } from '../utils/database.utils'
 import { navigate } from '../utils/navigation.utils'
 import { AppCard } from './app-card'

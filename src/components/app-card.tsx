@@ -1,5 +1,5 @@
 import { kebabCase } from 'es-toolkit'
-import { cn } from 'shuutils'
+import { cn } from '../utils/class.utils'
 import { appBoxClasses } from '../utils/theme.utils'
 
 type AppCardProperties = {
