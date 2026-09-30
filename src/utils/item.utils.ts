@@ -58,8 +58,7 @@ function deleteItemLocally(item: Item, currentState = state) {
 function updateItemLocally(item: Item, currentState = state) {
   const items = clone(currentState.items)
   const index = items.findIndex(one => one.$id === item.$id)
-  if (index === -1)
-    items.push(item) // new item with id
+  if (index === -1) items.push(item) // new item with id
   else items[index] = item // update existing item
   currentState.items = items
 }

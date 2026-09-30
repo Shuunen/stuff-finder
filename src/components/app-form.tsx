@@ -50,12 +50,10 @@ export function AppForm<FormType extends Form>({ children, error: parentError = 
 
   const checkDataInClipboard = useCallback(async () => {
     const rawClip = await readClipboard()
-      .then(value => Result.ok(value))
-      .catch((error: unknown) => Result.error(`error reading clipboard : ${error instanceof Error ? error.message : String(error)}`))
     if (!rawClip.ok) return Result.error(`error reading clipboard : ${rawClip.error}`)
     if (rawClip.value === '') return Result.ok('clipboard is empty')
     const clip = alignClipboard(rawClip.value)
-    const json = parseJson(clip)
+    const json = Result.unwrap(parseJson(clip))
     if (json.error || typeof json.value !== 'object' || json.value === null) return Result.error(`error parsing clipboard data : ${objectSerialize({ clip, error: json.error, rawClip, value: json.value })}`)
     const { hasChanged: hasChangedLocal, updatedForm: updatedFormLocal } = updateForm(form, json.value)
     if (!hasChangedLocal) return Result.ok('no changes made')

@@ -1,3 +1,4 @@
+// oxlint-disable max-classes-per-file
 import type { Models } from 'appwrite'
 import { functionReturningVoid, nbDaysInWeek, sleep } from 'shuutils'
 import type { ItemModel } from '../types/item.types'
@@ -14,6 +15,8 @@ export function mockFile(data: Partial<Models.File> = {}): Models.File {
     chunksUploaded: 1,
     compression: '',
     encryption: false,
+    folder: '',
+    key: 'fileName-a.jpg',
     mimeType: 'image/jpeg',
     name: 'fileName-a.jpg',
     signature: 'signature-a',
@@ -71,7 +74,6 @@ class TablesDB {
   }
 }
 
-// oxlint-disable-next-line max-classes-per-file
 class Client {
   public constructor() {
     functionReturningVoid()

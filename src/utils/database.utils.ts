@@ -8,6 +8,19 @@ import { itemModelSchema, itemSchema, itemsSchema } from './parsers.utils'
 import { state } from './state.utils'
 import { normalizePhotoUrl } from './url.utils'
 
+/**
+ * Like Result.trySafe but also catches synchronous throws, which appwrite does on invalid params before returning a promise
+ * @param run the function calling appwrite
+ * @returns a Result promise
+ */
+async function trySafeAsync<Value>(run: () => Promise<Value>) {
+  try {
+    return Result.ok(await run())
+  } catch (error) {
+    return Result.error(error)
+  }
+}
+
 const client = new Client()
 const tablesDb = new TablesDB(client)
 const storage = new Storage(client)
@@ -54,7 +67,7 @@ export function fileTypeToExtension(type: string) {
 }
 
 export async function deleteImageRemotely(id: string) {
-  const result = await Result.trySafe(storage.deleteFile({ bucketId: state.credentials.bucketId, fileId: id }))
+  const result = await trySafeAsync(() => storage.deleteFile({ bucketId: state.credentials.bucketId, fileId: id }))
   if (result.ok) logger.success(`image "${id}" deleted successfully`)
   else logger.error(`image "${id}" deletion failed`, result.error)
   return result
@@ -67,11 +80,11 @@ export async function uploadImage(fileName: string, url: string) {
   const finalFileName = hasExtension ? fileName : `${fileName}.${extension.value}`
   const file = new File([blob], finalFileName, { type: blob.type })
   const id = slugify(finalFileName.replaceAll(/[_.]/gu, '-')).slice(0, uuidMaxLength)
-  let upload = await Result.trySafe(storage.createFile({ bucketId: state.credentials.bucketId, file, fileId: id }))
+  let upload = await trySafeAsync(() => storage.createFile({ bucketId: state.credentials.bucketId, file, fileId: id }))
   if (!upload.ok) {
     logger.error('uploadImage failed', upload.error)
     if (String(upload.error).includes('requested ID already exists')) await deleteImageRemotely(id)
-    upload = await Result.trySafe(storage.createFile({ bucketId: state.credentials.bucketId, file, fileId: id })) // retry
+    upload = await trySafeAsync(() => storage.createFile({ bucketId: state.credentials.bucketId, file, fileId: id })) // retry
   }
   if (!upload.ok) return Result.ok(url)
   return Result.ok(upload.value.$id)
@@ -109,8 +122,9 @@ export async function listImages(bucketId = state.credentials.bucketId) {
   let offset = 0
   let shouldCheckNextPage = true
   while (shouldCheckNextPage) {
+    const pageOffset = offset
     // oxlint-disable-next-line no-await-in-loop
-    const result = await Result.trySafe(storage.listFiles({ bucketId, queries: [Query.limit(nbPercentMax), Query.offset(offset)] }))
+    const result = await trySafeAsync(() => storage.listFiles({ bucketId, queries: [Query.limit(nbPercentMax), Query.offset(pageOffset)] }))
     if (!result.ok) return result
     if (result.value.files.length === 0) shouldCheckNextPage = false
     else {
@@ -144,11 +158,12 @@ export async function getItemsRemotely() {
   let offset = 0
   let shouldCheckNextPage = true
   while (shouldCheckNextPage) {
+    const pageOffset = offset
     // oxlint-disable-next-line no-await-in-loop
-    const result = await Result.trySafe(
+    const result = await trySafeAsync(() =>
       tablesDb.listRows<ItemModel>({
         databaseId: state.credentials.databaseId,
-        queries: [Query.limit(nbPercentMax), Query.offset(offset)],
+        queries: [Query.limit(nbPercentMax), Query.offset(pageOffset)],
         tableId: state.credentials.collectionId,
       }),
     )
@@ -233,7 +248,7 @@ export async function addItemRemotely(item: Item, currentState = state) {
   const { collectionId, databaseId } = currentState.credentials
   const payload = itemToAppWriteModel(data.value)
   if (!payload.ok) return payload
-  const post = await Result.trySafe(tablesDb.createRow<ItemModel>({ data: payload.value, databaseId, rowId: id.value, tableId: collectionId }))
+  const post = await trySafeAsync(() => tablesDb.createRow<ItemModel>({ data: payload.value, databaseId, rowId: id.value, tableId: collectionId }))
   if (!post.ok) return post
   const parse = safeParse(itemSchema, post.value)
   if (!parse.success) return Result.error(parse.issues.map(issue => issue.message).join(', '))
@@ -242,7 +257,7 @@ export async function addItemRemotely(item: Item, currentState = state) {
 
 export async function deleteItemRemotely(item: Item, currentState = state) {
   const { collectionId, databaseId } = currentState.credentials
-  const result = await Result.trySafe(tablesDb.deleteRow({ databaseId, rowId: item.$id, tableId: collectionId }))
+  const result = await trySafeAsync(() => tablesDb.deleteRow({ databaseId, rowId: item.$id, tableId: collectionId }))
   /* v8 ignore if */
   if (result.ok)
     for (const photo of item.photos) {
@@ -262,7 +277,7 @@ export async function updateItemRemotely(item: Item, currentState = state) {
   if (data.value.$id.length === 0) return Result.error(`item id is empty in ${JSON.stringify(data.value)}`)
   const payload = itemToAppWriteModel(data.value)
   if (!payload.ok) return payload
-  const post = await Result.trySafe(tablesDb.updateRow<ItemModel>({ data: payload.value, databaseId, rowId: data.value.$id, tableId: collectionId }))
+  const post = await trySafeAsync(() => tablesDb.updateRow<ItemModel>({ data: payload.value, databaseId, rowId: data.value.$id, tableId: collectionId }))
   if (!post.ok) return post
   const parse = safeParse(itemSchema, post.value)
   if (!parse.success) return Result.error(parse.issues.map(issue => issue.message).join(', '))
