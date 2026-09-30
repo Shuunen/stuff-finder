@@ -12,24 +12,29 @@ describe('cleanSuggestions', () => {
       keyB: ['a', 'b', 'c'],
     })
   })
+
   it('B empty object', () => {
     expect(cleanSuggestions({})).toStrictEqual({})
   })
+
   it('C removes empty arrays', () => {
     expect(cleanSuggestions({ keyA: ['a', 'b', 'c'], keyB: [] })).toStrictEqual({ keyA: ['a', 'b', 'c'] })
   })
+
   it('D deduplicates and removes empty strings', () => {
     expect(cleanSuggestions({ keyA: ['a', 'b', '', '0', 'c'], keyB: ['a', 'b', 'c', 'a', 'b', 'c'] })).toStrictEqual({
       keyA: ['a', 'b', 'c'],
       keyB: ['a', 'b', 'c'],
     })
   })
+
   it('E filters nullish and capitalizes', () => {
     // @ts-expect-error typing is not correct
     expect(cleanSuggestions({ name: ['a', -1, '0', undefined, undefined, 'b', '', 0, 'c'] })).toStrictEqual({
       name: ['A', 'B', 'C'],
     })
   })
+
   it('F matches snapshot with mixed types', () => {
     // @ts-expect-error typing is not correct
     expect(cleanSuggestions({ details: ['a', 'b', 'c'], plo: ['0', 0, 12, new Date()], plop: undefined, zob: [''] })).toMatchInlineSnapshot(`
@@ -78,6 +83,7 @@ describe('addSuggestionsFromCampo', () => {
     await addSuggestionsFromCampo(suggestions, '3760052142741')
     expect(suggestions).toStrictEqual(emptyItemSuggestions)
   })
+
   it('B with working get fetches and stores suggestions', async () => {
     state.credentials.wrap = 'xyz'
     const suggestions = clone(emptyItemSuggestions)
