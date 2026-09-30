@@ -1,4 +1,4 @@
-import Dexie, { type Table } from 'dexie'
+import { Dexie, type Table } from 'dexie'
 import type { Item } from '../types/item.types'
 
 type MetaRecord = {

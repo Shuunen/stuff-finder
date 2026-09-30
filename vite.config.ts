@@ -76,7 +76,7 @@ export default defineConfig({
   },
   test: {
     coverage: {
-      exclude: ['**/*.types.ts', '**/*.tsx', '**/*.d.ts', '**/*.css', 'src/pwa.ts', 'src/db/db.ts'],
+      exclude: ['**/*.types.ts', '**/*.tsx', '**/*.d.ts', '**/*.css', '**/*.snap', 'src/pwa.ts', 'src/db/db.ts'],
       include: ['src'],
       provider: 'v8' as const,
       reporter: [['text', { maxCols: 120 }], 'lcov'],
