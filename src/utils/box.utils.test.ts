@@ -7,6 +7,7 @@ describe('box utils', () => {
       expect(boxToLetter('h (hardware)')).toBe('H')
       expect(boxToLetter('A')).toBe('A')
     })
+
     it('returns ? for empty string', () => {
       expect(boxToLetter('')).toBe('?')
     })
@@ -18,6 +19,7 @@ describe('box utils', () => {
       expect(boxToColor('A')).toBe('#FFD27A')
       expect(boxToColor('H')).toBe('#FFB088')
     })
+
     it('returns fallback color for unknown letters', () => {
       expect(boxToColor('1 (unknown)')).toBe('#C8C8C8')
     })
