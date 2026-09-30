@@ -107,6 +107,7 @@
     "curly": ["error", "multi"],
     "explicit-function-return-type": "off",
     "explicit-module-boundary-types": "off",
+    "one-var": "off",
     "exports-last": "off",
     "extensions": "off",
     "filename-case": [
