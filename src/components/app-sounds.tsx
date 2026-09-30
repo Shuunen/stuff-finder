@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { logger } from '../utils/logger.utils'
 import { state, watchState } from '../utils/state.utils'
 
@@ -9,15 +9,16 @@ export function AppSounds() {
   const stopReference = useRef<HTMLAudioElement>(null)
   const errorReference = useRef<HTMLAudioElement>(null)
 
-  // oxlint-disable-next-line react/react-compiler
-  watchState('sound', () => {
-    logger.info('sound to play', state.sound)
-    if (state.sound === 'barcode') barcodeReference.current?.play()
-    if (state.sound === 'notify') notifyReference.current?.play()
-    if (state.sound === 'start') startReference.current?.play()
-    if (state.sound === 'stop') stopReference.current?.play()
-    if (state.sound === 'error') errorReference.current?.play()
-  })
+  useEffect(() => {
+    watchState('sound', () => {
+      logger.info('sound to play', state.sound)
+      if (state.sound === 'barcode') barcodeReference.current?.play()
+      if (state.sound === 'notify') notifyReference.current?.play()
+      if (state.sound === 'start') startReference.current?.play()
+      if (state.sound === 'stop') stopReference.current?.play()
+      if (state.sound === 'error') errorReference.current?.play()
+    })
+  }, [])
   return (
     <>
       <audio preload="auto" ref={barcodeReference} src="/assets/barcode-scan-beep-09.mp3" />

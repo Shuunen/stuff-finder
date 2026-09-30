@@ -29,7 +29,7 @@ type MetricCardProps = {
 
 const iconStyle = { fontSize: '3rem' }
 
-const MetricCard = memo((props: MetricCardProps) => {
+function MetricCardComponent(props: MetricCardProps) {
   const { title, color, amount, icon: Icon, items, children, loadingItemIds } = props
   const isHidden = items?.length === 0
 
@@ -53,7 +53,9 @@ const MetricCard = memo((props: MetricCardProps) => {
       </div>
     </div>
   )
-})
+}
+
+const MetricCard = memo(MetricCardComponent)
 
 MetricCard.displayName = 'MetricCard'
 
@@ -126,7 +128,7 @@ function PriceButtons({ onPriceClick, selection }: { onPriceClick: (price: numbe
   )
 }
 
-const MetricCardMissingPriceList = memo(({ metrics }: { metrics: MetricsData }) => {
+function MetricCardMissingPriceListComponent({ metrics }: { metrics: MetricsData }) {
   const [baseSelection, setBaseSelection] = useState<Item[]>([])
   const [itemsToDisplay, setItemsToDisplay] = useState<Item[]>(() => [...metrics.itemsWithoutPrice])
   const [loadingItemIds, setLoadingItemIds] = useState<Item['$id'][] | undefined>()
@@ -149,7 +151,9 @@ const MetricCardMissingPriceList = memo(({ metrics }: { metrics: MetricsData }) 
       <PriceButtons onPriceClick={onPriceClick} selection={selection} />
     </MetricCard>
   )
-})
+}
+
+const MetricCardMissingPriceList = memo(MetricCardMissingPriceListComponent)
 
 MetricCardMissingPriceList.displayName = 'MetricCardMissingPriceList'
 

@@ -34,9 +34,8 @@ export function PageSearch() {
         setAsyncResults(data.results)
       } catch (error: unknown) {
         logger.error('search failed', error)
-      } finally {
-        setLastSearchedInput(input)
       }
+      setLastSearchedInput(input)
     }
     void runSearch()
   }, [input, stateResults, state])

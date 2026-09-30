@@ -9,6 +9,7 @@ export function PageItemDetails() {
   const { id, context } = useParams<{ id: string; context?: string }>()
 
   useEffect(() => {
+    if (id === undefined) return
     window.scrollTo({ behavior: 'smooth', top: 0 })
   }, [id])
 
