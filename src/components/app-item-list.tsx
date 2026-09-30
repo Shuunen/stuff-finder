@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
-import { cn } from 'shuutils'
 import type { Item } from '../types/item.types'
 import type { Display } from '../types/theme.types'
+import { cn } from '../utils/class.utils'
 import { state, watchState } from '../utils/state.utils'
 import { AppItemListEntry } from './app-item-list-entry'
 
