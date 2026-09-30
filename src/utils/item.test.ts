@@ -198,16 +198,20 @@ describe('item.utils', () => {
   it('itemBoxToRoom A', () => {
     expect(itemBoxToRoom('A (apple)')).toMatchInlineSnapshot(`"entrée"`)
   })
+
   it('itemBoxToRoom B', () => {
     // @ts-expect-error for testing purposes
     expect(itemBoxToRoom('zz')).toMatchInlineSnapshot(`undefined`)
   })
+
   it('itemBoxToRoom C', () => {
     expect(itemBoxToRoom('C (couteau)')).toMatchInlineSnapshot(`"salon"`)
   })
+
   it('itemBoxToRoom D empty box', () => {
     expect(itemBoxToRoom('')).toMatchInlineSnapshot(`undefined`)
   })
+
   it('itemBoxToRoom E room box', () => {
     expect(itemBoxToRoom('Salon')).toMatchInlineSnapshot(`"salon"`)
   })
@@ -215,15 +219,19 @@ describe('item.utils', () => {
   it('statusStringToStatus A lost', () => {
     expect(statusStringToStatus('lost')).toMatchInlineSnapshot(`"lost"`)
   })
+
   it('statusStringToStatus B bought', () => {
     expect(statusStringToStatus('bought')).toMatchInlineSnapshot(`"bought"`)
   })
+
   it('statusStringToStatus C to-give', () => {
     expect(statusStringToStatus('to-give')).toMatchInlineSnapshot(`"to-give"`)
   })
+
   it('statusStringToStatus D for-sell', () => {
     expect(statusStringToStatus('for-sell')).toMatchInlineSnapshot(`"for-sell"`)
   })
+
   it('statusStringToStatus E unhandled status', () => {
     expect(statusStringToStatus('hehe')).toMatchInlineSnapshot(`"bought"`)
   })
@@ -231,9 +239,11 @@ describe('item.utils', () => {
   it('drawerStringToDrawer A valid', () => {
     expect(drawerStringToDrawer('2')).toBe(2)
   })
+
   it('drawerStringToDrawer B empty', () => {
     expect(drawerStringToDrawer('')).toBe(-1)
   })
+
   it('drawerStringToDrawer C NaN', () => {
     expect(drawerStringToDrawer('hehe')).toBe(-1)
   })
@@ -241,6 +251,7 @@ describe('item.utils', () => {
   it('boxStringToBox A valid', () => {
     expect(boxStringToBox('A (apple)')).toMatchInlineSnapshot(`"A (apple)"`)
   })
+
   it('boxStringToBox B invalid', () => {
     expect(boxStringToBox('hehe')).toBe('')
   })

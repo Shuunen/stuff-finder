@@ -26,7 +26,7 @@ Ok {
 
 exports[`item.utils > formToItem A default itemForm 1`] = `
 "{
-  "$createdAt": "xxxx-xx-xxTxx:xx:xx.000Z",
+  "$createdAt": "xxxx-xx-xxTxx:xx:xx.xxxZ",
   "$id": "",
   "barcode": "",
   "box": "",
@@ -44,7 +44,7 @@ exports[`item.utils > formToItem A default itemForm 1`] = `
 
 exports[`item.utils > formToItem B itemForm with some values 1`] = `
 "{
-  "$createdAt": "xxxx-xx-xxTxx:xx:xx.000Z",
+  "$createdAt": "xxxx-xx-xxTxx:xx:xx.xxxZ",
   "$id": "",
   "barcode": "",
   "box": "",
