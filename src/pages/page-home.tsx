@@ -21,20 +21,22 @@ export function PageHome({ ...properties }: Readonly<Record<string, unknown>>) {
 
   return (
     <div className="relative flex w-full grow animate-fade-up flex-col py-12" data-testid="home">
-      <div className="flex items-center justify-between" data-testid="home-header">
+      <div className="relative z-10 flex items-center justify-between" data-testid="home-header">
         <AppPill name="item-count" className="bg-pastel-1">
           {itemCount} things
         </AppPill>
         <AppButton name="settings" onClick={() => navigate('/settings')} label="Settings" endIcon={<SettingsIcon />} />
       </div>
-      <div className="mx-auto mb-24 flex flex-1 flex-col justify-center" data-testid="home-content">
-        <div className="relative inline-block">
-          <span className="font-display text-[clamp(44px,12vw,62px)] leading-none font-extrabold">Stuff Finder</span>
-          <span data-testid="home-dot" className="ml-1 inline-block size-3 animate-bounce-in-left rounded-full border-2 bg-primary align-baseline" />
-          <AppTape className="absolute -top-8 left-24 -rotate-4" />
-          <p className="my-4 text-grey">Where the heck did I put my label maker?</p>
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div className="flex flex-col" data-testid="home-content">
+          <div className="relative inline-block">
+            <span className="font-display text-[clamp(44px,12vw,62px)] leading-none font-extrabold">Stuff Finder</span>
+            <span data-testid="home-dot" className="ml-1 inline-block size-3 animate-bounce-in-left rounded-full border-2 bg-primary align-baseline" />
+            <AppTape className="absolute -top-8 left-24 -rotate-4" />
+            <p className="my-4 text-grey">Where the heck did I put my label maker?</p>
+          </div>
+          <AppQuickSearch />
         </div>
-        <AppQuickSearch />
       </div>
     </div>
   )
