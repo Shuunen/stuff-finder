@@ -2,6 +2,17 @@
 
 All notable changes to stuff-finder are documented here.
 
+## [3.2.4] - 2026-10-04
+
+### Added in 3.2.4
+
+- **Showcase video** — the README now has a "How does it work ?" section with a short video showing how to add an item, print its sticky label and find it again from any screen or by scanning its sticker
+- **Video source** — the video is fully reproducible from the new `brag/` folder (capture scripts, composition and assets)
+
+### Changed in 3.2.4
+
+- **Lint and format** — the `brag/` folder is ignored by the linter and formatter
+
 ## [3.2.3] - 2026-06-20
 
 ### Changed in 3.2.3

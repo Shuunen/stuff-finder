@@ -86,5 +86,5 @@
     "up:deps": "pnpm update --latest && echo up:deps completed successfully"
   },
   "type": "module",
-  "version": "3.2.3"
+  "version": "3.2.4"
 }
