@@ -13,7 +13,7 @@
 
 ### How does it work ?
 
-[![showcase video](docs/brag.jpg)](docs/brag.mp4)
+https://github.com/user-attachments/assets/87b4c99a-6902-4de1-afab-3f4917a79fef
 
 _Add an item, print its sticky label, then find it from any screen or by scanning its sticker. Source of the video in [brag/](brag/README.md)._
 
