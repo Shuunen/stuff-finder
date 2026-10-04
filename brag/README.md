@@ -12,7 +12,8 @@ Source of the showcase video of the main README ([docs/brag.mp4](../docs/brag.mp
 | `scripts/gen.py`          | **generates `composition/index.html`** (timing, copy and animations all live here, edit this, not the html)      |
 | `composition/`            | the Hyperframes project (`index.html` generated, `assets/` = fonts, sfx, screenshots, form recording)            |
 | `data/`                   | small inputs of `gen.py` (bass envelope of the music, card positions, form cursor path, QR)                      |
-| `scripts/capture/`        | playwright scripts that screenshot the **real app** (seeded with your real items), see below                     |
+| `scripts/capture/`        | `capture-screens.mjs` + `capture-form.mjs` screenshot the **real app** (seeded with your real items), see below   |
+| `scripts/make-data.sh`    | regenerates `data/bass.json` (music bass envelope) and `data/qr.svg` (sticker qr, text `BT-168D`)                |
 | `scripts/build-assets.sh` | converts raw captures into `composition/assets`                                                                  |
 | `.local/`, `out/`         | git-ignored : personal inventory dump, raw captures, render output                                               |
 
@@ -39,7 +40,11 @@ ffmpeg -i brag/out/brag.mp4 -i docs/brag.jpg -filter_complex "[0:v]scale=1280:72
 1. start the app (`pnpm dev`, port 4200) and open `/search/battery` in your browser with your data loaded
 2. `python3 brag/scripts/capture/dump-receiver.py` then paste `brag/scripts/capture/dump-from-browser.js` in the devtools console
 3. `python3 brag/scripts/capture/download-images.py`
-4. `node brag/scripts/capture/cap-results.mjs`, `cap-dock.mjs`, `cap-pages.mjs`, `cap-more.mjs`, `cap-form.mjs`
+4. `node brag/scripts/capture/capture-screens.mjs` (results, details, print, tablet, phone) and `node brag/scripts/capture/capture-form.mjs` (add form recording)
 5. `./brag/scripts/build-assets.sh` then `python3 brag/scripts/gen.py`
 
-The video shows the item "Digital Battery Tester" (`bt-168d`) : `cap-form.mjs` excludes it from the seeded data so the add form does not complain that the reference exists.
+The app draws a random background pattern on each load, so recaptured screenshots always differ a bit : only refresh them when the UI really changed.
+
+Change the music or the qr text : edit `scripts/gen.py` / `scripts/make-data.sh`, run `./brag/scripts/fetch-music.sh && ./brag/scripts/make-data.sh`, then `gen.py`.
+
+The video shows the item "Digital Battery Tester" (`bt-168d`) : `capture-form.mjs` excludes it from the seeded data so the add form does not complain that the reference exists.

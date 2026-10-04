@@ -1,5 +1,5 @@
 import fs from 'node:fs'
-import { open, SP } from './cap-common.mjs'
+import { open, SP } from './common.mjs'
 const { browser, page } = await open({ width: 1920, height: 1080 }, { exclude: i => i.reference === 'BT-168D' || i.$id === 'bt-168d' })
 fs.rmSync(SP + 'form', { recursive: true, force: true })
 fs.mkdirSync(SP + 'form', { recursive: true })
