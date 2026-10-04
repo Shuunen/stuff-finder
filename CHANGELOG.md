@@ -2,6 +2,17 @@
 
 All notable changes to stuff-finder are documented here.
 
+## [3.2.5] - 2026-10-04
+
+### Changed in 3.2.5
+
+- **Dependency updates** — patch/minor bumps (vite, vitest, turbo, @types/node) and `vite-plugin-pwa` 2.0.0
+- **Toolchain** — pnpm 12.9.1
+
+### Fixed in 3.2.5
+
+- Cleared 20 transitive audit advisories (brace-expansion, fast-uri, browserslist, baseline-browser-mapping)
+
 ## [3.2.4] - 2026-10-04
 
 ### Added in 3.2.4
