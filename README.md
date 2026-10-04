@@ -11,6 +11,12 @@
 
 [![demo](docs/design-3.2.3-home-tablet.jpg)](https://stuff-finder.netlify.app)
 
+### How does it work ?
+
+[![showcase video](docs/brag.jpg)](docs/brag.mp4)
+
+_Add an item, print its sticky label, then find it from any screen or by scanning its sticker. Source of the video in [brag/](brag/README.md)._
+
 ## Features
 
 - Search your stuff by text, voice or barcode/QR scan

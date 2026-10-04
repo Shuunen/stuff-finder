@@ -1,0 +1,411 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1920, height=1080" />
+<title>Stuff Finder Brag</title>
+<script src="assets/gsap.min.js"></script>
+<style>
+@font-face { font-family: "Bricolage Grotesque"; font-weight: 400; src: url("assets/fonts/bricolage-400.ttf") format("truetype"); }
+@font-face { font-family: "Bricolage Grotesque"; font-weight: 800; src: url("assets/fonts/bricolage-800.ttf") format("truetype"); }
+@font-face { font-family: "JetBrains Mono"; font-weight: 700; src: url("assets/fonts/jbmono-700.ttf") format("truetype"); }
+:root { --navy:#1e2a3b; --slate:#4a5666; --red:#e04a2b; --amber:#ffd27a; --mint:#b7e5c0; --sky:#9fd3e8; --peach:#ffb088; --pink:#f0a8c8; --cream:#fbf7ee; }
+html, body { margin:0; padding:0; background:#fbf7ee; }
+body { font-family:"Bricolage Grotesque", system-ui, sans-serif; color:var(--navy); }
+#root { position:relative; width:100%; height:100%; overflow:hidden; background:linear-gradient(to top right, #fbf7ee 0%, #fbf0d8 60%, #fde9bd 100%); }
+#glow { position:absolute; inset:0; background:radial-gradient(ellipse 60% 55% at 50% 48%, rgba(255,210,122,0.75), rgba(255,210,122,0) 70%); opacity:0.35; }
+#dots { position:absolute; inset:0; background-image:radial-gradient(rgba(30,42,59,0.10) 2px, transparent 2.5px); background-size:44px 44px; }
+.clip { position:absolute; inset:0; }
+.scene { position:absolute; inset:0; }
+.word { display:inline-block; white-space:nowrap; }
+.ch { opacity:0; }
+.pill { position:absolute; font-family:"JetBrains Mono", monospace; font-weight:700; font-size:30px; padding:10px 24px; border:3px solid var(--navy); border-radius:40px; box-shadow:5px 5px 0 var(--navy); background:var(--amber); }
+.btn { position:absolute; font-weight:800; font-size:28px; letter-spacing:1px; text-transform:uppercase; padding:10px 26px; border:3px solid var(--navy); border-radius:16px; box-shadow:5px 5px 0 var(--navy); background:#fff; display:flex; gap:14px; align-items:center; }
+.tape { position:absolute; width:190px; height:66px; background:rgba(255,176,136,0.85); box-shadow:0 2px 6px rgba(30,42,59,0.15); }
+.wordmark { position:relative; display:inline-block; font-weight:800; font-size:178px; line-height:1; letter-spacing:-3px; white-space:nowrap; }
+.dot { display:inline-block; width:38px; height:38px; border-radius:50%; background:var(--red); border:4px solid var(--navy); margin-left:10px; }
+.bar { width:920px; height:104px; border-radius:52px; border:4px solid var(--navy); background:#fff; box-shadow:7px 7px 0 var(--navy); display:flex; align-items:center; padding:0 32px; box-sizing:border-box; gap:22px; }
+.bar .txt { flex:1; font-weight:800; font-size:44px; color:var(--navy); white-space:nowrap; }
+.bar .ph { position:absolute; left:0; font-weight:400; color:#9aa3ad; }
+.rc { position:absolute; display:block; }
+.mono { font-family:"JetBrains Mono", monospace; font-weight:700; }
+.cap { position:absolute; left:0; right:0; text-align:center; font-size:40px; color:var(--slate); white-space:nowrap; }
+.tag { position:absolute; font-family:"JetBrains Mono", monospace; font-weight:700; font-size:26px; padding:6px 20px; border:3px solid var(--navy); border-radius:30px; background:var(--amber); box-shadow:4px 4px 0 var(--navy); }
+.drawer { display:inline-flex; align-items:center; gap:12px; background:var(--amber); border:4px solid var(--navy); border-radius:20px; padding:8px 18px 8px 10px; box-shadow:5px 5px 0 var(--navy); }
+.drawer b { display:inline-block; width:50px; height:50px; line-height:46px; text-align:center; background:#fff; border:3px solid var(--navy); border-radius:12px; font-size:30px; font-weight:800; }
+.drawer i { font-style:normal; font-weight:800; font-size:34px; }
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="main" data-start="0" data-width="1920" data-height="1080" data-duration="41.68">
+  <div id="glow"></div>
+  <div id="dots"></div>
+
+  <!-- 1: the question -->
+  <section id="scene1" class="clip" data-start="0" data-duration="3.48">
+    <div class="scene" id="s1">
+      <div id="hook" style="position:absolute; left:140px; right:140px; top:0; bottom:0; display:flex; align-items:center; justify-content:center; text-align:center; font-weight:800; font-size:128px; line-height:1.1; letter-spacing:-2px;"><div><span class="word"><span class="ch h1c">W</span><span class="ch h1c">h</span><span class="ch h1c">e</span><span class="ch h1c">r</span><span class="ch h1c">e</span></span> <span class="word"><span class="ch h1c">t</span><span class="ch h1c">h</span><span class="ch h1c">e</span></span> <span class="word"><span class="ch h1c">h</span><span class="ch h1c">e</span><span class="ch h1c">c</span><span class="ch h1c">k</span></span> <span class="word"><span class="ch h1c">d</span><span class="ch h1c">i</span><span class="ch h1c">d</span></span> <span class="word"><span class="ch h1c">I</span></span> <span class="word"><span class="ch h1c">p</span><span class="ch h1c">u</span><span class="ch h1c">t</span></span> <span class="word"><span class="ch h1c">m</span><span class="ch h1c">y</span></span> <span class="word"><span class="ch h1c">b</span><span class="ch h1c">a</span><span class="ch h1c">t</span><span class="ch h1c">t</span><span class="ch h1c">e</span><span class="ch h1c">r</span><span class="ch h1c">y</span></span> <span class="word"><span class="ch h1c">t</span><span class="ch h1c">e</span><span class="ch h1c">s</span><span class="ch h1c">t</span><span class="ch h1c">e</span><span class="ch h1c">r</span><span class="ch h1c">?</span></span></div></div>
+    </div>
+  </section>
+
+  <!-- 2: home -->
+  <section id="scene2" class="clip" data-start="3.18" data-duration="3.46">
+    <div class="scene" id="s2">
+      <div class="pill" id="s2-pill" style="left:80px; top:64px;">901 things</div>
+      <div class="btn" id="s2-btn" style="right:80px; top:60px;">Settings <svg width="30" height="30" viewBox="0 0 24 24"><path fill="#1e2a3b" d="M19.14 12.94c.04-.3.06-.61.06-.94s-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.49.49 0 0 0-.59-.22l-2.39.96a7 7 0 0 0-1.62-.94l-.36-2.54A.48.48 0 0 0 13.92 2h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.48.48 0 0 0-.59.22L2.74 8.47a.47.47 0 0 0 .12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32a.47.47 0 0 0-.12-.61zM12 15.6A3.6 3.6 0 1 1 12 8.4a3.6 3.6 0 0 1 0 7.2"/></svg></div>
+      <div style="position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:44px;">
+        <div id="s2-mark" class="wordmark">Stuff Finder<span class="dot" id="s2-dot"></span><div class="tape" data-layout-allow-overflow id="s2-tape" style="top:-46px; left:440px; transform:rotate(-4deg);"></div></div>
+        <div class="bar" id="s2-bar"><svg width="34" height="34" viewBox="0 0 24 24"><path fill="#1e2a3b" d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"/></svg><div class="txt" style="position:relative;"><span class="ph" id="s2-ph">label maker, AAA batteries...</span><span class="ch qc">b</span><span class="ch qc">a</span><span class="ch qc">t</span><span class="ch qc">t</span><span class="ch qc">e</span><span class="ch qc">r</span><span class="ch qc">y</span></div><svg width="34" height="34" viewBox="0 0 24 24"><path fill="#1e2a3b" d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3m5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72z"/></svg></div>
+      </div>
+      <svg id="cursor" width="54" height="54" viewBox="0 0 24 24" style="position:absolute; left:0; top:0; z-index:9;"><path d="M5 2l14 10-6 1.5L16 21l-3 1-3-7.5L5 19z" fill="#1e2a3b" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/></svg>
+    </div>
+  </section>
+
+  <!-- 3: results, real masonry -->
+  <section id="scene3" class="clip" data-start="6.34" data-duration="4.51">
+    <div class="scene" id="s3">
+      <img src="assets/img/results-bg.jpg" style="position:absolute; left:0; top:0; width:1920px; height:1080px;" alt="" />
+      <img class="rc" id="rc0" src="assets/img/card-0.png" style="left:194px; top:95px; width:388px; height:412px;" alt="" />
+<img class="rc" id="rc4" src="assets/img/card-4.png" style="left:576px; top:95px; width:388px; height:442px;" alt="" />
+<img class="rc" id="rc8" src="assets/img/card-8.png" style="left:958px; top:95px; width:388px; height:426px;" alt="" />
+<img class="rc" id="rc11" src="assets/img/card-11.png" style="left:1340px; top:95px; width:388px; height:576px;" alt="" />
+<img class="rc" id="rc1" src="assets/img/card-1.png" style="left:194px; top:435px; width:388px; height:494px;" alt="" />
+<img class="rc" id="rc9" src="assets/img/card-9.png" style="left:958px; top:449px; width:388px; height:459px;" alt="" />
+<img class="rc" id="rc5" src="assets/img/card-5.png" style="left:576px; top:465px; width:388px; height:448px;" alt="" />
+<img class="rc" id="rc12" src="assets/img/card-12.png" style="left:1340px; top:599px; width:388px; height:373px;" alt="" />
+
+      <img src="assets/img/dock.png" style="position:absolute; left:1400px; top:960px; width:520px; height:120px; z-index:3;" alt="" />
+      <svg id="s3-ring" width="1920" height="1080" viewBox="0 0 1920 1080" style="position:absolute; left:0; top:0; z-index:5; overflow:visible;"><ellipse id="s3-ring-e" cx="393" cy="315" rx="232" ry="205" transform="rotate(-6 393 315)" fill="none" stroke="#e04a2b" stroke-width="9" stroke-linecap="round" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/></svg>
+      <div id="s3-found" class="tag" style="left:430px; top:50px; font-size:38px; background:var(--mint); padding:8px 28px; z-index:6;">Found it !</div>
+    </div>
+  </section>
+
+  <!-- 5: how does it work -->
+  <section id="scene5" class="clip" data-start="10.55" data-duration="1.88">
+    <div class="scene" id="s5">
+      <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center;">
+        <div id="s5-text" class="wordmark" style="font-size:170px;">How does it work ?<div class="tape" data-layout-allow-overflow id="s5-tape" style="top:-48px; left:60px; transform:rotate(-4deg);"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6: step 1 -->
+  <section id="scene6" class="clip" data-start="12.13" data-duration="8.19">
+    <div class="scene" id="s6">
+      <div id="s6-title" style="position:absolute; left:0; right:0; top:70px; text-align:center; font-weight:800; font-size:96px; line-height:1.05; letter-spacing:-2px; white-space:nowrap;">Step 1 : Add the item</div>
+      <div id="s6-win" style="position:absolute; left:320px; top:250px; width:1288px; height:768px; box-sizing:border-box; background:#fff; border:4px solid var(--navy); border-radius:22px; box-shadow:10px 10px 0 var(--navy); overflow:hidden;"><div style="height:40px; background:#f3ead7; border-bottom:4px solid var(--navy); display:flex; align-items:center; gap:10px; padding:0 16px;"><i style="width:14px; height:14px; border-radius:50%; background:#e04a2b; display:block;"></i><i style="width:14px; height:14px; border-radius:50%; background:#ffd27a; display:block;"></i><i style="width:14px; height:14px; border-radius:50%; background:#b7e5c0; display:block;"></i></div><div style="position:relative; width:1280px; height:720px;"><img id="s6-det" src="assets/img/details.jpg" style="position:absolute; left:0; top:0; width:1280px; height:720px;" alt="" /></div></div>
+      <svg id="cursor6" width="54" height="54" viewBox="0 0 24 24" style="position:absolute; left:0; top:0; z-index:9;"><path d="M5 2l14 10-6 1.5L16 21l-3 1-3-7.5L5 19z" fill="#1e2a3b" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/></svg>
+    </div>
+  </section>
+  <div id="s6-vidwrap" style="position:absolute; left:324px; top:294px; width:1280px; height:720px; overflow:hidden; opacity:0; z-index:4;">
+    <video id="form-vid" src="assets/video/form.mp4" data-start="12.68" data-duration="5.85" data-track-index="2" muted playsinline style="position:absolute; left:-489px; top:-274px; width:2234px; height:1257px; display:block;"></video>
+  </div>
+
+  <!-- 7: step 2 -->
+  <section id="scene7" class="clip" data-start="20.02" data-duration="7.14">
+    <div class="scene" id="s7">
+      <div id="s7-title" style="position:absolute; left:0; right:0; top:76px; text-align:center; font-weight:800; font-size:78px; line-height:1.05; letter-spacing:-2px; white-space:nowrap;">Step 2 <span style="color:var(--slate); font-weight:400;">(optional)</span> : Print the sticky label</div>
+      <div id="s7-win" style="position:absolute; left:70px; top:250px; width:1068px; height:644px; box-sizing:border-box; background:#fff; border:4px solid var(--navy); border-radius:22px; box-shadow:10px 10px 0 var(--navy); overflow:hidden;"><div style="height:40px; background:#f3ead7; border-bottom:4px solid var(--navy); display:flex; align-items:center; gap:10px; padding:0 16px;"><i style="width:14px; height:14px; border-radius:50%; background:#e04a2b; display:block;"></i><i style="width:14px; height:14px; border-radius:50%; background:#ffd27a; display:block;"></i><i style="width:14px; height:14px; border-radius:50%; background:#b7e5c0; display:block;"></i></div><div style="position:relative; width:1060px; height:596px;"><img src="assets/img/print.jpg" style="position:absolute; left:-742px; top:-424px; width:2544px; height:1431px;" alt="" /></div></div>
+      <div id="s7-ring" style="position:absolute; left:429px; top:603px; width:221px; height:114px; box-sizing:border-box; border:5px solid var(--red); border-radius:12px;"></div>
+      <svg id="cursor7" width="54" height="54" viewBox="0 0 24 24" style="position:absolute; left:0; top:0; z-index:9;"><path d="M5 2l14 10-6 1.5L16 21l-3 1-3-7.5L5 19z" fill="#1e2a3b" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/></svg>
+      <div id="prn" style="position:absolute; left:1210px; top:290px; width:640px; height:640px;">
+        <div id="prn-clip" style="position:absolute; left:90px; top:258px; width:480px; height:360px; overflow:hidden; z-index:1;">
+          <div id="prn-label" style="position:absolute; left:20px; top:-210px;"><div id="prn-lab" style="width:440px; height:190px; background:#fff; border-radius:8px; box-shadow:0 12px 26px rgba(30,42,59,0.35); display:flex; align-items:center; gap:17px; padding:0 17px; box-sizing:border-box;"><svg xmlns="http://www.w3.org/2000/svg" width="110" height="110" viewBox="0 0 21 21" shape-rendering="crispEdges" style="flex:none;" class="segno"><path class="qrline" stroke="#000" d="M0 0.5h7m1 0h1m1 0h1m1 0h1m1 0h7m-21 1h1m5 0h1m4 0h2m1 0h1m5 0h1m-21 1h1m1 0h3m1 0h1m4 0h2m1 0h1m1 0h3m1 0h1m-21 1h1m1 0h3m1 0h1m1 0h1m3 0h1m1 0h1m1 0h3m1 0h1m-21 1h1m1 0h3m1 0h1m3 0h3m1 0h1m1 0h3m1 0h1m-21 1h1m5 0h1m2 0h2m1 0h1m1 0h1m5 0h1m-21 1h7m1 0h1m1 0h1m1 0h1m1 0h7m-12 1h1m1 0h2m-11 1h1m1 0h3m1 0h2m3 0h1m3 0h1m2 0h1m-19 1h1m1 0h1m2 0h3m1 0h2m1 0h2m2 0h2m-19 1h1m4 0h1m2 0h1m3 0h3m3 0h1m-20 1h1m1 0h1m2 0h1m1 0h2m1 0h2m3 0h2m2 0h1m-17 1h1m2 0h1m1 0h2m2 0h2m1 0h1m4 0h1m-13 1h1m2 0h2m2 0h1m2 0h3m-21 1h7m2 0h1m2 0h1m3 0h1m1 0h1m-19 1h1m5 0h1m1 0h3m2 0h3m4 0h1m-21 1h1m1 0h3m1 0h1m1 0h1m2 0h4m1 0h1m1 0h1m1 0h1m-21 1h1m1 0h3m1 0h1m2 0h1m1 0h1m1 0h1m1 0h1m3 0h1m-20 1h1m1 0h3m1 0h1m1 0h2m1 0h1m4 0h3m1 0h1m-21 1h1m5 0h1m2 0h2m2 0h2m2 0h4m-21 1h7m2 0h2m1 0h1m1 0h2m2 0h1m1 0h1"/></svg><div style="flex:1; text-align:right; color:#1e2a3b; white-space:nowrap;"><div style="font-size:24px; line-height:1.15;">Digital Battery Tester</div><div style="font-size:19px; color:#2f3a4a; margin-top:4px;">Battery Checker BT-168D</div><div style="font-size:40px; font-weight:800; margin-top:8px;">A·1</div></div></div></div>
+        </div>
+        <div id="prn-body" style="position:absolute; left:20px; top:0; width:600px; height:270px; box-sizing:border-box; background:var(--pink); border:5px solid var(--navy); border-radius:40px; box-shadow:10px 10px 0 var(--navy); z-index:2;">
+          <div style="position:absolute; left:40px; top:36px; width:520px; height:76px; border:4px solid var(--navy); border-radius:16px; background:#fff3f8; display:flex; align-items:center; justify-content:space-between; padding:0 24px; box-sizing:border-box;">
+            <div class="mono" style="font-size:30px; position:relative; width:300px; height:36px;"><span id="prn-t1" style="position:absolute; left:0;">READY</span><span id="prn-t2" style="position:absolute; left:0; opacity:0;">PRINTING...</span><span id="prn-t3" style="position:absolute; left:0; opacity:0;">DONE</span></div>
+            <i id="prn-led" style="display:block; width:26px; height:26px; border-radius:50%; background:#ffd27a; border:3px solid var(--navy);"></i>
+          </div>
+          <div class="mono" style="position:absolute; left:42px; top:132px; font-size:22px; color:var(--navy); opacity:0.7;">THERMAL LABEL PRINTER</div>
+          <div style="position:absolute; left:100px; top:226px; width:400px; height:18px; background:var(--navy); border-radius:9px;"></div>
+        </div>
+      </div>
+      <div id="s7-item" style="position:absolute; left:300px; top:300px; width:520px; height:500px; box-sizing:border-box; background:#fff; border:4px solid var(--navy); border-radius:28px; box-shadow:10px 10px 0 var(--navy); display:flex; align-items:center; justify-content:center; opacity:0;">
+        <img src="assets/img/item.jpg" style="display:block; width:430px; height:403px;" alt="" />
+      </div>
+      <div id="s7-sticker" style="position:absolute; left:1320px; top:574px; opacity:0;"><div id="s7-lab" style="width:430px; height:180px; background:#fff; border-radius:8px; box-shadow:0 12px 26px rgba(30,42,59,0.35); display:flex; align-items:center; gap:17px; padding:0 17px; box-sizing:border-box;"><svg xmlns="http://www.w3.org/2000/svg" width="110" height="110" viewBox="0 0 21 21" shape-rendering="crispEdges" style="flex:none;" class="segno"><path class="qrline" stroke="#000" d="M0 0.5h7m1 0h1m1 0h1m1 0h1m1 0h7m-21 1h1m5 0h1m4 0h2m1 0h1m5 0h1m-21 1h1m1 0h3m1 0h1m4 0h2m1 0h1m1 0h3m1 0h1m-21 1h1m1 0h3m1 0h1m1 0h1m3 0h1m1 0h1m1 0h3m1 0h1m-21 1h1m1 0h3m1 0h1m3 0h3m1 0h1m1 0h3m1 0h1m-21 1h1m5 0h1m2 0h2m1 0h1m1 0h1m5 0h1m-21 1h7m1 0h1m1 0h1m1 0h1m1 0h7m-12 1h1m1 0h2m-11 1h1m1 0h3m1 0h2m3 0h1m3 0h1m2 0h1m-19 1h1m1 0h1m2 0h3m1 0h2m1 0h2m2 0h2m-19 1h1m4 0h1m2 0h1m3 0h3m3 0h1m-20 1h1m1 0h1m2 0h1m1 0h2m1 0h2m3 0h2m2 0h1m-17 1h1m2 0h1m1 0h2m2 0h2m1 0h1m4 0h1m-13 1h1m2 0h2m2 0h1m2 0h3m-21 1h7m2 0h1m2 0h1m3 0h1m1 0h1m-19 1h1m5 0h1m1 0h3m2 0h3m4 0h1m-21 1h1m1 0h3m1 0h1m1 0h1m2 0h4m1 0h1m1 0h1m1 0h1m-21 1h1m1 0h3m1 0h1m2 0h1m1 0h1m1 0h1m1 0h1m3 0h1m-20 1h1m1 0h3m1 0h1m1 0h2m1 0h1m4 0h3m1 0h1m-21 1h1m5 0h1m2 0h2m2 0h2m2 0h4m-21 1h7m2 0h2m1 0h1m1 0h2m2 0h1m1 0h1"/></svg><div style="flex:1; text-align:right; color:#1e2a3b; white-space:nowrap;"><div style="font-size:23px; line-height:1.15;">Digital Battery Tester</div><div style="font-size:18px; color:#2f3a4a; margin-top:4px;">Battery Checker BT-168D</div><div style="font-size:39px; font-weight:800; margin-top:8px;">A·1</div></div></div></div>
+      <div class="cap" id="s7-cap" style="top:940px; color:var(--navy); font-weight:800; font-size:50px;">Then stick the small label on your item.</div>
+    </div>
+  </section>
+
+  <!-- 8a: any screen -->
+  <section id="scene8" class="clip" data-start="26.86" data-duration="5.03">
+    <div class="scene" id="s8">
+      <div id="s8-title" style="position:absolute; left:0; right:0; top:66px; text-align:center; font-weight:800; font-size:84px; line-height:1.05; letter-spacing:-2px; white-space:nowrap;">Add it once, find it on any screen</div>
+      <div class="cap" id="s8-cap" style="top:178px;">Type or speak its name, on desktop, tablet or phone.</div>
+      <div id="s8-desk" style="position:absolute; left:70px; top:340px; width:928px; height:565px; box-sizing:border-box; background:#fff; border:4px solid var(--navy); border-radius:22px; box-shadow:10px 10px 0 var(--navy); overflow:hidden;"><div style="height:40px; background:#f3ead7; border-bottom:4px solid var(--navy); display:flex; align-items:center; gap:10px; padding:0 16px;"><i style="width:14px; height:14px; border-radius:50%; background:#e04a2b; display:block;"></i><i style="width:14px; height:14px; border-radius:50%; background:#ffd27a; display:block;"></i><i style="width:14px; height:14px; border-radius:50%; background:#b7e5c0; display:block;"></i></div><div style="position:relative; width:920px; height:517px;"><img src="assets/img/results-full.jpg" style="position:absolute; left:0; top:0; width:920px; height:517px;" alt="" /></div></div>
+      <div id="s8-tab" style="position:absolute; left:1048px; top:302px; width:428px; height:603px; box-sizing:border-box; background:#1e2a3b; border-radius:40px; padding:14px; box-shadow:10px 10px 0 rgba(30,42,59,0.35);"><img src="assets/img/tablet-results.jpg" style="display:block; width:400px; height:575px; border-radius:26px;" alt="" /></div>
+      <div id="s8-ph" style="position:absolute; left:1520px; top:336px; width:278px; height:569px; box-sizing:border-box; background:#1e2a3b; border-radius:37px; padding:14px; box-shadow:10px 10px 0 rgba(30,42,59,0.35);"><div style="position:relative; width:250px; height:541px; border-radius:27px; overflow:hidden; background:#fff;"><img src="assets/img/phone-results.jpg" style="display:block; width:250px; height:541px;" alt="" /></div></div>
+      <div class="tag" id="s8-l1" style="left:460px; top:935px; background:var(--sky);">Desktop</div>
+      <div class="tag" id="s8-l2" style="left:1212px; top:935px; background:var(--mint);">Tablet</div>
+      <div class="tag" id="s8-l3" style="left:1615px; top:935px; background:var(--pink);">Phone</div>
+    </div>
+  </section>
+
+  <!-- 8b: scan the sticker -->
+  <section id="scene9" class="clip" data-start="31.59" data-duration="5.04">
+    <div class="scene" id="s9">
+      <div id="s9-title" style="position:absolute; left:0; right:0; top:66px; text-align:center; font-weight:800; font-size:96px; line-height:1.05; letter-spacing:-2px; white-space:nowrap;">Or scan its sticker</div>
+      <div id="s9-item" style="position:absolute; left:210px; top:270px; width:520px; height:500px; box-sizing:border-box; background:#fff; border:4px solid var(--navy); border-radius:28px; box-shadow:10px 10px 0 var(--navy); display:flex; align-items:center; justify-content:center;">
+        <img src="assets/img/item.jpg" style="display:block; width:430px; height:403px;" alt="" />
+        <div id="s9-sticker" style="position:absolute; right:-60px; bottom:-40px;"><div id="s9-lab" style="width:430px; height:180px; background:#fff; border-radius:8px; box-shadow:0 12px 26px rgba(30,42,59,0.35); display:flex; align-items:center; gap:17px; padding:0 17px; box-sizing:border-box;"><svg xmlns="http://www.w3.org/2000/svg" width="110" height="110" viewBox="0 0 21 21" shape-rendering="crispEdges" style="flex:none;" class="segno"><path class="qrline" stroke="#000" d="M0 0.5h7m1 0h1m1 0h1m1 0h1m1 0h7m-21 1h1m5 0h1m4 0h2m1 0h1m5 0h1m-21 1h1m1 0h3m1 0h1m4 0h2m1 0h1m1 0h3m1 0h1m-21 1h1m1 0h3m1 0h1m1 0h1m3 0h1m1 0h1m1 0h3m1 0h1m-21 1h1m1 0h3m1 0h1m3 0h3m1 0h1m1 0h3m1 0h1m-21 1h1m5 0h1m2 0h2m1 0h1m1 0h1m5 0h1m-21 1h7m1 0h1m1 0h1m1 0h1m1 0h7m-12 1h1m1 0h2m-11 1h1m1 0h3m1 0h2m3 0h1m3 0h1m2 0h1m-19 1h1m1 0h1m2 0h3m1 0h2m1 0h2m2 0h2m-19 1h1m4 0h1m2 0h1m3 0h3m3 0h1m-20 1h1m1 0h1m2 0h1m1 0h2m1 0h2m3 0h2m2 0h1m-17 1h1m2 0h1m1 0h2m2 0h2m1 0h1m4 0h1m-13 1h1m2 0h2m2 0h1m2 0h3m-21 1h7m2 0h1m2 0h1m3 0h1m1 0h1m-19 1h1m5 0h1m1 0h3m2 0h3m4 0h1m-21 1h1m1 0h3m1 0h1m1 0h1m2 0h4m1 0h1m1 0h1m1 0h1m-21 1h1m1 0h3m1 0h1m2 0h1m1 0h1m1 0h1m1 0h1m3 0h1m-20 1h1m1 0h3m1 0h1m1 0h2m1 0h1m4 0h3m1 0h1m-21 1h1m5 0h1m2 0h2m2 0h2m2 0h4m-21 1h7m2 0h2m1 0h1m1 0h2m2 0h1m1 0h1"/></svg><div style="flex:1; text-align:right; color:#1e2a3b; white-space:nowrap;"><div style="font-size:23px; line-height:1.15;">Digital Battery Tester</div><div style="font-size:18px; color:#2f3a4a; margin-top:4px;">Battery Checker BT-168D</div><div style="font-size:39px; font-weight:800; margin-top:8px;">A·1</div></div></div></div>
+      </div>
+      <svg id="s9-arrow" width="420" height="200" viewBox="0 0 420 200" style="position:absolute; left:660px; top:470px;"><path id="s9-arrow-p" d="M400 100 C 320 10, 160 10, 40 110" fill="none" stroke="#e04a2b" stroke-width="7" stroke-dasharray="14 12" stroke-linecap="round"/><path d="M40 110 l22 -2 m-22 2 l12 -20" fill="none" stroke="#e04a2b" stroke-width="7" stroke-linecap="round"/></svg>
+      <div id="s9-ph" style="position:absolute; left:1060px; top:180px; width:338px; height:699px; box-sizing:border-box; background:#1e2a3b; border-radius:46px; padding:14px; box-shadow:10px 10px 0 rgba(30,42,59,0.35);"><div style="position:relative; width:310px; height:671px; border-radius:34px; overflow:hidden; background:#fff;">
+        <div id="s9-cam" style="position:absolute; inset:0; background:radial-gradient(ellipse at 50% 45%, #4a505b 0%, #2a2f38 70%, #1c2027 100%);">
+          <div style="position:absolute; left:20px; top:20px; width:50px; height:50px; border-left:6px solid #fff; border-top:6px solid #fff; border-radius:8px 0 0 0;"></div>
+          <div style="position:absolute; right:20px; top:20px; width:50px; height:50px; border-right:6px solid #fff; border-top:6px solid #fff; border-radius:0 8px 0 0;"></div>
+          <div style="position:absolute; left:20px; bottom:20px; width:50px; height:50px; border-left:6px solid #fff; border-bottom:6px solid #fff; border-radius:0 0 0 8px;"></div>
+          <div style="position:absolute; right:20px; bottom:20px; width:50px; height:50px; border-right:6px solid #fff; border-bottom:6px solid #fff; border-radius:0 0 8px 0;"></div>
+          <div id="s9-camlab" style="position:absolute; left:16px; top:250px; transform:rotate(-3deg);"><div id="s9-camlab-i" style="width:290px; height:140px; background:#fff; border-radius:8px; box-shadow:0 12px 26px rgba(30,42,59,0.35); display:flex; align-items:center; gap:11px; padding:0 11px; box-sizing:border-box;"><svg xmlns="http://www.w3.org/2000/svg" width="84" height="84" viewBox="0 0 21 21" shape-rendering="crispEdges" style="flex:none;" class="segno"><path class="qrline" stroke="#000" d="M0 0.5h7m1 0h1m1 0h1m1 0h1m1 0h7m-21 1h1m5 0h1m4 0h2m1 0h1m5 0h1m-21 1h1m1 0h3m1 0h1m4 0h2m1 0h1m1 0h3m1 0h1m-21 1h1m1 0h3m1 0h1m1 0h1m3 0h1m1 0h1m1 0h3m1 0h1m-21 1h1m1 0h3m1 0h1m3 0h3m1 0h1m1 0h3m1 0h1m-21 1h1m5 0h1m2 0h2m1 0h1m1 0h1m5 0h1m-21 1h7m1 0h1m1 0h1m1 0h1m1 0h7m-12 1h1m1 0h2m-11 1h1m1 0h3m1 0h2m3 0h1m3 0h1m2 0h1m-19 1h1m1 0h1m2 0h3m1 0h2m1 0h2m2 0h2m-19 1h1m4 0h1m2 0h1m3 0h3m3 0h1m-20 1h1m1 0h1m2 0h1m1 0h2m1 0h2m3 0h2m2 0h1m-17 1h1m2 0h1m1 0h2m2 0h2m1 0h1m4 0h1m-13 1h1m2 0h2m2 0h1m2 0h3m-21 1h7m2 0h1m2 0h1m3 0h1m1 0h1m-19 1h1m5 0h1m1 0h3m2 0h3m4 0h1m-21 1h1m1 0h3m1 0h1m1 0h1m2 0h4m1 0h1m1 0h1m1 0h1m-21 1h1m1 0h3m1 0h1m2 0h1m1 0h1m1 0h1m1 0h1m3 0h1m-20 1h1m1 0h3m1 0h1m1 0h2m1 0h1m4 0h3m1 0h1m-21 1h1m5 0h1m2 0h2m2 0h2m2 0h4m-21 1h7m2 0h2m1 0h1m1 0h2m2 0h1m1 0h1"/></svg><div style="flex:1; text-align:right; color:#1e2a3b; white-space:nowrap;"><div style="font-size:14px; line-height:1.15;">Digital Battery Tester</div><div style="font-size:11px; color:#2f3a4a; margin-top:4px;">Battery Checker BT-168D</div><div style="font-size:23px; font-weight:800; margin-top:8px;">A·1</div></div></div></div>
+          <div id="s9-found" style="position:absolute; left:2px; top:238px; width:306px; height:162px; box-sizing:border-box; border:5px solid var(--navy); border-radius:12px; background:rgba(183,229,192,0.45); transform:rotate(-3deg);"></div>
+          <div id="s9-line" style="position:absolute; left:0; right:0; top:0; height:7px; background:var(--red); box-shadow:0 0 18px 5px rgba(224,74,43,0.65);"></div>
+        </div>
+        <img id="s9-pdet" src="assets/img/phone-details.jpg" style="position:absolute; left:0; top:0; width:310px; height:671px; opacity:0;" alt="" /></div></div>
+      <div class="cap" id="s9-cap" style="top:972px;">Scan the label on any item with your phone: its details pop up.</div>
+    </div>
+  </section>
+
+  <!-- 9: outro -->
+  <section id="scene10" class="clip" data-start="36.33" data-duration="5.35">
+    <div class="scene" id="s10">
+      <div id="s10-text" style="position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; font-weight:800; font-size:108px; line-height:1.12; letter-spacing:-2px;">
+        <div id="l1">Sorting things is pointless</div>
+        <div id="l2">if you can’t <span id="find" style="background:var(--amber); padding:0 14px; border-radius:12px;">find</span> them afterwards.</div>
+      </div>
+      <div id="s10-logo" style="position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:26px;">
+        <div id="s10-mark" class="wordmark" style="font-size:210px;">Stuff Finder<span class="dot" id="s10-dot" style="width:46px; height:46px;"></span><div class="tape" data-layout-allow-overflow id="s10-tape" style="top:-54px; left:500px; transform:rotate(-4deg);"></div></div>
+        <div id="s10-url" style="font-family:'JetBrains Mono', monospace; font-weight:700; font-size:40px; color:var(--slate);">stuff-finder.netlify.app</div>
+      </div>
+    </div>
+  </section>
+
+  <audio id="bg-music" data-start="0" data-duration="41.68" data-track-index="10" data-volume="0.3" data-automation='{"version":1,"lanes":[{"target":"volume","points":[{"t":0,"v":0},{"t":1.2,"v":1},{"t":39.38,"v":1},{"t":41.68,"v":0}]}]}' src="assets/music/happy-beats-business-moves-vol-11-by-ende-dot-app.mp3"></audio>
+    <audio id="sfx-1" data-start="0.30" data-duration="0.1" data-track-index="11" data-volume="0.3" src="assets/sfx/keyboard/keypress-003.wav"></audio>
+  <audio id="sfx-2" data-start="0.42" data-duration="0.1" data-track-index="11" data-volume="0.3" src="assets/sfx/keyboard/keypress-011.wav"></audio>
+  <audio id="sfx-3" data-start="0.54" data-duration="0.1" data-track-index="11" data-volume="0.3" src="assets/sfx/keyboard/keypress-019.wav"></audio>
+  <audio id="sfx-4" data-start="0.66" data-duration="0.1" data-track-index="11" data-volume="0.3" src="assets/sfx/keyboard/keypress-003.wav"></audio>
+  <audio id="sfx-5" data-start="0.78" data-duration="0.1" data-track-index="11" data-volume="0.3" src="assets/sfx/keyboard/keypress-011.wav"></audio>
+  <audio id="sfx-6" data-start="0.90" data-duration="0.1" data-track-index="11" data-volume="0.3" src="assets/sfx/keyboard/keypress-019.wav"></audio>
+  <audio id="sfx-7" data-start="1.02" data-duration="0.1" data-track-index="11" data-volume="0.3" src="assets/sfx/keyboard/keypress-003.wav"></audio>
+  <audio id="sfx-8" data-start="1.14" data-duration="0.1" data-track-index="11" data-volume="0.3" src="assets/sfx/keyboard/keypress-011.wav"></audio>
+  <audio id="sfx-9" data-start="1.26" data-duration="0.1" data-track-index="11" data-volume="0.3" src="assets/sfx/keyboard/keypress-019.wav"></audio>
+  <audio id="sfx-10" data-start="1.38" data-duration="0.1" data-track-index="11" data-volume="0.3" src="assets/sfx/keyboard/keypress-003.wav"></audio>
+  <audio id="sfx-11" data-start="1.50" data-duration="0.1" data-track-index="11" data-volume="0.3" src="assets/sfx/keyboard/keypress-011.wav"></audio>
+  <audio id="sfx-12" data-start="1.62" data-duration="0.1" data-track-index="11" data-volume="0.3" src="assets/sfx/keyboard/keypress-019.wav"></audio>
+  <audio id="sfx-13" data-start="1.74" data-duration="0.1" data-track-index="11" data-volume="0.3" src="assets/sfx/keyboard/keypress-003.wav"></audio>
+  <audio id="sfx-14" data-start="1.86" data-duration="0.1" data-track-index="11" data-volume="0.3" src="assets/sfx/keyboard/keypress-011.wav"></audio>
+  <audio id="sfx-15" data-start="1.98" data-duration="0.1" data-track-index="11" data-volume="0.3" src="assets/sfx/keyboard/keypress-019.wav"></audio>
+  <audio id="sfx-16" data-start="4.12" data-duration="0.2" data-track-index="12" data-volume="0.7" src="assets/sfx/interface/click_003.ogg"></audio>
+  <audio id="sfx-17" data-start="4.30" data-duration="0.19" data-track-index="11" data-volume="0.3" src="assets/sfx/keyboard/keypress-003.wav"></audio>
+  <audio id="sfx-18" data-start="4.50" data-duration="0.19" data-track-index="11" data-volume="0.3" src="assets/sfx/keyboard/keypress-019.wav"></audio>
+  <audio id="sfx-19" data-start="4.70" data-duration="0.19" data-track-index="11" data-volume="0.3" src="assets/sfx/keyboard/keypress-011.wav"></audio>
+  <audio id="sfx-20" data-start="4.90" data-duration="0.19" data-track-index="11" data-volume="0.3" src="assets/sfx/keyboard/keypress-003.wav"></audio>
+  <audio id="sfx-21" data-start="3.14" data-duration="0.4" data-track-index="13" data-volume="0.5" src="assets/sfx/impact/impactSoft_medium_001.ogg"></audio>
+  <audio id="sfx-22" data-start="6.34" data-duration="0.3" data-track-index="13" data-volume="0.5" src="assets/sfx/interface/drop_001.ogg"></audio>
+  <audio id="sfx-23" data-start="6.58" data-duration="0.3" data-track-index="14" data-volume="0.4" src="assets/sfx/casino/card-place-1.ogg"></audio>
+  <audio id="sfx-24" data-start="6.88" data-duration="0.3" data-track-index="14" data-volume="0.4" src="assets/sfx/casino/card-place-1.ogg"></audio>
+  <audio id="sfx-25" data-start="7.18" data-duration="0.3" data-track-index="14" data-volume="0.4" src="assets/sfx/casino/card-place-1.ogg"></audio>
+  <audio id="sfx-26" data-start="7.48" data-duration="0.3" data-track-index="14" data-volume="0.4" src="assets/sfx/casino/card-place-1.ogg"></audio>
+  <audio id="sfx-27" data-start="8.93" data-duration="0.4" data-track-index="13" data-volume="0.6" src="assets/sfx/impact/impactSoft_medium_001.ogg"></audio>
+  <audio id="sfx-28" data-start="9.16" data-duration="0.2" data-track-index="12" data-volume="0.5" src="assets/sfx/interface/click_003.ogg"></audio>
+  <audio id="sfx-29" data-start="10.63" data-duration="0.4" data-track-index="13" data-volume="0.5" src="assets/sfx/impact/impactSoft_medium_001.ogg"></audio>
+  <audio id="sfx-30" data-start="13.08" data-duration="0.2" data-track-index="12" data-volume="0.55" src="assets/sfx/interface/click_003.ogg"></audio>
+  <audio id="sfx-31" data-start="14.05" data-duration="0.2" data-track-index="12" data-volume="0.55" src="assets/sfx/interface/click_003.ogg"></audio>
+  <audio id="sfx-32" data-start="14.51" data-duration="0.2" data-track-index="12" data-volume="0.55" src="assets/sfx/interface/click_003.ogg"></audio>
+  <audio id="sfx-33" data-start="15.51" data-duration="0.2" data-track-index="12" data-volume="0.55" src="assets/sfx/interface/click_003.ogg"></audio>
+  <audio id="sfx-34" data-start="15.83" data-duration="0.2" data-track-index="12" data-volume="0.55" src="assets/sfx/interface/click_003.ogg"></audio>
+  <audio id="sfx-35" data-start="16.66" data-duration="0.2" data-track-index="12" data-volume="0.55" src="assets/sfx/interface/click_003.ogg"></audio>
+  <audio id="sfx-36" data-start="16.86" data-duration="0.2" data-track-index="12" data-volume="0.55" src="assets/sfx/interface/click_003.ogg"></audio>
+  <audio id="sfx-37" data-start="17.29" data-duration="0.2" data-track-index="12" data-volume="0.55" src="assets/sfx/interface/click_003.ogg"></audio>
+  <audio id="sfx-38" data-start="17.49" data-duration="0.2" data-track-index="12" data-volume="0.55" src="assets/sfx/interface/click_003.ogg"></audio>
+  <audio id="sfx-39" data-start="17.93" data-duration="0.2" data-track-index="12" data-volume="0.55" src="assets/sfx/interface/click_003.ogg"></audio>
+  <audio id="sfx-40" data-start="13.20" data-duration="0.09" data-track-index="11" data-volume="0.28" src="assets/sfx/keyboard/keypress-003.wav"></audio>
+  <audio id="sfx-41" data-start="13.29" data-duration="0.09" data-track-index="11" data-volume="0.28" src="assets/sfx/keyboard/keypress-003.wav"></audio>
+  <audio id="sfx-42" data-start="13.38" data-duration="0.09" data-track-index="11" data-volume="0.28" src="assets/sfx/keyboard/keypress-003.wav"></audio>
+  <audio id="sfx-43" data-start="13.47" data-duration="0.09" data-track-index="11" data-volume="0.28" src="assets/sfx/keyboard/keypress-003.wav"></audio>
+  <audio id="sfx-44" data-start="13.56" data-duration="0.09" data-track-index="11" data-volume="0.28" src="assets/sfx/keyboard/keypress-003.wav"></audio>
+  <audio id="sfx-45" data-start="13.65" data-duration="0.09" data-track-index="11" data-volume="0.28" src="assets/sfx/keyboard/keypress-003.wav"></audio>
+  <audio id="sfx-46" data-start="13.74" data-duration="0.09" data-track-index="11" data-volume="0.28" src="assets/sfx/keyboard/keypress-003.wav"></audio>
+  <audio id="sfx-47" data-start="13.83" data-duration="0.09" data-track-index="11" data-volume="0.28" src="assets/sfx/keyboard/keypress-003.wav"></audio>
+  <audio id="sfx-48" data-start="14.17" data-duration="0.09" data-track-index="11" data-volume="0.28" src="assets/sfx/keyboard/keypress-003.wav"></audio>
+  <audio id="sfx-49" data-start="14.26" data-duration="0.09" data-track-index="11" data-volume="0.28" src="assets/sfx/keyboard/keypress-003.wav"></audio>
+  <audio id="sfx-50" data-start="14.35" data-duration="0.09" data-track-index="11" data-volume="0.28" src="assets/sfx/keyboard/keypress-003.wav"></audio>
+  <audio id="sfx-51" data-start="14.63" data-duration="0.09" data-track-index="11" data-volume="0.28" src="assets/sfx/keyboard/keypress-003.wav"></audio>
+  <audio id="sfx-52" data-start="14.72" data-duration="0.09" data-track-index="11" data-volume="0.28" src="assets/sfx/keyboard/keypress-003.wav"></audio>
+  <audio id="sfx-53" data-start="14.81" data-duration="0.09" data-track-index="11" data-volume="0.28" src="assets/sfx/keyboard/keypress-003.wav"></audio>
+  <audio id="sfx-54" data-start="14.90" data-duration="0.09" data-track-index="11" data-volume="0.28" src="assets/sfx/keyboard/keypress-003.wav"></audio>
+  <audio id="sfx-55" data-start="14.99" data-duration="0.09" data-track-index="11" data-volume="0.28" src="assets/sfx/keyboard/keypress-003.wav"></audio>
+  <audio id="sfx-56" data-start="15.08" data-duration="0.09" data-track-index="11" data-volume="0.28" src="assets/sfx/keyboard/keypress-003.wav"></audio>
+  <audio id="sfx-57" data-start="15.17" data-duration="0.09" data-track-index="11" data-volume="0.28" src="assets/sfx/keyboard/keypress-003.wav"></audio>
+  <audio id="sfx-58" data-start="15.26" data-duration="0.09" data-track-index="11" data-volume="0.28" src="assets/sfx/keyboard/keypress-003.wav"></audio>
+  <audio id="sfx-59" data-start="15.63" data-duration="0.09" data-track-index="11" data-volume="0.28" src="assets/sfx/keyboard/keypress-003.wav"></audio>
+  <audio id="sfx-60" data-start="18.23" data-duration="0.4" data-track-index="13" data-volume="0.5" src="assets/sfx/impact/impactSoft_medium_001.ogg"></audio>
+  <audio id="sfx-61" data-start="12.19" data-duration="0.3" data-track-index="14" data-volume="0.4" src="assets/sfx/interface/drop_001.ogg"></audio>
+  <audio id="sfx-62" data-start="20.12" data-duration="0.3" data-track-index="14" data-volume="0.4" src="assets/sfx/interface/drop_001.ogg"></audio>
+  <audio id="sfx-63" data-start="21.62" data-duration="0.2" data-track-index="12" data-volume="0.7" src="assets/sfx/interface/click_003.ogg"></audio>
+  <audio id="sfx-64" data-start="21.97" data-duration="1.9" data-track-index="13" data-volume="0.5" src="assets/sfx/casino/card-shuffle.ogg"></audio>
+  <audio id="sfx-65" data-start="24.77" data-duration="0.4" data-track-index="14" data-volume="0.6" src="assets/sfx/impact/impactSoft_medium_001.ogg"></audio>
+  <audio id="sfx-66" data-start="24.27" data-duration="0.4" data-track-index="13" data-volume="0.5" src="assets/sfx/casino/card-place-1.ogg"></audio>
+  <audio id="sfx-67" data-start="20.57" data-duration="0.3" data-track-index="12" data-volume="0.4" src="assets/sfx/interface/drop_002.ogg"></audio>
+  <audio id="sfx-68" data-start="27.26" data-duration="0.4" data-track-index="14" data-volume="0.5" src="assets/sfx/casino/card-place-1.ogg"></audio>
+  <audio id="sfx-69" data-start="27.81" data-duration="0.4" data-track-index="14" data-volume="0.5" src="assets/sfx/casino/card-place-1.ogg"></audio>
+  <audio id="sfx-70" data-start="28.31" data-duration="0.4" data-track-index="14" data-volume="0.5" src="assets/sfx/casino/card-place-1.ogg"></audio>
+  <audio id="sfx-71" data-start="26.91" data-duration="0.3" data-track-index="12" data-volume="0.4" src="assets/sfx/interface/drop_001.ogg"></audio>
+  <audio id="sfx-72" data-start="31.64" data-duration="0.3" data-track-index="12" data-volume="0.4" src="assets/sfx/interface/drop_001.ogg"></audio>
+  <audio id="sfx-73" data-start="31.94" data-duration="0.4" data-track-index="14" data-volume="0.5" src="assets/sfx/casino/card-place-1.ogg"></audio>
+  <audio id="sfx-74" data-start="32.29" data-duration="0.4" data-track-index="13" data-volume="0.5" src="assets/sfx/impact/impactSoft_medium_001.ogg"></audio>
+  <audio id="sfx-beep" data-start="36.31" data-duration="1.07" data-track-index="15" data-volume="0.55" src="assets/sfx/barcode-scan-beep-09.mp3"></audio>
+  <audio id="sfx-75" data-start="36.89" data-duration="0.4" data-track-index="13" data-volume="0.5" src="assets/sfx/impact/impactSoft_medium_001.ogg"></audio>
+  <audio id="sfx-76" data-start="36.51" data-duration="0.3" data-track-index="13" data-volume="0.4" src="assets/sfx/interface/drop_001.ogg"></audio>
+  <audio id="sfx-77" data-start="37.07" data-duration="0.3" data-track-index="14" data-volume="0.4" src="assets/sfx/interface/drop_002.ogg"></audio>
+  <audio id="sfx-78" data-start="39.45" data-duration="0.4" data-track-index="13" data-volume="0.55" src="assets/sfx/impact/impactSoft_medium_001.ogg"></audio>
+  <audio id="sfx-79" data-start="39.91" data-duration="1.5" data-track-index="14" data-volume="0.35" src="assets/sfx/impact/impactBell_heavy_000.ogg"></audio>
+</div>
+<script>
+const BASS = [0.45,1.0,0.59,0.35,0.21,0.17,0.17,0.16,0.16,0.17,0.18,0.18,0.16,0.17,0.17,0.16,0.71,0.8,0.53,0.32,0.19,0.12,0.13,0.14,0.16,0.16,0.16,0.17,0.17,0.15,0.15,0.28,0.76,0.66,0.48,0.28,0.16,0.14,0.13,0.12,0.14,0.14,0.13,0.14,0.13,0.13,0.12,0.16,0.84,0.66,0.43,0.25,0.14,0.09,0.1,0.1,0.1,0.1,0.1,0.11,0.11,0.1,0.1,0.27,0.84,0.63,0.37,0.17,0.13,0.15,0.12,0.1,0.1,0.1,0.1,0.09,0.1,0.1,0.12,0.52,0.88,0.6,0.32,0.16,0.12,0.13,0.09,0.09,0.09,0.09,0.08,0.09,0.09,0.09,0.1,0.62,0.75,0.52,0.27,0.16,0.11,0.1,0.07,0.07,0.07,0.07,0.07,0.07,0.07,0.08,0.18,0.76,0.64,0.45,0.24,0.15,0.12,0.08,0.06,0.06,0.06,0.06,0.06,0.06,0.06,0.05,0.25,0.75,0.67,0.46,0.25,0.27,0.26,0.25,0.26,0.25,0.25,0.25,0.25,0.25,0.26,0.26,0.2,0.73,0.57,0.42,0.22,0.23,0.25,0.26,0.27,0.27,0.27,0.26,0.26,0.25,0.25,0.19,0.46,0.78,0.48,0.4,0.19,0.22,0.21,0.21,0.2,0.2,0.2,0.21,0.2,0.2,0.21,0.19,0.78,0.82,0.42,0.35,0.17,0.18,0.16,0.17,0.16,0.16,0.17,0.17,0.18,0.18,0.16,0.24,0.82,0.69,0.58,0.28,0.14,0.21,0.17,0.18,0.17,0.17,0.17,0.17,0.17,0.17,0.16,0.38,0.8,0.52,0.43,0.34,0.13,0.16,0.13,0.14,0.14,0.14,0.14,0.14,0.13,0.12,0.15,0.35,0.87,0.51,0.29,0.28,0.11,0.12,0.12,0.11,0.11,0.1,0.11,0.1,0.11,0.11,0.12,0.52,0.85,0.53,0.27,0.21,0.1,0.08,0.09,0.09,0.09,0.09,0.09,0.09,0.09,0.09,0.1,0.71,0.84,0.47,0.28,0.17,0.16,0.17,0.16,0.18,0.18,0.18,0.17,0.18,0.18,0.16,0.23,0.88,0.6,0.43,0.27,0.15,0.15,0.14,0.15,0.16,0.17,0.16,0.16,0.16,0.16,0.16,0.42,0.81,0.62,0.39,0.22,0.11,0.11,0.13,0.13,0.14,0.13,0.14,0.15,0.15,0.15,0.18,0.42,0.86,0.55,0.36,0.21,0.12,0.12,0.11,0.11,0.11,0.11,0.11,0.12,0.1,0.1,0.09,0.51,0.76,0.56,0.28,0.14,0.13,0.13,0.11,0.1,0.1,0.1,0.1,0.1,0.1,0.09,0.18,0.73,0.66,0.49,0.24,0.13,0.12,0.1,0.09,0.09,0.09,0.09,0.09,0.09,0.09,0.08,0.27,0.83,0.67,0.44,0.22,0.14,0.12,0.09,0.07,0.07,0.07,0.07,0.07,0.07,0.07,0.08,0.37,0.85,0.59,0.37,0.2,0.13,0.1,0.06,0.06,0.06,0.06,0.06,0.06,0.06,0.06,0.07,0.46,0.72,0.65,0.31,0.28,0.24,0.27,0.26,0.26,0.25,0.25,0.26,0.25,0.26,0.26,0.24,0.45,0.56,0.54,0.27,0.23,0.21,0.24,0.24,0.24,0.25,0.25,0.25,0.24,0.24,0.24,0.16,0.72,0.58,0.45,0.25,0.19,0.2,0.21,0.2,0.21,0.21,0.22,0.22,0.21,0.2,0.19,0.33,0.92,0.58,0.37,0.26,0.15,0.17,0.17,0.17,0.16,0.17,0.17,0.17,0.17,0.17,0.14,0.06,0.13,0.19,0.19,0.19,0.19,0.2,0.2,0.2,0.19,0.18,0.18,0.17,0.17,0.2,0.2,0.19,0.17,0.16,0.16,0.16,0.15,0.16,0.16,0.16,0.16,0.15,0.15,0.14,0.13,0.14,0.14,0.06,0.01,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.02,0.34,0.67,0.47,0.29,0.16,0.17,0.16,0.18,0.2,0.25,0.2,0.2,0.22,0.2,0.2,0.24,0.54,0.69,0.4,0.26,0.16,0.17,0.19,0.17,0.22,0.23,0.21,0.2,0.21,0.2,0.19,0.27,0.64,0.63,0.32,0.22,0.16,0.16,0.18,0.14,0.22,0.23,0.21,0.21,0.22,0.18,0.19,0.33,0.66,0.61,0.33,0.19,0.14,0.16,0.19,0.13,0.23,0.21,0.19,0.2,0.19,0.2,0.2,0.43,0.76,0.58,0.29,0.1,0.13,0.21,0.18,0.11,0.1,0.16,0.17,0.17,0.17,0.16,0.16,0.43,0.71,0.5,0.27,0.07,0.16,0.21,0.15,0.13,0.16,0.17,0.18,0.17,0.17,0.17,0.17,0.55,0.68,0.41,0.2,0.09,0.22,0.22,0.16,0.12,0.17,0.18,0.19,0.18,0.17,0.16,0.17,0.62,0.68,0.36,0.14,0.11,0.21,0.2,0.14,0.1,0.16,0.19,0.18,0.18,0.18,0.17,0.21,0.73,0.51,0.4,0.28,0.31,0.28,0.31,0.22,0.18,0.3,0.32,0.31,0.3,0.31,0.32,0.29,0.68,0.42,0.37,0.25,0.27,0.28,0.31,0.19,0.22,0.33,0.35,0.33,0.32,0.32,0.33,0.32,0.61,0.42,0.33,0.27,0.27,0.3,0.29,0.21,0.28,0.34,0.34,0.32,0.31,0.32,0.31,0.52,0.61,0.42,0.32,0.29,0.26,0.3,0.26,0.16,0.25,0.31,0.31,0.3,0.3,0.3,0.28,0.62,0.56,0.42,0.31,0.16,0.26,0.22,0.23,0.18,0.22,0.24,0.24,0.24,0.23,0.23,0.22,0.68,0.51,0.43,0.23,0.17,0.26,0.22,0.21,0.18,0.24,0.25,0.24,0.24,0.23,0.23,0.31,0.65,0.43,0.43,0.2,0.22,0.23,0.21,0.2,0.2,0.26,0.26,0.24,0.22,0.22,0.26,0.43,0.63,0.43,0.4,0.18,0.24,0.22,0.22,0.18,0.2,0.25,0.25,0.24,0.24,0.28,0.28,0.47,0.64,0.33,0.23,0.17,0.16,0.19,0.16,0.19,0.22,0.2,0.21,0.19,0.19,0.18,0.28,0.62,0.62,0.33,0.19,0.13,0.15,0.19,0.15,0.26,0.23,0.21,0.2,0.2,0.2,0.19,0.4,0.68,0.53,0.29,0.15,0.13,0.14,0.18,0.15,0.24,0.22,0.21,0.2,0.19,0.19,0.21,0.45,0.65,0.46,0.29,0.17,0.17,0.17,0.19,0.16,0.24,0.21,0.19,0.2,0.2,0.2,0.24,0.58,0.73,0.44,0.21,0.07,0.19,0.2,0.15,0.1,0.14,0.17,0.17,0.17,0.17,0.16,0.15,0.61,0.71,0.39,0.19,0.08,0.17,0.18,0.12,0.1,0.17,0.18,0.18,0.17,0.17,0.16,0.19,0.67,0.62,0.33,0.13,0.1,0.19,0.17,0.13,0.1,0.18,0.19,0.18,0.16,0.16,0.15,0.29,0.69,0.56,0.3,0.11,0.15,0.22,0.18,0.12,0.12,0.18,0.19,0.18,0.18,0.17,0.18,0.45,0.67,0.43,0.35,0.27,0.27,0.3,0.3,0.17,0.23,0.32,0.33,0.33,0.32,0.31,0.32,0.48,0.63,0.41,0.36,0.32,0.38,0.46,0.37,0.22,0.3,0.35,0.34,0.33,0.32,0.32,0.26,0.55,0.5,0.43,0.35,0.33,0.28,0.31,0.25,0.2,0.32,0.34,0.33,0.32,0.31,0.32,0.28,0.65,0.48,0.39,0.29,0.32,0.29,0.31,0.21,0.16,0.27,0.29,0.29,0.29,0.29,0.29,0.34,0.66,0.45,0.42,0.2,0.21,0.23,0.22,0.21,0.18,0.22,0.23,0.24,0.23,0.23,0.26,0.36,0.63,0.44,0.42,0.18,0.24,0.24,0.24,0.18,0.2,0.24,0.23,0.23,0.22,0.22,0.26,0.53,0.69,0.37,0.26,0.14,0.09,0.05,0.01,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.01,0.01,0.01,0.1,0.59,0.52,0.38,0.22,0.14,0.15,0.15,0.16,0.15,0.16,0.16,0.17,0.17,0.18,0.18,0.4,0.8,0.59,0.38,0.23,0.14,0.15,0.15,0.16,0.15,0.16,0.15,0.16,0.16,0.15,0.13,0.29,0.87,0.52,0.31,0.19,0.14,0.13,0.13,0.14,0.14,0.13,0.13,0.14,0.12,0.12,0.16,0.52,0.75,0.5,0.3,0.19,0.09,0.1,0.11,0.12,0.13,0.13,0.11,0.11,0.11,0.11,0.21,0.73,0.7,0.51,0.39,0.26,0.12,0.14,0.16,0.16,0.16,0.17,0.17,0.18,0.18,0.17,0.13,0.77,0.61,0.46,0.37,0.22,0.11,0.14,0.15,0.15,0.16,0.16,0.16,0.16,0.16,0.15,0.2,0.81,0.59,0.43,0.32,0.17,0.1,0.13,0.15,0.14,0.14,0.13,0.13,0.13,0.13,0.1,0.35,0.8,0.54,0.39,0.28,0.13,0.09,0.11,0.11,0.11,0.11,0.12,0.12,0.12,0.12,0.13,0.56,0.73,0.59,0.28,0.29,0.25,0.28,0.28,0.27,0.27,0.27,0.28,0.27,0.27,0.26,0.26,0.59,0.58,0.53,0.26,0.27,0.22,0.25,0.24,0.24,0.25,0.25,0.25,0.25,0.25,0.24,0.19,0.69,0.58,0.47,0.24,0.22,0.19,0.21,0.21,0.2,0.2,0.21,0.21,0.2,0.19,0.21,0.2,0.74,0.57,0.41,0.21,0.17,0.16,0.18,0.18,0.18,0.18,0.18,0.18,0.18,0.18,0.17,0.39,0.76,0.53,0.49,0.19,0.18,0.2,0.2,0.19,0.18,0.18,0.19,0.19,0.19,0.18,0.24,0.53,0.71,0.5,0.47,0.25,0.14,0.17,0.15,0.15,0.15,0.15,0.15,0.15,0.15,0.15,0.17,0.67,0.62,0.35,0.26,0.23,0.11,0.13,0.13,0.13,0.12,0.12,0.12,0.12,0.12,0.12,0.17,0.77,0.6,0.38,0.21,0.19,0.1,0.09,0.1,0.09,0.09,0.09,0.1,0.1,0.09,0.08,0.39,0.96,0.58,0.34,0.21,0.16,0.16,0.16,0.17,0.15,0.16,0.15,0.16,0.16,0.16,0.19,0.52,0.72,0.48,0.3,0.19,0.11,0.13,0.13,0.14,0.14,0.15,0.14,0.14,0.14,0.14,0.17,0.6,0.7,0.44,0.27,0.17,0.13,0.13,0.13,0.13,0.12,0.12,0.13,0.13,0.11,0.11,0.07,0.7,0.56,0.41,0.24,0.14,0.09,0.1,0.1,0.1,0.09,0.1,0.1,0.09,0.1,0.1,0.28,0.83,0.61,0.43,0.35,0.19,0.11,0.14,0.15,0.14,0.15,0.16,0.17,0.17];
+const tl = gsap.timeline({ paused: true });
+const SC = [[1, 0, 3.18], [2, 3.18, 6.34], [3, 6.34, 10.55], [5, 10.55, 12.13], [6, 12.13, 20.02], [7, 20.02, 26.86], [8, 26.86, 31.59], [9, 31.59, 36.33], [10, 36.33, 41.68]];
+for (let i = 0; i < SC.length; i++) {
+  const id = "#s" + SC[i][0];
+  if (i > 0) tl.fromTo(id, { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "none" }, SC[i][1]);
+  if (i < SC.length - 1) tl.to(id, { opacity: 0, duration: 0.3, ease: "none" }, SC[i][2]);
+}
+const pop = (sel, t, extra) => tl.fromTo(sel, Object.assign({ y: 40, opacity: 0 }, extra && extra.from), Object.assign({ y: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, extra && extra.to), t);
+
+// --- 1: typed hook
+document.querySelectorAll(".h1c").forEach((el, i) => tl.set(el, { opacity: 1 }, 0.3 + i * 0.04));
+tl.fromTo("#hook", { scale: 1.04 }, { scale: 1, duration: 3, ease: "power1.out" }, 0);
+
+// --- 2: home
+tl.fromTo("#s2-mark", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.55, ease: "power3.out" }, 3.18); // beat-locked: 3.18s
+tl.fromTo("#s2-dot", { x: -60, opacity: 0 }, { x: 0, opacity: 1, duration: 0.6, ease: "bounce.out" }, 3.45);
+tl.fromTo("#s2-tape", { opacity: 0, y: -30 }, { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" }, 3.4);
+tl.fromTo("#s2-pill", { y: -40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, ease: "back.out(1.6)" }, 3.3);
+tl.fromTo("#s2-btn", { y: -40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, ease: "back.out(1.6)" }, 3.4);
+tl.fromTo("#s2-bar", { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, 3.6);
+tl.fromTo("#cursor", { x: 1450, y: 930, opacity: 0 }, { x: 1040, y: 690, opacity: 1, duration: 0.6, ease: "power2.inOut" }, 3.5);
+tl.to("#cursor", { scale: 0.85, duration: 0.06, yoyo: true, repeat: 1, transformOrigin: "0 0" }, 4.12);
+tl.to("#s2-ph", { opacity: 0, duration: 0.08 }, 4.17);
+tl.to("#s2-bar", { boxShadow: "7px 7px 0 #e04a2b", duration: 0.15 }, 4.12);
+document.querySelectorAll(".qc").forEach((el, i) => tl.set(el, { opacity: 1 }, 4.3 + i * 0.1));
+tl.to("#cursor", { opacity: 0, duration: 0.3 }, 5.3);
+
+// --- 3: real masonry results (8 cards, quick), then circle the found item
+tl.fromTo("#rc0", { y: 40, opacity: 0, scale: 0.94 }, { y: 0, opacity: 1, scale: 1, duration: 0.3, ease: "back.out(1.4)" }, 6.62); // beat-grid
+tl.fromTo("#rc4", { y: 40, opacity: 0, scale: 0.94 }, { y: 0, opacity: 1, scale: 1, duration: 0.3, ease: "back.out(1.4)" }, 6.77); // beat-grid
+tl.fromTo("#rc8", { y: 40, opacity: 0, scale: 0.94 }, { y: 0, opacity: 1, scale: 1, duration: 0.3, ease: "back.out(1.4)" }, 6.92); // beat-grid
+tl.fromTo("#rc11", { y: 40, opacity: 0, scale: 0.94 }, { y: 0, opacity: 1, scale: 1, duration: 0.3, ease: "back.out(1.4)" }, 7.07); // beat-grid
+tl.fromTo("#rc1", { y: 40, opacity: 0, scale: 0.94 }, { y: 0, opacity: 1, scale: 1, duration: 0.3, ease: "back.out(1.4)" }, 7.22); // beat-grid
+tl.fromTo("#rc9", { y: 40, opacity: 0, scale: 0.94 }, { y: 0, opacity: 1, scale: 1, duration: 0.3, ease: "back.out(1.4)" }, 7.37); // beat-grid
+tl.fromTo("#rc5", { y: 40, opacity: 0, scale: 0.94 }, { y: 0, opacity: 1, scale: 1, duration: 0.3, ease: "back.out(1.4)" }, 7.52); // beat-grid
+tl.fromTo("#rc12", { y: 40, opacity: 0, scale: 0.94 }, { y: 0, opacity: 1, scale: 1, duration: 0.3, ease: "back.out(1.4)" }, 7.67); // beat-grid
+
+tl.to("#s3-ring-e", { strokeDashoffset: 0, duration: 0.55, ease: "power2.inOut" }, 8.96); // beat-locked: 8.96s
+tl.fromTo("#s3-found", { scale: 0.4, opacity: 0, rotation: -12 }, { scale: 1, opacity: 1, rotation: -3, duration: 0.45, ease: "back.out(2.2)" }, 9.360000000000001);
+tl.to("#rc0", { scale: 1.03, duration: 0.2, yoyo: true, repeat: 1 }, 9.510000000000002);
+
+// --- 5: how does it work
+tl.fromTo("#s5-text", { y: 50, opacity: 0, scale: 0.94 }, { y: 0, opacity: 1, scale: 1, duration: 0.55, ease: "back.out(1.5)" }, 10.63);
+tl.fromTo("#s5-tape", { opacity: 0, y: -30 }, { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" }, 10.950000000000001);
+
+// --- 6: step 1
+pop("#s6-title", 12.190000000000001);
+tl.fromTo("#s6-win", { y: 80, opacity: 0 }, { y: 0, opacity: 1, duration: 0.55, ease: "power3.out" }, 12.290000000000001);
+tl.fromTo("#s6-vidwrap", { opacity: 0 }, { opacity: 1, duration: 0.2 }, 12.629999999999999);
+tl.fromTo("#cursor6", { x: 1500, y: 900, opacity: 0 }, { x: 894, y: 573, opacity: 1, duration: 0.5, ease: "power2.inOut" }, 12.53);
+tl.to("#cursor6", { scale: 0.85, duration: 0.06, yoyo: true, repeat: 1, transformOrigin: "0 0" }, 13.08);
+tl.to("#cursor6", { x: 1232, y: 643, duration: 0.30, ease: "power2.inOut" }, 13.75);
+tl.to("#cursor6", { scale: 0.85, duration: 0.06, yoyo: true, repeat: 1, transformOrigin: "0 0" }, 14.05);
+tl.to("#cursor6", { x: 894, y: 656, duration: 0.30, ease: "power2.inOut" }, 14.21);
+tl.to("#cursor6", { scale: 0.85, duration: 0.06, yoyo: true, repeat: 1, transformOrigin: "0 0" }, 14.51);
+tl.to("#cursor6", { x: 1444, y: 572, duration: 0.30, ease: "power2.inOut" }, 15.21);
+tl.to("#cursor6", { scale: 0.85, duration: 0.06, yoyo: true, repeat: 1, transformOrigin: "0 0" }, 15.51);
+tl.to("#cursor6", { x: 894, y: 740, duration: 0.18, ease: "power2.inOut" }, 15.65);
+tl.to("#cursor6", { scale: 0.85, duration: 0.06, yoyo: true, repeat: 1, transformOrigin: "0 0" }, 15.83);
+tl.to("#cursor6", { x: 1196, y: 740, duration: 0.30, ease: "power2.inOut" }, 16.36);
+tl.to("#cursor6", { scale: 0.85, duration: 0.06, yoyo: true, repeat: 1, transformOrigin: "0 0" }, 16.66);
+tl.to("#cursor6", { x: 1229, y: 803, duration: 0.06, ease: "power2.inOut" }, 16.80);
+tl.to("#cursor6", { scale: 0.85, duration: 0.06, yoyo: true, repeat: 1, transformOrigin: "0 0" }, 16.86);
+tl.to("#cursor6", { x: 1408, y: 740, duration: 0.29, ease: "power2.inOut" }, 17.00);
+tl.to("#cursor6", { scale: 0.85, duration: 0.06, yoyo: true, repeat: 1, transformOrigin: "0 0" }, 17.29);
+tl.to("#cursor6", { x: 1441, y: 803, duration: 0.06, ease: "power2.inOut" }, 17.43);
+tl.to("#cursor6", { scale: 0.85, duration: 0.06, yoyo: true, repeat: 1, transformOrigin: "0 0" }, 17.49);
+tl.to("#cursor6", { x: 941, y: 829, duration: 0.29, ease: "power2.inOut" }, 17.63);
+tl.to("#cursor6", { scale: 0.85, duration: 0.06, yoyo: true, repeat: 1, transformOrigin: "0 0" }, 17.93);
+tl.to("#cursor6", { opacity: 0, duration: 0.25 }, 18.33);
+tl.fromTo("#s6-det", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 18.23);
+tl.to("#s6-vidwrap", { opacity: 0, duration: 0.3 }, 18.23);
+tl.to("#s6-win", { scale: 1.02, duration: 0.15, yoyo: true, repeat: 1 }, 18.23);
+
+// --- 7: step 2
+pop("#s7-title", 20.12);
+tl.fromTo("#s7-win", { y: 80, opacity: 0 }, { y: 0, opacity: 1, duration: 0.55, ease: "power3.out" }, 20.27);
+tl.fromTo("#prn", { x: 120, opacity: 0 }, { x: 0, opacity: 1, duration: 0.55, ease: "power3.out" }, 20.57);
+tl.fromTo("#s7-ring", { opacity: 0, scale: 1.3 }, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(2)" }, 20.52);
+tl.fromTo("#cursor7", { x: 900, y: 880, opacity: 0 }, { x: 729, y: 762, opacity: 1, duration: 0.8, ease: "power2.inOut" }, 20.64);
+tl.to("#cursor7", { scale: 0.85, duration: 0.06, yoyo: true, repeat: 1, transformOrigin: "0 0" }, 21.62);
+tl.to("#cursor7", { opacity: 0, duration: 0.25 }, 21.970000000000002);
+tl.set("#prn-t1", { opacity: 0 }, 21.92);
+tl.set("#prn-t2", { opacity: 1 }, 21.92);
+tl.to("#prn-led", { backgroundColor: "#e04a2b", duration: 0.1 }, 21.92);
+tl.to("#prn-body", { x: 2, duration: 0.05, yoyo: true, repeat: 17, ease: "none" }, 21.970000000000002);
+tl.fromTo("#prn-label", { y: 0 }, { y: 214, duration: 1.8, ease: "steps(14)" }, 21.970000000000002);
+tl.set("#prn-t2", { opacity: 0 }, 23.82);
+tl.set("#prn-t3", { opacity: 1 }, 23.82);
+tl.to("#prn-led", { backgroundColor: "#b7e5c0", duration: 0.1 }, 23.82);
+tl.to("#prn-label", { y: 236, rotation: -3, duration: 0.3, ease: "back.out(2)" }, 23.82);
+// label leaves the printer and sticks on the item
+tl.to("#s7-win", { opacity: 0, x: -120, duration: 0.4, ease: "power2.in" }, 23.92);
+tl.fromTo("#s7-item", { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, 23.970000000000002);
+tl.set("#prn-label", { opacity: 0 }, 24.37);
+tl.set("#s7-sticker", { opacity: 1, rotation: -3 }, 24.37);
+tl.to("#s7-sticker", { x: -870, y: 86, rotation: -5, scale: 1.0, duration: 0.55, ease: "power3.inOut" }, 24.37);
+tl.to("#s7-sticker", { scale: 1.1, duration: 0.12, yoyo: true, repeat: 1, ease: "power2.out" }, 24.92);
+pop("#s7-cap", 24.970000000000002);
+tl.to("#s7-ring", { opacity: 0, duration: 0.3 }, 21.82);
+
+// --- 8a: any screen
+pop("#s8-title", 26.91);
+pop("#s8-cap", 27.11);
+tl.fromTo("#s8-desk", { y: 80, opacity: 0 }, { y: 0, opacity: 1, duration: 0.55, ease: "back.out(1.3)" }, 27.31);
+tl.fromTo("#s8-tab", { y: 80, opacity: 0 }, { y: 0, opacity: 1, duration: 0.55, ease: "back.out(1.3)" }, 27.86);
+tl.fromTo("#s8-ph", { y: 80, opacity: 0 }, { y: 0, opacity: 1, duration: 0.55, ease: "back.out(1.3)" }, 28.36);
+tl.fromTo("#s8-l1", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.3 }, 27.759999999999998);
+tl.fromTo("#s8-l2", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.3 }, 28.31);
+tl.fromTo("#s8-l3", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.3 }, 28.81);
+
+// --- 8b: scan the sticker
+pop("#s9-title", 31.64);
+tl.fromTo("#s9-item", { y: 70, opacity: 0 }, { y: 0, opacity: 1, duration: 0.55, ease: "power3.out" }, 31.89);
+tl.fromTo("#s9-sticker", { scale: 1.8, opacity: 0, rotation: 10 }, { scale: 1, opacity: 1, rotation: -5, duration: 0.4, ease: "back.out(1.6)" }, 32.29);
+tl.fromTo("#s9-ph", { x: 160, opacity: 0 }, { x: 0, opacity: 1, duration: 0.6, ease: "power3.out" }, 32.49);
+tl.fromTo("#s9-arrow", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 32.89);
+pop("#s9-cap", 32.79);
+tl.fromTo("#s9-line", { y: 0, opacity: 0 }, { y: 660, opacity: 1, duration: 0.8, ease: "power1.inOut" }, 35.49);
+tl.to("#s9-line", { opacity: 0, duration: 0.12 }, 36.34);
+tl.fromTo("#s9-found", { opacity: 0, scale: 1.12 }, { opacity: 1, scale: 1, duration: 0.25, ease: "back.out(2)" }, 36.34); // beat-locked
+tl.fromTo("#s9-pdet", { y: 70, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, 36.89);
+tl.to("#s9-arrow", { opacity: 0, duration: 0.3 }, 36.74);
+
+// --- 10: outro
+tl.fromTo("#l1", { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, 36.54);
+tl.fromTo("#l2", { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, 37.089999999999996);
+tl.fromTo("#find", { backgroundColor: "rgba(255,210,122,0)" }, { backgroundColor: "rgba(255,210,122,1)", duration: 0.4 }, 37.89);
+tl.to("#s10-text", { opacity: 0, y: -40, duration: 0.33, ease: "power2.in" }, 39.14);
+tl.fromTo("#s10-logo", { opacity: 0 }, { opacity: 0, duration: 0.01 }, 36.33);
+tl.set("#s10-logo", { opacity: 1 }, 39.47);
+tl.fromTo("#s10-mark", { scale: 0.85, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.55, ease: "back.out(1.6)" }, 39.47);
+tl.fromTo("#s10-tape", { opacity: 0, y: -30 }, { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" }, 39.69);
+tl.fromTo("#s10-dot", { y: -420, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: "bounce.out" }, 39.839999999999996);
+tl.fromTo("#s10-url", { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, 40.089999999999996);
+
+// --- subtle audio-reactive warmth
+for (let f = 0; f < BASS.length; f++) {
+  tl.set("#glow", { opacity: 0.3 + 0.35 * BASS[f] }, f / 30);
+}
+window.__timelines["main"] = tl;
+</script>
+</body>
+</html>

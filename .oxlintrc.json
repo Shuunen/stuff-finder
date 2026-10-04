@@ -44,7 +44,7 @@
     "vi": "readonly",
     "window": "readonly"
   },
-  "ignorePatterns": [".git", "*.d.ts", "coverage", "dist", "node_modules", "out-tsc", "test-output"],
+  "ignorePatterns": [".git", "brag", "*.d.ts", "coverage", "dist", "node_modules", "out-tsc", "test-output"],
   "overrides": [
     {
       "files": ["src/bin/**/*.ts"],

@@ -1,0 +1,1 @@
+Sorting things is pointless if you can't find them afterwards, so I built Stuff Finder: add an item, stick a QR label on it, then search it on any screen or just scan the sticker with your phone to see where it lives.

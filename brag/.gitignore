@@ -1,0 +1,6 @@
+# personal inventory dump, raw captures and render output
+.local/
+out/
+composition/assets/music/
+composition/snapshots/
+composition/.hyperframes/
