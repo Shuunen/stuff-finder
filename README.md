@@ -2,8 +2,9 @@
 
 [![GitHub license](https://img.shields.io/github/license/shuunen/stuff-finder.svg?color=informational)](https://github.com/Shuunen/stuff-finder/blob/master/LICENSE)
 [![Website](https://img.shields.io/website/https/stuff-finder.netlify.app.svg)](https://stuff-finder.netlify.app)
+[![Visitors](https://hits.sh/github.com/Shuunen/stuff-finder.svg?label=visitors&color=informational)](https://hits.sh/github.com/Shuunen/stuff-finder/)
 
-![banner](docs/banner.svg)
+![logo](docs/banner.svg)
 
 ## Demo
 
@@ -57,6 +58,8 @@ Tooling benchmarks are tracked in [docs/benchmarks.md](docs/benchmarks.md).
 
 - [101 Soundboards](https://www.101soundboards.com/sounds/1295599-barcode-scan-beep-09) : for the various sounds used in the app
 - [Boxy Svg](https://boxy-svg.com) : simple & effective svg editor
+- [Knip](https://github.com/webpro/knip) : super tool to find & fix problems
+- [Oxc](https://oxc.rs) : a lovely super-fast collection of JavaScript tools written in Rust
 - [Oxlint](https://oxc.rs/docs/guide/usage/linter.html) : super fast linter to find & fix problems
 - [Oxfmt](https://oxc.rs/docs/guide/usage/formatter.html) : super fast formatter
 - [Appwrite](https://appwrite.io) : open source backend for storing the items
@@ -73,6 +76,7 @@ Tooling benchmarks are tracked in [docs/benchmarks.md](docs/benchmarks.md).
 - [RIOT Optimizer](https://riot-optimizer.com) : Radical Image Optimization Tool, the best software I found to compress images
 - [Shields.io](https://shields.io) : for the nice badges on top of this readme
 - [Shuutils](https://github.com/Shuunen/shuutils) : collection of pure JS utils
+- [Svg Omg](https://jakearchibald.github.io/svgomg/) : the great king of svg file size reduction
 - [SvgOmg](https://jakearchibald.github.io/svgomg/) : great tool to reduce svg image size
 - [TailwindCss](https://tailwindcss.com) : awesome lib to produce maintainable style
 - [Turborepo](https://turborepo.dev) : task runner with caching

@@ -29,7 +29,7 @@ function renderScanStatus(status: 'error' | 'loading' | 'need-perm' | 'ready', v
       </Collapse>
       <Collapse in={status === 'ready'}>
         <div className="aspect-video max-h-80 overflow-hidden rounded-xl shadow-lg">
-          <video className="w-full object-cover" ref={videoReference} />
+          <video height={360} width={640} className="w-full object-cover" ref={videoReference} />
         </div>
       </Collapse>
       <Collapse in={status === 'need-perm'}>

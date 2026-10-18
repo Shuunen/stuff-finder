@@ -73,7 +73,7 @@ export function colSpanClass(columns: number) {
 
 const patterns = ['geometric-4.svg', 'geometric-5.svg', 'triangles-21.svg', 'doodle-2.svg']
 
-export const pattern = pickOne(patterns)
+const pattern = pickOne(patterns)
 
 globalThis.document.body.style.backgroundImage = `url("/assets/patterns/${pattern}")`
 

@@ -43,7 +43,7 @@ function AppItemListEntryComponent({ className, display, index = 0, item, isLoad
         }}
       >
         <AppCard name="item-card" hover>
-          <img alt={item.name} className="mx-auto max-h-96" data-testid="item-card-entry-image" loading="lazy" src={itemToImageUrl(item)} />
+          <img alt={item.name} height={300} width={400} className="mx-auto max-h-96" data-testid="item-card-entry-image" loading="lazy" src={itemToImageUrl(item)} />
           <div className="grid gap-2">
             {renderDetails(item)}
             <AppLocSticker className="absolute -top-1 -right-2" box={item.box} drawer={item.drawer} rotate={3.5} />
@@ -63,7 +63,7 @@ function AppItemListEntryComponent({ className, display, index = 0, item, isLoad
       style={{ animationDelay: staggerDelay }}
     >
       <AppCard name="item-list" hover className="w-full items-center md:flex-row">
-        <img alt={item.name} className="object-contain p-2 md:max-h-36 md:w-36" data-testid="item-list-entry-image" loading="lazy" src={itemToImageUrl(item)} />
+        <img alt={item.name} height={300} width={400} className="object-contain p-2 md:max-h-36 md:w-36" data-testid="item-list-entry-image" loading="lazy" src={itemToImageUrl(item)} />
         <div className="mr-auto grid gap-2">{renderDetails(item)}</div>
         <AppLocSticker className="absolute -top-2 -right-2 md:relative md:top-auto md:right-4" box={item.box} drawer={item.drawer} />
       </AppCard>

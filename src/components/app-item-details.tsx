@@ -56,7 +56,7 @@ function renderVisual(item: Item) {
   return (
     <div className="relative animate-fade-in px-1 pt-2">
       <AppPill name="visual" className="relative w-full rounded-xl bg-white p-3">
-        <img alt={item.name} className="max-h-65 w-full rounded-xl object-contain md:max-h-120" data-testid="item-detail-image" loading="lazy" src={itemToImageUrl(item)} style={{ aspectRatio: '4/3' }} />
+        <img alt={item.name} height={300} width={400} className="max-h-65 w-full rounded-xl object-contain md:max-h-120" data-testid="item-detail-image" loading="lazy" src={itemToImageUrl(item)} style={{ aspectRatio: '4/3' }} />
         <AppTape className="absolute -top-6 w-42 -rotate-4 md:-rotate-6" />
       </AppPill>
       <div className="absolute -top-5 right-0 md:-right-4">
