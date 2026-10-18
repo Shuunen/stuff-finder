@@ -141,7 +141,7 @@ export function PageItemAddEdit({ isEdit = false }: Readonly<{ isEdit?: boolean 
         {!isEdit && <p className="text-center">Please fill in the form below to add a new item, no worry, you will be able to edit it later if needed ✏️</p>}
         {id !== '' && initialForm.fields.reference.value === '' && <p>Here is the keyword you search previously : {id}</p>}
         <div className="flex flex-col items-end gap-6 md:flex-row">
-          <img alt="item visual" className="w-auto justify-self-center p-4 md:max-h-80 md:w-1/3 md:max-w-72" ref={photoReference} src={itemPhotoToImageUrl(initialForm.fields.photo.value)} />
+          <img alt="item visual" height={300} width={400} className="w-auto justify-self-center p-4 md:max-h-80 md:w-1/3 md:max-w-72" ref={photoReference} src={itemPhotoToImageUrl(initialForm.fields.photo.value)} />
           <div className="w-full place-self-center pr-4 md:pr-0">
             <AppForm error={error} initialForm={initialForm} onChange={onChange} />
           </div>

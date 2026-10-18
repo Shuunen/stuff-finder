@@ -2,6 +2,13 @@
 
 All notable changes to stuff-finder are documented here.
 
+## [3.2.6] - 2026-10-19
+
+### Changed in 3.2.6
+
+- **Dependency updates** — patch/minor bumps (react, vite, vitest, turbo, MUI, playwright, oxlint) and majors: `appwrite` 29, `happy-dom` 21, `oxfmt` 0.73
+- **Toolchain** — pnpm 12.14.0
+
 ## [3.2.5] - 2026-10-04
 
 ### Changed in 3.2.5
