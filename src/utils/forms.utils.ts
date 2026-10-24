@@ -77,7 +77,7 @@ export function validateForm<FormType extends Form>(form: FormType) {
     isTouched: form.isTouched,
     isValid: isFormValid,
   } satisfies FormType
-  const hasChanged = !objectEqual(form, updatedForm, true)
+  const hasChanged = !objectEqual(form, updatedForm, { sortKeys: true })
   return { hasChanged, updatedForm }
 }
 

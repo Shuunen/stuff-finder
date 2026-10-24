@@ -102,7 +102,7 @@ export function cleanSuggestions(suggestionsInput: Record<string, string[] | und
     if (keysToCapitalize.has(key))
       values = values.map(value => {
         if (isNullish(value)) return value
-        return capitalize(value, true)
+        return capitalize(value, { lowercaseRest: true })
       })
     // clear empty suggestions
     // oxlint-disable-next-line no-dynamic-delete
