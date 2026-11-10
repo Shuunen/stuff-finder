@@ -1,2 +1,4 @@
+minimumReleaseAgeExclude:
+  - knip@6.45.0
 onlyBuiltDependencies:
   - bun
