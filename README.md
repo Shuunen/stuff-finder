@@ -73,6 +73,7 @@ Tooling benchmarks are tracked in [docs/benchmarks.md](docs/benchmarks.md).
 - [Pattern Monster](https://pattern.monster/doodle-21) : Various quality patterns for app bg
 - [React](https://reactjs.org) : great library for web and native user interfaces
 - [Playwright](https://playwright.dev) : reliable end-to-end testing
+- [Repo-checker](https://github.com/Shuunen/repo-checker) : eslint cover /src code and this tool the rest ^^
 - [RIOT Optimizer](https://riot-optimizer.com) : Radical Image Optimization Tool, the best software I found to compress images
 - [Shields.io](https://shields.io) : for the nice badges on top of this readme
 - [Shuutils](https://github.com/Shuunen/shuutils) : collection of pure JS utils

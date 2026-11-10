@@ -45,6 +45,10 @@
     "window": "readonly"
   },
   "ignorePatterns": [".git", "brag", "*.d.ts", "coverage", "dist", "node_modules", "out-tsc", "test-output"],
+  "options": {
+    "typeAware": true,
+    "typeCheck": true
+  },
   "overrides": [
     {
       "files": ["src/bin/**/*.ts"],
@@ -76,7 +80,6 @@
         "vi": "readonly"
       },
       "rules": {
-        "promise/avoid-new": "off",
         "jsx-no-new-array-as-prop": "off",
         "max-lines": "off",
         "max-lines-per-function": "off",
@@ -87,6 +90,7 @@
         "prefer-describe-function-title": "off",
         "prefer-ending-with-an-expect": "off",
         "prefer-importing-jest-globals": "off",
+        "promise/avoid-new": "off",
         "vitest/max-expects": "off",
         "vitest/no-conditional-expect": "off",
         "vitest/no-conditional-in-test": "off",
@@ -107,7 +111,6 @@
     "curly": ["error", "multi"],
     "explicit-function-return-type": "off",
     "explicit-module-boundary-types": "off",
-    "one-var": "off",
     "exports-last": "off",
     "extensions": "off",
     "filename-case": [
@@ -187,13 +190,13 @@
     "no-void": "off",
     "no-warning-comments": "off",
     "number-literal-case": "off",
+    "one-var": "off",
     "prefer-at": "error",
     "prefer-default-export": "off",
     "prefer-importing-vitest-globals": "off",
     "prefer-nullish-coalescing": "off",
     "prefer-readonly-parameter-types": "off",
     "prefer-ternary": "off",
-    "unicorn/max-nested-calls": ["error", { "max": 4 }],
     "promise-function-async": "off",
     "react-in-jsx-scope": "off",
     "react/jsx-no-literals": "off",
@@ -206,6 +209,18 @@
     "strict-void-return": "off",
     "switch-exhaustiveness-check": "off",
     "unambiguous": "off",
+    "unicorn/filename-case": [
+      "error",
+      {
+        "case": "kebabCase"
+      }
+    ],
+    "unicorn/max-nested-calls": [
+      "error",
+      {
+        "max": 4
+      }
+    ],
     "unicorn/prefer-spread": "off",
     "vitest/prefer-called-times": "off",
     "vitest/prefer-to-be-falsy": "off",
