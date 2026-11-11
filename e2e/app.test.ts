@@ -485,6 +485,8 @@ test('highlight switch toggles checked state when clicked', async ({ page }) => 
   await stubPrint(page)
   await seedDatabase(page)
   await page.goto('/item/print/item-001')
+  // the page auto-prints on load then updates the item, wait for that to finish before interacting
+  await expect(page.locator('.shu-toast')).toBeAttached()
   const switchInput = page.locator('[data-testid="highlight-switch"] input[type="checkbox"]')
   await expect(switchInput).not.toBeChecked()
   await switchInput.click({ force: true })
