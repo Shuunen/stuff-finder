@@ -1,8 +1,8 @@
 import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
+import { uniqueMark } from 'shuutils/plugins'
 import { VitePWA } from 'vite-plugin-pwa'
 import { defineConfig } from 'vitest/config'
-import { uniqueMark } from './src/plugins/unique-mark.ts'
 
 const imagesCacheMaxEntries = 500
 const imagesCacheMaxAgeSeconds = 2_592_000 // 30 days
