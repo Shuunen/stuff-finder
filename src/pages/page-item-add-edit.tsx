@@ -1,5 +1,5 @@
 import SaveIcon from '@mui/icons-material/Save'
-import { type Dispatch, type RefObject, type SetStateAction, useCallback, useEffect, useRef, useState } from 'react'
+import { type Dispatch, type RefObject, type SetStateAction, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { dom, functionReturningVoid, objectSum, off, on, Result } from 'shuutils'
 import { AppButton } from '../components/app-button'
@@ -9,6 +9,8 @@ import { defaultImage } from '../constants'
 import type { Item } from '../types/item.types'
 import { getImageFromPaste, imageToWebpDataUrl, isImageFetchable } from '../utils/browser.utils'
 import { getAppWriteIdFromUrl, itemPhotoToImageUrl } from '../utils/database.utils'
+import { clearDraft, getDraftKey, restoreDraft, saveDraft } from '../utils/draft.utils'
+import { validateForm } from '../utils/forms.utils'
 import { addItem, areItemsEquivalent, formToItem, type itemForm, itemToForm, updateItem } from '../utils/item.utils'
 import { logger } from '../utils/logger.utils'
 import { navigate } from '../utils/navigation.utils'
@@ -49,6 +51,16 @@ function useIsNotFetchable(photoValue: string) {
     }
   }, [photoValue])
   return photoValue !== '' && notFetchableUrl === photoValue
+}
+
+// a draft is kept in the local storage until the item is saved remotely, so a reload does not lose the form
+function useDraftForm(draftKey: string, initialItem: Item | undefined) {
+  const startForm = useMemo(() => {
+    const initialForm = itemToForm(initialItem)
+    const restored = restoreDraft(draftKey, initialForm)
+    return restored === initialForm ? initialForm : validateForm(restored).updatedForm
+  }, [draftKey, initialItem])
+  return { draftKey, startForm }
 }
 
 type PastedPhoto = Readonly<{ dataUrl: string; fieldValue: string; previousFieldValue: string }>
@@ -111,11 +123,11 @@ export function PageItemAddEdit({ isEdit = false }: Readonly<{ isEdit?: boolean 
   logger.debug('PageItemAddEdit', { id, isEdit })
   const initialItem = state.items.find(one => one.$id === id)
   const initialSum = initialItem ? objectSum(initialItem) : 0
-  const initialForm = itemToForm(initialItem)
+  const { draftKey, startForm } = useDraftForm(getDraftKey(isEdit ? id : ''), initialItem)
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  const [canSubmit, setCanSubmit] = useState(false)
-  const [lastForm, setLastForm] = useState(initialForm)
+  const [canSubmit, setCanSubmit] = useState<boolean>(startForm.isTouched && startForm.isValid)
+  const [lastForm, setLastForm] = useState(startForm)
   const photoReference = useRef<HTMLImageElement>(null)
   const paste = usePastedPhoto({ error, fieldValue: lastForm.fields.photo.value, photoReference, setCanSubmit, setLastForm })
   type Form = typeof itemForm
@@ -136,6 +148,8 @@ export function PageItemAddEdit({ isEdit = false }: Readonly<{ isEdit?: boolean 
   const onSubmitSuccess = useCallback(
     (item: Item) => {
       if (!isEdit) {
+        // the add page is replaced by the item details, so the back button on the print page leads to the created item
+        navigate(`/item/details/${item.$id}`, true)
         navigate(`/item/print/${item.$id}`)
         return
       }
@@ -155,13 +169,14 @@ export function PageItemAddEdit({ isEdit = false }: Readonly<{ isEdit?: boolean 
     setIsLoading(true)
     const result = await (isEdit ? updateItem(item) : addItem(item))
     if (result.ok) {
+      clearDraft(draftKey)
       onSubmitSuccess({ ...item, $id: result.value.$id })
       return
     }
     logger.showError(`error ${isEdit ? 'updating' : 'adding'} item`)
     logger.error('onSubmit failed', result)
     setIsLoading(false)
-  }, [checkExistingSetError, isEdit, lastForm, onSubmitSuccess, paste.activePhoto])
+  }, [checkExistingSetError, draftKey, isEdit, lastForm, onSubmitSuccess, paste.activePhoto])
 
   const handlePhoto = useCallback(
     (form: Form) => {
@@ -192,12 +207,13 @@ export function PageItemAddEdit({ isEdit = false }: Readonly<{ isEdit?: boolean 
         sumB: objectSum(item),
       })
       setLastForm(form)
+      saveDraft(draftKey, form)
       setCanSubmit(isValid)
       checkExistingSetError(item)
       const result = handlePhoto(form)
       logger.debug('handlePhoto', { form, result })
     },
-    [checkExistingSetError, error, initialItem, initialSum, handlePhoto, paste],
+    [checkExistingSetError, draftKey, error, initialItem, initialSum, handlePhoto, paste],
   )
 
   useEffect(() => {
@@ -224,10 +240,10 @@ export function PageItemAddEdit({ isEdit = false }: Readonly<{ isEdit?: boolean 
       <div className="mb-20 flex max-h-[90%] flex-col overflow-x-hidden overflow-y-auto md:mb-0 md:max-h-full">
         {isEdit && <p className="text-center">Please fill in the form below to edit the item, you can change any field you want 🔄</p>}
         {!isEdit && <p className="text-center">Please fill in the form below to add a new item, no worry, you will be able to edit it later if needed ✏️</p>}
-        {id !== '' && initialForm.fields.reference.value === '' && <p>Here is the keyword you search previously : {id}</p>}
+        {id !== '' && startForm.fields.reference.value === '' && <p>Here is the keyword you search previously : {id}</p>}
         <div className="flex flex-col items-end gap-6 md:flex-row">
           <div className="flex flex-col items-center gap-1 md:w-1/3 md:max-w-72">
-            <img alt="item visual" height={300} width={400} className="w-auto p-4 md:max-h-80" ref={photoReference} src={itemPhotoToImageUrl(initialForm.fields.photo.value)} />
+            <img alt="item visual" height={300} width={400} className="w-auto p-4 md:max-h-80" ref={photoReference} src={itemPhotoToImageUrl(startForm.fields.photo.value)} />
             {paste.isNotFetchable && (
               <p className="text-center text-sm text-red-500" data-testid="photo-not-fetchable">
                 Image not fetchable, please right click &gt; copy and paste it, or use a fetchable link

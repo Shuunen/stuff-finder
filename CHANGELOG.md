@@ -2,6 +2,21 @@
 
 All notable changes to stuff-finder are documented here.
 
+## [3.4.0] - 2026-11-11
+
+### Added in 3.4.0
+
+- **Form draft** — the add/edit item form is saved in the local storage and restored after a reload (F5), until the item is saved remotely
+- Starting a new item on purpose (menu "Add", clone) clears the draft
+
+### Fixed in 3.4.0
+
+- **Search results** — going back to the results after editing or deleting an item now shows its latest version
+- **Item creation** — the back button on the print page now leads to the created item instead of a blank add page
+- **Photo error** — "Image not fetchable" no longer shows on a fresh add page with an empty photo
+- **Search results** — tall thin photos are no longer stretched, they keep their aspect ratio
+- **Settings version** — the version mark is now filled, using the `uniqueMark` plugin from shuutils
+
 ## [3.3.0] - 2026-11-11
 
 ### Added in 3.3.0

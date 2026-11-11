@@ -43,7 +43,7 @@ function AppItemListEntryComponent({ className, display, index = 0, item, isLoad
         }}
       >
         <AppCard name="item-card" hover>
-          <img alt={item.name} height={300} width={400} className="mx-auto max-h-96" data-testid="item-card-entry-image" loading="lazy" src={itemToImageUrl(item)} />
+          <img alt={item.name} height={300} width={400} className="mx-auto h-auto max-h-96 w-auto max-w-full" data-testid="item-card-entry-image" loading="lazy" src={itemToImageUrl(item)} />
           <div className="grid gap-2">
             {renderDetails(item)}
             <AppLocSticker className="absolute -top-1 -right-2" box={item.box} drawer={item.drawer} rotate={3.5} />

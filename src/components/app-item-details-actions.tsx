@@ -13,6 +13,7 @@ import MenuItem from '@mui/material/MenuItem'
 import { useState } from 'react'
 import { copyToClipboard } from 'shuutils'
 import type { Item } from '../types/item.types'
+import { clearDraft, getDraftKey } from '../utils/draft.utils'
 import { deleteItem } from '../utils/item.utils'
 import { logger } from '../utils/logger.utils'
 import { navigate } from '../utils/navigation.utils'
@@ -55,6 +56,7 @@ export function AppItemDetailsActions({ className, item }: Readonly<{ className?
     }
     logger.info('cloning item', data)
     await copyToClipboard(data)
+    clearDraft(getDraftKey('')) // a new item is wanted on purpose, not a reload
     navigate('/item/add')
   }
 

@@ -13,13 +13,21 @@ import SpeedDialAction from '@mui/material/SpeedDialAction'
 import { useCallback, useMemo, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { isMobile } from 'shuutils'
+import { clearDraft, getDraftKey } from '../utils/draft.utils'
 import { logger } from '../utils/logger.utils'
 import { navigate } from '../utils/navigation.utils'
 import { AppQuickSearch } from './app-quick-search'
 
 const actions = [
   { handleClick: () => navigate('/'), icon: <HomeIcon />, name: 'Home' },
-  { handleClick: () => navigate('/item/add'), icon: <AddIcon />, name: 'Add' },
+  {
+    handleClick: () => {
+      clearDraft(getDraftKey('')) // a new item is wanted on purpose, not a reload
+      navigate('/item/add')
+    },
+    icon: <AddIcon />,
+    name: 'Add',
+  },
   { handleClick: () => navigate('/settings'), icon: <SettingsIcon />, name: 'Settings' },
   { handleClick: () => navigate('/metrics'), icon: <InsightsIcon />, name: 'Metrics' },
   { handleClick: () => navigate('/scan'), icon: <QrCodeScannerIcon />, name: 'Scan' },

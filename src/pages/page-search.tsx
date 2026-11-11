@@ -9,10 +9,17 @@ import { AppPill } from '../components/app-pill'
 import { AppTape } from '../components/app-tape'
 import { setPageTitle } from '../utils/browser.utils'
 import { logger } from '../utils/logger.utils'
+import { state as appState } from '../utils/state.utils'
 import { sadAscii } from '../utils/strings.utils'
 import { maxNameLength, search, type SearchState } from './page-search.const'
 
 const emptyResults: SearchState['results'] = []
+
+// the results kept in the navigation history can be outdated (item edited or deleted since), so use the latest version of each item
+function refreshResults(results: SearchState['results']) {
+  if (appState.items.length === 0) return results
+  return results.flatMap(result => appState.items.find(item => item.$id === result.$id) ?? [])
+}
 
 // oxlint-disable-next-line max-lines-per-function
 export function PageSearch() {
@@ -21,7 +28,8 @@ export function PageSearch() {
   const stateResults = useMemo(() => state?.results ?? emptyResults, [state])
   const [lastSearchedInput, setLastSearchedInput] = useState(() => (stateResults.length > 0 ? input : ''))
   const [asyncResults, setAsyncResults] = useState<SearchState['results']>(() => (stateResults.length > 0 ? stateResults : []))
-  const results = stateResults.length > 0 ? stateResults : asyncResults
+  const rawResults = stateResults.length > 0 ? stateResults : asyncResults
+  const results = useMemo(() => refreshResults(rawResults), [rawResults])
   const loading = stateResults.length === 0 && lastSearchedInput !== input
   setPageTitle(`Search for "${ellipsis(input, maxNameLength)}"`)
 
