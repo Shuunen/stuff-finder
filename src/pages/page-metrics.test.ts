@@ -9,6 +9,7 @@ import {
   formatPercentage,
   getItemsNotPrinted,
   getItemsWithoutLocation,
+  getItemsWithPhotoUrl,
   getItemsWithoutPhoto,
   getItemsWithoutPrice,
   getToGiveItems,
@@ -244,5 +245,23 @@ describe('page-metrics.utils', () => {
     expect(result.itemsWithoutLocation[0]?.$id).toMatchInlineSnapshot(`"4"`)
     expect(result.itemsWithoutPhoto[0]?.$id).toMatchInlineSnapshot(`"4"`)
     expect(result.itemsWithoutPrice[0]?.$id).toMatchInlineSnapshot(`"3"`)
+  })
+
+  it('getItemsWithPhotoUrl A should return only items with a photo url instead of an upload id', () => {
+    const items = [
+      mockItem({ $id: 'a', photos: ['abc-photo-0-webp'] }),
+      mockItem({ $id: 'b', photos: ['https://example.com/photo.png'] }),
+      mockItem({ $id: 'c', photos: ['abc-photo-0-webp', 'data:image/webp;base64,AAAA'] }),
+      mockItem({ $id: 'd', photos: [] }),
+    ]
+    const result = getItemsWithPhotoUrl(items)
+
+    expect(result.map(item => item.$id)).toMatchInlineSnapshot(`
+      [
+        "b",
+        "c",
+      ]
+    `)
+    expect(calculateMetrics(items).itemsWithPhotoUrl).toHaveLength(2)
   })
 })

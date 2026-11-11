@@ -9,6 +9,15 @@ const themeOptions: ThemeOptions = {
         {
           props: { variant: 'outlined' },
           style: {
+            '&.Mui-disabled': {
+              backgroundColor: 'transparent !important',
+              borderColor: 'var(--color-black)',
+              borderStyle: 'dashed',
+              boxShadow: 'none',
+              color: 'var(--color-black)',
+              opacity: 0.45,
+              transform: 'translate(2px, 2px)',
+            },
             '&:hover': {
               boxShadow: '1px 1px 0 var(--color-black)',
               transform: 'translate(1px, 1px)',

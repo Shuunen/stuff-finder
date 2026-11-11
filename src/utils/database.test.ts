@@ -516,12 +516,31 @@ describe('database.utils', () => {
     })
   })
 
-  it('uploadImage B filename without extension, url point to a png => no upload', async () => {
+  it('uploadImage B filename without extension, url point to a png and webp conversion is not available => no upload', async () => {
     mockFetch.mockResolvedValueOnce(new Response(new Blob([], { type: 'image/png' })))
     const result = await uploadImage('file-name_photo-450', 'https://example.com/photo.png')
     expect(result.ok).toBe(true)
     expect(Result.unwrap(result).value).toMatchInlineSnapshot(`"https://example.com/photo.png"`)
     expect(databaseMock.createFile).toHaveBeenCalledTimes(0)
+  })
+
+  it('uploadImage B2 fetch fails (cors, network) => no upload, fallback to input url', async () => {
+    logger.disable()
+    mockFetch.mockRejectedValueOnce(new TypeError('Failed to fetch'))
+    const result = await uploadImage('file-name_photo-450', 'https://example.com/photo.png')
+    expect(result.ok).toBe(true)
+    expect(Result.unwrap(result).value).toMatchInlineSnapshot(`"https://example.com/photo.png"`)
+    expect(databaseMock.createFile).toHaveBeenCalledTimes(0)
+    logger.enable()
+  })
+
+  it('uploadImage B3 pasted data url that cannot be uploaded => error, never store the data url', async () => {
+    logger.disable()
+    mockFetch.mockResolvedValueOnce(new Response(new Blob([], { type: 'image/png' })))
+    const result = await uploadImage('file-name', 'data:image/png;base64,AAAA')
+    expect(result.ok).toBe(false)
+    expect(databaseMock.createFile).toHaveBeenCalledTimes(0)
+    logger.enable()
   })
 
   it('uploadImage C filename with extension, url point to a jpeg => upload', async () => {

@@ -64,12 +64,20 @@ export function getItemsWithoutPhoto(items: Item[]): Item[] {
   return items.filter(item => !item.photos || item.photos.length === 0)
 }
 
+const photoUrlRegex = /^(?:https?:\/\/|data:)/u
+
+// photos should be upload ids, a url means the photo was never uploaded to the bucket
+export function getItemsWithPhotoUrl(items: Item[]): Item[] {
+  return items.filter(item => Boolean(item.photos) && item.photos.some(photo => photoUrlRegex.test(photo)))
+}
+
 export function calculateMetrics(items: Item[]) {
   return {
     ...calculateBasicMetrics(items),
     boxAnalysis: calculateBoxAnalysis(items),
     itemsNotPrinted: getItemsNotPrinted(items),
     itemsToGive: getToGiveItems(items),
+    itemsWithPhotoUrl: getItemsWithPhotoUrl(items),
     itemsWithoutLocation: getItemsWithoutLocation(items),
     itemsWithoutPhoto: getItemsWithoutPhoto(items),
     itemsWithoutPrice: getItemsWithoutPrice(items),

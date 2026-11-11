@@ -68,7 +68,7 @@ function renderVisual(item: Item) {
 
 function renderBottomActionButtons(item: Item) {
   return (
-    <div className="mt-2 flex animate-fade-up justify-center gap-3 md:mt-4" data-testid="item-detail-actions">
+    <div className="relative z-30 mt-2 flex animate-fade-up justify-center gap-3 md:mt-4" data-testid="item-detail-actions">
       <AppButton label="Edit" name="edit" onClick={() => navigate(`/item/edit/${item.$id}`)} startIcon={<EditOutlinedIcon />} />
       <AppButton color="pastel-6" label="Print label" name="print-label" onClick={() => navigate(`/item/print/${item.$id}`)} endIcon={<PrintIcon />} />
     </div>

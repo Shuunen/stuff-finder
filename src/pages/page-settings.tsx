@@ -34,7 +34,11 @@ export function PageSettings() {
   return (
     <AppPageCard cardTitle="Settings" pageCode="settings" pageTitle="Settings">
       <div className="flex flex-col">
-        <p>Stuff-Finder needs your Appwrite credentials to access your data, they are only stored in your browser.</p>
+        <p className="mb-2">Stuff-Finder needs your Appwrite credentials to access your data, they are only stored in your browser.</p>
+        <div className="mb-2 flex gap-2 font-mono text-sm opacity-50">
+          <span>App version</span>
+          <span id="unique-mark" />
+        </div>
         <AppForm initialForm={settingsForm} onSubmit={onSubmit} />
       </div>
       <AppButton name="download" label="Download items" onClick={downloadItems} />

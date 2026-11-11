@@ -178,6 +178,7 @@ export function PageMetrics({ ...properties }: Readonly<Record<string, unknown>>
           <MetricCard color={tw('text-red-600')} items={metrics.itemsNotPrinted} title={`Items not printed : ${metrics.itemsNotPrinted.length}`} />
           <MetricCard color={tw('text-red-600')} items={metrics.itemsWithoutLocation} title={`Items without location : ${metrics.itemsWithoutLocation.length}`} />
           <MetricCard color={tw('text-red-600')} items={metrics.itemsWithoutPhoto} title={`Items without photo : ${metrics.itemsWithoutPhoto.length}`} />
+          <MetricCard color={tw('text-red-600')} items={metrics.itemsWithPhotoUrl} title={`Items with a photo url instead of an upload : ${metrics.itemsWithPhotoUrl.length}`} />
           <MetricCardMissingPriceList metrics={metrics} />
           <MetricCard color={tw('text-blue-700')} title="Storage locations">
             {Object.entries(metrics.boxAnalysis)

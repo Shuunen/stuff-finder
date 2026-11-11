@@ -3,6 +3,7 @@ import { dateIso10, storage as lsStorage, nbDaysInMonth, nbHueMax, nbPercentMax,
 import { safeParse } from 'valibot'
 import { defaultImage, uuidMaxLength } from '../constants'
 import type { Item, ItemModel } from '../types/item.types'
+import { fetchImageBlob } from './browser.utils'
 import { logger } from './logger.utils'
 import { itemModelSchema, itemSchema, itemsSchema } from './parsers.utils'
 import { state } from './state.utils'
@@ -38,7 +39,7 @@ export function getAppWriteIdFromUrl(url: string) {
   return id
 }
 
-const urlRegex = /https?:\/\/\S+/u
+const urlRegex = /https?:\/\/\S+|^data:image\//u
 
 function isUrl(text: string) {
   return urlRegex.test(text)
@@ -72,10 +73,18 @@ export async function deleteImageRemotely(id: string) {
   else logger.error(`image "${id}" deletion failed`, result.error)
   return result
 }
+// an external url can be kept as is, a pasted data url cannot (too big to store in the item)
+function uploadFallback(url: string) {
+  if (url.startsWith('data:')) return Result.error('failed to upload pasted image')
+  return Result.ok(url)
+}
+
 export async function uploadImage(fileName: string, url: string) {
-  const blob = await fetch(url).then(response => response.blob())
+  const download = await fetchImageBlob(url, type => fileTypeToExtension(type).ok)
+  if (!download.ok) return uploadFallback(url)
+  const blob = download.value
   const extension = fileTypeToExtension(blob.type)
-  if (!extension.ok) return Result.ok(url)
+  if (!extension.ok) return uploadFallback(url)
   const hasExtension = fileName.includes('.')
   const finalFileName = hasExtension ? fileName : `${fileName}.${extension.value}`
   const file = new File([blob], finalFileName, { type: blob.type })
@@ -86,7 +95,7 @@ export async function uploadImage(fileName: string, url: string) {
     if (String(upload.error).includes('requested ID already exists')) await deleteImageRemotely(id)
     upload = await trySafeAsync(() => storage.createFile({ bucketId: state.credentials.bucketId, file, fileId: id })) // retry
   }
-  if (!upload.ok) return Result.ok(url)
+  if (!upload.ok) return uploadFallback(url)
   return Result.ok(upload.value.$id)
 }
 

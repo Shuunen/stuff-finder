@@ -2,6 +2,18 @@
 
 All notable changes to stuff-finder are documented here.
 
+## [3.3.0] - 2026-11-11
+
+### Added in 3.3.0
+
+- **Pasted photos** — paste an image (Ctrl+V) or URL in the item add/edit page, converted to a resized webp with no CORS issue
+- **App version** shown on the settings page
+
+### Fixed in 3.3.0
+
+- **Save button** — shadow no longer cropped and hover no longer scrolls the form
+- **Disabled buttons** — now clearly inactive (faded, dashed border, flat)
+
 ## [3.2.6] - 2026-10-19
 
 ### Changed in 3.2.6
