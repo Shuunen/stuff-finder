@@ -48,7 +48,7 @@ function useIsNotFetchable(photoValue: string) {
       controller.abort()
     }
   }, [photoValue])
-  return notFetchableUrl === photoValue
+  return photoValue !== '' && notFetchableUrl === photoValue
 }
 
 type PastedPhoto = Readonly<{ dataUrl: string; fieldValue: string; previousFieldValue: string }>
