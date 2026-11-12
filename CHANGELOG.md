@@ -2,6 +2,12 @@
 
 All notable changes to stuff-finder are documented here.
 
+## [Unreleased]
+
+### Changed
+
+- Add a `VERSION` file
+
 ## [3.4.0] - 2026-11-11
 
 ### Added in 3.4.0
