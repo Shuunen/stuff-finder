@@ -8,6 +8,7 @@ All notable changes to stuff-finder are documented here.
 
 - Send a `Content-Security-Policy` header that only runs the scripts of the app, with a nonce stamped on them at build time
 - Serve a `robots.txt` that lets crawlers index the site, in place of the misspelled `robot.txt`
+- App icons listed in the web app manifest, so the app can be installed
 
 ### Changed
 
