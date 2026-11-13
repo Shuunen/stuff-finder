@@ -4,6 +4,10 @@ All notable changes to stuff-finder are documented here.
 
 ## [Unreleased]
 
+### Added
+
+- Send a `Content-Security-Policy` header that only runs the scripts of the app, with a nonce stamped on them at build time
+
 ## [3.4.1] - 2026-11-13
 
 ### Changed

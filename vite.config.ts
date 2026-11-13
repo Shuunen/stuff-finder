@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react'
 import { uniqueMark } from 'shuutils/plugins'
 import { VitePWA } from 'vite-plugin-pwa'
 import { defineConfig } from 'vitest/config'
+import { cspNonce } from './src/plugins/csp-nonce.ts'
 
 const imagesCacheMaxEntries = 500
 const imagesCacheMaxAgeSeconds = 2_592_000 // 30 days
@@ -21,6 +22,7 @@ export default defineConfig({
     react(),
     tailwindcss(),
     uniqueMark(),
+    cspNonce(),
     // oxlint-disable-next-line new-cap
     VitePWA({
       manifest: {

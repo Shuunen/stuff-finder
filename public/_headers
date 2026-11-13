@@ -1,5 +1,6 @@
 /*
   Referrer-Policy: strict-origin-when-cross-origin
+  Content-Security-Policy: script-src 'self' 'strict-dynamic' 'nonce-shub926f459aedb'; object-src 'none'; base-uri 'self';
   X-Content-Type-Options: nosniff
   X-Frame-Options: DENY
 /sw.js
