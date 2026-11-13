@@ -7,6 +7,16 @@ All notable changes to stuff-finder are documented here.
 ### Added
 
 - Send a `Content-Security-Policy` header that only runs the scripts of the app, with a nonce stamped on them at build time
+- Serve a `robots.txt` that lets crawlers index the site, in place of the misspelled `robot.txt`
+
+### Changed
+
+- Move the pnpm build allowlist to `allowBuilds`
+- Fail fast when the dev or preview port is already taken
+
+### Fixed
+
+- Link the web app manifest from the page so the app can be installed
 
 ## [3.4.1] - 2026-11-13
 
