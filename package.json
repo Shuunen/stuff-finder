@@ -90,5 +90,5 @@
     "up:deps": "pnpm update --recursive --latest && echo up:deps completed successfully"
   },
   "type": "module",
-  "version": "3.4.0"
+  "version": "3.4.1"
 }
