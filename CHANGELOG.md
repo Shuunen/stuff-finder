@@ -9,6 +9,7 @@ All notable changes to stuff-finder are documented here.
 - Add a `VERSION` file
 - Drop the redundant `run_install` option from the CI
 - Stop the browser from caching the service worker
+- Stop ignoring the `.github` folder in git
 
 ## [3.4.0] - 2026-11-11
 
