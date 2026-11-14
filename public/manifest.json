@@ -1,10 +1,10 @@
 {
-  "background_color": "#ffffff",
+  "background_color": "#ffb728",
   "display": "standalone",
   "name": "@shuunen/stuff-finder",
   "short_name": "@shuunen/stuff-finder",
   "start_url": "/",
-  "theme_color": "#ffffff",
+  "theme_color": "#ffd27a",
   "icons": [
     {
       "src": "/assets/android-chrome-192x192.png",

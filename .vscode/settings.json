@@ -36,8 +36,17 @@
     "zxing"
   ],
   "workbench.colorCustomizations": {
-    "activityBar.background": "#4C1C3C",
-    "titleBar.activeBackground": "#6A2754",
-    "titleBar.activeForeground": "#FDF8FB"
+    "activityBar.background": "#ffb728",
+    "activityBar.foreground": "#111827",
+    "activityBarBadge.background": "#ffd27a",
+    "activityBarBadge.foreground": "#111827",
+    "statusBar.background": "#ffb728",
+    "statusBar.foreground": "#111827cc",
+    "statusBar.inactiveBackground": "#a6771a",
+    "tab.activeBorderTop": "#ffd27a",
+    "titleBar.activeBackground": "#ffd27a",
+    "titleBar.activeForeground": "#111827",
+    "titleBar.inactiveBackground": "#ffb728",
+    "titleBar.inactiveForeground": "#111827aa"
   }
 }
