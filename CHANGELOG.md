@@ -15,6 +15,7 @@ All notable changes to stuff-finder are documented here.
 - Move the pnpm build allowlist to `allowBuilds`
 - Fail fast when the dev or preview port is already taken
 - Stop reporting the compressed size of the files at build time
+- Render the app in React strict mode to catch unsafe effects while developing
 
 ### Fixed
 

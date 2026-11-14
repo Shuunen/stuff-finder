@@ -1,3 +1,4 @@
+import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { toastError, toastInfo } from 'shuutils'
 import { App } from './app'
@@ -11,7 +12,12 @@ import { state } from './utils/state.utils'
 logger.info('app start')
 
 const root = document.querySelector('#app')
-if (root) createRoot(root).render(<App />)
+if (root)
+  createRoot(root).render(
+    <StrictMode>
+      <App />
+    </StrictMode>,
+  )
 else logger.error('root not found')
 
 await migrateFromLocalStorage()
