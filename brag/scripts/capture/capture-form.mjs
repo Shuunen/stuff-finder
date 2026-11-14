@@ -5,7 +5,7 @@ fs.rmSync(SP + 'form', { recursive: true, force: true })
 fs.mkdirSync(SP + 'form', { recursive: true })
 import fs2 from 'node:fs'
 await page.route('https://example.com/**', route => route.fulfill({ body: fs2.readFileSync(SP + 'dump/imgs/0.bin'), contentType: 'image/jpeg' }))
-await page.goto('http://localhost:4200/item/add')
+await page.goto('http://localhost:5110/item/add')
 await page.waitForSelector('#name')
 await page.waitForTimeout(2500)
 await page.addStyleTag({ content: 'html{cursor:none}' })

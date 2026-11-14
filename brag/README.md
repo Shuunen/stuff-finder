@@ -37,7 +37,7 @@ ffmpeg -i brag/out/brag.mp4 -i docs/brag.jpg -filter_complex "[0:v]scale=1280:72
 
 ## Refresh the screenshots (only if the app UI changed)
 
-1. start the app (`pnpm dev`, port 4200) and open `/search/battery` in your browser with your data loaded
+1. start the app (`pnpm dev`, port 5110) and open `/search/battery` in your browser with your data loaded
 2. `python3 brag/scripts/capture/dump-receiver.py` then paste `brag/scripts/capture/dump-from-browser.js` in the devtools console
 3. `python3 brag/scripts/capture/download-images.py`
 4. `node brag/scripts/capture/capture-screens.mjs` (results, details, print, tablet, phone) and `node brag/scripts/capture/capture-form.mjs` (add form recording)

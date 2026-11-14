@@ -70,12 +70,12 @@ export default defineConfig({
   ],
   preview: {
     host: 'localhost',
-    port: 4300,
+    port: 4110,
     strictPort: true,
   },
   server: {
     host: 'localhost',
-    port: 4200,
+    port: 5110,
     strictPort: true,
   },
   test: {

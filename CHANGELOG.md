@@ -16,6 +16,7 @@ All notable changes to stuff-finder are documented here.
 - Fail fast when the dev or preview port is already taken
 - Stop reporting the compressed size of the files at build time
 - Render the app in React strict mode to catch unsafe effects while developing
+- Move the dev and preview ports to 5110 and 4110 to follow the port scheme
 
 ### Fixed
 

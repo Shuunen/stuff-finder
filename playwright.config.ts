@@ -6,11 +6,11 @@ export default defineConfig({
   projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'], channel: 'chromium-headless-shell' } }],
   reporter: './e2e/summary-reporter.ts',
   testDir: './e2e',
-  use: { baseURL: 'http://localhost:4200' },
+  use: { baseURL: 'http://localhost:5110' },
   webServer: {
     command: 'pnpm run start:vite',
     reuseExistingServer: !process.env.CI,
-    url: 'http://localhost:4200',
+    url: 'http://localhost:5110',
   },
   workers: 4,
 })

@@ -20,7 +20,7 @@ export async function open(viewport, opts = {}) {
     if (m && fileMap[m[1]]) return route.fulfill({ body: fs.readFileSync(fileMap[m[1]]), contentType: 'image/jpeg', headers: { 'access-control-allow-origin': '*' } })
     return route.abort()
   })
-  await page.goto('http://localhost:4200/', { waitUntil: 'commit' })
+  await page.goto('http://localhost:5110/', { waitUntil: 'commit' })
   await page.evaluate(() => new Promise((res, rej) => { const r = indexedDB.deleteDatabase('stuff-finder'); r.onsuccess = () => res(); r.onerror = () => rej(new Error('del')) }))
   await page.evaluate(itemsToSeed => new Promise((resolve, reject) => {
     const request = indexedDB.open('stuff-finder', 1)

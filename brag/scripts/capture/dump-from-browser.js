@@ -1,4 +1,4 @@
-// Paste in the DevTools console of http://localhost:4200/search/battery (the app, with your real data loaded),
+// Paste in the DevTools console of http://localhost:5110/search/battery (the app, with your real data loaded),
 // while `python3 brag/scripts/capture/dump-receiver.py` is running. Saves your items + the visible photo urls
 // into brag/.local/dump/ (git-ignored : it is your personal inventory).
 const items = await new Promise((resolve, reject) => {

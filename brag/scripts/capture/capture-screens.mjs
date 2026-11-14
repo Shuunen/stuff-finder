@@ -5,7 +5,7 @@ import { open, SP } from './common.mjs'
 
 const shots = SP + 'shots/'
 fs.mkdirSync(shots, { recursive: true })
-const base = 'http://localhost:4200'
+const base = 'http://localhost:5110'
 
 async function load(page, url) {
   await page.goto(base + url)
