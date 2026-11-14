@@ -16,7 +16,7 @@ export default defineConfig({
   build: {
     emptyOutDir: true,
     outDir: './dist',
-    reportCompressedSize: true,
+    reportCompressedSize: false,
   },
   plugins: [
     react(),
