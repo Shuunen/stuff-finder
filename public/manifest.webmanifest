@@ -1,8 +1,8 @@
 {
   "background_color": "#ffb728",
   "display": "standalone",
-  "name": "@shuunen/stuff-finder",
-  "short_name": "@shuunen/stuff-finder",
+  "name": "Stuff Finder",
+  "short_name": "Stuff Finder",
   "start_url": "/",
   "theme_color": "#ffd27a",
   "icons": [
