@@ -32,7 +32,7 @@ All notable changes to stuff-finder are documented here.
 
 ## [3.4.1] - 2026-11-13
 
-### Changed
+### Changed in 3.4.1
 
 - Add a `VERSION` file
 - Drop the redundant `run_install` option from the CI
