@@ -18,10 +18,14 @@ All notable changes to stuff-finder are documented here.
 - Render the app in React strict mode to catch unsafe effects while developing
 - Move the dev and preview ports to 5110 and 4110 to follow the port scheme
 - Align the web manifest colors and the VS Code window colors on the theme color
+- Accept letters, numbers, punctuation and symbols in the text fields (like `+`, `%`, `(`, `"`, `’`) in place of a short list of characters
+- Reject text fields starting or ending with a space, and blank values
+- Explain why a field is invalid (too long, too short, forbidden characters, hint for the price and the reference) in place of printing the regex
 
 ### Fixed
 
 - Link the web app manifest from the page so the app can be installed
+- Accept brands of one or two characters (`HP`, `3M`), the text fields needed at least three
 
 ## [3.4.1] - 2026-11-13
 

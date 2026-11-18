@@ -10,6 +10,11 @@ type FormFieldBase = {
   isVisible: boolean
   label: string
   link: string
+  /** a short help added to the error message when the regex fails, like "use whole euros" */
+  hint?: string
+  /** only set on fields using the default characters, fields with their own regex keep the length rule in it */
+  maxLength?: number
+  minLength?: number
   options?: FormFieldOptions
   regex: RegExp
   unit: string
@@ -19,8 +24,36 @@ type FormFieldSelect = FormFieldBase & { options: FormFieldOptions; type: 'selec
 type FormFieldCheckbox = FormFieldBase & { type: 'checkbox'; value: boolean }
 type FormField<Type extends FormFieldType> = Type extends 'text' ? FormFieldText : Type extends 'select' ? FormFieldSelect : FormFieldCheckbox
 
-function fieldRegex(regex?: RegExp, minLength = 3, maxLength = 100) {
-  return regex ?? new RegExp(`^[-',.\\d\\p{L}\\s/&]{${minLength},${maxLength}}$`, 'u')
+const forbiddenCharacters = /[^\p{L}\p{N}\p{P}\p{S} ]/gu
+
+/**
+ * The default rule : letters, numbers, punctuation, symbols and plain spaces, starting and ending with something visible
+ * The length is not part of it, see minLength and maxLength on the field
+ */
+const defaultRegex = /^(?=\S)[\p{L}\p{N}\p{P}\p{S} ]+(?<=\S)$/u
+
+function fieldRegex(regex?: RegExp) {
+  return regex ?? defaultRegex
+}
+
+/**
+ * Explain why a field value is not valid, in a human friendly way
+ * @param field the field to check
+ * @returns the error message, or undefined when the value is valid
+ */
+export function getFieldError(field: Pick<FormFieldBase, 'hint' | 'label' | 'maxLength' | 'minLength' | 'regex'> & { value: boolean | string | undefined }) {
+  const { hint, label, maxLength, minLength, regex, value } = field
+  if (typeof value !== 'string' || value === '') return `${label} is required`
+  if (maxLength !== undefined && value.length > maxLength) return `${label} is too long (${value.length} characters, ${maxLength} max)`
+  if (minLength !== undefined && value.length < minLength) return `${label} is too short (${value.length} character${value.length > 1 ? 's' : ''}, ${minLength} min)`
+  if (String(regex) === String(defaultRegex)) {
+    // compared by text because a structured clone of the form creates new RegExp objects
+    if (value !== value.trim()) return `${label} should not start or end with a space`
+    const forbidden = [...new Set(value.match(forbiddenCharacters))]
+    if (forbidden.length > 0) return `${label} contains characters that are not allowed : ${forbidden.map(character => JSON.stringify(character)).join(' ')}`
+  }
+  if (regex.test(value)) return undefined
+  return `${label} is invalid, "${value}"${hint === undefined ? '' : `, ${hint}`}`
 }
 
 export type Form = {
@@ -60,13 +93,13 @@ export function updateForm<FormType extends Form>(form: FormType, updatedFields:
 export function validateForm<FormType extends Form>(form: FormType) {
   let errorMessage = ''
   // oxlint-disable-next-line no-array-reduce
-  const updatedFields = Object.entries(form.fields).reduce((accumulator, [field, { isRequired, label, regex, value }]) => {
+  const updatedFields = Object.entries(form.fields).reduce((accumulator, [field, { hint, isRequired, label, maxLength, minLength, regex, value }]) => {
     const isBoolean = typeof value === 'boolean'
     const isEmptyButNotRequired = !isRequired && typeof value === 'string' && value === ''
     const isUndefinedButNotRequired = !isRequired && value === undefined
-    const isValidText = typeof value === 'string' && regex.test(value)
-    const isValid = isEmptyButNotRequired || isUndefinedButNotRequired || isValidText || isBoolean
-    if (!isValid) errorMessage = value === '' ? `${label} is required` : `${label} is invalid, "${value}" should match ${String(regex)}`
+    const error = isBoolean || isEmptyButNotRequired || isUndefinedButNotRequired ? undefined : getFieldError({ hint, label, maxLength, minLength, regex, value })
+    const isValid = error === undefined
+    if (!isValid) errorMessage = error
     return { ...accumulator, [field]: { ...form.fields[field], isValid } }
   }, {})
   const isFormValid = errorMessage === ''
@@ -82,17 +115,20 @@ export function validateForm<FormType extends Form>(form: FormType) {
 }
 
 export function createTextField(
-  parameters: Partial<Pick<FormFieldText, 'columns' | 'isRequired' | 'isValid' | 'isVisible' | 'link' | 'regex' | 'unit' | 'value'>> & Pick<FormFieldText, 'label'> & { maxLength?: number; minLength?: number },
+  parameters: Partial<Pick<FormFieldText, 'columns' | 'hint' | 'isRequired' | 'isValid' | 'isVisible' | 'link' | 'regex' | 'unit' | 'value'>> & Pick<FormFieldText, 'label'> & { maxLength?: number; minLength?: number },
 ) {
-  const { columns = 1, isRequired = false, isValid = false, isVisible = true, label, link = '', maxLength = 100, minLength = 3, regex, unit = '', value = '' } = parameters
+  const { columns = 1, hint, isRequired = false, isValid = false, isVisible = true, label, link = '', maxLength = 100, minLength = 1, regex, unit = '', value = '' } = parameters
   return {
     columns,
+    ...(hint === undefined ? {} : { hint }),
     isRequired,
     isValid,
     isVisible,
     label,
     link,
-    regex: fieldRegex(regex, minLength, maxLength),
+    // a field with its own regex keeps its length rule inside it, the length given here is for the default regex only
+    ...(regex === undefined ? { maxLength, minLength } : {}),
+    regex: fieldRegex(regex),
     type: 'text',
     unit,
     value,

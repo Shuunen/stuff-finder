@@ -1,5 +1,5 @@
 import { clone } from 'shuutils'
-import { alignClipboard, createCheckboxField, createSelectField, optionsToLabels, updateForm, validateForm } from './forms.utils'
+import { alignClipboard, createCheckboxField, createSelectField, createTextField, getFieldError, optionsToLabels, updateForm, validateForm } from './forms.utils'
 import { settingsForm } from './settings.utils'
 
 describe('forms.utils', () => {
@@ -129,6 +129,59 @@ describe('forms.utils', () => {
 
   it('createSelectField A with a link', () => {
     expect(createSelectField({ label: 'label', link: 'https://example.com', options: [] })).toMatchSnapshot()
+  })
+
+  it('createTextField A default regex accepts the usual product text', () => {
+    const field = createTextField({ label: 'label', maxLength: 200 })
+    for (const text of ["DAB+/FM, radio d'urgence", 'radio d’urgence 50% (noir) : 15" 20° 5m² 2×3 – ok!', 'HP', '3M', 'Zeiss']) expect(getFieldError({ ...field, value: text })).toBeUndefined()
+  })
+
+  it('createTextField B field with its own regex has no length rule', () => {
+    const field = createTextField({ label: 'label', maxLength: 5, regex: /^.+$/u })
+    expect(field.maxLength).toBeUndefined()
+    expect(getFieldError({ ...field, value: 'a very long value' })).toBeUndefined()
+  })
+
+  it('getFieldError A required', () => {
+    const field = createTextField({ label: 'Name' })
+    expect(getFieldError({ ...field, value: '' })).toBe('Name is required')
+    expect(getFieldError({ ...field, value: undefined })).toBe('Name is required')
+  })
+
+  it('getFieldError B too long', () => {
+    const field = createTextField({ label: 'Name', maxLength: 5 })
+    expect(getFieldError({ ...field, value: 'abcdef' })).toBe('Name is too long (6 characters, 5 max)')
+  })
+
+  it('getFieldError C too short', () => {
+    const field = createTextField({ label: 'Name', minLength: 3 })
+    expect(getFieldError({ ...field, value: 'ab' })).toBe('Name is too short (2 characters, 3 min)')
+    expect(getFieldError({ ...field, value: 'a' })).toBe('Name is too short (1 character, 3 min)')
+  })
+
+  it('getFieldError D spaces around and blank', () => {
+    const field = createTextField({ label: 'Name' })
+    expect(getFieldError({ ...field, value: ' abc' })).toBe('Name should not start or end with a space')
+    expect(getFieldError({ ...field, value: 'abc ' })).toBe('Name should not start or end with a space')
+    expect(getFieldError({ ...field, value: '   ' })).toBe('Name should not start or end with a space')
+  })
+
+  it('getFieldError E forbidden characters', () => {
+    const field = createTextField({ label: 'Details' })
+    expect(getFieldError({ ...field, value: 'tab\there\nnew line\tagain' })).toBe(String.raw`Details contains characters that are not allowed : "\t" "\n"`)
+    expect(getFieldError({ ...field, value: '<b>+|~$^`=</b>' })).toBeUndefined()
+  })
+
+  it('getFieldError F own regex with a hint', () => {
+    const field = createTextField({ hint: 'use whole euros', label: 'Price', regex: /^\d{1,5}$/u })
+    expect(getFieldError({ ...field, value: '12,5' })).toBe('Price is invalid, "12,5", use whole euros')
+    expect(getFieldError({ ...field, value: '12' })).toBeUndefined()
+    expect(getFieldError({ ...createTextField({ label: 'Photo', regex: /^\d$/u }), value: 'x' })).toBe('Photo is invalid, "x"')
+  })
+
+  it('getFieldError G survives a structured clone of the form', () => {
+    const field = structuredClone(createTextField({ label: 'Details' }))
+    expect(getFieldError({ ...field, value: 'a\tb' })).toBe(String.raw`Details contains characters that are not allowed : "\t"`)
   })
 
   it('optionsToLabels A empty', () => {

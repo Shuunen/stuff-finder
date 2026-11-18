@@ -100,11 +100,12 @@ export const itemForm = {
   fields: {
     name: createTextField({ columns: 5, isRequired: true, label: 'Name' }),
     brand: createTextField({ columns: 3, label: 'Brand' }),
-    price: createTextField({ columns: 2, label: 'Price', regex: /^\d{1,5}$/u, unit: '€' }),
+    price: createTextField({ columns: 2, hint: 'use whole euros, digits only', label: 'Price', regex: /^\d{1,5}$/u, unit: '€' }),
     // line
     details: createTextField({ columns: 5, label: 'Details', maxLength: 200 }),
     reference: createTextField({
       columns: 3,
+      hint: 'use 3 to 50 letters, digits, - _ or /',
       isRequired: true,
       label: 'Reference',
       maxLength: 30,
