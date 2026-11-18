@@ -21,6 +21,7 @@ All notable changes to stuff-finder are documented here.
 - Accept letters, numbers, punctuation and symbols in the text fields (like `+`, `%`, `(`, `"`, `’`) in place of a short list of characters
 - Reject text fields starting or ending with a space, and blank values
 - Explain why a field is invalid (too long, too short, forbidden characters, hint for the price and the reference) in place of printing the regex
+- Rename the web app manifest to `manifest.webmanifest`, the standard extension
 
 ### Fixed
 
