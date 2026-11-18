@@ -22,6 +22,7 @@ All notable changes to stuff-finder are documented here.
 - Reject text fields starting or ending with a space, and blank values
 - Explain why a field is invalid (too long, too short, forbidden characters, hint for the price and the reference) in place of printing the regex
 - Rename the web app manifest to `manifest.webmanifest`, the standard extension
+- Keep a single web app manifest, the PWA plugin no longer generates a second one
 - Name the installed app Stuff Finder instead of @shuunen/stuff-finder
 
 ### Fixed

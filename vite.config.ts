@@ -25,24 +25,8 @@ export default defineConfig({
     cspNonce(),
     // oxlint-disable-next-line new-cap
     VitePWA({
-      manifest: {
-        background_color: '#fbf7ee',
-        description: "Sorting things is pointless if you can't find them afterwards",
-        display: 'standalone',
-        icons: [
-          { sizes: '64x64', src: '/pwa-64x64.png', type: 'image/png' },
-          { sizes: '192x192', src: '/pwa-192x192.png', type: 'image/png' },
-          { sizes: '512x512', src: '/pwa-512x512.png', type: 'image/png' },
-          { purpose: 'maskable', sizes: '512x512', src: '/maskable-icon-512x512.png', type: 'image/png' },
-        ],
-        id: 'stuff-finder',
-        name: 'Stuff Finder',
-        orientation: 'any',
-        scope: '/',
-        short_name: 'Stuff Finder',
-        start_url: '/',
-        theme_color: '#fbf7ee',
-      },
+      // the manifest is public/manifest.webmanifest, linked from index.html
+      manifest: false,
       registerType: 'autoUpdate',
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,mp3,woff2}'],
