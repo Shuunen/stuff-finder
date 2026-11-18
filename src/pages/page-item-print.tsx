@@ -18,7 +18,7 @@ import { findItemById, handlePrintAction, waitDelay } from './page-item-print.ut
 // oxlint-disable-next-line max-lines-per-function
 export function PageItemPrint() {
   const { id } = useParams<{ id: string }>()
-  if (typeof id !== 'string') throw new Error('An id in the url is required')
+  if (typeof id !== 'string') throw new TypeError('An id in the url is required')
   const item = findItemById(id)
   const { value } = itemToPrintData(item)
   const [size, setSize] = useState<PrintSize>('40x20')
