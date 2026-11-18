@@ -3,6 +3,7 @@ import { safeParse } from 'valibot'
 import { AppButton } from '../components/app-button'
 import { AppForm } from '../components/app-form'
 import { AppPageCard } from '../components/app-page-card'
+import { syncSettingsToDb } from '../db/db-init'
 import { downloadItems } from '../utils/database.utils'
 import { logger } from '../utils/logger.utils'
 import { settingsForm } from '../utils/settings.utils'
@@ -10,7 +11,7 @@ import { state } from '../utils/state.utils'
 import { settingsSchema, type SettingsFormData } from './page-settings.schemas'
 
 export function PageSettings() {
-  const onSubmit = useCallback((form: typeof settingsForm) => {
+  const onSubmit = useCallback(async (form: typeof settingsForm) => {
     const formData: SettingsFormData = {
       bucketId: form.fields.bucketId.value,
       collectionId: form.fields.collectionId.value,
@@ -27,6 +28,8 @@ export function PageSettings() {
       databaseId: parsed.output.databaseId,
       wrap: '',
     }
+    // the debounced sync would be lost by the reload, so persist right now
+    await syncSettingsToDb()
     logger.showSuccess('credentials saved...')
     document.location.reload()
   }, [])
