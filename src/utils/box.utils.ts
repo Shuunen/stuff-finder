@@ -1,3 +1,6 @@
+import { capitalize } from 'shuutils'
+import type { Item } from '../types/item.types'
+
 const boxColorMap: Record<string, string> = {
   Ab: '#FFD27A',
   Bb: '#9FD3E8',
@@ -22,7 +25,7 @@ const boxColorMap: Record<string, string> = {
   Ub: '#A8C8D8',
   Vb: '#E8B8E0',
   Wb: '#D0A878',
-  Xb: '#C8C8C8',
+  Xb: '#E8E8E8',
   Yb: '#FFE8A0',
   Zb: '#C8E8C8',
 }
@@ -31,7 +34,46 @@ export function boxToLetter(box: string) {
   return box.at(0)?.toUpperCase() ?? '?'
 }
 
+const singleLetterBoxPattern = /^\S(?<description>\s*\(.*\))?$/
+
+export function isSingleLetterBox(box: string) {
+  return box.trim().length === 0 || singleLetterBoxPattern.test(box.trim())
+}
+
+const boxTitlePattern = /^(?<name>[^(]*?)\s*\((?<description>.*)\)\s*$/u
+
+/**
+ * Make a box name easier to read, like "B (usb & audio)" becomes "B · Usb & audio"
+ * @param box the raw box name
+ * @returns the readable title
+ */
+export function boxToTitle(box: string) {
+  const { description = '', name = '' } = boxTitlePattern.exec(box.trim())?.groups ?? {}
+  if (description.trim() === '') return box.trim()
+  return `${name} · ${capitalize(description.trim(), { lowercaseRest: true })}`
+}
+
 export function boxToColor(box: string) {
   const letter = boxToLetter(box)
-  return boxColorMap[`${letter}b`] ?? '#C8C8C8'
+  return boxColorMap[`${letter}b`] ?? '#E8E8E8'
+}
+
+export type DrawerGroup = { drawer: Item['drawer']; items: Item[] }
+
+/**
+ * Group items by drawer, sorted by drawer number with the items outside any drawer (-1) last
+ * @param items the items to group
+ * @returns the groups
+ */
+export function groupItemsByDrawer(items: Item[]) {
+  const groups = new Map<Item['drawer'], Item[]>()
+  for (const item of items) groups.set(item.drawer, [...(groups.get(item.drawer) ?? []), item])
+  const noDrawer = -1
+  return [...groups.entries()]
+    .map(([drawer, drawerItems]): DrawerGroup => ({ drawer, items: drawerItems }))
+    .toSorted((groupA, groupB) => {
+      if (groupA.drawer === noDrawer) return 1
+      if (groupB.drawer === noDrawer) return -1
+      return groupA.drawer - groupB.drawer
+    })
 }

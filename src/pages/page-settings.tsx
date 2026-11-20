@@ -40,7 +40,7 @@ export function PageSettings() {
         <p className="mb-2">Stuff-Finder needs your Appwrite credentials to access your data, they are only stored in your browser.</p>
         <div className="mb-2 flex gap-2 font-mono text-sm opacity-50">
           <span>App version</span>
-          <span id="unique-mark" />
+          <span data-testid="settings-version" id="unique-mark" />
         </div>
         <AppForm initialForm={settingsForm} onSubmit={onSubmit} />
       </div>

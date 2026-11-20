@@ -202,7 +202,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 // oxlint-disable-next-line react/no-multi-comp
 export function PageKitchenSink() {
   return (
-    <div className="flex h-screen flex-col gap-10 p-12" data-page="kitchen-sink">
+    <div className="flex h-screen flex-col gap-10 p-12" data-page="kitchen-sink" data-testid="page-kitchen-sink">
       <h1>Kitchen Sink</h1>
       <div className="grid min-h-0 flex-1 gap-6 overflow-y-auto">
         <Section title="Typography">{typographyTable()}</Section>

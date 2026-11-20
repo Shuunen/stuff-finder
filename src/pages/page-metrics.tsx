@@ -1,17 +1,22 @@
+// oxlint-disable react/no-multi-comp
 import OutboxIcon from '@mui/icons-material/Outbox'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import SpeedIcon from '@mui/icons-material/Speed'
-import { memo, type ReactNode, useCallback, useMemo, useState } from 'react'
-// oxlint-disable react/no-multi-comp
+import { kebabCase } from 'es-toolkit'
+import { memo, type MouseEvent, type ReactNode, useCallback, useEffect, useMemo, useState } from 'react'
 import { tw } from 'shuutils'
 import { AppButton } from '../components/app-button'
+import { AppCard } from '../components/app-card'
 import { AppItemList } from '../components/app-item-list'
+import { AppLocSticker } from '../components/app-loc-sticker'
 import { AppPageCard } from '../components/app-page-card'
 import type { MuiIcon } from '../types/icons.types'
 import type { Item } from '../types/item.types'
 import { updateItem } from '../utils/item.utils'
 import { logger } from '../utils/logger.utils'
+import { navigate } from '../utils/navigation.utils'
 import { state, watchState } from '../utils/state.utils'
+import { findItemsWithBrokenPhoto } from './page-metrics.broken-photos'
 import { calculateMetrics, formatCurrency, type MetricsData, topValueItems } from './page-metrics.utils'
 
 // oxlint-disable-next-line no-magic-numbers
@@ -32,20 +37,24 @@ const iconStyle = { fontSize: '3rem' }
 function MetricCardComponent(props: MetricCardProps) {
   const { title, color, amount, icon: Icon, items, children, loadingItemIds } = props
   const isHidden = items?.length === 0
+  const isStat = amount !== undefined && Icon !== undefined
 
   return (
-    <div className={`relative flex gap-6 rounded-lg border border-black/20 bg-white p-6 whitespace-nowrap shadow-sm ${color} ${isHidden ? 'hidden' : ''}`}>
-      {amount && Icon && (
-        <div className="flex items-center">
+    <div
+      data-testid={kebabCase(`metric-card-${title.split(' :')[0]}`)}
+      className={`relative flex gap-4 rounded-lg border border-black/20 bg-white p-6 whitespace-nowrap shadow-sm ${color} ${isStat ? 'items-center justify-center' : ''} ${isHidden ? 'hidden' : ''}`}
+    >
+      {isStat && (
+        <div className="flex shrink-0 items-center gap-2">
           <Icon className="opacity-30" sx={iconStyle} />
-          <p className="text-3xl font-bold">{amount}</p>
+          <p className="ml-2 text-3xl leading-none font-bold">{amount}</p>
         </div>
       )}
-      <div className={`flex w-full flex-col ${amount ? 'justify-center' : ''}`}>
+      <div className={`flex flex-col gap-2 ${isStat ? 'justify-center' : 'w-full'}`}>
         <h2 className="text-xl font-semibold text-current">{title}</h2>
         {(children || items) && (
-          <div className="max-h-96 space-y-3 overflow-y-auto">
-            {items && <AppItemList display="list" items={items} loadingItemIds={loadingItemIds} />}
+          <div className="scroll-shadow max-h-96 space-y-3 overflow-y-auto rounded-md bg-grey/10 p-1">
+            {items && <AppItemList className="mb-0" display="list" items={items} loadingItemIds={loadingItemIds} />}
             {!items && children}
           </div>
         )}
@@ -59,15 +68,26 @@ const MetricCard = memo(MetricCardComponent)
 
 MetricCard.displayName = 'MetricCard'
 
-function MetricCardEntry({ title, subtitle, value }: { title: string; subtitle: string; value: string }) {
+function MetricCardEntry({ box, count, value }: { box: Item['box']; count: number; value: string }) {
+  const goToBox = useCallback(
+    (event: MouseEvent<HTMLAnchorElement>) => {
+      event.preventDefault()
+      navigate(`/box/${encodeURIComponent(box)}`)
+    },
+    [box],
+  )
   return (
-    <div className="mr-3 flex items-center justify-between rounded-md border border-black/20 p-3">
-      <div className="max-w-4/5 flex-1">
-        <h4 className="truncate font-medium text-black">{title}</h4>
-        <p className="text-sm text-grey">{subtitle}</p>
-      </div>
-      <p className="font-medium">{value}</p>
-    </div>
+    <a data-testid="metric-entry-link" href={`/box/${encodeURIComponent(box)}`} onClick={goToBox}>
+      <AppCard name="metric-entry" hover className="flex-row items-center justify-between gap-4 p-3">
+        <AppLocSticker box={box} hideParentheses />
+        <div className="text-right">
+          <p className="font-medium">{value}</p>
+          <p className="text-sm text-grey">
+            {count} {count === 1 ? 'item' : 'items'}
+          </p>
+        </div>
+      </AppCard>
+    </a>
   )
 }
 
@@ -118,8 +138,8 @@ function PriceButtons({ onPriceClick, selection }: { onPriceClick: (price: numbe
   const label = selection.length > 1 ? `${selection.length} selected items` : 'selected item'
   return (
     <>
-      <p>Set price for the {label} :</p>
-      <div className="flex gap-4">
+      <p data-testid="metrics-price-prompt">Set price for the {label} :</p>
+      <div className="flex gap-4" data-testid="metrics-price-buttons">
         {priceList.map(price => (
           <AppButton name={`price-${price}`} key={price} label={`${price} €`} onClick={() => onPriceClick(price)} />
         ))}
@@ -157,6 +177,47 @@ const MetricCardMissingPriceList = memo(MetricCardMissingPriceListComponent)
 
 MetricCardMissingPriceList.displayName = 'MetricCardMissingPriceList'
 
+function MetricCardBrokenPhotosComponent({ items }: { items: Item[] }) {
+  const [result, setResult] = useState<{ brokenItems: Item[]; checkedItems: Item[] }>({ brokenItems: [], checkedItems: [] })
+  useEffect(() => {
+    let isCancelled = false
+    async function check() {
+      const brokenItems = await findItemsWithBrokenPhoto(items)
+      if (!isCancelled) setResult({ brokenItems, checkedItems: items })
+    }
+    void check()
+    return () => {
+      isCancelled = true
+    }
+  }, [items])
+  const isChecking = result.checkedItems !== items
+  const title = `Items with a photo that fails to load : ${result.brokenItems.length}${isChecking ? ' (checking...)' : ''}`
+  if (result.brokenItems.length === 0)
+    return (
+      <MetricCard color={isChecking ? tw('text-blue-700') : tw('text-green-600')} title={title}>
+        <p className="p-4 whitespace-normal">{isChecking ? 'Checking every photo, this can take a moment...' : 'All photos load correctly.'}</p>
+      </MetricCard>
+    )
+  return <MetricCard color={tw('text-red-600')} items={result.brokenItems} title={title} />
+}
+
+const MetricCardBrokenPhotos = memo(MetricCardBrokenPhotosComponent)
+
+MetricCardBrokenPhotos.displayName = 'MetricCardBrokenPhotos'
+
+function OnDemandPhotoCheck({ items }: { items: Item[] }) {
+  const [isStarted, setIsStarted] = useState(false)
+  const start = useCallback(() => {
+    setIsStarted(true)
+  }, [])
+  if (isStarted) return <MetricCardBrokenPhotos items={items} />
+  return (
+    <div className="flex items-start justify-center">
+      <AppButton name="check-photos" label="Check photos that fail to load" onClick={start} />
+    </div>
+  )
+}
+
 export function PageMetrics({ ...properties }: Readonly<Record<string, unknown>>) {
   logger.debug('PageMetrics', { properties })
   const [items, setItems] = useState(state.items)
@@ -166,7 +227,7 @@ export function PageMetrics({ ...properties }: Readonly<Record<string, unknown>>
   const metrics = useMemo(() => calculateMetrics(items), [items])
   return (
     <AppPageCard cardTitle="Metrics" pageCode="metrics" pageTitle="Metrics">
-      <div className="flex flex-col">
+      <div className="flex flex-col gap-6">
         {/* Amounts */}
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
           <MetricCard amount={metrics.totalItems} color={tw('text-purple-700')} icon={SpeedIcon} title="items registered" />
@@ -181,14 +242,18 @@ export function PageMetrics({ ...properties }: Readonly<Record<string, unknown>>
           <MetricCard color={tw('text-red-600')} items={metrics.itemsWithPhotoUrl} title={`Items with a photo url instead of an upload : ${metrics.itemsWithPhotoUrl.length}`} />
           <MetricCardMissingPriceList metrics={metrics} />
           <MetricCard color={tw('text-blue-700')} title="Storage locations">
-            {Object.entries(metrics.boxAnalysis)
-              .toSorted((entryA, entryB) => entryA[0].localeCompare(entryB[0]))
-              .map(([box, data]) => (
-                <MetricCardEntry key={box} subtitle={`${data.count} items`} title={box || 'No box specified'} value={formatCurrency(data.totalValue)} />
-              ))}
+            <div className="flex flex-col gap-4 p-4">
+              {Object.entries(metrics.boxAnalysis)
+                .toSorted((entryA, entryB) => entryA[0].localeCompare(entryB[0]))
+                .map(([box, data]) => (
+                  <MetricCardEntry box={box as Item['box']} count={data.count} key={box} value={formatCurrency(data.totalValue)} />
+                ))}
+            </div>
           </MetricCard>
           <MetricCard color={tw('text-green-700')} items={metrics.topValueItems} title={`Top ${topValueItems} most valuable`} />
           <MetricCard color={tw('text-yellow-700')} items={metrics.itemsToGive} title={`Items to give : ${metrics.itemsToGive.length}`} />
+          {/* On demand check, it calls the backend for each photo */}
+          <OnDemandPhotoCheck items={items} />
         </div>
       </div>
     </AppPageCard>

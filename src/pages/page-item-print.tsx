@@ -3,11 +3,13 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import Switch from '@mui/material/Switch'
 import ToggleButton from '@mui/material/ToggleButton'
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup'
+import { kebabCase } from 'es-toolkit'
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { sleep } from 'shuutils'
 import { AppBarcode } from '../components/app-barcode'
 import { AppButton } from '../components/app-button'
+import { AppItemImage } from '../components/app-item-image'
 import { AppPageCard } from '../components/app-page-card'
 import { type PrintSize, printSizes } from '../types/print.types'
 import { itemToImageUrl } from '../utils/database.utils'
@@ -58,16 +60,18 @@ export function PageItemPrint() {
     <>
       <AppPageCard cardTitle="Print" pageCode="item-print" pageTitle={`${item.name} - Print`}>
         <div className="flex flex-col md:flex-row">
-          <img alt={item.name} height={300} width={400} className="mx-auto max-h-64 w-1/3 object-contain" src={itemToImageUrl(item)} />
+          <AppItemImage data-testid="print-item-image" alt={item.name} height={300} width={400} className="mx-auto max-h-64 w-1/3 object-contain" src={itemToImageUrl(item)} />
           <div className="flex flex-col gap-4 text-center md:items-start md:text-left">
-            <h1 className="w-full">{item.name}</h1>
-            <p>You are about to print a barcode with the following value : {value}</p>
+            <h1 className="w-full" data-testid="print-item-name">
+              {item.name}
+            </h1>
+            <p data-testid="print-value">You are about to print a barcode with the following value : {value}</p>
             <div className="flex flex-col items-center pt-3 md:flex-row md:items-start">
               <AppBarcode isHighlighted={isHighlighted} item={item} size={size} />
               <div className="flex flex-col gap-3 md:ml-6 md:items-start">
-                <ToggleButtonGroup aria-label="Size" color="primary" exclusive onChange={onSizeChange} size="small" value={size}>
+                <ToggleButtonGroup data-testid="print-size-group" aria-label="Size" color="primary" exclusive onChange={onSizeChange} size="small" value={size}>
                   {Object.keys(printSizes).map(one => (
-                    <ToggleButton key={one} value={one}>
+                    <ToggleButton data-testid={kebabCase(`print-size-${one}`)} key={one} value={one}>
                       {one}
                     </ToggleButton>
                   ))}

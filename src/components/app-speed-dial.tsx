@@ -57,8 +57,9 @@ export function AppSpeedDial({ isLoading = false, isSettingsRequired = false }: 
   const onMouseLeave = useCallback(() => {
     onMouse('leave')
   }, [onMouse])
-  const options: Partial<FabProps> = {
+  const options: Partial<FabProps> & { 'data-testid': string } = {
     color: 'default',
+    'data-testid': 'speed-dial-fab',
     sx: {
       '&:hover': { backgroundColor: 'white', boxShadow: '2px 2px 0 var(--color-black)' },
       backgroundColor: 'white',
@@ -74,9 +75,9 @@ export function AppSpeedDial({ isLoading = false, isSettingsRequired = false }: 
   return (
     <>
       <Fade in={isOpen}>
-        <div className="absolute right-0 bottom-0 z-10 size-full" data-component="speed-dial-backdrop" onClick={toggleOpen} />
+        <div className="absolute right-0 bottom-0 z-10 size-full" data-component="speed-dial-backdrop" data-testid="app-speed-dial-backdrop" onClick={toggleOpen} />
       </Fade>
-      <div className="pointer-events-none fixed right-4 bottom-4 z-20 flex w-full items-end justify-end gap-4 md:right-6 md:bottom-6 print:hidden" data-component="speed-dial">
+      <div className="pointer-events-none fixed right-4 bottom-4 z-20 flex w-full items-end justify-end gap-4 md:right-6 md:bottom-6 print:hidden" data-component="speed-dial" data-testid="app-speed-dial">
         <Fade in={isQuickSearchAvailable}>
           <div className="pointer-events-auto mb-1 ml-8 flex grow justify-end">
             <AppQuickSearch />

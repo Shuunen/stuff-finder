@@ -83,7 +83,7 @@ export function AppForm<FormType extends Form>({ children, error: parentError = 
   const canSubmit = form.isValid && form.isTouched && errorMessage.length === 0
 
   return (
-    <form autoComplete="off" className={`grid w-full gap-6 md:min-w-176 ${gridClass(form.columns)}`} noValidate onSubmit={onFormSubmit} spellCheck={false}>
+    <form data-testid="app-form" autoComplete="off" className={`grid w-full gap-6 md:min-w-176 ${gridClass(form.columns)}`} noValidate onSubmit={onFormSubmit} spellCheck={false}>
       {Object.entries(form.fields).map(([id, field]) => (
         <div className={`grid w-full ${field.isVisible ? '' : 'hidden'} ${colSpanClass(field.columns)}`} key={id}>
           {field.type === 'text' && <AppFormFieldText field={field} form={form} id={id} suggestions={suggestions} updateField={updateField} />}
@@ -92,7 +92,11 @@ export function AppForm<FormType extends Form>({ children, error: parentError = 
         </div>
       ))}
       <div className="order-last flex justify-center md:col-span-full">
-        {Boolean(errorMessage) && form.isTouched && <p className="text-red-500">{errorMessage}</p>}
+        {Boolean(errorMessage) && form.isTouched && (
+          <p className="text-red-500" data-testid="app-form-error">
+            {errorMessage}
+          </p>
+        )}
         {onSubmit !== undefined && <AppButton disabled={!canSubmit} label="Save" name="submit" type="submit" variant="outlined" />}
         {children}
       </div>

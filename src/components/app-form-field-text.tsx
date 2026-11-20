@@ -1,5 +1,6 @@
 import Autocomplete, { type AutocompleteRenderInputParams } from '@mui/material/Autocomplete'
 import TextField from '@mui/material/TextField'
+import { kebabCase } from 'es-toolkit'
 import { useCallback } from 'react'
 import type { Form, FormFieldText } from '../utils/forms.utils'
 
@@ -28,5 +29,5 @@ export function AppFormFieldText({ field, form, id, suggestions, updateField }: 
 
   const options = suggestions?.[id] ?? emptySuggestions
 
-  return <Autocomplete freeSolo id={id} onChange={onChange} options={options} renderInput={renderInput} value={field.value} />
+  return <Autocomplete data-testid={kebabCase(`app-form-field-${id}`)} freeSolo id={id} onChange={onChange} options={options} renderInput={renderInput} value={field.value} />
 }

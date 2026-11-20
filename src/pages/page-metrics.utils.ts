@@ -3,6 +3,8 @@ import type { Item } from '../types/item.types'
 
 export const topValueItems = 10
 
+export const unknownBoxName = 'Unknown'
+
 export type BoxAnalysis = Record<string, { count: number; totalValue: number }>
 
 export type StatusCounts = Record<string, number>
@@ -29,7 +31,7 @@ export function calculateStatusCounts(items: Item[]): StatusCounts {
 export function calculateBoxAnalysis(items: Item[]): BoxAnalysis {
   const boxAnalysis: BoxAnalysis = {}
   for (const item of items) {
-    const boxName = item.box || 'Unknown'
+    const boxName = item.box || unknownBoxName
     if (!boxAnalysis[boxName]) boxAnalysis[boxName] = { count: 0, totalValue: 0 }
     boxAnalysis[boxName].count += 1
     if (item.price > 0) boxAnalysis[boxName].totalValue += item.price

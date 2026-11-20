@@ -13,7 +13,7 @@ export function PageItemDetails() {
     window.scrollTo({ behavior: 'smooth', top: 0 })
   }, [id])
 
-  if (typeof id !== 'string') return <>An id in the url is required, got &quot;{id}&quot;</>
+  if (typeof id !== 'string') return <p data-testid="item-id-required">An id in the url is required, got &quot;{id}&quot;</p>
   const item = state.items.find(one => one.$id === id)
   if (item === undefined) return <p data-testid="item-not-found">Item with id &quot;{id}&quot; not found ;(</p>
   logger.debug('PageItemDetails', { item })
@@ -21,7 +21,7 @@ export function PageItemDetails() {
   setPageTitle(`${item.name} - Details`)
 
   return (
-    <div className="mx-auto flex flex-col pb-24" data-page="item-details">
+    <div className="mx-auto flex flex-col pb-24" data-page="item-details" data-testid="page-item-details">
       <AppItemDetails item={item} stepsBack={stepsBack} />
     </div>
   )

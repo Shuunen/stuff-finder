@@ -8,6 +8,7 @@ import { navigate } from '../utils/navigation.utils'
 import { AppButton } from './app-button'
 import { AppButtonBack } from './app-button-back'
 import { AppItemDetailsActions } from './app-item-details-actions'
+import { AppItemImage } from './app-item-image'
 import { AppLocSticker } from './app-loc-sticker'
 import { AppPill } from './app-pill'
 import { AppTape } from './app-tape'
@@ -45,7 +46,7 @@ function renderMetaTags(item: Item) {
 
 function renderTopActionButtons(item: Item, stepsBack?: number) {
   return (
-    <div className="my-8 flex justify-between px-1">
+    <div className="my-8 flex justify-between px-1" data-testid="item-detail-top-actions">
       <AppButtonBack stepsBack={stepsBack} />
       <AppItemDetailsActions item={item} />
     </div>
@@ -54,9 +55,9 @@ function renderTopActionButtons(item: Item, stepsBack?: number) {
 
 function renderVisual(item: Item) {
   return (
-    <div className="relative animate-fade-in px-1 pt-2">
+    <div className="relative animate-fade-in px-1 pt-2" data-testid="item-detail-visual">
       <AppPill name="visual" className="relative w-full rounded-xl bg-white p-3">
-        <img alt={item.name} height={300} width={400} className="max-h-65 w-full rounded-xl object-contain md:max-h-120" data-testid="item-detail-image" loading="lazy" src={itemToImageUrl(item)} style={{ aspectRatio: '4/3' }} />
+        <AppItemImage alt={item.name} height={300} width={400} className="max-h-65 w-full rounded-xl object-contain md:max-h-120" data-testid="item-detail-image" loading="lazy" src={itemToImageUrl(item)} style={{ aspectRatio: '4/3' }} />
         <AppTape className="absolute -top-6 w-42 -rotate-4 md:-rotate-6" />
       </AppPill>
       <div className="absolute -top-5 right-0 md:-right-4">
@@ -78,7 +79,7 @@ function renderBottomActionButtons(item: Item) {
 export function AppItemDetails({ item, stepsBack }: Readonly<{ item: Item; stepsBack?: number }>) {
   const itemLocation = useMemo(() => itemToLocation(item), [item])
   return (
-    <div className="flex flex-col gap-6" data-component="item-details">
+    <div className="flex flex-col gap-6" data-component="item-details" data-testid="app-item-details">
       {renderTopActionButtons(item, stepsBack)}
       {renderVisual(item)}
       <AppPill name="item-details" className="mt-6 ml-2 flex animate-fade-up flex-col items-start gap-3 rounded-xl bg-white px-6 py-8">

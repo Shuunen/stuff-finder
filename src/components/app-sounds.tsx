@@ -21,11 +21,11 @@ export function AppSounds() {
   }, [])
   return (
     <>
-      <audio preload="auto" ref={barcodeReference} src="/assets/barcode-scan-beep-09.mp3" />
-      <audio preload="auto" ref={notifyReference} src="/assets/windows-xp-notify.mp3" />
-      <audio preload="auto" ref={startReference} src="/assets/windows-xp-start.mp3" />
-      <audio preload="auto" ref={stopReference} src="/assets/windows-xp-stop-mod.mp3" />
-      <audio preload="auto" ref={errorReference} src="/assets/windows-hardware-fail-mod.mp3" />
+      <audio data-testid="app-sounds-barcode" preload="auto" ref={barcodeReference} src="/assets/barcode-scan-beep-09.mp3" />
+      <audio data-testid="app-sounds-notify" preload="auto" ref={notifyReference} src="/assets/windows-xp-notify.mp3" />
+      <audio data-testid="app-sounds-start" preload="auto" ref={startReference} src="/assets/windows-xp-start.mp3" />
+      <audio data-testid="app-sounds-stop" preload="auto" ref={stopReference} src="/assets/windows-xp-stop-mod.mp3" />
+      <audio data-testid="app-sounds-error" preload="auto" ref={errorReference} src="/assets/windows-hardware-fail-mod.mp3" />
     </>
   )
 }
