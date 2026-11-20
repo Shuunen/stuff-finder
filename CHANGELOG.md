@@ -12,6 +12,7 @@ All notable changes to stuff-finder are documented here.
 
 ### Changed
 
+- Redesign the metrics page: storage locations as bars sortable by name (default), value or items, ranked top 10 with prices, items to give as a grid, an average value per item and a data health card, the metrics blocks fade in when the page loads, the storage locations sort themselves by name on load and slide when sorted, their bars resize a bit after, the page has no main card and its title sits next to the back and home buttons
 - Move the pnpm build allowlist to `allowBuilds`
 - Fail fast when the dev or preview port is already taken
 - Stop reporting the compressed size of the files at build time

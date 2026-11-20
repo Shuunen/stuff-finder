@@ -1,6 +1,8 @@
 import type { Item } from '../types/item.types'
 import { mockItem } from '../utils/mock.utils'
 import {
+  type BoxAnalysis,
+  calculateAverageValue,
   calculateBasicMetrics,
   calculateBoxAnalysis,
   calculateMetrics,
@@ -14,7 +16,14 @@ import {
   getItemsWithoutPrice,
   getToGiveItems,
   getTopValueItems,
+  sortBoxAnalysis,
 } from './page-metrics.utils'
+
+const boxAnalysis: BoxAnalysis = {
+  'A (apple)': { count: 8, totalValue: 100 },
+  Bureau: { count: 4, totalValue: 500 },
+  Salon: { count: 2, totalValue: 900 },
+}
 
 const mockItems: Item[] = [
   mockItem({
@@ -245,6 +254,48 @@ describe('page-metrics.utils', () => {
     expect(result.itemsWithoutLocation[0]?.$id).toMatchInlineSnapshot(`"4"`)
     expect(result.itemsWithoutPhoto[0]?.$id).toMatchInlineSnapshot(`"4"`)
     expect(result.itemsWithoutPrice[0]?.$id).toMatchInlineSnapshot(`"3"`)
+  })
+
+  it('sortBoxAnalysis A should sort by name and size the bars on the number of items', () => {
+    const rows = sortBoxAnalysis(boxAnalysis, 'name')
+    expect(rows.map(row => row.box)).toStrictEqual(['A (apple)', 'Bureau', 'Salon'])
+    expect(rows.map(row => row.barPercent)).toStrictEqual([100, 50, 25])
+  })
+
+  it('sortBoxAnalysis B should sort by value, highest first, and size the bars on the value', () => {
+    const rows = sortBoxAnalysis(boxAnalysis, 'value')
+    expect(rows.map(row => row.box)).toStrictEqual(['Salon', 'Bureau', 'A (apple)'])
+    expect(rows.map(row => row.barPercent)).toStrictEqual([100, (500 / 900) * 100, (100 / 900) * 100])
+  })
+
+  it('sortBoxAnalysis C should sort by items, most first, and size the bars on the number of items', () => {
+    const rows = sortBoxAnalysis(boxAnalysis, 'items')
+    expect(rows.map(row => row.box)).toStrictEqual(['A (apple)', 'Bureau', 'Salon'])
+    expect(rows.map(row => row.barPercent)).toStrictEqual([100, 50, 25])
+  })
+
+  it('sortBoxAnalysis D should fall back on the name when two locations are tied', () => {
+    const rows = sortBoxAnalysis({ Alpha: { count: 3, totalValue: 10 }, Beta: { count: 3, totalValue: 10 } }, 'items')
+    expect(rows.map(row => row.box)).toStrictEqual(['Alpha', 'Beta'])
+  })
+
+  it('sortBoxAnalysis E should keep a visible bar for a location without value', () => {
+    const rows = sortBoxAnalysis({ Alpha: { count: 1, totalValue: 0 }, Beta: { count: 1, totalValue: 50 } }, 'value')
+    expect(rows.map(row => row.barPercent)).toStrictEqual([100, 2])
+  })
+
+  it('sortBoxAnalysis G should keep a visible bar when no location has any value', () => {
+    const rows = sortBoxAnalysis({ Alpha: { count: 1, totalValue: 0 }, Beta: { count: 2, totalValue: 0 } }, 'value')
+    expect(rows.map(row => row.barPercent)).toStrictEqual([2, 2])
+  })
+
+  it('sortBoxAnalysis F should handle no location', () => {
+    expect(sortBoxAnalysis({}, 'name')).toStrictEqual([])
+  })
+
+  it('calculateAverageValue A should divide the total value by the number of items', () => {
+    expect(calculateAverageValue(26_305, 927)).toBeCloseTo(28.38, 2)
+    expect(calculateAverageValue(0, 0)).toBe(0)
   })
 
   it('getItemsWithPhotoUrl A should return only items with a photo url instead of an upload id', () => {

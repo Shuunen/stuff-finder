@@ -73,9 +73,49 @@ export function getItemsWithPhotoUrl(items: Item[]): Item[] {
   return items.filter(item => Boolean(item.photos) && item.photos.some(photo => photoUrlRegex.test(photo)))
 }
 
+export type BoxSortCriteria = 'items' | 'name' | 'value'
+
+export type BoxRow = {
+  /** width of the bar in percent, never fully empty so every location stays visible */
+  barPercent: number
+  box: string
+  count: number
+  totalValue: number
+}
+
+const minBarPercent = 2
+
+function compareBoxRows(rowA: Omit<BoxRow, 'barPercent'>, rowB: Omit<BoxRow, 'barPercent'>, criteria: BoxSortCriteria) {
+  if (criteria === 'value' && rowA.totalValue !== rowB.totalValue) return rowB.totalValue - rowA.totalValue
+  if (criteria === 'items' && rowA.count !== rowB.count) return rowB.count - rowA.count
+  return rowA.box.localeCompare(rowB.box)
+}
+
+/**
+ * Sort the storage locations and size their bars, by name the bar shows the number of items
+ * @param boxAnalysis the items count and value of each location
+ * @param criteria how to sort the locations, "name" is alphabetical, "value" and "items" are highest first
+ * @returns the locations with the width of their bar
+ */
+export function sortBoxAnalysis(boxAnalysis: BoxAnalysis, criteria: BoxSortCriteria): BoxRow[] {
+  const rows = Object.entries(boxAnalysis)
+    .map(([box, data]) => ({ box, count: data.count, totalValue: data.totalValue }))
+    .toSorted((rowA, rowB) => compareBoxRows(rowA, rowB, criteria))
+  const measure = (row: Omit<BoxRow, 'barPercent'>) => (criteria === 'value' ? row.totalValue : row.count)
+  const maxMeasure = Math.max(0, ...rows.map(row => measure(row)))
+  return rows.map(row => ({ ...row, barPercent: maxMeasure === 0 ? minBarPercent : Math.max(minBarPercent, (measure(row) / maxMeasure) * nbPercentMax) }))
+}
+
+export function calculateAverageValue(totalValue: number, totalItems: number): number {
+  if (totalItems === 0) return 0
+  return totalValue / totalItems
+}
+
 export function calculateMetrics(items: Item[]) {
+  const basicMetrics = calculateBasicMetrics(items)
   return {
-    ...calculateBasicMetrics(items),
+    ...basicMetrics,
+    averageValue: calculateAverageValue(basicMetrics.totalValue, basicMetrics.totalItems),
     boxAnalysis: calculateBoxAnalysis(items),
     itemsNotPrinted: getItemsNotPrinted(items),
     itemsToGive: getToGiveItems(items),
