@@ -78,9 +78,9 @@ export function AppItemDetailsActions({ className, item }: Readonly<{ className?
   }
 
   return (
-    <div className={className}>
+    <div className={className} data-testid="app-item-details-actions">
       <AppButton aria-controls={isOpen ? 'item-actions-menu' : undefined} aria-expanded={isOpen ? 'true' : undefined} aria-haspopup="true" name="more" label="More" onClick={handleClick} endIcon={<MoreDots />} />
-      <Menu id="item-actions-menu" anchorEl={anchorElement} onClose={closeMenu} open={isOpen}>
+      <Menu data-testid="item-actions-menu" id="item-actions-menu" anchorEl={anchorElement} onClose={closeMenu} open={isOpen}>
         <MenuItem data-testid="menu-item-edit" onClick={doEdit}>
           <ListItemIcon>
             <EditIcon />
@@ -100,7 +100,7 @@ export function AppItemDetailsActions({ className, item }: Readonly<{ className?
           Delete
         </MenuItem>
       </Menu>
-      <Dialog aria-describedby="delete-dialog-description" aria-labelledby="delete-dialog-title" onClose={closeDialog} open={isDialogOpen}>
+      <Dialog data-testid="delete-dialog" aria-describedby="delete-dialog-description" aria-labelledby="delete-dialog-title" onClose={closeDialog} open={isDialogOpen}>
         <DialogTitle id="delete-dialog-title">Delete item ?</DialogTitle>
         <DialogContent>
           <DialogContentText id="delete-dialog-description">We need to confirm the deletion of this item.</DialogContentText>

@@ -1,5 +1,6 @@
 import Autocomplete, { type AutocompleteRenderInputParams } from '@mui/material/Autocomplete'
 import TextField from '@mui/material/TextField'
+import { kebabCase } from 'es-toolkit'
 import { useCallback } from 'react'
 import { type Form, type FormFieldSelect, optionsToLabels } from '../utils/forms.utils'
 
@@ -25,5 +26,5 @@ export function AppFormFieldSelect({ field, form, id, updateField }: Properties)
 
   const options = optionsToLabels(field.options)
 
-  return <Autocomplete id={id} onChange={onChange} options={options} renderInput={renderInput} value={field.value} />
+  return <Autocomplete data-testid={kebabCase(`app-form-field-${id}`)} id={id} onChange={onChange} options={options} renderInput={renderInput} value={field.value} />
 }

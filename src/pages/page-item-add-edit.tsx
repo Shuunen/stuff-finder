@@ -233,17 +233,25 @@ export function PageItemAddEdit({ isEdit = false }: Readonly<{ isEdit?: boolean 
     }
   }, [])
 
-  if (isEdit && initialItem === undefined) return <>Cannot edit, item with id &quot;{id}&quot; not found ;(</>
+  if (isEdit && initialItem === undefined) return <p data-testid="item-edit-not-found">Cannot edit, item with id &quot;{id}&quot; not found ;(</p>
 
   return (
     <AppPageCard cardTitle={`${isEdit ? 'Edit' : 'Add'} item`} pageCode={`item-${isEdit ? 'edit' : 'add'}`} pageTitle={`${isEdit ? 'Edit' : 'Add'} item`}>
       <div className="mb-20 flex max-h-[90%] flex-col overflow-x-hidden overflow-y-auto md:mb-0 md:max-h-full">
-        {isEdit && <p className="text-center">Please fill in the form below to edit the item, you can change any field you want 🔄</p>}
-        {!isEdit && <p className="text-center">Please fill in the form below to add a new item, no worry, you will be able to edit it later if needed ✏️</p>}
+        {isEdit && (
+          <p data-testid="add-edit-intro" className="text-center">
+            Please fill in the form below to edit the item, you can change any field you want 🔄
+          </p>
+        )}
+        {!isEdit && (
+          <p data-testid="add-edit-intro" className="text-center">
+            Please fill in the form below to add a new item, no worry, you will be able to edit it later if needed ✏️
+          </p>
+        )}
         {id !== '' && startForm.fields.reference.value === '' && <p>Here is the keyword you search previously : {id}</p>}
         <div className="flex flex-col items-end gap-6 md:flex-row">
           <div className="flex flex-col items-center gap-1 md:w-1/3 md:max-w-72">
-            <img alt="item visual" height={300} width={400} className="w-auto p-4 md:max-h-80" ref={photoReference} src={itemPhotoToImageUrl(startForm.fields.photo.value)} />
+            <img data-testid="add-edit-photo" alt="item visual" height={300} width={400} className="w-auto p-4 md:max-h-80" ref={photoReference} src={itemPhotoToImageUrl(startForm.fields.photo.value)} />
             {paste.isNotFetchable && (
               <p className="text-center text-sm text-red-500" data-testid="photo-not-fetchable">
                 Image not fetchable, please right click &gt; copy and paste it, or use a fetchable link

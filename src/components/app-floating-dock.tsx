@@ -23,7 +23,7 @@ export function AppFloatingDock({ isUsable, onSpeech, placeholder, searchRef }: 
     <AppPill className="flex w-full max-w-96 items-center justify-between bg-white" name="quick-search">
       <div className="flex grow items-center gap-3">
         <SearchIcon />
-        <input className="mt-0.5 grow bg-transparent font-display text-grey outline-none" disabled={!isUsable} onKeyUp={onSearch} placeholder={placeholder} ref={searchRef} />
+        <input data-testid="app-floating-dock-input" className="mt-0.5 grow bg-transparent font-display text-grey outline-none" disabled={!isUsable} onKeyUp={onSearch} placeholder={placeholder} ref={searchRef} />
       </div>
       <AppButton className="flex! h-8 min-w-8! grow-0 overflow-hidden rounded-full! pr-0! pl-3!" name="speak-search" onClick={onSpeech} startIcon={<MicIcon fontSize="small" />} variant="text" />
     </AppPill>

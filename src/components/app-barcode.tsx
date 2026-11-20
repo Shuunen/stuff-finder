@@ -43,6 +43,7 @@ export function AppBarcode({ isHighlighted = false, item, size, willResize = tru
     <div
       className="box-content flex items-center gap-0 overflow-hidden rounded-sm border border-black px-1 transition-all print:rounded-none print:border-0 print:px-0"
       data-component="barcode"
+      data-testid="app-barcode"
       ref={wrapperReference}
       style={printSizes[size].styles}
     >

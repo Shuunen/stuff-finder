@@ -16,7 +16,7 @@ type AppPageCardProps = Readonly<{
 export function AppPageCard({ cardTitle, children, nextLabel = 'Home', nextUrl = '/', pageCode, pageTitle, stepsBack = 1 }: AppPageCardProps) {
   setPageTitle(pageTitle)
   return (
-    <div className="flex w-full grow flex-col items-center justify-center gap-6 print:hidden" data-component="page-card" data-page={pageCode}>
+    <div className="flex w-full grow flex-col items-center justify-center gap-6 print:hidden" data-component="page-card" data-page={pageCode} data-testid={`page-${pageCode}`}>
       <h3>{cardTitle}</h3>
       <AppCard name="page-card" className="items-center">
         {children}

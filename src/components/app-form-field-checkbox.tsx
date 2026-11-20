@@ -1,5 +1,6 @@
 import Checkbox from '@mui/material/Checkbox'
 import FormControlLabel from '@mui/material/FormControlLabel'
+import { kebabCase } from 'es-toolkit'
 import { useCallback } from 'react'
 import type { FormFieldCheckbox } from '../utils/forms.utils'
 
@@ -21,5 +22,5 @@ export function AppFormFieldCheckbox({ field, id, updateField }: Properties) {
     [id, updateField],
   )
 
-  return <FormControlLabel control={checkboxControl(field.value)} id={id} label={field.label} onChange={onChange} required={field.isRequired} />
+  return <FormControlLabel data-testid={kebabCase(`app-form-field-${id}`)} control={checkboxControl(field.value)} id={id} label={field.label} onChange={onChange} required={field.isRequired} />
 }

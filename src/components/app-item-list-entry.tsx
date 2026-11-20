@@ -5,6 +5,7 @@ import { cn } from '../utils/class.utils'
 import { itemToImageUrl } from '../utils/database.utils'
 import { navigate } from '../utils/navigation.utils'
 import { AppCard } from './app-card'
+import { AppItemImage } from './app-item-image'
 import { AppLocSticker } from './app-loc-sticker'
 
 const maxStaggerIndex = 10
@@ -34,6 +35,7 @@ function AppItemListEntryComponent({ className, display, index = 0, item, isLoad
   if (display === 'card')
     return (
       <a
+        data-testid="app-item-list-entry-card"
         className={cn(`block animate-fade-up break-inside-avoid pt-1 pr-2 transition`, isLoading && 'opacity-60', className)}
         style={{ animationDelay: staggerDelay }}
         href={`/item/details/${item.$id}`}
@@ -43,7 +45,7 @@ function AppItemListEntryComponent({ className, display, index = 0, item, isLoad
         }}
       >
         <AppCard name="item-card" hover>
-          <img alt={item.name} height={300} width={400} className="mx-auto h-auto max-h-96 w-auto max-w-full" data-testid="item-card-entry-image" loading="lazy" src={itemToImageUrl(item)} />
+          <AppItemImage alt={item.name} height={300} width={400} className="mx-auto h-auto max-h-96 w-auto max-w-full" data-testid="item-card-entry-image" loading="lazy" src={itemToImageUrl(item)} />
           <div className="grid gap-2">
             {renderDetails(item)}
             <AppLocSticker className="absolute -top-1 -right-2" box={item.box} drawer={item.drawer} rotate={3.5} />
@@ -54,6 +56,7 @@ function AppItemListEntryComponent({ className, display, index = 0, item, isLoad
 
   return (
     <a
+      data-testid="app-item-list-entry-list"
       className={cn(`flex animate-fade-up items-center gap-4`, isLoading && 'opacity-60', className)}
       href={`/item/details/${item.$id}`}
       onClick={event => {
@@ -63,7 +66,7 @@ function AppItemListEntryComponent({ className, display, index = 0, item, isLoad
       style={{ animationDelay: staggerDelay }}
     >
       <AppCard name="item-list" hover className="w-full items-center md:flex-row">
-        <img alt={item.name} height={300} width={400} className="object-contain p-2 md:max-h-36 md:w-36" data-testid="item-list-entry-image" loading="lazy" src={itemToImageUrl(item)} />
+        <AppItemImage alt={item.name} height={300} width={400} className="object-contain p-2 md:max-h-36 md:w-36" data-testid="item-list-entry-image" loading="lazy" src={itemToImageUrl(item)} />
         <div className="mr-auto grid gap-2">{renderDetails(item)}</div>
         <AppLocSticker className="absolute -top-2 -right-2 md:relative md:top-auto md:right-4" box={item.box} drawer={item.drawer} />
       </AppCard>
